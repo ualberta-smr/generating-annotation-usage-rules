@@ -1,5 +1,7 @@
 # API misuse detection process
 
+Developed and maintained by [Mansur Gulami](https://github.com/MensurOwary).
+
 The repository consists of 3 projects:
 
 1. [rules-to-grammar](./rules-to-grammar): it converts the candidate rules to RulePad grammar
