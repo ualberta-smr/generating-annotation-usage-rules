@@ -7,6 +7,7 @@ The repository consists of 3 projects:
 1. [rules-to-grammar](./rules-to-grammar): it converts the candidate rules to RulePad grammar
 2. [grammar-to-xpath](./grammar-to-xpath): it converts the grammar generated in the step 1 to srcML XPath queries
 3. [violation-detector](./violation-detector): it utilizes the XPath rules to detect violations
+4. [ui](./ui): it allows users to label rules
 
 # Credit
 
