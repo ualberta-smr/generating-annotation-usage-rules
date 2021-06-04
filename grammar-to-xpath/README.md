@@ -1,6 +1,6 @@
 # Grammar to XPATH converter
 
-All credit goes to [Sahar Mehrpout](https://github.com/SaharMehrpour), and project [RulePad](https://github.com/devuxd/active-doc-client)
+All credit goes to [Sahar Mehrpour](https://github.com/SaharMehrpour), and project [RulePad](https://github.com/devuxd/active-doc-client)
 
 ## Converting to an executable
 

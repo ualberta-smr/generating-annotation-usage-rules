@@ -1,6 +1,6 @@
 # idea is the following
 # 0. Given a project, generate xml files from the files using srcML
-# 1. Take the ruleTable.json file, and check the rules against any project.
+# 1. Take the rules.json file, and check the rules against any project.
 # 2. Report on the violations.
 
 import sys
@@ -15,7 +15,7 @@ from dataclasses import *
 
 @dataclass
 class Rule:
-    title: str
+    id: str
     """
     pre-condition
     """
@@ -58,6 +58,7 @@ def find_violations(xml_dict, rules):
                 a = match_xpath(v, rule.postcondition)
                 if len(a) == 0:
                     yield {
+                        "candidate-rule-id": rule.id,
                         "file": k,
                         "precondition": rule.precondition,
                         "postcondition": rule.postcondition,
@@ -69,10 +70,11 @@ def get_rules():
     with open("rules.json") as f:
         rules = json.load(f)
         for rule in rules:
+            _id = rule["candidate-id"]
             pre = rule["quantifier"]
             pos = rule["constraint"]
             g = rule["grammar"]
-            yield Rule("TITLE", pre, pos, g)
+            yield Rule(_id, pre, pos, g)
 
 
 def get_files(path, lang):

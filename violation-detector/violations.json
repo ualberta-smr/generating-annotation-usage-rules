@@ -1,0 +1,128 @@
+[
+    {
+        "candidate-rule-id": -1569715546,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\backend\\src\\main\\java\\de\\incentergy\\base\\menu\\jms\\CreateMenuOnDeploymentMessageListener.java",
+        "precondition": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "postcondition": "src:class[(((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])) and ((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='RestClient']] and src:annotation[src:name[text()='Claim']])])))]",
+        "grammar": "class with (declaration statement with (annotation \"Inject\" ) ) must have (declaration statement with (annotation \"RestClient\" and annotation \"Claim\" ) ) "
+    },
+    {
+        "candidate-rule-id": -554362854,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\backend\\src\\main\\java\\de\\incentergy\\base\\menu\\jms\\CreateMenuOnDeploymentMessageListener.java",
+        "precondition": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "postcondition": "src:class[(((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])) and ((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='String']] and src:annotation[src:name[text()='ConfigProperty']])])))]",
+        "grammar": "class with (declaration statement with (annotation \"Inject\" ) ) must have (declaration statement with (annotation \"String\" and annotation \"ConfigProperty\" ) ) "
+    },
+    {
+        "candidate-rule-id": -1569715546,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\jwt\\jaxrs\\src\\main\\java\\org\\eclipse\\microprofile\\jwt\\jaxrs\\JWTAuthFilter.java",
+        "precondition": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "postcondition": "src:class[(((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])) and ((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='RestClient']] and src:annotation[src:name[text()='Claim']])])))]",
+        "grammar": "class with (declaration statement with (annotation \"Inject\" ) ) must have (declaration statement with (annotation \"RestClient\" and annotation \"Claim\" ) ) "
+    },
+    {
+        "candidate-rule-id": -554362854,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\jwt\\jaxrs\\src\\main\\java\\org\\eclipse\\microprofile\\jwt\\jaxrs\\JWTAuthFilter.java",
+        "precondition": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "postcondition": "src:class[(((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])) and ((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='String']] and src:annotation[src:name[text()='ConfigProperty']])])))]",
+        "grammar": "class with (declaration statement with (annotation \"Inject\" ) ) must have (declaration statement with (annotation \"String\" and annotation \"ConfigProperty\" ) ) "
+    },
+    {
+        "candidate-rule-id": 1392587348,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\jwt\\principal\\src\\test\\java\\org\\eclipse\\microprofile\\jwt\\test\\cdi\\JWTAuthContextInfoProvider.java",
+        "precondition": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Produces']])])]",
+        "postcondition": "src:class[(((src:block/src:function[(src:annotation[src:name[text()='Produces']])])) and ((src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Operation']])])))]",
+        "grammar": "class with (function with (annotation \"Produces\" ) ) must have (function with (annotation \"Path\" and annotation \"Operation\" ) ) "
+    },
+    {
+        "candidate-rule-id": -1569715546,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\jwt\\principal\\src\\test\\java\\org\\eclipse\\microprofile\\jwt\\test\\format\\TestTokenValidation.java",
+        "precondition": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "postcondition": "src:class[(((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])) and ((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='RestClient']] and src:annotation[src:name[text()='Claim']])])))]",
+        "grammar": "class with (declaration statement with (annotation \"Inject\" ) ) must have (declaration statement with (annotation \"RestClient\" and annotation \"Claim\" ) ) "
+    },
+    {
+        "candidate-rule-id": -554362854,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\jwt\\principal\\src\\test\\java\\org\\eclipse\\microprofile\\jwt\\test\\format\\TestTokenValidation.java",
+        "precondition": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "postcondition": "src:class[(((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])) and ((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='String']] and src:annotation[src:name[text()='ConfigProperty']])])))]",
+        "grammar": "class with (declaration statement with (annotation \"Inject\" ) ) must have (declaration statement with (annotation \"String\" and annotation \"ConfigProperty\" ) ) "
+    },
+    {
+        "candidate-rule-id": -1569715546,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\jwt\\wildfly-jwt-auth-provider\\src\\main\\java\\de\\incentergy\\base\\jwt\\cdi\\JsonWebTokenProducer.java",
+        "precondition": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "postcondition": "src:class[(((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])) and ((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='RestClient']] and src:annotation[src:name[text()='Claim']])])))]",
+        "grammar": "class with (declaration statement with (annotation \"Inject\" ) ) must have (declaration statement with (annotation \"RestClient\" and annotation \"Claim\" ) ) "
+    },
+    {
+        "candidate-rule-id": -554362854,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\jwt\\wildfly-jwt-auth-provider\\src\\main\\java\\de\\incentergy\\base\\jwt\\cdi\\JsonWebTokenProducer.java",
+        "precondition": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "postcondition": "src:class[(((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])) and ((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='String']] and src:annotation[src:name[text()='ConfigProperty']])])))]",
+        "grammar": "class with (declaration statement with (annotation \"Inject\" ) ) must have (declaration statement with (annotation \"String\" and annotation \"ConfigProperty\" ) ) "
+    },
+    {
+        "candidate-rule-id": 1392587348,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\jwt\\wildfly-jwt-auth-provider\\src\\main\\java\\de\\incentergy\\base\\jwt\\cdi\\JsonWebTokenProducer.java",
+        "precondition": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Produces']])])]",
+        "postcondition": "src:class[(((src:block/src:function[(src:annotation[src:name[text()='Produces']])])) and ((src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Operation']])])))]",
+        "grammar": "class with (function with (annotation \"Produces\" ) ) must have (function with (annotation \"Path\" and annotation \"Operation\" ) ) "
+    },
+    {
+        "candidate-rule-id": 1392587348,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\jwt\\wildfly-jwt-auth-provider\\src\\main\\java\\de\\incentergy\\base\\jwt\\wildfly\\JWTAuthContextInfoProvider.java",
+        "precondition": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Produces']])])]",
+        "postcondition": "src:class[(((src:block/src:function[(src:annotation[src:name[text()='Produces']])])) and ((src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Operation']])])))]",
+        "grammar": "class with (function with (annotation \"Produces\" ) ) must have (function with (annotation \"Path\" and annotation \"Operation\" ) ) "
+    },
+    {
+        "candidate-rule-id": -1569715546,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\menu-support\\src\\main\\java\\de\\incentergy\\base\\menu\\support\\MenuSupportSingelton.java",
+        "precondition": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "postcondition": "src:class[(((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])) and ((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='RestClient']] and src:annotation[src:name[text()='Claim']])])))]",
+        "grammar": "class with (declaration statement with (annotation \"Inject\" ) ) must have (declaration statement with (annotation \"RestClient\" and annotation \"Claim\" ) ) "
+    },
+    {
+        "candidate-rule-id": -554362854,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\menu-support\\src\\main\\java\\de\\incentergy\\base\\menu\\support\\MenuSupportSingelton.java",
+        "precondition": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "postcondition": "src:class[(((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])) and ((descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='String']] and src:annotation[src:name[text()='ConfigProperty']])])))]",
+        "grammar": "class with (declaration statement with (annotation \"Inject\" ) ) must have (declaration statement with (annotation \"String\" and annotation \"ConfigProperty\" ) ) "
+    },
+    {
+        "candidate-rule-id": 1144405872,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\opensearch\\src\\main\\java\\de\\incentergy\\base\\opensearch\\jaxrs\\Search.java",
+        "precondition": "src:class[(src:annotation[src:name[text()='Path']])]",
+        "postcondition": "src:class[(((src:annotation[src:name[text()='Path']])) and ((src:annotation[src:name[text()='RegisterRestClient']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']] and src:annotation[src:name[text()='Claim']])] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='GET']] and src:annotation[src:name[text()='Traced']])])))]",
+        "grammar": "class with (annotation \"Path\" ) must have (annotation \"RegisterRestClient\" and declaration statement with (annotation \"Inject\" and annotation \"Claim\" ) and function with (annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" and annotation \"Traced\" ) ) "
+    },
+    {
+        "candidate-rule-id": 788072703,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\opensearch\\src\\main\\java\\de\\incentergy\\base\\opensearch\\jaxrs\\Search.java",
+        "precondition": "src:class[(src:block/src:function[(src:annotation[src:name[text()='GET']])])]",
+        "postcondition": "src:class[(((src:block/src:function[(src:annotation[src:name[text()='GET']])])) and ((src:annotation[src:name[text()='RegisterRestClient']] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Traced']] and src:annotation[src:name[text()='Operation']])])))]",
+        "grammar": "class with (function with (annotation \"GET\" ) ) must have (annotation \"RegisterRestClient\" and function with (annotation \"Path\" and annotation \"Produces\" and annotation \"Traced\" and annotation \"Operation\" ) ) "
+    },
+    {
+        "candidate-rule-id": 958033635,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\opensearch\\src\\main\\java\\de\\incentergy\\base\\opensearch\\jaxrs\\Search.java",
+        "precondition": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='GET']])])]",
+        "postcondition": "src:class[(((src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='GET']])])) and ((src:annotation[src:name[text()='RegisterRestClient']] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Traced']])])))]",
+        "grammar": "class with (annotation \"Path\" and function with (annotation \"GET\" ) ) must have (annotation \"RegisterRestClient\" and function with (annotation \"Path\" and annotation \"Produces\" and annotation \"Traced\" ) ) "
+    },
+    {
+        "candidate-rule-id": -858730437,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\opensearch\\src\\main\\java\\de\\incentergy\\base\\opensearch\\jaxrs\\Search.java",
+        "precondition": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='GET']])])]",
+        "postcondition": "src:class[(((src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='GET']])])) and ((src:annotation[src:name[text()='RegisterRestClient']] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Traced']])])))]",
+        "grammar": "class with (annotation \"Path\" and function with (annotation \"GET\" ) ) must have (annotation \"RegisterRestClient\" and function with (annotation \"Path\" and annotation \"Produces\" and annotation \"Traced\" ) ) "
+    },
+    {
+        "candidate-rule-id": -516519425,
+        "file": "C:\\Users\\mensu\\Downloads\\javaee-openui5-multi-modules-base\\opensearch\\src\\main\\java\\de\\incentergy\\base\\opensearch\\jaxrs\\Search.java",
+        "precondition": "src:class[(src:annotation[src:name[text()='Path']])]",
+        "postcondition": "src:class[(((src:annotation[src:name[text()='Path']])) and ((src:block/src:function[(src:annotation[src:name[text()='Operation']])])))]",
+        "grammar": "class with (annotation \"Path\" ) must have (function with (annotation \"Operation\" ) ) "
+    }
+]

@@ -36,12 +36,14 @@ class Class:
 
 @dataclass
 class Rule:
+    id: int
     antecedent: Class
     consequent: Class
 
 
 @dataclass
 class CandidateRule:
+    id: int
     antecedent: List[str]
     consequent: List[str]
     label: str
@@ -51,14 +53,14 @@ def loadRulesFromFile() -> List[CandidateRule]:
     with open("candidate-rules.json") as f:
         rules = json.load(f)
         return list(
-            map(lambda r: CandidateRule(r["antecedent"], r["consequent"], r["label"]),
+            map(lambda r: CandidateRule(r["id"], r["antecedent"], r["consequent"], r["label"]),
                 filter(lambda r: r["label"] != "not a rule", rules)))
 
 
 def makeRule(d: CandidateRule) -> Rule:
     a = partialToClass(d.antecedent)
     c = partialToClass(d.consequent)
-    return Rule(a, c)
+    return Rule(d.id, a, c)
 
 
 def makeRulesList() -> List[Rule]:

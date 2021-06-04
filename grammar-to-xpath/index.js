@@ -20,15 +20,18 @@ const convert = (line, words) => {
 };
 
 const main = (readFrom, writeTo) => {
-    let array = fs.readFileSync(readFrom).toString().split(EOL);
+    let array = JSON.parse(fs.readFileSync(readFrom).toString())
 
-    let result = array.map((line) => {
+    let result = array.map((a) => {
+        let line = a.rule;
+
         let words = line.match(/"[a-zA-Z]+"/g);
         words = words.map((a) => a.replace(/['"]+/g, ""));
         let set = new Set();
         words.forEach((e) => set.add(e));
         let obj = convert(line, set);
-        obj.grammar = line;
+        obj["candidate-id"] = a.id;
+        obj["grammar"] = line;
         return obj;
     });
 

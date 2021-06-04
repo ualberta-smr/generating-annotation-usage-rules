@@ -1,6 +1,8 @@
+import json
 from typing import List
 from dataclasses import *
 from model import *
+
 
 def annotationsToGrammar(annos: List[Annotation]) -> str:
     return " and ".join(map(lambda anno: f"annotation \"{anno.name}\"", annos))
@@ -19,6 +21,7 @@ def fieldToGrammar(field: Field) -> str:
         return "declaration statement with (" + " and ".join(final_string) + " )"
     return ""
 
+
 def methodToGrammar(function: Function) -> str:
     final_string = []
     a = function.annotations
@@ -32,6 +35,7 @@ def methodToGrammar(function: Function) -> str:
         return "function with (" + " and ".join(final_string)+" )"
     return ""
 
+
 def toAntecedent(clazz: Class) -> str:
     final_string = []
     a = clazz.annotations
@@ -40,10 +44,10 @@ def toAntecedent(clazz: Class) -> str:
 
     if clazz.field:
         final_string.append(fieldToGrammar(clazz.field))
-    
+
     if clazz.function:
         final_string.append(methodToGrammar(clazz.function))
-    
+
     return "class with (" + " and ".join(final_string) + " )"
 
 
@@ -55,26 +59,29 @@ def toConsequent(clazz: Class) -> str:
 
     if clazz.field:
         final_string.append(fieldToGrammar(clazz.field))
-    
+
     if clazz.function:
         final_string.append(methodToGrammar(clazz.function))
-    
+
     return "(" + " and ".join(final_string) + " )"
 
 
 def toGrammar(rule: Rule) -> str:
-    format = "%s must have %s "
     a = toAntecedent(rule.antecedent)
     c = toConsequent(rule.consequent)
-    return format % (a, c)
+    return {
+        "id": rule.id,
+        "rule": "%s must have %s " % (a, c)
+    }
 
 
 def toGrammarAll() -> List[str]:
     return list(
-            filter(lambda x: not x.endswith("must have ( ) "), 
-                map(toGrammar, makeRulesList())
-            )
+        filter(lambda x: not x["rule"].endswith("must have ( ) "),
+               map(toGrammar, makeRulesList())
+        )
     )
 
-with open("results.txt", "w+") as f:
-    f.write("\n".join(toGrammarAll()).strip())
+
+with open("results.json", "w+") as f:
+    json.dump(toGrammarAll(), f, indent=4)
