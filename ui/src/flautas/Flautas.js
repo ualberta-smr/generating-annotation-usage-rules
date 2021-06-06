@@ -1,12 +1,16 @@
 import "./Flautas.css";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
+import Prism from "prismjs";
 import GridLayout from "react-grid-layout";
 import ContentEditable from "react-contenteditable";
 import { useState } from "react";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs/components/prism-core";
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-java";
+import "prismjs/themes/prism.css";
 
 function highlightWords(string) {
     string = string.replace(/<[^>]*>?/gm, "");
@@ -210,7 +214,7 @@ public class Incorrect {
                             <GridLayout
                                 className="method"
                                 layout={layout}
-                                cols={4}
+                                cols={3}
                                 rowHeight={10}
                                 width={1100}
                             >
