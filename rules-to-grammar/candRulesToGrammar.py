@@ -1,4 +1,5 @@
 import json
+import sys
 from typing import List
 from dataclasses import *
 from model import *
@@ -75,13 +76,15 @@ def toGrammar(rule: Rule) -> str:
     }
 
 
-def toGrammarAll() -> List[str]:
+def toGrammarAll(candidatesFile: str) -> List[str]:
     return list(
         filter(lambda x: not x["rule"].endswith("must have ( ) "),
-               map(toGrammar, makeRulesList())
+               map(toGrammar, makeRulesList(candidatesFile))
         )
     )
 
-
-with open("results.json", "w+") as f:
-    json.dump(toGrammarAll(), f, indent=4)
+# candidates file and grammar output file need to be json files
+if __name__ == "__main__":
+    _, candidatesFile, grammarRulesOutput = sys.argv
+    with open(grammarRulesOutput, "w+") as f:
+        json.dump(toGrammarAll(candidatesFile), f, indent=4)

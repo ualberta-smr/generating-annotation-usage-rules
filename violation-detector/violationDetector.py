@@ -28,13 +28,11 @@ class Rule:
 
 
 def main(args: List[str]):
-    rules = list(get_rules())
+    rules_file, path_to_project, violations_output = args
+    rules = list(get_rules(rules_file))
     print("Rules available: %d" % len(rules))
 
-    path = args[0]
-    violations_output = args[1]
-    
-    filenames = get_files(path, 'java')
+    filenames = get_files(path_to_project, 'java')
     print("Files available: %d" % len(filenames))
     
     file_xml_dict = execute_srcml(filenames)
@@ -66,8 +64,8 @@ def find_violations(xml_dict, rules):
                     }
 
 
-def get_rules():
-    with open("rules.json") as f:
+def get_rules(rules_path: str):
+    with open(rules_path) as f:
         rules = json.load(f)
         for rule in rules:
             _id = rule["candidate-id"]
@@ -96,5 +94,7 @@ def execute_srcml(filenames):
     return results
 
 
+# 3 args:
+# <rules path> <project path> <violations output>
 if __name__ == '__main__':
     main(sys.argv[1:])

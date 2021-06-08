@@ -49,8 +49,8 @@ class CandidateRule:
     label: str
 
 
-def loadRulesFromFile() -> List[CandidateRule]:
-    with open("candidate-rules.json") as f:
+def loadRulesFromFile(candidatesFile:str) -> List[CandidateRule]:
+    with open(candidatesFile) as f:
         rules = json.load(f)
         return list(
             map(lambda r: CandidateRule(r["id"], r["antecedent"], r["consequent"], r["label"]),
@@ -63,8 +63,8 @@ def makeRule(d: CandidateRule) -> Rule:
     return Rule(d.id, a, c)
 
 
-def makeRulesList() -> List[Rule]:
-    candidates = loadRulesFromFile()
+def makeRulesList(candidatesFile:str) -> List[Rule]:
+    candidates = loadRulesFromFile(candidatesFile)
     return list(map(makeRule, candidates))
 
 
