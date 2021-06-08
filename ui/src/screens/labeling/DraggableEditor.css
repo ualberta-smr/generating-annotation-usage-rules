@@ -1,0 +1,37 @@
+.annotations, 
+.declarations, 
+.methods, 
+.class {
+    border-bottom: 1px solid black;
+}
+
+.methods, .method {
+    background-color: white;
+}
+
+a {
+    border: 1px solid black;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+.dragged-area {
+    background-color: #414260;
+    padding: 3%;
+    display: grid;
+}
+
+.draggable {
+    background-color: white;
+}
+
+.draggable .annotation {
+    background-color: blueviolet;
+    color: white;
+}
+
+.draggable .static {
+    border: unset !important;
+    background-color: unset;
+    color: black !important;
+}
