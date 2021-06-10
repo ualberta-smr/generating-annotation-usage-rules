@@ -22,7 +22,7 @@ def print_violation_stats():
         print("Found %d violations" % count)
 
 
-# python main.py ..\rules-to-grammar\candidate-rules.json C:\Users\mensu\Downloads\broker
+# python main.py .\candidate-rules.json C:\Users\mensu\Downloads\broker
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print("There should be 2 args: <candidate rules path> <project path>", file=sys.stderr)

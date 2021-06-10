@@ -4,9 +4,11 @@ from typing import List
 from dataclasses import *
 from model import *
 
+def fqnToSimpleName(fully_qualified_name: str)-> str:
+    return fully_qualified_name.split(".")[-1]
 
 def annotationsToGrammar(annos: List[Annotation]) -> str:
-    return " and ".join(map(lambda anno: f"annotation \"{anno.name}\"", annos))
+    return " and ".join(map(lambda anno: f"annotation \"{fqnToSimpleName(anno.name)}\"", annos))
 
 
 def fieldToGrammar(field: Field) -> str:
@@ -16,7 +18,7 @@ def fieldToGrammar(field: Field) -> str:
         final_string.append(annotationsToGrammar(a))
 
     if field.type:
-        final_string.append(f"type \"{field.type.name}\"")
+        final_string.append(f"type \"{fqnToSimpleName(field.type.name)}\"")
 
     if len(final_string) > 0:
         return "declaration statement with (" + " and ".join(final_string) + " )"
@@ -30,7 +32,7 @@ def methodToGrammar(function: Function) -> str:
         final_string.append(annotationsToGrammar(a))
 
     if function.type:
-        final_string.append(f"type \"{function.type.name}\"")
+        final_string.append(f"type \"{fqnToSimpleName(function.type.name)}\"")
 
     if len(final_string) > 0:
         return "function with (" + " and ".join(final_string)+" )"
