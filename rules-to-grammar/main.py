@@ -16,7 +16,7 @@ def fieldToGrammar(field: Field) -> str:
         final_string.append(annotationsToGrammar(a))
 
     if field.type:
-        final_string.append("type " + field.type.name)
+        final_string.append(f"type \"{field.type.name}\"")
 
     if len(final_string) > 0:
         return "declaration statement with (" + " and ".join(final_string) + " )"
@@ -30,7 +30,7 @@ def methodToGrammar(function: Function) -> str:
         final_string.append(annotationsToGrammar(a))
 
     if function.type:
-        final_string.append("type " + function.type.name)
+        final_string.append(f"type \"{function.type.name}\"")
 
     if len(final_string) > 0:
         return "function with (" + " and ".join(final_string)+" )"

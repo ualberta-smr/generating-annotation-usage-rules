@@ -22,6 +22,7 @@ def print_violation_stats():
         print("Found %d violations" % count)
 
 
+# python main.py ..\rules-to-grammar\candidate-rules.json C:\Users\mensu\Downloads\broker
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print("There should be 2 args: <candidate rules path> <project path>", file=sys.stderr)
@@ -31,7 +32,7 @@ if __name__ == "__main__":
 
     # given candidate rules, convert them to grammar
     print("Converting candidate rules to RulePad grammar...", end='')
-    run(["python", "../rules-to-grammar/candRulesToGrammar.py", candidateRulesFile, RESULTS_FILE])
+    run(["python", "../rules-to-grammar/main.py", candidateRulesFile, RESULTS_FILE])
     print("Done")
 
     # given grammar, convert them to xpath
@@ -41,7 +42,7 @@ if __name__ == "__main__":
 
     # given xpath rules and a project, detect violations
     print("Detecting violations...", end='')
-    run(["python", "../violation-detector/violationDetector.py", RULES_FILE, projectFolder, VIOLATIONS_FILE])
+    run(["python", "../violation-detector/main.py", RULES_FILE, projectFolder, VIOLATIONS_FILE])
     print("Done")
 
     print_violation_stats()
