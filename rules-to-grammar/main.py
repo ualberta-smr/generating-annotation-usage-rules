@@ -1,11 +1,14 @@
 import json
+import sys
 from typing import List
 from dataclasses import *
 from model import *
 
+def fqnToSimpleName(fully_qualified_name: str)-> str:
+    return fully_qualified_name.split(".")[-1]
 
 def annotationsToGrammar(annos: List[Annotation]) -> str:
-    return " and ".join(map(lambda anno: f"annotation \"{anno.name}\"", annos))
+    return " and ".join(map(lambda anno: f"annotation \"{fqnToSimpleName(anno.name)}\"", annos))
 
 
 def fieldToGrammar(field: Field) -> str:
@@ -15,7 +18,7 @@ def fieldToGrammar(field: Field) -> str:
         final_string.append(annotationsToGrammar(a))
 
     if field.type:
-        final_string.append("type " + field.type.name)
+        final_string.append(f"type \"{fqnToSimpleName(field.type.name)}\"")
 
     if len(final_string) > 0:
         return "declaration statement with (" + " and ".join(final_string) + " )"
@@ -29,7 +32,7 @@ def methodToGrammar(function: Function) -> str:
         final_string.append(annotationsToGrammar(a))
 
     if function.type:
-        final_string.append("type " + function.type.name)
+        final_string.append(f"type \"{fqnToSimpleName(function.type.name)}\"")
 
     if len(final_string) > 0:
         return "function with (" + " and ".join(final_string)+" )"
@@ -75,13 +78,15 @@ def toGrammar(rule: Rule) -> str:
     }
 
 
-def toGrammarAll() -> List[str]:
+def toGrammarAll(candidatesFile: str) -> List[str]:
     return list(
         filter(lambda x: not x["rule"].endswith("must have ( ) "),
-               map(toGrammar, makeRulesList())
+               map(toGrammar, makeRulesList(candidatesFile))
         )
     )
 
-
-with open("results.json", "w+") as f:
-    json.dump(toGrammarAll(), f, indent=4)
+# candidates file and grammar output file need to be json files
+if __name__ == "__main__":
+    _, candidatesFile, grammarRulesOutput = sys.argv
+    with open(grammarRulesOutput, "w+") as f:
+        json.dump(toGrammarAll(candidatesFile), f, indent=4)

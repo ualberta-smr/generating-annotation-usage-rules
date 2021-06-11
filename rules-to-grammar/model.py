@@ -49,8 +49,8 @@ class CandidateRule:
     label: str
 
 
-def loadRulesFromFile() -> List[CandidateRule]:
-    with open("candidate-rules.json") as f:
+def loadRulesFromFile(candidatesFile:str) -> List[CandidateRule]:
+    with open(candidatesFile) as f:
         rules = json.load(f)
         return list(
             map(lambda r: CandidateRule(r["id"], r["antecedent"], r["consequent"], r["label"]),
@@ -63,8 +63,8 @@ def makeRule(d: CandidateRule) -> Rule:
     return Rule(d.id, a, c)
 
 
-def makeRulesList() -> List[Rule]:
-    candidates = loadRulesFromFile()
+def makeRulesList(candidatesFile:str) -> List[Rule]:
+    candidates = loadRulesFromFile(candidatesFile)
     return list(map(makeRule, candidates))
 
 
@@ -81,27 +81,26 @@ def partialToClass(facts: List[str]) -> Class:
     method_param = []
 
     anno_info = {}
-
     for ant in facts:
         if "Class --" in ant:
             clazz = ant.split()[-1].split("_")[-1]
-            if "annotatedWith":
+            if "annotatedWith" in ant:
                 class_anno.append(clazz)
-            elif "extends/implements":
+            elif "extends/implements" in ant:
                 class_ext_impl.append(clazz)
         elif "Field --" in ant:
-            if "annotatedWith":
+            if "annotatedWith" in ant:
                 field_anno.append(ant.split()[-1].split("_")[-1])
             elif "hasType":
                 field_type = ant.split()[-1]
         elif "Method --" in ant:
-            if "annotatedWith":
+            if "annotatedWith" in ant:
                 method_anno.append(ant.split()[-1].split("_")[-1])
-            elif "hasType":
+            elif "hasType" in ant:
                 method_type = ant.split()[-1]
-            elif "hasParam":
+            elif "hasParam" in ant:
                 method_param.append(ant.split()[-1].split("_")[-1])
-        elif "Annotation_" in ant:
+        elif ant.startswith("Annotation_"):
             f, s, t = ant.split()
             if "hasParam" in ant:
                 anno_type = f.split("_")[-1]
@@ -110,7 +109,7 @@ def partialToClass(facts: List[str]) -> Class:
                 anno_info[anno_type] = (a, b)
 
     def makeAnnotation(full_path_anno: str) -> Annotation:
-        canonical_name = full_path_anno.split(".")[-1]
+        canonical_name = full_path_anno
         param_name, param_type = None, None
         if full_path_anno in anno_info:
             param_name, param_type = anno_info[full_path_anno]

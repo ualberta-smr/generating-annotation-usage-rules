@@ -25,7 +25,8 @@ const main = (readFrom, writeTo) => {
     let result = array.map((a) => {
         let line = a.rule;
 
-        let words = line.match(/"[a-zA-Z]+"/g);
+        console.log(line)
+        let words = line.match(/"[a-zA-Z.]+"/g);
         words = words.map((a) => a.replace(/['"]+/g, ""));
         let set = new Set();
         words.forEach((e) => set.add(e));

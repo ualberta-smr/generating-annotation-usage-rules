@@ -11,46 +11,8 @@
     border: 1px solid black;
     background-color: white;
     display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: 50% 48%;
-}
-
-.flautas .code-example .annotations, 
-.flautas .code-example .declarations, 
-.flautas .code-example .methods, 
-.flautas .code-example .class {
-    border-bottom: 1px solid black;
-}
-
-.flautas .code-example .methods, .method {
-    background-color: white;
-}
-
-.flautas .code-example .a {
-    border: 1px solid black;
-    box-sizing: border-box;
-    background-color: white;
-}
-
-.flautas .code-example .dragged-area {
-    background-color: #414260;
-    padding: 3%;
-    display: grid;
-}
-
-.flautas .code-example .draggable {
-    background-color: white;
-}
-
-.flautas .code-example .draggable .annotation {
-    background-color: blueviolet;
-    color: white;
-}
-
-.flautas .code-example .draggable .static {
-    border: unset !important;
-    background-color: unset;
-    color: black !important;
+    /* grid-template-columns: 100%; */
+    /* grid-template-rows: 50% 48%; */
 }
 
 .flautas .code-desc-container {
@@ -124,6 +86,10 @@
     padding: 1% 2%;
     width: 160px;
     height: 45px;
+}
+
+.flautas .btn-selected {
+    background-color: orange;
 }
 
 .flautas .btn:hover {

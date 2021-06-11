@@ -2,11 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import Flautas from "./flautas/Flautas";
+import LabelingScreen from "./screens/labeling/LabelingScreen";
 
 ReactDOM.render(
     <React.StrictMode>
-        <Flautas />
+        <LabelingScreen />
     </React.StrictMode>,
     document.getElementById("root")
 );
