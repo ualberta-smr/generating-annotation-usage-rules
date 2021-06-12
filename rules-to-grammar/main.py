@@ -69,18 +69,36 @@ def toConsequent(clazz: Class) -> str:
     return "(" + " and ".join(final_string) + " )"
 
 
+def toRuleWithNoAntecedent(clazz: Class) -> str:
+    final_string = []
+    a = clazz.annotations
+    if len(a) > 0:
+        final_string.append(annotationsToGrammar(a))
+
+    if clazz.field:
+        final_string.append(fieldToGrammar(clazz.field))
+
+    if clazz.function:
+        final_string.append(methodToGrammar(clazz.function))
+
+    return "class must have (" + " and ".join(final_string) + " )"
+
+
 def toGrammar(rule: Rule) -> str:
     a = toAntecedent(rule.antecedent)
     c = toConsequent(rule.consequent)
+    r = toRuleWithNoAntecedent(mergeClasses(rule.antecedent, rule.consequent))
     return {
         "id": rule.id,
-        "rule": "%s must have %s " % (a, c)
+        "rule": r,
+        "antecedent_origin": "%s must have %s " % (a, c)
     }
 
 
 def toGrammarAll(candidatesFile: str) -> List[str]:
     return list(
-        filter(lambda x: not x["rule"].endswith("must have ( ) "),
+        filter(lambda x: not x["rule"].endswith("must have ( ) ") and \
+            not x["antecedent_origin"].endswith("must have ( ) "),
                map(toGrammar, makeRulesList(candidatesFile))
         )
     )
@@ -88,5 +106,7 @@ def toGrammarAll(candidatesFile: str) -> List[str]:
 # candidates file and grammar output file need to be json files
 if __name__ == "__main__":
     _, candidatesFile, grammarRulesOutput = sys.argv
+    # candidatesFile = "./rules.json"
+    # grammarRulesOutput = "./out.json"
     with open(grammarRulesOutput, "w+") as f:
         json.dump(toGrammarAll(candidatesFile), f, indent=4)

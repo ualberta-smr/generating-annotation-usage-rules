@@ -68,7 +68,7 @@ def get_rules(rules_path: str):
     with open(rules_path) as f:
         rules = json.load(f)
         for rule in rules:
-            _id = rule["candidate-id"]
+            _id = rule["candidate_id"]
             pre = rule["quantifier"]
             pos = rule["constraint"]
             g = rule["grammar"]

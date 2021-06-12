@@ -49,6 +49,33 @@ class CandidateRule:
     label: str
 
 
+def mergeFields(a: Field, b: Field) -> Field:
+    if not (a or b):
+        return a
+    elif not a:
+        return b
+    elif not b:
+        return a
+    return Field(a.annotations + b.annotations, a.type if a.type else b.type)
+
+
+def mergeFunctions(a: Function, b: Function) -> Function:
+    if not (a or b):
+        return a
+    elif not a:
+        return b
+    elif not b:
+        return a
+    return Function(a.annotations + b.annotations, a.type if a.type else b.type)
+
+
+def mergeClasses(a: Class, b: Class) -> Class:
+    annotations = a.annotations + b.annotations
+    field = mergeFields(a.field, b.field)
+    function = mergeFunctions(a.function, b.function)
+    return Class(annotations, function, field)
+
+
 def loadRulesFromFile(candidatesFile:str) -> List[CandidateRule]:
     with open(candidatesFile) as f:
         rules = json.load(f)

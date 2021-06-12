@@ -1,0 +1,487 @@
+[
+    {
+        "id": 1144405872,
+        "rule": "class must have (annotation \"Path\" and annotation \"RegisterRestClient\" and declaration statement with (annotation \"Inject\" and annotation \"Claim\" ) and function with (annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" and annotation \"Traced\" ) )",
+        "antecedent_origin": "class with (annotation \"Path\" ) must have (annotation \"RegisterRestClient\" and declaration statement with (annotation \"Inject\" and annotation \"Claim\" ) and function with (annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" and annotation \"Traced\" ) ) "
+    },
+    {
+        "id": 1530558578,
+        "rule": "class must have (annotation \"Path\" and declaration statement with (annotation \"Claim\" and annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (annotation \"Path\" and declaration statement with (annotation \"Claim\" ) ) must have (declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": 978092668,
+        "rule": "class must have (annotation \"Path\" and declaration statement with (annotation \"Inject\" and type \"JsonWebToken\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"Inject\" and type \"JsonWebToken\" ) ) must have (annotation \"Path\" ) "
+    },
+    {
+        "id": -1611704934,
+        "rule": "class must have (annotation \"Produces\" and annotation \"Path\" and declaration statement with (annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (annotation \"Produces\" and annotation \"Path\" ) must have (declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": 993758132,
+        "rule": "class must have (annotation \"Path\" and declaration statement with (annotation \"Claim\" and annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"Claim\" and annotation \"Inject\" ) ) must have (annotation \"Path\" ) "
+    },
+    {
+        "id": -1569715546,
+        "rule": "class must have (declaration statement with (annotation \"Inject\" and annotation \"RestClient\" and annotation \"Claim\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"Inject\" ) ) must have (declaration statement with (annotation \"RestClient\" and annotation \"Claim\" ) ) "
+    },
+    {
+        "id": 210315815,
+        "rule": "class must have (annotation \"Path\" and declaration statement with (annotation \"Inject\" and annotation \"Claim\" ) )",
+        "antecedent_origin": "class with (annotation \"Path\" and declaration statement with (annotation \"Inject\" ) ) must have (declaration statement with (annotation \"Claim\" ) ) "
+    },
+    {
+        "id": 538285467,
+        "rule": "class must have (annotation \"Path\" and declaration statement with (annotation \"Claim\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"Claim\" ) ) must have (annotation \"Path\" ) "
+    },
+    {
+        "id": -759906189,
+        "rule": "class must have (annotation \"Produces\" and annotation \"Path\" )",
+        "antecedent_origin": "class with (annotation \"Produces\" ) must have (annotation \"Path\" ) "
+    },
+    {
+        "id": -157332226,
+        "rule": "class must have (annotation \"Produces\" and annotation \"Path\" and declaration statement with (annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (annotation \"Produces\" and declaration statement with (annotation \"Inject\" ) ) must have (annotation \"Path\" ) "
+    },
+    {
+        "id": 733660448,
+        "rule": "class must have (annotation \"Path\" and declaration statement with (annotation \"Inject\" and type \"JsonWebToken\" ) )",
+        "antecedent_origin": "class with (annotation \"Path\" and declaration statement with (type \"JsonWebToken\" ) ) must have (declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": 1774990798,
+        "rule": "class must have (annotation \"Path\" and declaration statement with (annotation \"Claim\" and annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"Claim\" and annotation \"Inject\" ) ) must have (annotation \"Path\" ) "
+    },
+    {
+        "id": 232366922,
+        "rule": "class must have (annotation \"Produces\" and annotation \"Path\" and declaration statement with (annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (annotation \"Produces\" and annotation \"Path\" ) must have (declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": 788072703,
+        "rule": "class must have (annotation \"RegisterRestClient\" and function with (annotation \"GET\" and annotation \"Path\" and annotation \"Produces\" and annotation \"Traced\" and annotation \"Operation\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"GET\" ) ) must have (annotation \"RegisterRestClient\" and function with (annotation \"Path\" and annotation \"Produces\" and annotation \"Traced\" and annotation \"Operation\" ) ) "
+    },
+    {
+        "id": 958033635,
+        "rule": "class must have (annotation \"Path\" and annotation \"RegisterRestClient\" and function with (annotation \"GET\" and annotation \"Path\" and annotation \"Produces\" and annotation \"Traced\" ) )",
+        "antecedent_origin": "class with (annotation \"Path\" and function with (annotation \"GET\" ) ) must have (annotation \"RegisterRestClient\" and function with (annotation \"Path\" and annotation \"Produces\" and annotation \"Traced\" ) ) "
+    },
+    {
+        "id": 538030893,
+        "rule": "class must have (annotation \"Path\" and annotation \"RegisterRestClient\" and function with (annotation \"Produces\" and annotation \"Path\" and annotation \"GET\" and annotation \"Traced\" ) )",
+        "antecedent_origin": "class with (annotation \"Path\" and function with (annotation \"Produces\" ) ) must have (annotation \"RegisterRestClient\" and function with (annotation \"Path\" and annotation \"GET\" and annotation \"Traced\" ) ) "
+    },
+    {
+        "id": -1124395966,
+        "rule": "class must have (annotation \"RegisterRestClient\" and annotation \"Path\" and function with (annotation \"Path\" and annotation \"GET\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Path\" and annotation \"GET\" ) ) must have (annotation \"RegisterRestClient\" and annotation \"Path\" ) "
+    },
+    {
+        "id": -222841034,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"Traced\" and annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" ) )",
+        "antecedent_origin": "class with (annotation \"Path\" and function with (annotation \"Traced\" ) ) must have (function with (annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" ) ) "
+    },
+    {
+        "id": 460474207,
+        "rule": "class must have (annotation \"ApplicationScoped\" and annotation \"Path\" and declaration statement with (annotation \"ConfigProperty\" ) and function with (annotation \"Traced\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" ) must have (annotation \"Path\" and declaration statement with (annotation \"ConfigProperty\" ) and function with (annotation \"Traced\" ) ) "
+    },
+    {
+        "id": -149959793,
+        "rule": "class must have (annotation \"Path\" and annotation \"RegisterRestClient\" and function with (annotation \"Path\" and annotation \"GET\" and annotation \"Traced\" and annotation \"Operation\" and type \"Response\" ) )",
+        "antecedent_origin": "class with (annotation \"Path\" and function with (annotation \"Path\" ) ) must have (annotation \"RegisterRestClient\" and function with (annotation \"GET\" and annotation \"Traced\" and annotation \"Operation\" and type \"Response\" ) ) "
+    },
+    {
+        "id": -1119745953,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"Traced\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Path\" and annotation \"Traced\" ) ) must have (annotation \"Path\" ) "
+    },
+    {
+        "id": 332895625,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"Produces\" and annotation \"Traced\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Produces\" and annotation \"Traced\" ) ) must have (annotation \"Path\" ) "
+    },
+    {
+        "id": 1621230822,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"Traced\" and annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" ) )",
+        "antecedent_origin": "class with (annotation \"Path\" and function with (annotation \"Traced\" ) ) must have (function with (annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" ) ) "
+    },
+    {
+        "id": 1596508348,
+        "rule": "class must have (annotation \"RegisterRestClient\" and annotation \"Path\" and function with (annotation \"Produces\" and annotation \"GET\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Produces\" and annotation \"GET\" ) ) must have (annotation \"RegisterRestClient\" and annotation \"Path\" ) "
+    },
+    {
+        "id": 724325903,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"Traced\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Path\" and annotation \"Traced\" ) ) must have (annotation \"Path\" ) "
+    },
+    {
+        "id": 1037059232,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"GET\" and annotation \"Traced\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"GET\" and annotation \"Traced\" ) ) must have (annotation \"Path\" ) "
+    },
+    {
+        "id": 1353807258,
+        "rule": "class must have (annotation \"RegisterRestClient\" and annotation \"Path\" and function with (annotation \"Path\" and annotation \"GET\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Path\" and annotation \"GET\" ) ) must have (annotation \"RegisterRestClient\" and annotation \"Path\" ) "
+    },
+    {
+        "id": 371646083,
+        "rule": "class must have (function with (annotation \"Path\" and annotation \"GET\" and annotation \"Traced\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Path\" ) ) must have (function with (annotation \"GET\" and annotation \"Traced\" ) ) "
+    },
+    {
+        "id": -858730437,
+        "rule": "class must have (annotation \"Path\" and annotation \"RegisterRestClient\" and function with (annotation \"GET\" and annotation \"Path\" and annotation \"Produces\" and annotation \"Traced\" ) )",
+        "antecedent_origin": "class with (annotation \"Path\" and function with (annotation \"GET\" ) ) must have (annotation \"RegisterRestClient\" and function with (annotation \"Path\" and annotation \"Produces\" and annotation \"Traced\" ) ) "
+    },
+    {
+        "id": -1479824569,
+        "rule": "class must have (annotation \"Path\" and annotation \"RegisterRestClient\" and function with (annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" and annotation \"Traced\" and annotation \"Operation\" and type \"Response\" ) )",
+        "antecedent_origin": "class with (annotation \"Path\" and function with (annotation \"Path\" ) ) must have (annotation \"RegisterRestClient\" and function with (annotation \"Produces\" and annotation \"GET\" and annotation \"Traced\" and annotation \"Operation\" and type \"Response\" ) ) "
+    },
+    {
+        "id": 710855498,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"ConfigProperty\" ) ) must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" and type \"String\" ) ) "
+    },
+    {
+        "id": 1810004499,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) ) must have (annotation \"ApplicationScoped\" ) "
+    },
+    {
+        "id": -554362854,
+        "rule": "class must have (declaration statement with (annotation \"Inject\" and annotation \"ConfigProperty\" and type \"String\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"Inject\" ) ) must have (declaration statement with (annotation \"ConfigProperty\" and type \"String\" ) ) "
+    },
+    {
+        "id": -1077500854,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" ) ) must have (declaration statement with (annotation \"Inject\" and type \"String\" ) ) "
+    },
+    {
+        "id": 1418037803,
+        "rule": "class must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) ) must have (declaration statement with (type \"String\" ) ) "
+    },
+    {
+        "id": -982772412,
+        "rule": "class must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"ConfigProperty\" ) ) must have (declaration statement with (annotation \"Inject\" and type \"String\" ) ) "
+    },
+    {
+        "id": 431647674,
+        "rule": "class must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) ) must have (declaration statement with (type \"String\" ) ) "
+    },
+    {
+        "id": -1476698120,
+        "rule": "class must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) ) must have (declaration statement with (type \"String\" ) ) "
+    },
+    {
+        "id": 1504722182,
+        "rule": "class must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"ConfigProperty\" and type \"String\" ) ) must have (declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": -114835556,
+        "rule": "class must have (declaration statement with (annotation \"Inject\" and annotation \"ConfigProperty\" and type \"String\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"Inject\" and type \"String\" ) ) must have (declaration statement with (annotation \"ConfigProperty\" ) ) "
+    },
+    {
+        "id": -297413640,
+        "rule": "class must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"ConfigProperty\" ) ) must have (declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": 175480252,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" and annotation \"ConfigProperty\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" ) ) must have (declaration statement with (annotation \"ConfigProperty\" ) ) "
+    },
+    {
+        "id": 1392587348,
+        "rule": "class must have (function with (annotation \"Produces\" and annotation \"Path\" and annotation \"Operation\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Produces\" ) ) must have (function with (annotation \"Path\" and annotation \"Operation\" ) ) "
+    },
+    {
+        "id": 263000292,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"Operation\" and type \"Response\" ) )",
+        "antecedent_origin": "class with (annotation \"Path\" and function with (type \"Response\" ) ) must have (function with (annotation \"Path\" and annotation \"Operation\" ) ) "
+    },
+    {
+        "id": 649643651,
+        "rule": "class must have (annotation \"RegisterRestClient\" and annotation \"Path\" and function with (annotation \"Produces\" and annotation \"Path\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Produces\" and annotation \"Path\" ) ) must have (annotation \"RegisterRestClient\" and annotation \"Path\" ) "
+    },
+    {
+        "id": 1310849796,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"Operation\" and type \"Response\" ) )",
+        "antecedent_origin": "class with (function with (type \"Response\" ) ) must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"Operation\" ) ) "
+    },
+    {
+        "id": -1504868995,
+        "rule": "class must have (annotation \"ApplicationScoped\" and function with (annotation \"Timeout\" and annotation \"Fallback\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" and function with (annotation \"Timeout\" ) ) must have (function with (annotation \"Fallback\" ) ) "
+    },
+    {
+        "id": -1705129842,
+        "rule": "class must have (annotation \"Asynchronous\" and function with (annotation \"Fallback\" and type \"CompletionStage\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Fallback\" and type \"CompletionStage\" ) ) must have (annotation \"Asynchronous\" ) "
+    },
+    {
+        "id": 665772254,
+        "rule": "class must have (annotation \"Asynchronous\" and function with (annotation \"Fallback\" and type \"CompletionStage\" ) )",
+        "antecedent_origin": "class with (annotation \"Asynchronous\" and function with (type \"CompletionStage\" ) ) must have (function with (annotation \"Fallback\" ) ) "
+    },
+    {
+        "id": 1078022917,
+        "rule": "class must have (function with (annotation \"Retry\" and annotation \"Fallback\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Retry\" ) ) must have (function with (annotation \"Fallback\" ) ) "
+    },
+    {
+        "id": -1569963816,
+        "rule": "class must have (annotation \"Asynchronous\" and function with (annotation \"Fallback\" and type \"CompletionStage\" ) )",
+        "antecedent_origin": "class with (annotation \"Asynchronous\" and function with (annotation \"Fallback\" ) ) must have (function with (type \"CompletionStage\" ) ) "
+    },
+    {
+        "id": 1182104882,
+        "rule": "class must have (annotation \"ApplicationScoped\" and function with (annotation \"Fallback\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Fallback\" ) ) must have (annotation \"ApplicationScoped\" ) "
+    },
+    {
+        "id": -670721267,
+        "rule": "class must have (annotation \"ApplicationScoped\" and function with (annotation \"Fallback\" and annotation \"Timeout\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Fallback\" and annotation \"Timeout\" ) ) must have (annotation \"ApplicationScoped\" ) "
+    },
+    {
+        "id": 910026140,
+        "rule": "class must have (annotation \"ApplicationScoped\" and function with (annotation \"Incoming\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Incoming\" ) ) must have (annotation \"ApplicationScoped\" ) "
+    },
+    {
+        "id": -293446250,
+        "rule": "class must have (annotation \"ApplicationScoped\" and function with (annotation \"Outgoing\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Outgoing\" ) ) must have (annotation \"ApplicationScoped\" ) "
+    },
+    {
+        "id": -597442730,
+        "rule": "class must have (annotation \"ApplicationScoped\" and function with (annotation \"Incoming\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Incoming\" ) ) must have (annotation \"ApplicationScoped\" ) "
+    },
+    {
+        "id": -447429904,
+        "rule": "class must have (annotation \"RegisterRestClient\" and annotation \"Path\" and function with (annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" ) )",
+        "antecedent_origin": "class with (annotation \"RegisterRestClient\" and function with (annotation \"Path\" ) ) must have (annotation \"Path\" and function with (annotation \"Produces\" and annotation \"GET\" ) ) "
+    },
+    {
+        "id": -20402558,
+        "rule": "class must have (annotation \"RegisterRestClient\" and function with (annotation \"Path\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Path\" ) ) must have (annotation \"RegisterRestClient\" ) "
+    },
+    {
+        "id": -226497064,
+        "rule": "class must have (annotation \"RegisterRestClient\" and annotation \"Path\" and function with (annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" ) )",
+        "antecedent_origin": "class with (annotation \"RegisterRestClient\" and annotation \"Path\" ) must have (function with (annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" ) ) "
+    },
+    {
+        "id": 669981210,
+        "rule": "class must have (declaration statement with (annotation \"RestClient\" and annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"RestClient\" ) ) must have (declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": 728557548,
+        "rule": "class must have (annotation \"RegisterRestClient\" and function with (annotation \"Path\" ) )",
+        "antecedent_origin": "class with (annotation \"RegisterRestClient\" ) must have (function with (annotation \"Path\" ) ) "
+    },
+    {
+        "id": -1705300636,
+        "rule": "class must have (annotation \"RegisterRestClient\" and annotation \"Path\" and function with (annotation \"GET\" and annotation \"Path\" and annotation \"Produces\" ) )",
+        "antecedent_origin": "class with (annotation \"RegisterRestClient\" and function with (annotation \"GET\" ) ) must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"Produces\" ) ) "
+    },
+    {
+        "id": -308539306,
+        "rule": "class must have (annotation \"RegisterRestClient\" and annotation \"Path\" and function with (annotation \"Produces\" and annotation \"Path\" and annotation \"GET\" ) )",
+        "antecedent_origin": "class with (annotation \"RegisterRestClient\" and function with (annotation \"Produces\" ) ) must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"GET\" ) ) "
+    },
+    {
+        "id": 1528918328,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) ) must have (declaration statement with (type \"String\" ) ) "
+    },
+    {
+        "id": 1314723926,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) ) must have (annotation \"ApplicationScoped\" ) "
+    },
+    {
+        "id": 1360127590,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" and annotation \"ConfigProperty\" and type \"String\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" and type \"String\" ) ) must have (declaration statement with (annotation \"ConfigProperty\" ) ) "
+    },
+    {
+        "id": -1149035180,
+        "rule": "class must have (annotation \"ApplicationScoped\" and annotation \"Readiness\" and declaration statement with (annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" and annotation \"Readiness\" ) must have (declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": -431984988,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" and declaration statement with (type \"String\" ) ) must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) ) "
+    },
+    {
+        "id": 1509801978,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) ) must have (annotation \"ApplicationScoped\" ) "
+    },
+    {
+        "id": 145395464,
+        "rule": "class must have (annotation \"Readiness\" and annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (annotation \"Readiness\" and declaration statement with (annotation \"Inject\" ) ) must have (annotation \"ApplicationScoped\" ) "
+    },
+    {
+        "id": 182635345,
+        "rule": "class must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"ConfigProperty\" ) ) must have (declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": 20293282,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" ) ) must have (declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": -1966197048,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and type \"String\" ) ) must have (declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": -1875407148,
+        "rule": "class must have (annotation \"ApplicationScoped\" and annotation \"Health\" and declaration statement with (annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" and annotation \"Health\" ) must have (declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": -378229179,
+        "rule": "class must have (annotation \"Liveness\" and annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (annotation \"Liveness\" ) must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": -652650054,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) ) must have (declaration statement with (type \"String\" ) ) "
+    },
+    {
+        "id": 554025540,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and type \"String\" ) ) must have (declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": -1455193346,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" ) ) must have (declaration statement with (annotation \"Inject\" and type \"String\" ) ) "
+    },
+    {
+        "id": 1321089304,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" and annotation \"ConfigProperty\" and type \"String\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" and type \"String\" ) ) must have (declaration statement with (annotation \"ConfigProperty\" ) ) "
+    },
+    {
+        "id": -160762702,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) ) must have (annotation \"ApplicationScoped\" and declaration statement with (type \"String\" ) ) "
+    },
+    {
+        "id": -59889610,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) ) must have (annotation \"ApplicationScoped\" ) "
+    },
+    {
+        "id": 233647615,
+        "rule": "class must have (annotation \"Liveness\" and annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (annotation \"Liveness\" ) must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": 1921878214,
+        "rule": "class must have (annotation \"Health\" and annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (annotation \"Health\" ) must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": -1191978191,
+        "rule": "class must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (declaration statement with (annotation \"ConfigProperty\" and type \"String\" ) ) must have (declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": -1354320254,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and type \"String\" ) ) must have (declaration statement with (annotation \"Inject\" ) ) "
+    },
+    {
+        "id": -580976504,
+        "rule": "class must have (annotation \"Health\" and annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" ) )",
+        "antecedent_origin": "class with (annotation \"Health\" and declaration statement with (annotation \"Inject\" ) ) must have (annotation \"ApplicationScoped\" ) "
+    },
+    {
+        "id": -40773260,
+        "rule": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )",
+        "antecedent_origin": "class with (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) ) must have (declaration statement with (type \"String\" ) ) "
+    },
+    {
+        "id": 814531134,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"Operation\" and annotation \"Path\" and type \"Response\" ) )",
+        "antecedent_origin": "class with (annotation \"Path\" and function with (annotation \"Operation\" ) ) must have (function with (annotation \"Path\" and type \"Response\" ) ) "
+    },
+    {
+        "id": 552330979,
+        "rule": "class must have (annotation \"Tag\" and annotation \"Path\" )",
+        "antecedent_origin": "class with (annotation \"Tag\" ) must have (annotation \"Path\" ) "
+    },
+    {
+        "id": -516519425,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"Operation\" ) )",
+        "antecedent_origin": "class with (annotation \"Path\" ) must have (function with (annotation \"Operation\" ) ) "
+    },
+    {
+        "id": 528456996,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"Operation\" and annotation \"Produces\" and annotation \"GET\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Operation\" ) ) must have (annotation \"Path\" and function with (annotation \"Produces\" and annotation \"GET\" ) ) "
+    },
+    {
+        "id": -1828214096,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"Operation\" and type \"Response\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Operation\" and type \"Response\" ) ) must have (annotation \"Path\" ) "
+    },
+    {
+        "id": -548003532,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"Operation\" and type \"Response\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Operation\" ) ) must have (annotation \"Path\" and function with (type \"Response\" ) ) "
+    },
+    {
+        "id": 1870904105,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"Operation\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Path\" and annotation \"Operation\" ) ) must have (annotation \"Path\" ) "
+    },
+    {
+        "id": 496128394,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"Operation\" and type \"Response\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Operation\" ) ) must have (annotation \"Path\" and function with (type \"Response\" ) ) "
+    },
+    {
+        "id": 2107072148,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"Operation\" and type \"Response\" ) )",
+        "antecedent_origin": "class with (annotation \"Path\" and function with (type \"Response\" ) ) must have (function with (annotation \"Path\" and annotation \"Operation\" ) ) "
+    },
+    {
+        "id": 54140033,
+        "rule": "class must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"Operation\" ) )",
+        "antecedent_origin": "class with (function with (annotation \"Path\" and annotation \"Operation\" ) ) must have (annotation \"Path\" ) "
+    }
+]
