@@ -1,0 +1,584 @@
+[
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Path']])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='RegisterRestClient']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']] and src:annotation[src:name[text()='Claim']])] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='GET']] and src:annotation[src:name[text()='Traced']])])]",
+        "candidate_id": 1144405872,
+        "grammar": "class must have (annotation \"Path\" and annotation \"RegisterRestClient\" and declaration statement with (annotation \"Inject\" and annotation \"Claim\" ) and function with (annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" and annotation \"Traced\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Path']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Claim']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Claim']] and src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": 1530558578,
+        "grammar": "class must have (annotation \"Path\" and declaration statement with (annotation \"Claim\" and annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='JsonWebToken']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='JsonWebToken']])])]",
+        "candidate_id": 978092668,
+        "grammar": "class must have (annotation \"Path\" and declaration statement with (annotation \"Inject\" and type \"JsonWebToken\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Path']])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Path']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": -1611704934,
+        "grammar": "class must have (annotation \"Produces\" and annotation \"Path\" and declaration statement with (annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Claim']] and src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Claim']] and src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": 993758132,
+        "grammar": "class must have (annotation \"Path\" and declaration statement with (annotation \"Claim\" and annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']] and src:annotation[src:name[text()='RestClient']] and src:annotation[src:name[text()='Claim']])])]",
+        "candidate_id": -1569715546,
+        "grammar": "class must have (declaration statement with (annotation \"Inject\" and annotation \"RestClient\" and annotation \"Claim\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Path']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']] and src:annotation[src:name[text()='Claim']])])]",
+        "candidate_id": 210315815,
+        "grammar": "class must have (annotation \"Path\" and declaration statement with (annotation \"Inject\" and annotation \"Claim\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Claim']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Claim']])])]",
+        "candidate_id": 538285467,
+        "grammar": "class must have (annotation \"Path\" and declaration statement with (annotation \"Claim\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Produces']])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Path']])]",
+        "candidate_id": -759906189,
+        "grammar": "class must have (annotation \"Produces\" and annotation \"Path\" )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Produces']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Path']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": -157332226,
+        "grammar": "class must have (annotation \"Produces\" and annotation \"Path\" and declaration statement with (annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Path']] and descendant-or-self::src:decl_stmt/src:decl[(src:type[src:name[text()='JsonWebToken']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='JsonWebToken']])])]",
+        "candidate_id": 733660448,
+        "grammar": "class must have (annotation \"Path\" and declaration statement with (annotation \"Inject\" and type \"JsonWebToken\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Claim']] and src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Claim']] and src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": 1774990798,
+        "grammar": "class must have (annotation \"Path\" and declaration statement with (annotation \"Claim\" and annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Path']])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Path']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": 232366922,
+        "grammar": "class must have (annotation \"Produces\" and annotation \"Path\" and declaration statement with (annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='GET']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='RegisterRestClient']] and src:block/src:function[(src:annotation[src:name[text()='GET']] and src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Traced']] and src:annotation[src:name[text()='Operation']])])]",
+        "candidate_id": 788072703,
+        "grammar": "class must have (annotation \"RegisterRestClient\" and function with (annotation \"GET\" and annotation \"Path\" and annotation \"Produces\" and annotation \"Traced\" and annotation \"Operation\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='GET']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='RegisterRestClient']] and src:block/src:function[(src:annotation[src:name[text()='GET']] and src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Traced']])])]",
+        "candidate_id": 958033635,
+        "grammar": "class must have (annotation \"Path\" and annotation \"RegisterRestClient\" and function with (annotation \"GET\" and annotation \"Path\" and annotation \"Produces\" and annotation \"Traced\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Produces']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='RegisterRestClient']] and src:block/src:function[(src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='GET']] and src:annotation[src:name[text()='Traced']])])]",
+        "candidate_id": 538030893,
+        "grammar": "class must have (annotation \"Path\" and annotation \"RegisterRestClient\" and function with (annotation \"Produces\" and annotation \"Path\" and annotation \"GET\" and annotation \"Traced\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='GET']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='RegisterRestClient']] and src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='GET']])])]",
+        "candidate_id": -1124395966,
+        "grammar": "class must have (annotation \"RegisterRestClient\" and annotation \"Path\" and function with (annotation \"Path\" and annotation \"GET\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Traced']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Traced']] and src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='GET']])])]",
+        "candidate_id": -222841034,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"Traced\" and annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and src:annotation[src:name[text()='Path']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']])] and src:block/src:function[(src:annotation[src:name[text()='Traced']])])]",
+        "candidate_id": 460474207,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and annotation \"Path\" and declaration statement with (annotation \"ConfigProperty\" ) and function with (annotation \"Traced\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Path']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='RegisterRestClient']] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='GET']] and src:annotation[src:name[text()='Traced']] and src:annotation[src:name[text()='Operation']] and src:type[src:name[text()='Response']])])]",
+        "candidate_id": -149959793,
+        "grammar": "class must have (annotation \"Path\" and annotation \"RegisterRestClient\" and function with (annotation \"Path\" and annotation \"GET\" and annotation \"Traced\" and annotation \"Operation\" and type \"Response\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Traced']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Traced']])])]",
+        "candidate_id": -1119745953,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"Traced\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Traced']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Traced']])])]",
+        "candidate_id": 332895625,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"Produces\" and annotation \"Traced\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Traced']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Traced']] and src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='GET']])])]",
+        "candidate_id": 1621230822,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"Traced\" and annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='GET']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='RegisterRestClient']] and src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='GET']])])]",
+        "candidate_id": 1596508348,
+        "grammar": "class must have (annotation \"RegisterRestClient\" and annotation \"Path\" and function with (annotation \"Produces\" and annotation \"GET\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Traced']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Traced']])])]",
+        "candidate_id": 724325903,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"Traced\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='GET']] and src:annotation[src:name[text()='Traced']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='GET']] and src:annotation[src:name[text()='Traced']])])]",
+        "candidate_id": 1037059232,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"GET\" and annotation \"Traced\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='GET']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='RegisterRestClient']] and src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='GET']])])]",
+        "candidate_id": 1353807258,
+        "grammar": "class must have (annotation \"RegisterRestClient\" and annotation \"Path\" and function with (annotation \"Path\" and annotation \"GET\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Path']])])]",
+        "constraint": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='GET']] and src:annotation[src:name[text()='Traced']])])]",
+        "candidate_id": 371646083,
+        "grammar": "class must have (function with (annotation \"Path\" and annotation \"GET\" and annotation \"Traced\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='GET']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='RegisterRestClient']] and src:block/src:function[(src:annotation[src:name[text()='GET']] and src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Traced']])])]",
+        "candidate_id": -858730437,
+        "grammar": "class must have (annotation \"Path\" and annotation \"RegisterRestClient\" and function with (annotation \"GET\" and annotation \"Path\" and annotation \"Produces\" and annotation \"Traced\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Path']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='RegisterRestClient']] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='GET']] and src:annotation[src:name[text()='Traced']] and src:annotation[src:name[text()='Operation']] and src:type[src:name[text()='Response']])])]",
+        "candidate_id": -1479824569,
+        "grammar": "class must have (annotation \"Path\" and annotation \"RegisterRestClient\" and function with (annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" and annotation \"Traced\" and annotation \"Operation\" and type \"Response\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": 710855498,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": 1810004499,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']] and src:annotation[src:name[text()='ConfigProperty']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": -554362854,
+        "grammar": "class must have (declaration statement with (annotation \"Inject\" and annotation \"ConfigProperty\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": -1077500854,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": 1418037803,
+        "grammar": "class must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']])])]",
+        "constraint": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": -982772412,
+        "grammar": "class must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": 431647674,
+        "grammar": "class must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": -1476698120,
+        "grammar": "class must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:type[src:name[text()='String']])])]",
+        "constraint": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": 1504722182,
+        "grammar": "class must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "constraint": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']] and src:annotation[src:name[text()='ConfigProperty']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": -114835556,
+        "grammar": "class must have (declaration statement with (annotation \"Inject\" and annotation \"ConfigProperty\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']])])]",
+        "constraint": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": -297413640,
+        "grammar": "class must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']] and src:annotation[src:name[text()='ConfigProperty']])])]",
+        "candidate_id": 175480252,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" and annotation \"ConfigProperty\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Produces']])])]",
+        "constraint": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Operation']])])]",
+        "candidate_id": 1392587348,
+        "grammar": "class must have (function with (annotation \"Produces\" and annotation \"Path\" and annotation \"Operation\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:type[src:name[text()='Response']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Operation']] and src:type[src:name[text()='Response']])])]",
+        "candidate_id": 263000292,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"Operation\" and type \"Response\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Path']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='RegisterRestClient']] and src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Path']])])]",
+        "candidate_id": 649643651,
+        "grammar": "class must have (annotation \"RegisterRestClient\" and annotation \"Path\" and function with (annotation \"Produces\" and annotation \"Path\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:type[src:name[text()='Response']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Operation']] and src:type[src:name[text()='Response']])])]",
+        "candidate_id": 1310849796,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"Operation\" and type \"Response\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and src:block/src:function[(src:annotation[src:name[text()='Timeout']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and src:block/src:function[(src:annotation[src:name[text()='Timeout']] and src:annotation[src:name[text()='Fallback']])])]",
+        "candidate_id": -1504868995,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and function with (annotation \"Timeout\" and annotation \"Fallback\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Fallback']] and src:type[src:name[text()='CompletionStage']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Asynchronous']] and src:block/src:function[(src:annotation[src:name[text()='Fallback']] and src:type[src:name[text()='CompletionStage']])])]",
+        "candidate_id": -1705129842,
+        "grammar": "class must have (annotation \"Asynchronous\" and function with (annotation \"Fallback\" and type \"CompletionStage\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Asynchronous']] and src:block/src:function[(src:type[src:name[text()='CompletionStage']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Asynchronous']] and src:block/src:function[(src:annotation[src:name[text()='Fallback']] and src:type[src:name[text()='CompletionStage']])])]",
+        "candidate_id": 665772254,
+        "grammar": "class must have (annotation \"Asynchronous\" and function with (annotation \"Fallback\" and type \"CompletionStage\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Retry']])])]",
+        "constraint": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Retry']] and src:annotation[src:name[text()='Fallback']])])]",
+        "candidate_id": 1078022917,
+        "grammar": "class must have (function with (annotation \"Retry\" and annotation \"Fallback\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Asynchronous']] and src:block/src:function[(src:annotation[src:name[text()='Fallback']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Asynchronous']] and src:block/src:function[(src:annotation[src:name[text()='Fallback']] and src:type[src:name[text()='CompletionStage']])])]",
+        "candidate_id": -1569963816,
+        "grammar": "class must have (annotation \"Asynchronous\" and function with (annotation \"Fallback\" and type \"CompletionStage\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Fallback']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and src:block/src:function[(src:annotation[src:name[text()='Fallback']])])]",
+        "candidate_id": 1182104882,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and function with (annotation \"Fallback\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Fallback']] and src:annotation[src:name[text()='Timeout']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and src:block/src:function[(src:annotation[src:name[text()='Fallback']] and src:annotation[src:name[text()='Timeout']])])]",
+        "candidate_id": -670721267,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and function with (annotation \"Fallback\" and annotation \"Timeout\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Incoming']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and src:block/src:function[(src:annotation[src:name[text()='Incoming']])])]",
+        "candidate_id": 910026140,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and function with (annotation \"Incoming\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Outgoing']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and src:block/src:function[(src:annotation[src:name[text()='Outgoing']])])]",
+        "candidate_id": -293446250,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and function with (annotation \"Outgoing\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Incoming']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and src:block/src:function[(src:annotation[src:name[text()='Incoming']])])]",
+        "candidate_id": -597442730,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and function with (annotation \"Incoming\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='RegisterRestClient']] and src:block/src:function[(src:annotation[src:name[text()='Path']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='RegisterRestClient']] and src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='GET']])])]",
+        "candidate_id": -447429904,
+        "grammar": "class must have (annotation \"RegisterRestClient\" and annotation \"Path\" and function with (annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Path']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='RegisterRestClient']] and src:block/src:function[(src:annotation[src:name[text()='Path']])])]",
+        "candidate_id": -20402558,
+        "grammar": "class must have (annotation \"RegisterRestClient\" and function with (annotation \"Path\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='RegisterRestClient']] and src:annotation[src:name[text()='Path']])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='RegisterRestClient']] and src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='GET']])])]",
+        "candidate_id": -226497064,
+        "grammar": "class must have (annotation \"RegisterRestClient\" and annotation \"Path\" and function with (annotation \"Path\" and annotation \"Produces\" and annotation \"GET\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='RestClient']])])]",
+        "constraint": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='RestClient']] and src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": 669981210,
+        "grammar": "class must have (declaration statement with (annotation \"RestClient\" and annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='RegisterRestClient']])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='RegisterRestClient']] and src:block/src:function[(src:annotation[src:name[text()='Path']])])]",
+        "candidate_id": 728557548,
+        "grammar": "class must have (annotation \"RegisterRestClient\" and function with (annotation \"Path\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='RegisterRestClient']] and src:block/src:function[(src:annotation[src:name[text()='GET']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='RegisterRestClient']] and src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='GET']] and src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Produces']])])]",
+        "candidate_id": -1705300636,
+        "grammar": "class must have (annotation \"RegisterRestClient\" and annotation \"Path\" and function with (annotation \"GET\" and annotation \"Path\" and annotation \"Produces\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='RegisterRestClient']] and src:block/src:function[(src:annotation[src:name[text()='Produces']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='RegisterRestClient']] and src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='GET']])])]",
+        "candidate_id": -308539306,
+        "grammar": "class must have (annotation \"RegisterRestClient\" and annotation \"Path\" and function with (annotation \"Produces\" and annotation \"Path\" and annotation \"GET\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": 1528918328,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": 1314723926,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']] and src:annotation[src:name[text()='ConfigProperty']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": 1360127590,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" and annotation \"ConfigProperty\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and src:annotation[src:name[text()='Readiness']])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and src:annotation[src:name[text()='Readiness']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": -1149035180,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and annotation \"Readiness\" and declaration statement with (annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:type[src:name[text()='String']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": -431984988,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": 1509801978,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Readiness']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Readiness']] and src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": 145395464,
+        "grammar": "class must have (annotation \"Readiness\" and annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']])])]",
+        "constraint": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": 182635345,
+        "grammar": "class must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": 20293282,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:type[src:name[text()='String']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": -1966197048,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and src:annotation[src:name[text()='Health']])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and src:annotation[src:name[text()='Health']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": -1875407148,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and annotation \"Health\" and declaration statement with (annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Liveness']])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Liveness']] and src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": -378229179,
+        "grammar": "class must have (annotation \"Liveness\" and annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": -652650054,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:type[src:name[text()='String']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": 554025540,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": -1455193346,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']] and src:annotation[src:name[text()='ConfigProperty']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": 1321089304,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" and annotation \"ConfigProperty\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": -160762702,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": -59889610,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Liveness']])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Liveness']] and src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": 233647615,
+        "grammar": "class must have (annotation \"Liveness\" and annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Health']])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Health']] and src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": 1921878214,
+        "grammar": "class must have (annotation \"Health\" and annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:type[src:name[text()='String']])])]",
+        "constraint": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": -1191978191,
+        "grammar": "class must have (declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:type[src:name[text()='String']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": -1354320254,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Health']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Health']] and src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='Inject']])])]",
+        "candidate_id": -580976504,
+        "grammar": "class must have (annotation \"Health\" and annotation \"ApplicationScoped\" and declaration statement with (annotation \"Inject\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='ApplicationScoped']] and descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[text()='ConfigProperty']] and src:annotation[src:name[text()='Inject']] and src:type[src:name[text()='String']])])]",
+        "candidate_id": -40773260,
+        "grammar": "class must have (annotation \"ApplicationScoped\" and declaration statement with (annotation \"ConfigProperty\" and annotation \"Inject\" and type \"String\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Operation']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Operation']] and src:annotation[src:name[text()='Path']] and src:type[src:name[text()='Response']])])]",
+        "candidate_id": 814531134,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"Operation\" and annotation \"Path\" and type \"Response\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Tag']])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Tag']] and src:annotation[src:name[text()='Path']])]",
+        "candidate_id": 552330979,
+        "grammar": "class must have (annotation \"Tag\" and annotation \"Path\" )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Path']])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Operation']])])]",
+        "candidate_id": -516519425,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"Operation\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Operation']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Operation']] and src:annotation[src:name[text()='Produces']] and src:annotation[src:name[text()='GET']])])]",
+        "candidate_id": 528456996,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"Operation\" and annotation \"Produces\" and annotation \"GET\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Operation']] and src:type[src:name[text()='Response']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Operation']] and src:type[src:name[text()='Response']])])]",
+        "candidate_id": -1828214096,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"Operation\" and type \"Response\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Operation']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Operation']] and src:type[src:name[text()='Response']])])]",
+        "candidate_id": -548003532,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"Operation\" and type \"Response\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Operation']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Operation']])])]",
+        "candidate_id": 1870904105,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"Operation\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Operation']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Operation']] and src:type[src:name[text()='Response']])])]",
+        "candidate_id": 496128394,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"Operation\" and type \"Response\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:type[src:name[text()='Response']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Operation']] and src:type[src:name[text()='Response']])])]",
+        "candidate_id": 2107072148,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"Operation\" and type \"Response\" ) )"
+    },
+    {
+        "quantifier": "src:class[(src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Operation']])])]",
+        "constraint": "src:class[(src:annotation[src:name[text()='Path']] and src:block/src:function[(src:annotation[src:name[text()='Path']] and src:annotation[src:name[text()='Operation']])])]",
+        "candidate_id": 54140033,
+        "grammar": "class must have (annotation \"Path\" and function with (annotation \"Path\" and annotation \"Operation\" ) )"
+    }
+]
