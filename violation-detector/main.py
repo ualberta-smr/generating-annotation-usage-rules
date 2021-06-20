@@ -3,11 +3,12 @@
 # 1. Take the rules.json file, and check the rules against any project.
 # 2. Report on the violations.
 
+from re import sub
 import sys
 import json
 import glob
 import os
-import subprocess
+from subprocess import Popen, PIPE
 from lxml import etree
 from typing import *
 from dataclasses import *
@@ -40,7 +41,9 @@ def main(args: List[str]):
 
     d = list(find_violations(file_xml_dict, rules))
 
-    find_positions_of_violations(d)
+    print("found: " + str(len(d)))
+
+    # find_positions_of_violations(d)
 
     with open(violations_output, "w+") as f:
         json.dump(list(d), f, indent=4)
@@ -166,7 +169,7 @@ def find_violations(xml_dict, rules):
                         "precondition": rule.precondition,
                         "postcondition": rule.postcondition,
                         "grammar": rule.grammar,
-                        "elements": pre_match
+                        # "elements": pre_match
                     }
 
 
@@ -193,9 +196,11 @@ def get_files(path, lang):
 def execute_srcml(filenames):
     results = dict()
     for filename in filenames:
-        result = subprocess.run(["srcml", filename, "--position"], capture_output=True)
-        if result.returncode == 0:
-            xml = result.stdout.decode('UTF-8')
+        r1 = Popen(f"java -jar ../type-resolution/type-resolver.jar \"{filename}\" ../type-resolution/lib", stdout=PIPE)
+        r2 = Popen(f"srcml --language Java --position", stdin=r1.stdout, stdout=PIPE)
+        result = r2.communicate()
+        if r2.returncode == 0:
+            xml = result[0].decode('UTF-8')
             results[filename] = xml
     return results
 

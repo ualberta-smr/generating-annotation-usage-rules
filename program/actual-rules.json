@@ -5,7 +5,7 @@
             "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.faulttolerance.Fallback"
         ],
         "consequent": [
-            "Annotation_org.eclipse.microprofile.faulttolerance.Fallback --(hasParam)--> Param_fallbackMethod:java.lang.[String|Class]"
+            "Annotation_org.eclipse.microprofile.faulttolerance.Fallback --(hasParam)--> Param_fallbackMethod:java.lang.<String,Class>"
         ],
         "label": "correct",
         "comment": "Supported. this rule is fully captured, though there are less usages of `.Class`"
@@ -28,7 +28,7 @@
             "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.faulttolerance.Asynchronous"
         ],
         "consequent": [
-            "Method --(hasReturnType)--> java.util.concurrent.[CompletionStage|Future]"
+            "Method --(hasReturnType)--> java.util.concurrent.<CompletionStage,Future>"
         ],
         "label": "correct",
         "comment": "Supported. This rule is captured."
@@ -36,10 +36,10 @@
     {
         "id": 10,
         "antecedent": [
-            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.reactive.messaging.[Outgoing|Incoming]"
+            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.reactive.messaging.<Outgoing,Incoming>"
         ],
         "consequent": [
-            "Class --(annotatedWith)--> Annotation_javax.enterprise.context.[ApplicationScoped|Dependent]"
+            "Class --(annotatedWith)--> Annotation_javax.enterprise.context.<ApplicationScoped,Dependent>"
         ],
         "label": "correct",
         "comment": "Supported. The rule is captured."
@@ -190,7 +190,7 @@
     {
         "id": 21,
         "antecedent": [
-            "Class --(annotatedWith)--> Annotation_javax.ws.rs.[Produces|Consumes|GET|POST|PUT|DELETE|UPDATE]"
+            "Class --(annotatedWith)--> Annotation_javax.ws.rs.<Produces,Consumes,GET,POST,PUT,DELETE,UPDATE>"
         ],
         "consequent": [
             "Class --(annotatedWith)--> Annotation_javax.ws.rs.Path"
@@ -202,7 +202,7 @@
     {
         "id": 2101,
         "antecedent": [
-            "Class --(annotatedWith)--> Annotation_javax.ws.rs.[Produces|Consumes|GET|POST|PUT|DELETE|UPDATE]"
+            "Class --(annotatedWith)--> Annotation_javax.ws.rs.<Produces,Consumes,GET,POST,PUT,DELETE,UPDATE>"
         ],
         "consequent": [
             "Method --(annotatedWith)--> Annotation_javax.ws.rs.Path"
@@ -214,7 +214,7 @@
     {
         "id": 2102,
         "antecedent": [
-            "Method --(annotatedWith)--> Annotation_javax.ws.rs.[Produces|Consumes|GET|POST|PUT|DELETE|UPDATE]"
+            "Method --(annotatedWith)--> Annotation_javax.ws.rs.<Produces,Consumes,GET,POST,PUT,DELETE,UPDATE>"
         ],
         "consequent": [
             "Class --(annotatedWith)--> Annotation_javax.ws.rs.Path"
@@ -226,7 +226,7 @@
     {
         "id": 2103,
         "antecedent": [
-            "Method --(annotatedWith)--> Annotation_javax.ws.rs.[Produces|Consumes|GET|POST|PUT|DELETE|UPDATE]"
+            "Method --(annotatedWith)--> Annotation_javax.ws.rs.<Produces,Consumes,GET,POST,PUT,DELETE,UPDATE>"
         ],
         "consequent": [
             "Method --(annotatedWith)--> Annotation_javax.ws.rs.Path"
@@ -237,7 +237,7 @@
     {
         "id": 23,
         "antecedent": [
-            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.graphql.[Mutation|Query]"
+            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.graphql.<Mutation,Query>"
         ],
         "consequent": [
             "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.graphql.GraphQLApi"

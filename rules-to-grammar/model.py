@@ -123,7 +123,7 @@ def partialToClass(facts: List[str]) -> Class:
         elif "Method --" in ant:
             if "annotatedWith" in ant:
                 method_anno.append(ant.split()[-1].split("_")[-1])
-            elif "hasType" in ant:
+            elif "hasType" in ant or "hasReturnType" in ant:
                 method_type = ant.split()[-1]
             elif "hasParam" in ant:
                 method_param.append(ant.split()[-1].split("_")[-1])

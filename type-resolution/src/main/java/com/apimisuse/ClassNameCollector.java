@@ -20,7 +20,8 @@ public class ClassNameCollector {
                         concat(getMethodParameterTypeImports(cu), getFieldTypeImports(cu)))
         ).filter(Objects::nonNull).collect(Collectors.toMap(
                 Import::getSimpleName,
-                Import::getFullyQualifiedName
+                Import::getFullyQualifiedName,
+                (s1, s2) -> s1
         ));
     }
 
