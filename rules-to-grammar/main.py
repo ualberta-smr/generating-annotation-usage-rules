@@ -5,7 +5,7 @@ from dataclasses import *
 from model import *
 
 def fqnToSimpleName(fully_qualified_name: str)-> str:
-    return fully_qualified_name.split(".")[-1]
+    return fully_qualified_name#.split(".")[-1]
 
 def annotationsToGrammar(annos: List[Annotation]) -> str:
     return " and ".join(map(lambda anno: f"annotation \"{fqnToSimpleName(anno.name)}\"", annos))

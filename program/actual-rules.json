@@ -1,0 +1,248 @@
+[
+    {
+        "id": 2,
+        "antecedent": [
+            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.faulttolerance.Fallback"
+        ],
+        "consequent": [
+            "Annotation_org.eclipse.microprofile.faulttolerance.Fallback --(hasParam)--> Param_fallbackMethod:java.lang.[String|Class]"
+        ],
+        "label": "correct",
+        "comment": "Supported. this rule is fully captured, though there are less usages of `.Class`"
+    },
+    {
+        "id": 3,
+        "antecedent": [
+            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.faulttolerance.Bulkhead",
+            "Annotation_org.eclipse.microprofile.faulttolerance.Bulkhead --(hasParam)--> Param_waitingTaskQueue:int"
+        ],
+        "consequent": [
+            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.faulttolerance.Asynchronous"
+        ],
+        "label": "correct",
+        "comment": "Not enough usages. This rule is not captured because there are little usages. There are usages of Bulkhead in test directory in Payara and helidon, however since test code does not represent a real usage scenario, we ignore all `src/test` directories of all projects."
+    },
+    {
+        "id": 4,
+        "antecedent": [
+            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.faulttolerance.Asynchronous"
+        ],
+        "consequent": [
+            "Method --(hasReturnType)--> java.util.concurrent.[CompletionStage|Future]"
+        ],
+        "label": "correct",
+        "comment": "Supported. This rule is captured."
+    },
+    {
+        "id": 10,
+        "antecedent": [
+            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.reactive.messaging.[Outgoing|Incoming]"
+        ],
+        "consequent": [
+            "Class --(annotatedWith)--> Annotation_javax.enterprise.context.[ApplicationScoped|Dependent]"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured."
+    },
+    {
+        "id": 11,
+        "antecedent": [
+            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.openapi.annotations.Operation"
+        ],
+        "consequent": [
+            "Method --(annotatedWith)--> Annotation_javax.ws.rs.Path"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured, though sometimes it only captures `Method` or `Class` for @Path, but not together."
+    },
+
+    {
+        "id": 1101,
+        "antecedent": [
+            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.openapi.annotations.Operation"
+        ],
+        "consequent": [
+            "Class --(annotatedWith)--> Annotation_javax.ws.rs.Path"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured, though sometimes it only captures `Method` or `Class` for @Path, but not together."
+    },
+
+    {
+        "id": 12,
+        "antecedent": [
+            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.openapi.annotations.Operation"
+        ],
+        "consequent": ["Method --(hasReturnType)--> javax.ws.rs.core.Response"],
+        "label": "correct",
+        "comment": "Supported. The rule is captured."
+    },
+    {
+        "id": 13,
+        "antecedent": [
+            "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.openapi.annotations.tags.Tag"
+        ],
+        "consequent": [
+            "Method --(annotatedWith)--> Annotation_javax.ws.rs.Path"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured, though sometimes it only captures `Method` or `Class` for @Path, but not together."
+    },
+    {
+        "id": 1301,
+        "antecedent": [
+            "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.openapi.annotations.tags.Tag"
+        ],
+        "consequent": [
+            "Class --(annotatedWith)--> Annotation_javax.ws.rs.Path"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured, though sometimes it only captures `Method` or `Class` for @Path, but not together."
+    },
+    {
+        "id": 14,
+        "antecedent": [
+            "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.rest.client.inject.RegisterRestClient"
+        ],
+        "consequent": [
+            "Method --(annotatedWith)--> Annotation_javax.ws.rs.Path"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured, though sometimes it only captures `Method` or `Class` for @Path, but not together."
+    },
+    {
+        "id": 1401,
+        "antecedent": [
+            "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.rest.client.inject.RegisterRestClient"
+        ],
+        "consequent": [
+            "Class --(annotatedWith)--> Annotation_javax.ws.rs.Path"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured, though sometimes it only captures `Method` or `Class` for @Path, but not together."
+    },
+    {
+        "id": 15,
+        "antecedent": [
+            "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.health.Liveness"
+        ],
+        "consequent": [
+            "Class --(extends/implements)--> Class_org.eclipse.microprofile.health.HealthCheck"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured."
+    },
+    {
+        "id": 16,
+        "antecedent": [
+            "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.health.Readiness"
+        ],
+        "consequent": [
+            "Class --(extends/implements)--> Class_org.eclipse.microprofile.health.HealthCheck"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured."
+    },
+    {
+        "id": 17,
+        "antecedent": [
+            "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.health.Health"
+        ],
+        "consequent": [
+            "Class --(extends/implements)--> Class_org.eclipse.microprofile.health.HealthCheck"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured, though deprecated. We can still mine potential rule templates like that."
+    },
+    {
+        "id": 18,
+        "antecedent": [
+            "Field --(annotatedWith)--> Annotation_org.eclipse.microprofile.jwt.Claim"
+        ],
+        "consequent": [
+            "Field --(annotatedWith)--> Annotation_javax.inject.Inject"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured."
+    },
+    {
+        "id": 19,
+        "antecedent": [
+            "Field --(annotatedWith)--> Annotation_org.eclipse.microprofile.rest.client.inject.RestClient"
+        ],
+        "consequent": [
+            "Field --(annotatedWith)--> Annotation_javax.inject.Inject"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured."
+    },
+    {
+        "id": 20,
+        "antecedent": [
+            "Field --(hasType)--> org.eclipse.microprofile.jwt.JsonWebToken"
+        ],
+        "consequent": [
+            "Field --(annotatedWith)--> Annotation_javax.inject.Inject"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured."
+    },
+    {
+        "id": 21,
+        "antecedent": [
+            "Class --(annotatedWith)--> Annotation_javax.ws.rs.[Produces|Consumes|GET|POST|PUT|DELETE|UPDATE]"
+        ],
+        "consequent": [
+            "Class --(annotatedWith)--> Annotation_javax.ws.rs.Path"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured, though sometimes it only captures `Method` or `Class` for @Path, but not together."
+    },
+
+    {
+        "id": 2101,
+        "antecedent": [
+            "Class --(annotatedWith)--> Annotation_javax.ws.rs.[Produces|Consumes|GET|POST|PUT|DELETE|UPDATE]"
+        ],
+        "consequent": [
+            "Method --(annotatedWith)--> Annotation_javax.ws.rs.Path"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured, though sometimes it only captures `Method` or `Class` for @Path, but not together."
+    },
+
+    {
+        "id": 2102,
+        "antecedent": [
+            "Method --(annotatedWith)--> Annotation_javax.ws.rs.[Produces|Consumes|GET|POST|PUT|DELETE|UPDATE]"
+        ],
+        "consequent": [
+            "Class --(annotatedWith)--> Annotation_javax.ws.rs.Path"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured, though sometimes it only captures `Method` or `Class` for @Path, but not together."
+    },
+
+    {
+        "id": 2103,
+        "antecedent": [
+            "Method --(annotatedWith)--> Annotation_javax.ws.rs.[Produces|Consumes|GET|POST|PUT|DELETE|UPDATE]"
+        ],
+        "consequent": [
+            "Method --(annotatedWith)--> Annotation_javax.ws.rs.Path"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured, though sometimes it only captures `Method` or `Class` for @Path, but not together."
+    },
+    {
+        "id": 23,
+        "antecedent": [
+            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.graphql.[Mutation|Query]"
+        ],
+        "consequent": [
+            "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.graphql.GraphQLApi"
+        ],
+        "label": "correct",
+        "comment": "Supported. The rule is captured, though sometimes it only captures `Method` or `Class` for @Path, but not together."
+    }
+]
