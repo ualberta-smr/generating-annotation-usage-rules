@@ -21,7 +21,7 @@ public class ClassNameCollector {
         ).filter(Objects::nonNull).collect(Collectors.toMap(
                 Import::getSimpleName,
                 Import::getFullyQualifiedName,
-                (s1, s2) -> s1
+                (s1, s2) -> s1 // basically, accept the first value
         ));
     }
 

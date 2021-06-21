@@ -1,16 +1,53 @@
 [
     {
         "candidate-rule-id": 20,
+        "file": "C:\\Users\\mensu\\Downloads\\jee-sample\\javaee-openui5-multi-modules-base-master\\jwt\\jaxrs\\src\\main\\java\\org\\eclipse\\microprofile\\jwt\\jaxrs\\demo\\JWTSecurityContext.java",
+        "precondition": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:type[src:name[(src:name[1][text()='org'] and src:name[2][text()='eclipse'] and src:name[3][text()='microprofile'] and src:name[4][text()='jwt'] and src:name[5][text()='JsonWebToken'])]])])]",
+        "postcondition": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[(src:name[1][text()='javax'] and src:name[2][text()='inject'] and src:name[3][text()='Inject'])]] and src:type[src:name[(src:name[1][text()='org'] and src:name[2][text()='eclipse'] and src:name[3][text()='microprofile'] and src:name[4][text()='jwt'] and src:name[5][text()='JsonWebToken'])]])])]",
+        "grammar": "class must have (declaration statement with (annotation \"javax.inject.Inject\" and type \"org.eclipse.microprofile.jwt.JsonWebToken\" ) )",
+        "details": [
+            {
+                "element": "descendant-or-self::src:decl_stmt[2]",
+                "violation": "src:annotation[src:name[src:name[1][text()='javax'] and src:name[2][text()='inject'] and src:name[3][text()='Inject']]]",
+                "positions": [
+                    "34",
+                    "5"
+                ]
+            }
+        ]
+    },
+    {
+        "candidate-rule-id": 20,
         "file": "C:\\Users\\mensu\\Downloads\\jee-sample\\javaee-openui5-multi-modules-base-master\\jwt\\jaxrs\\src\\main\\java\\org\\eclipse\\microprofile\\jwt\\jaxrs\\JWTSecurityContext.java",
         "precondition": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:type[src:name[(src:name[1][text()='org'] and src:name[2][text()='eclipse'] and src:name[3][text()='microprofile'] and src:name[4][text()='jwt'] and src:name[5][text()='JsonWebToken'])]])])]",
         "postcondition": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[(src:name[1][text()='javax'] and src:name[2][text()='inject'] and src:name[3][text()='Inject'])]] and src:type[src:name[(src:name[1][text()='org'] and src:name[2][text()='eclipse'] and src:name[3][text()='microprofile'] and src:name[4][text()='jwt'] and src:name[5][text()='JsonWebToken'])]])])]",
-        "grammar": "class must have (declaration statement with (annotation \"javax.inject.Inject\" and type \"org.eclipse.microprofile.jwt.JsonWebToken\" ) )"
+        "grammar": "class must have (declaration statement with (annotation \"javax.inject.Inject\" and type \"org.eclipse.microprofile.jwt.JsonWebToken\" ) )",
+        "details": [
+            {
+                "element": "descendant-or-self::src:decl_stmt[2]",
+                "violation": "src:annotation[src:name[src:name[1][text()='javax'] and src:name[2][text()='inject'] and src:name[3][text()='Inject']]]",
+                "positions": [
+                    "34",
+                    "5"
+                ]
+            }
+        ]
     },
     {
         "candidate-rule-id": 20,
         "file": "C:\\Users\\mensu\\Downloads\\jee-sample\\javaee-openui5-multi-modules-base-master\\jwt\\principal\\src\\test\\java\\org\\eclipse\\microprofile\\jwt\\test\\format\\TestTokenClaimTypesTest.java",
         "precondition": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:type[src:name[(src:name[1][text()='org'] and src:name[2][text()='eclipse'] and src:name[3][text()='microprofile'] and src:name[4][text()='jwt'] and src:name[5][text()='JsonWebToken'])]])])]",
         "postcondition": "src:class[(descendant-or-self::src:decl_stmt/src:decl[(src:annotation[src:name[(src:name[1][text()='javax'] and src:name[2][text()='inject'] and src:name[3][text()='Inject'])]] and src:type[src:name[(src:name[1][text()='org'] and src:name[2][text()='eclipse'] and src:name[3][text()='microprofile'] and src:name[4][text()='jwt'] and src:name[5][text()='JsonWebToken'])]])])]",
-        "grammar": "class must have (declaration statement with (annotation \"javax.inject.Inject\" and type \"org.eclipse.microprofile.jwt.JsonWebToken\" ) )"
+        "grammar": "class must have (declaration statement with (annotation \"javax.inject.Inject\" and type \"org.eclipse.microprofile.jwt.JsonWebToken\" ) )",
+        "details": [
+            {
+                "element": "descendant-or-self::src:decl_stmt[2]",
+                "violation": "src:annotation[src:name[src:name[1][text()='javax'] and src:name[2][text()='inject'] and src:name[3][text()='Inject']]]",
+                "positions": [
+                    "35",
+                    "5"
+                ]
+            }
+        ]
     }
 ]
