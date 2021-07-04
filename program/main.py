@@ -39,7 +39,6 @@ if __name__ == "__main__":
     print("Converting RulePad grammar to XPath queries...", end='')
     run(["node", "../grammar-to-xpath/index.js", RESULTS_FILE, RULES_FILE])
     print("Done")
-    exit(2)
 
     # given xpath rules and a project, detect violations
     print("Detecting violations...", end='')
