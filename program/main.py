@@ -11,8 +11,8 @@ def cleanup():
     os.remove(RESULTS_FILE)
     os.remove(RULES_FILE)
 
-def run(args):
-    return subprocess.run(args, capture_output=True)
+def run(args, capture_output=True):
+    return subprocess.run(args, capture_output=capture_output)
 
 
 def print_violation_stats():
@@ -39,10 +39,11 @@ if __name__ == "__main__":
     print("Converting RulePad grammar to XPath queries...", end='')
     run(["node", "../grammar-to-xpath/index.js", RESULTS_FILE, RULES_FILE])
     print("Done")
+    exit(2)
 
     # given xpath rules and a project, detect violations
     print("Detecting violations...", end='')
-    run(["python", "../violation-detector/main.py", RULES_FILE, projectFolder, VIOLATIONS_FILE])
+    run(["python", "../violation-detector/main.py", RULES_FILE, projectFolder, VIOLATIONS_FILE], False)
     print("Done")
 
     print_violation_stats()

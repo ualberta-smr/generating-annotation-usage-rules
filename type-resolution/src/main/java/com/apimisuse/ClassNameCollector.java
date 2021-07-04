@@ -87,7 +87,7 @@ public class ClassNameCollector {
             final String qualifiedName = type.resolve().asReferenceType().getQualifiedName();
             final String simple = type.asString();
             return new Import(simple, qualifiedName);
-        } catch (UnsolvedSymbolException e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -104,7 +104,7 @@ public class ClassNameCollector {
             if (alreadyQualifiedName) return null;
 
             return new Import(name, qualifiedName);
-        } catch (UnsolvedSymbolException e) {
+        } catch (Exception e) {
             return null;
         }
     }

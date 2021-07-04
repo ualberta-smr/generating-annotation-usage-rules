@@ -23,7 +23,7 @@ def main(args: List[str]):
     
     file_xml_dict = execute_srcml(filenames)
 
-    d = list(find_violations(file_xml_dict, rules))
+    d = list(find_violations(file_xml_dict, rules, len(filenames)))
 
     find_positions_of_violations(d)
 
@@ -34,15 +34,13 @@ def main(args: List[str]):
 
 
 def execute_srcml(filenames):
-    results = dict()
     for filename in filenames:
         r1 = Popen(f"java -jar ../type-resolution/type-resolver.jar \"{filename}\" ../type-resolution/lib", stdout=PIPE)
         r2 = Popen(f"srcml --language Java --position", stdin=r1.stdout, stdout=PIPE)
         result = r2.communicate()
         if r2.returncode == 0:
             xml = result[0].decode('UTF-8')
-            results[filename] = xml
-    return results
+            yield (filename, xml)
 
 def execute_srcml_with_position(violations):
     for violation in violations:

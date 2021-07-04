@@ -1,5 +1,6 @@
 package com.apimisuse;
 
+import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.*;
@@ -38,15 +39,17 @@ public class TypeResolver {
 
         configureParser(libFolder);
 
-        final CompilationUnit cu = StaticJavaParser.parse(new File(filePath));
+        try {
+            final CompilationUnit cu = StaticJavaParser.parse(new File(filePath));
 
-        final Map<String, String> imports = ClassNameCollector.getImports(cu);
+            final Map<String, String> imports = ClassNameCollector.getImports(cu);
 
-        convertMethodDeclarations(cu, imports);
-        convertFieldDeclarations(cu, imports);
-        convertClassInterfaceDeclarations(cu, imports);
+            convertMethodDeclarations(cu, imports);
+            convertFieldDeclarations(cu, imports);
+            convertClassInterfaceDeclarations(cu, imports);
 
-        System.out.print(cu);
+            System.out.print(cu);
+        } catch (Exception ignore) {}
     }
 
     private static void convertClassInterfaceDeclarations(CompilationUnit cu, Map<String, String> imports) {

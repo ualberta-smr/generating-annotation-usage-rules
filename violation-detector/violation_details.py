@@ -1,8 +1,9 @@
 from utils import *
 from eulxml import xpath
 
-def find_violations(xml_dict, rules):
-    for k, v in xml_dict.items():
+def find_violations(xml_dict, rules, file_count):
+    current = 1
+    for k, v in xml_dict:
         for rule in rules:
             pre_match = match_xpath(v, rule.precondition)
             if len(pre_match) > 0:
@@ -16,6 +17,8 @@ def find_violations(xml_dict, rules):
                         "grammar": rule.grammar,
                         "elements": pre_match
                     }
+        print("[%d/%d] Finished processing: %s" % (current, file_count, k))
+        current += 1
 
 def extractConditions(node, collection):
     if isinstance(node, xpath.ast.Step):
