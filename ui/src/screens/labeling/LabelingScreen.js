@@ -10,14 +10,17 @@ import { highlight, languages } from "prismjs/components/prism-core";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-java";
 import "prismjs/themes/prism.css";
+import MonacoEditor from "react-monaco-editor";
 
 import {
     getNextRuleToLabel,
     getPreviousRuleToLabel,
     highlightWords,
 } from "./helper";
+import TextualRuleEditor from "./TextualRuleEditor";
 
 function LabelingScreen() {
+
     const [grammarText, setGrammarText] = useState("");
 
     useEffect(() => {
@@ -35,16 +38,7 @@ function LabelingScreen() {
         }
     }, []);
 
-    const [cursorPos, setCursorPosition] = useState(null);
 
-    const handleChange = (evt) => {
-        setCursorPosition(evt.target.selectionStart);
-        setGrammarText(evt.target.value);
-    };
-
-    const handleFocus = (evt) => {
-        if (cursorPos != null) evt.target.selectionStart = cursorPos;
-    };
 
     const [code, setRuleCode] = useState("");
     const [compliant, setCompliantCode] = useState("");
@@ -77,6 +71,32 @@ function LabelingScreen() {
         updateFields(getPreviousRuleToLabel());
     };
 
+    const newCodeEditor = (value, onValueChange, disabled = false) => {
+        return (
+            <>
+                <h4
+                    style={{
+                        color: "white",
+                    }}
+                >
+                    Foo.java
+                </h4>
+                <MonacoEditor
+                    width={800}
+                    height={300}
+                    language="java"
+                    theme="vs-dark"
+                    value={value}
+                    options={{
+                        readOnly: disabled,
+                        folding: false,
+                    }}
+                    onChange={onValueChange}
+                />
+            </>
+        );
+    };
+
     const codeEditor = (value, onValueChange, disabled = false) => {
         return (
             <Editor
@@ -93,23 +113,19 @@ function LabelingScreen() {
         );
     };
 
+    
+
     return (
         <div className="flautas">
             <div className="code-example">
                 <div className="code-snippet-sidebar">
-                    {codeEditor(code, setRuleCode)}
+                    {newCodeEditor(code, setRuleCode)}
                 </div>
             </div>
 
             <div className="code-desc-container">
                 <div className="code-description">
-                    <ContentEditable
-                        html={highlightWords(grammarText)}
-                        disabled={false}
-                        onChange={handleChange}
-                        onFocus={handleFocus}
-                        className="code-description-text"
-                    />
+                    <TextualRuleEditor text={grammarText}/>
                 </div>
                 <div className="code-snippet-examples">
                     <div className="correct">

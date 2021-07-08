@@ -39,8 +39,9 @@
 }
 
 .flautas .code-description {
-	display: flex;
-	align-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .flautas .code-description-text {
@@ -48,18 +49,18 @@
     border: 1px dashed #aaa;
     padding: 5px;
     font-size: 20px;
-	background-color: white;
-	word-wrap: break-word;
-	word-break: break-all;
+    background-color: white;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .flautas .hl-red {
-	color: red;
+    color: red;
 }
 
 .flautas .hl-blue-bg {
-	background-color: #9A614B;
-	color: white;
+    background-color: #9a614b;
+    color: white;
 }
 
 .flautas .hl-italic {
@@ -81,7 +82,7 @@
 }
 
 .flautas .btn {
-    background-color: #F6F6F5;
+    background-color: #f6f6f5;
     border-style: dashed;
     padding: 1% 2%;
     width: 160px;
@@ -145,7 +146,8 @@
     flex: 0.5;
 }
 
-.flautas .left-btn-div, .flautas .right-btn-div {
+.flautas .left-btn-div,
+.flautas .right-btn-div {
     display: flex;
     align-items: center;
 }
@@ -159,14 +161,14 @@
 
 .flautas .a button {
     background-color: white;
-    color: #9A614B;
+    color: #9a614b;
 }
 
 .flautas .extends-implements {
     background-color: darkcyan !important;
 }
 
-.flautas .extends-implements p{
+.flautas .extends-implements p {
     color: white !important;
 }
 
@@ -176,11 +178,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .flautas .code-snippet-textbar {
     width: 95%;
     resize: none;
     font-size: 14px;
-	background-color: white;
+    background-color: white;
 }
