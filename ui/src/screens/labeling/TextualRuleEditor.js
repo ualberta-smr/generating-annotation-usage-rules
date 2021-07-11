@@ -2,10 +2,11 @@ import MonacoEditor from "react-monaco-editor";
 import { useState } from "react";
 
 function TextualRuleEditor(props) {
-    const [grammarText, setGrammarText] = useState("");
+    const [grammarText, setGrammarText] = useState(props.text);
 
     const handleChange = (text) => {
         setGrammarText(text);
+        props.onChange(text)
     };
 
     const editorWillMount = (monaco) => {

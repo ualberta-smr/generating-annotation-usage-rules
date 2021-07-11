@@ -83,13 +83,15 @@ function LabelingScreen() {
                 </h4>
                 <MonacoEditor
                     width={800}
-                    height={300}
+                    height={400}
                     language="java"
                     theme="vs-dark"
                     value={value}
                     options={{
                         readOnly: disabled,
                         folding: false,
+                        formatOnType: true,
+                        formatOnPaste: true
                     }}
                     onChange={onValueChange}
                 />
@@ -113,6 +115,31 @@ function LabelingScreen() {
         );
     };
 
+
+    const updateStuff = (text) => {
+        setGrammarText(text)
+        fetch(
+            `http://localhost:5000/grammarToCode?grammar=${text}`
+        )
+        .then(response => {
+            const status = response.status
+            if (status === 200) {
+                return response.json()
+            } else {
+                return null
+            }
+        })
+        .then(json => {
+            if (json == null) {
+                console.log("Error")
+            } else {
+                const code = json.code
+                setRuleCode(code.trim())
+            }
+            
+        })
+    }
+
     
 
     return (
@@ -125,7 +152,7 @@ function LabelingScreen() {
 
             <div className="code-desc-container">
                 <div className="code-description">
-                    <TextualRuleEditor text={grammarText}/>
+                    <TextualRuleEditor text={grammarText} onChange={(text) => updateStuff(text)}/>
                 </div>
                 <div className="code-snippet-examples">
                     <div className="correct">
