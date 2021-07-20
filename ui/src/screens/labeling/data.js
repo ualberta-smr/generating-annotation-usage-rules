@@ -59,8 +59,8 @@ public class Incorrect {
             'class with (annotation "Path" and declaration statement with (annotation "Claim" ) ) must have (declaration statement with (annotation "Inject" ) ) ',
         ruleCode: `@Path
 class Demo {
-    @Claim
-    @Inject
+    @AnnotationA
+    @AnnotationB
     private Object field;
 }`,
         compliantExamples: [

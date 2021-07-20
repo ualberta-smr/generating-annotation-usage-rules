@@ -1,70 +1,12 @@
 # Generated from RulepadGrammar.g4 by ANTLR 4.9.2
-from ast import parse
-from typing import List
 from dataclasses import *
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .RulepadGrammarParser import RulepadGrammarParser
+    from .model import *
 else:
     from RulepadGrammarParser import RulepadGrammarParser
-
-@dataclass
-class Annotation:
-    type: str
-    # param: str
-
-@dataclass
-class Field:
-    type: str = "Object"
-    annotations: List[Annotation] = field(default_factory=[])
-
-@dataclass
-class Method:
-    returnType: str = "void"
-    # parameters: List[str]
-    annotations: List[Annotation] = field(default_factory=[])
-
-@dataclass
-class JavaClass:
-    annotations: List[Annotation] = field(default_factory=[])
-    # extendedClass: str = None
-    # implementedInterfaces: List[str] = []
-    field: Field = None
-    method: Method = None
-
-
-def toStringJavaClass(clazz: JavaClass):
-    template = '''
-<ClassAnnotations>
-class Demo {
-
-<FieldDeclaration>
-<MethodDeclaration>
-
-}
-    '''
-
-    annos = "\n".join(map(lambda x: f"@{x.type}", clazz.annotations))
-
-    def toStringField(field: Field):
-        if field is None:
-            return ""
-        t = "\t<FieldAnnotations>\n\tprivate <ReturnType> field;"
-        annos = "\n\t".join(map(lambda x: f"@{x.type}", field.annotations)).strip()
-        return t.replace("<FieldAnnotations>", annos).replace("<ReturnType>", field.type)
-    
-    def toStringFunction(function: Method):
-        if function is None: 
-            return ""
-        t = "\t<MethodAnnotations>\n\tpublic <ReturnType> method() {}"
-        annos = "\n\t".join(map(lambda x: f"@{x.type}", function.annotations)).strip()
-        return t.replace("<MethodAnnotations>", annos).replace("<ReturnType>", function.returnType)
-    
-    return template\
-                    .replace("<ClassAnnotations>", annos)\
-                    .replace("<FieldDeclaration>", toStringField(clazz.field))\
-                    .replace("<MethodDeclaration>", toStringFunction(clazz.method))
-
+    from model import *
 
 # This class defines a complete listener for a parse tree produced by RulepadGrammarParser.
 class RulepadGrammarListener(ParseTreeListener):
@@ -74,10 +16,12 @@ class RulepadGrammarListener(ParseTreeListener):
         self.annotations = []
         self.field = None
         self.function = None
+        self.extendedClass = None
+        self.implementedInterfaces = []
 
     def getJavaClass(self) -> JavaClass:
         return JavaClass(
-            self.annotations, self.field, self.function
+            self.annotations, self.extendedClass, self.implementedInterfaces, self.field, self.function
         )
 
     # Enter a parse tree produced by RulepadGrammarParser#inputSentence.
@@ -257,7 +201,7 @@ class RulepadGrammarListener(ParseTreeListener):
             self.field.annotations.append(annotation)
         elif comingFrom == 'FunctionExpressionContext':
             if self.function is None:
-                self.function = Method(None, [])
+                self.function = Method('void', [], [])
             self.function.annotations.append(annotation)
 
 
@@ -277,7 +221,9 @@ class RulepadGrammarListener(ParseTreeListener):
 
     # Enter a parse tree produced by RulepadGrammarParser#extensions.
     def enterExtensions(self, ctx:RulepadGrammarParser.ExtensionsContext):
-        pass
+        extendedClass = ctx.extensionCondition().words().getText().replace('"', "")
+        if self.extendedClass is None:
+            self.extendedClass = extendedClass
 
     # Exit a parse tree produced by RulepadGrammarParser#extensions.
     def exitExtensions(self, ctx:RulepadGrammarParser.ExtensionsContext):
@@ -295,7 +241,7 @@ class RulepadGrammarListener(ParseTreeListener):
 
     # Enter a parse tree produced by RulepadGrammarParser#implementations.
     def enterImplementations(self, ctx:RulepadGrammarParser.ImplementationsContext):
-        pass
+        self.implementedInterfaces.append(ctx.implementationCondition().words().getText().replace('"', ""))
 
     # Exit a parse tree produced by RulepadGrammarParser#implementations.
     def exitImplementations(self, ctx:RulepadGrammarParser.ImplementationsContext):
@@ -456,8 +402,12 @@ class RulepadGrammarListener(ParseTreeListener):
             self.field.type = type
         elif comingFrom == 'FunctionExpressionContext':
             if self.function is None:
-                self.function = Method(None, [])
+                self.function = Method('void', [], [])
             self.function.returnType = type
+        elif comingFrom == "ParameterExpressionContext":
+            if self.function is None:
+                self.function = Method('void', [], [])
+            self.function.parameters.append(Param(type, None))
 
     # Exit a parse tree produced by RulepadGrammarParser#types.
     def exitTypes(self, ctx:RulepadGrammarParser.TypesContext):

@@ -1,3 +1,7 @@
+.myInlineDecoration {
+    background: lightgreen;
+}
+
 .flautas {
     display: grid;
     grid-template-columns: 55% 45%;

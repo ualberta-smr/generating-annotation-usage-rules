@@ -2,7 +2,6 @@ import "./LabelingScreen.css";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import Prism from "prismjs";
-import ContentEditable from "react-contenteditable";
 import { useEffect, useState } from "react";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import Editor from "react-simple-code-editor";
@@ -12,15 +11,10 @@ import "prismjs/components/prism-java";
 import "prismjs/themes/prism.css";
 import MonacoEditor from "react-monaco-editor";
 
-import {
-    getNextRuleToLabel,
-    getPreviousRuleToLabel,
-    highlightWords,
-} from "./helper";
+import { getNextRuleToLabel, getPreviousRuleToLabel } from "./helper";
 import TextualRuleEditor from "./TextualRuleEditor";
 
 function LabelingScreen() {
-
     const [grammarText, setGrammarText] = useState("");
 
     useEffect(() => {
@@ -37,8 +31,6 @@ function LabelingScreen() {
             });
         }
     }, []);
-
-
 
     const [code, setRuleCode] = useState("");
     const [compliant, setCompliantCode] = useState("");
@@ -71,6 +63,21 @@ function LabelingScreen() {
         updateFields(getPreviousRuleToLabel());
     };
 
+    const editorWillMount = (editor, monaco) => {
+        // const r = new monaco.Range(1, 1, 1, 3);
+        // editor.deltaDecorations(
+        //     [],
+        //     [
+        //         {
+        //             range: r,
+        //             options: {
+        //                 inlineClassName: "myInlineDecoration",
+        //             },
+        //         },
+        //     ]
+        // );
+    };
+
     const newCodeEditor = (value, onValueChange, disabled = false) => {
         return (
             <>
@@ -85,15 +92,16 @@ function LabelingScreen() {
                     width={800}
                     height={400}
                     language="java"
-                    theme="vs-dark"
+                    // theme="vs-dark"
                     value={value}
-                    options={{
-                        readOnly: disabled,
-                        folding: false,
-                        formatOnType: true,
-                        formatOnPaste: true
-                    }}
+                    // options={{
+                    //     readOnly: disabled,
+                    //     folding: false,
+                    //     formatOnType: true,
+                    //     formatOnPaste: true,
+                    // }}
                     onChange={onValueChange}
+                    editorDidMount={editorWillMount}
                 />
             </>
         );
@@ -115,32 +123,26 @@ function LabelingScreen() {
         );
     };
 
-
     const updateStuff = (text) => {
-        setGrammarText(text)
-        fetch(
-            `http://localhost:5000/grammarToCode?grammar=${text}`
-        )
-        .then(response => {
-            const status = response.status
-            if (status === 200) {
-                return response.json()
-            } else {
-                return null
-            }
-        })
-        .then(json => {
-            if (json == null) {
-                console.log("Error")
-            } else {
-                const code = json.code
-                setRuleCode(code.trim())
-            }
-            
-        })
-    }
-
-    
+        setGrammarText(text);
+        fetch(`http://localhost:5000/grammarToCode?grammar=${text}`)
+            .then((response) => {
+                const status = response.status;
+                if (status === 200) {
+                    return response.json();
+                } else {
+                    return null;
+                }
+            })
+            .then((json) => {
+                if (json == null) {
+                    console.log("Error");
+                } else {
+                    const code = json.code;
+                    setRuleCode(code.trim());
+                }
+            });
+    };
 
     return (
         <div className="flautas">
@@ -152,7 +154,10 @@ function LabelingScreen() {
 
             <div className="code-desc-container">
                 <div className="code-description">
-                    <TextualRuleEditor text={grammarText} onChange={(text) => updateStuff(text)}/>
+                    <TextualRuleEditor
+                        text={grammarText}
+                        onChange={(text) => updateStuff(text)}
+                    />
                 </div>
                 <div className="code-snippet-examples">
                     <div className="correct">
