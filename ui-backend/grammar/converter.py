@@ -4,10 +4,12 @@ if __name__ is not None and "." in __name__:
     from .RulepadGrammarLexer import RulepadGrammarLexer
     from .RulepadGrammarParser import RulepadGrammarParser
     from .RulepadGrammarListener import *
+    from .listener import *
 else:
     from RulepadGrammarLexer import RulepadGrammarLexer
     from RulepadGrammarParser import RulepadGrammarParser
     from RulepadGrammarListener import *
+    from listener import *
 
 def toStringField(field: Field):
     if field is None:
@@ -61,7 +63,7 @@ def convert(input):
     parser = RulepadGrammarParser(CommonTokenStream(RulepadGrammarLexer(InputStream(input))))
     tree = parser.inputSentence()
 
-    listener = RulepadGrammarListener()
+    listener = ConcreteRulepadGrammarListener()
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
 
