@@ -3,19 +3,19 @@ from typing import List
 from dataclasses import *
 
 @dataclass
+class Param:
+    type: str
+    name: str
+
+@dataclass
 class Annotation:
     type: str
-    # param: str
+    param: Param = field(default=None)
 
 @dataclass
 class Field:
     type: str = "Object"
     annotations: List[Annotation] = field(default_factory=[])
-
-@dataclass
-class Param:
-    type: str
-    name: str
 
 @dataclass
 class Method:

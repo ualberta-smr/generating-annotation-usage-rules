@@ -140,7 +140,19 @@ annotations
     ;
 
 annotationCondition
-    : combinatorialWords SPACE
+    : combinatorialWords SPACE annotationConditionTransition?
+    | annotationConditionTransition
+    ;
+
+annotationConditionTransition
+    : withWord annotationExpression
+    ;
+
+annotationExpression
+    : LPAREN annotationExpression RPAREN
+    | left=annotationExpression op=binary right=annotationExpression
+    | ( parameters)
+    | annotationExpression SPACE
     ;
 
 

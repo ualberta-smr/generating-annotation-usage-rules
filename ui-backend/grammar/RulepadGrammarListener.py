@@ -1,18 +1,12 @@
 # Generated from RulepadGrammar.g4 by ANTLR 4.9.2
-from dataclasses import *
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .RulepadGrammarParser import RulepadGrammarParser
-    from .model import *
 else:
     from RulepadGrammarParser import RulepadGrammarParser
-    from model import *
 
 # This class defines a complete listener for a parse tree produced by RulepadGrammarParser.
 class RulepadGrammarListener(ParseTreeListener):
-
-    def __init__(self) -> None:
-        super().__init__()
 
     # Enter a parse tree produced by RulepadGrammarParser#inputSentence.
     def enterInputSentence(self, ctx:RulepadGrammarParser.InputSentenceContext):
@@ -180,7 +174,6 @@ class RulepadGrammarListener(ParseTreeListener):
     def enterAnnotations(self, ctx:RulepadGrammarParser.AnnotationsContext):
         pass
 
-
     # Exit a parse tree produced by RulepadGrammarParser#annotations.
     def exitAnnotations(self, ctx:RulepadGrammarParser.AnnotationsContext):
         pass
@@ -192,6 +185,24 @@ class RulepadGrammarListener(ParseTreeListener):
 
     # Exit a parse tree produced by RulepadGrammarParser#annotationCondition.
     def exitAnnotationCondition(self, ctx:RulepadGrammarParser.AnnotationConditionContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#annotationConditionTransition.
+    def enterAnnotationConditionTransition(self, ctx:RulepadGrammarParser.AnnotationConditionTransitionContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#annotationConditionTransition.
+    def exitAnnotationConditionTransition(self, ctx:RulepadGrammarParser.AnnotationConditionTransitionContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#annotationExpression.
+    def enterAnnotationExpression(self, ctx:RulepadGrammarParser.AnnotationExpressionContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#annotationExpression.
+    def exitAnnotationExpression(self, ctx:RulepadGrammarParser.AnnotationExpressionContext):
         pass
 
 
@@ -441,7 +452,6 @@ class RulepadGrammarListener(ParseTreeListener):
     # Enter a parse tree produced by RulepadGrammarParser#declarationStatements.
     def enterDeclarationStatements(self, ctx:RulepadGrammarParser.DeclarationStatementsContext):
         pass
-        
 
     # Exit a parse tree produced by RulepadGrammarParser#declarationStatements.
     def exitDeclarationStatements(self, ctx:RulepadGrammarParser.DeclarationStatementsContext):

@@ -1,4 +1,5 @@
 from antlr4 import *
+from antlr4.error.ErrorListener import ConsoleErrorListener
 
 if __name__ is not None and "." in __name__:
     from .RulepadGrammarLexer import RulepadGrammarLexer
@@ -15,7 +16,7 @@ def toStringField(field: Field):
     if field is None:
         return ""
     t = "\t<FieldAnnotations>\n\tprivate <ReturnType> field;"
-    annos = "\n\t".join(map(lambda x: f"@{x.type}", field.annotations)).strip()
+    annos = toStringAnnotations(field.annotations, ch="\t").strip()
     return t.replace("<FieldAnnotations>", annos).replace("<ReturnType>", field.type)
 
 def toStringFunctionParameters(function: Method):
@@ -27,7 +28,7 @@ def toStringFunction(function: Method):
     if function is None: 
         return ""
     t = "\t<MethodAnnotations>\n\tpublic <ReturnType> method(<FunctionParameters>) {}"
-    annos = "\n\t".join(map(lambda x: f"@{x.type}", function.annotations)).strip()
+    annos = toStringAnnotations(function.annotations, ch="\t").strip()
     params = ", ".join(toStringFunctionParameters(function))
     return t.replace("<MethodAnnotations>", annos)\
             .replace("<ReturnType>", function.returnType)\
@@ -39,6 +40,14 @@ def toStringExtends(extendedClass: str):
 def toStringImplements(interfaces: List[str]):
     return "" if len(interfaces) == 0 else "implements " + ", ".join(interfaces)
 
+def toStringAnnotations(annotations: List[Annotation], ch = "") -> str:
+    def toStringAnnotation(a: Annotation) -> str:
+        result = f"@{a.type}"
+        if a.param is not None:
+            result += f"({'='.join(filter(lambda x: x is not None, [a.param.name, a.param.type]))})"
+        return result
+    return f"\n{ch}".join(map(toStringAnnotation, annotations))
+
 def toStringJavaClass(clazz: JavaClass):
     template = '''
 <ClassAnnotations>
@@ -49,7 +58,7 @@ class Demo <ExtendsTemplate> <ImplementsTemplate> {
 
 }'''
 
-    annos = "\n".join(map(lambda x: f"@{x.type}", clazz.annotations))
+    annos = toStringAnnotations(clazz.annotations)
 
     return template\
             .replace("<ClassAnnotations>", annos)\
@@ -60,7 +69,9 @@ class Demo <ExtendsTemplate> <ImplementsTemplate> {
 
 
 def convert(input):
-    parser = RulepadGrammarParser(CommonTokenStream(RulepadGrammarLexer(InputStream(input))))
+    lexer = RulepadGrammarLexer(InputStream(input))
+    parser = RulepadGrammarParser(CommonTokenStream(lexer))
+    parser.setTrace(not True)
     tree = parser.inputSentence()
 
     listener = ConcreteRulepadGrammarListener()
@@ -71,4 +82,14 @@ def convert(input):
 
 # print(convert('class with annotation "Demo" must have extension of "SomeOtherClass" and (implementation of "IInterface" and implementation of "BInterface" )'))
 # print(convert('class must have function with (parameter with type "HelloWorldItsAMe" and parameter with type "RequestObject" ) '))
-print(convert("class with (function with (annotation \"org.eclipse.microprofile.reactive.messaging.<Outgoing Incoming>\" ) ) must have (annotation \"javax.enterprise.context.<ApplicationScoped Dependent>\" ) "))
+# print(convert("class with (function with (annotation \"org.eclipse.microprofile.reactive.messaging.<Outgoing Incoming>\" ) ) must have (annotation \"javax.enterprise.context.<ApplicationScoped Dependent>\" ) "))
+
+# convert('class must have annotation "Hello" ')
+# convert('class must have annotation with parameter with type "String" ')
+# print(convert('class must have (annotation "Hello" with parameter with (type "String" and name "targetClassName" ) ) '))
+
+a = """class with declaration statement with (annotation "Autowired" with parameter with (name "name" and type "String" ) ) must have annotation "Demo" """
+
+# a = 'class with annotation "A" with parameter with type "String" must have annotation "A" with parameter with name "className" '
+
+print(convert(a))
