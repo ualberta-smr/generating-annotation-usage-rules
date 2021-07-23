@@ -7,30 +7,34 @@ class Part:
     is_antecedent: bool = field(default=None, init=False)
 
 @dataclass
+class Type(Part):
+    name: str
+
+@dataclass
 class Param(Part):
-    type: str
+    type: Type
     name: str
 
 @dataclass
 class Annotation(Part):
-    type: str
+    type: Type
     param: Param = field(default=None)
 
 @dataclass
 class Field(Part):
-    type: str = "Object"
+    type: Type = field(default=Type("Object"))
     annotations: List[Annotation] = field(default_factory=[])
 
 @dataclass
 class Method(Part):
-    returnType: str = "void"
+    returnType: Type = field(default=Type("void"))
     parameters: List[Param] = field(default_factory=[])
     annotations: List[Annotation] = field(default_factory=[])
 
 @dataclass
 class JavaClass(Part):
     annotations: List[Annotation] = field(default_factory=[])
-    extendedClass: str = None
-    implementedInterfaces: List[str] = field(default_factory=[])
+    extendedClass: Type = None
+    implementedInterfaces: List[Type] = field(default_factory=[])
     field: Field = None
     method: Method = None

@@ -10,7 +10,6 @@ else:
     from RulepadGrammarListener import RulepadGrammarListener
     from model import *
 
-
 class ConcreteRulepadGrammarListener(RulepadGrammarListener):
     def __init__(self) -> None:
         super().__init__()
@@ -30,20 +29,21 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
 
     def enterAnnotations(self, ctx: RulepadGrammarParser.AnnotationsContext):
         try:
-            annotationName = ctx.annotationCondition().combinatorialWords().getText().replace("\"", "")
+            annotationType = self.initObj(
+                Type(ctx.annotationCondition().combinatorialWords().getText().replace("\"", ""))
+            )
         except:
-            annotationName = None
-        
-        a = Annotation(annotationName)
-        a.is_antecedent = self.__is_antecedent
+            annotationType = None
+
+        annotation = self.initObj(Annotation(annotationType))
 
         prev = self.__stack[-1]
         if prev['comingFrom'] in ['class', 'function', 'field']:
-            prev['node'].annotations.append(a)
+            prev['node'].annotations.append(annotation)
 
         self.__stack.append({
             'comingFrom': 'annotation',
-            'node': a
+            'node': annotation
         })
     
     def exitAnnotations(self, ctx:RulepadGrammarParser.AnnotationsContext):
@@ -55,19 +55,22 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
 
         prev = self.__stack[-1]
         if prev['comingFrom'] == 'class':
-            prev['node'].extendedClass = extendedClass
+            prev['node'].extendedClass = self.initObj(Type(extendedClass))
     
     def enterImplementations(self, ctx:RulepadGrammarParser.ImplementationsContext):
         '''there can be multiple extensions'''
         prev = self.__stack[-1]
         if prev['comingFrom'] == 'class':
-            prev['node'].implementedInterfaces.append(ctx.implementationCondition().words().getText().replace('"', ""))
+            className = ctx.implementationCondition().words().getText().replace('"', "")
+            prev['node'].implementedInterfaces.append(self.initObj(Type(className)))
 
     def enterTypes(self, ctx:RulepadGrammarParser.TypesContext):
         try:
-            type = ctx.typeCondition().combinatorialWords().getText().replace("\"", "")
+            type = ctx.typeCondition().combinatorialWords()
         except:
-            type = ctx.typeCondition().words().getText().replace("\"", "")
+            type = ctx.typeCondition().words()
+
+        type = self.initObj(Type(type.getText().replace("\"", "")))
 
         prev = self.__stack[-1]
         if prev['comingFrom'] == 'parameter':
@@ -79,16 +82,15 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
     
     def enterParameters(self, ctx:RulepadGrammarParser.ParametersContext):
         prev = self.__stack[-1]
-        p = Param(None, None)
-        p.is_antecedent = self.__is_antecedent
+        param = self.initObj(Param(None, None))
         if prev['comingFrom'] == 'annotation':
-            prev['node'].param = p
+            prev['node'].param = param
         elif prev['comingFrom'] == 'function':
-            prev['node'].parameters.append(p)
+            prev['node'].parameters.append(param)
         
         self.__stack.append({
             'comingFrom': 'parameter',
-            'node': p
+            'node': param
         })
 
     def exitParameters(self, ctx:RulepadGrammarParser.ParametersContext):
@@ -96,8 +98,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
 
     # Enter a parse tree produced by RulepadGrammarParser#functions.
     def enterFunctions(self, ctx:RulepadGrammarParser.FunctionsContext):
-        method = Method("void", [], [])
-        method.is_antecedent = self.__is_antecedent
+        method = self.initObj(Method(self.initObj(Type("void")), [], []))
 
         prev = self.__stack[-1]
         if prev['comingFrom'] == 'class':
@@ -115,8 +116,8 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
 
     # Enter a parse tree produced by RulepadGrammarParser#declarationStatements.
     def enterDeclarationStatements(self, ctx:RulepadGrammarParser.DeclarationStatementsContext):
-        field = Field("Object", [])
-        field.is_antecedent = self.__is_antecedent
+        field = self.initObj(Field(self.initObj(Type("Object")), []))
+        
         prev = self.__stack[-1]
         if prev['comingFrom'] == 'class':
             prev['node'].field = field
@@ -137,5 +138,8 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
         if prev['comingFrom'] == 'parameter':
             prev['node'].name = name
 
+    def initObj(self, obj):
+        obj.is_antecedent = self.__is_antecedent
+        return obj
 
 
