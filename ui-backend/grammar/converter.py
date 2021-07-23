@@ -1,5 +1,4 @@
 from antlr4 import *
-from antlr4.error.ErrorListener import ConsoleErrorListener
 
 if __name__ is not None and "." in __name__:
     from .RulepadGrammarLexer import RulepadGrammarLexer
@@ -51,7 +50,7 @@ def toStringAnnotations(annotations: List[Annotation], ch = "") -> str:
 def toStringJavaClass(clazz: JavaClass):
     template = '''
 <ClassAnnotations>
-class Demo <ExtendsTemplate> <ImplementsTemplate> {
+class Foo <ExtendsTemplate> <ImplementsTemplate> {
 
 <FieldDeclaration>
 <MethodDeclaration>
@@ -77,8 +76,8 @@ def convert(input):
     listener = ConcreteRulepadGrammarListener()
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
-
-    return toStringJavaClass(listener.getJavaClass()).strip()
+    j = listener.getJavaClass()
+    return toStringJavaClass(j).strip()
 
 # print(convert('class with annotation "Demo" must have extension of "SomeOtherClass" and (implementation of "IInterface" and implementation of "BInterface" )'))
 # print(convert('class must have function with (parameter with type "HelloWorldItsAMe" and parameter with type "RequestObject" ) '))
