@@ -2,7 +2,7 @@ import "./LabelingScreen.css";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import Prism from "prismjs";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs/components/prism-core";
@@ -11,33 +11,28 @@ import "prismjs/components/prism-java";
 import "prismjs/themes/prism.css";
 import MonacoEditor from "react-monaco-editor";
 
-import { getNextRuleToLabel, getPreviousRuleToLabel } from "./helper";
 import TextualRuleEditor from "./TextualRuleEditor";
 
 function LabelingScreen() {
     const [grammarText, setGrammarText] = useState("");
     const [oldDecorations, setNewDecorations] = useState([])
-
-    useEffect(() => {
-        const rule = getNextRuleToLabel();
-        if (rule != null) {
-            updateFields(rule);
-        } else {
-            updateFields({
-                grammar: "",
-                ruleCode: "",
-                compliantExamples: [""],
-                nonCompliantExamples: [""],
-                label: null,
-            });
-        }
-    }, []);
+    const [propertiesFileData, setPropertiesFileData] = useState(null)
 
     const [code, setRuleCode] = useState("");
     const [compliant, setCompliantCode] = useState("");
     const [nonCompliant, setNonCompliantCode] = useState("");
     const [ruleLabel, setRuleLabel] = useState(null);
     const [editorData, setEditor] = useState(null);
+
+    useEffect(() => {
+        updateFields({
+            grammar: "",
+            ruleCode: "",
+            compliantExamples: [""],
+            nonCompliantExamples: [""],
+            label: null,
+        });
+    }, []);
 
     const updateFields = (rule) => {
         if (rule != null) {
@@ -57,31 +52,23 @@ function LabelingScreen() {
         }
     };
 
-    const getNextRule = () => {
-        updateFields(getNextRuleToLabel());
-    };
-
-    const getPrevRule = () => {
-        updateFields(getPreviousRuleToLabel());
-    };
+    const getNextRule = () => {};
+    const getPrevRule = () => {};
 
     const editorDidMount = (editor, monaco) => {
-        // const r = new monaco.Range(2, 1, 2, 10);
-        // editor.deltaDecorations(
-        //     [],
-        //     [
-        //         {
-        //             range: r,
-        //             options: {
-        //                 inlineClassName: "myInlineDecoration",
-        //             },
-        //         },
-        //     ]
-        // );
         setEditor({editor, monaco})
     };
 
-    const newCodeEditor = (value, onValueChange, disabled = false) => {
+    const newCodeEditor = (
+            value, 
+            onValueChange, 
+            editorDidMountAction = null, 
+            fileName = "Foo.java", 
+            disabled=false, 
+            language="java"
+    ) => {
+        if (editorDidMountAction == null) editorDidMountAction = editorDidMount
+        const height = 400 * ( 1 / (propertiesFileData == null ? 1 : 2))
         return (
             <>
                 <h4
@@ -89,26 +76,23 @@ function LabelingScreen() {
                         color: "white",
                     }}
                 >
-                    Foo.java
+                    {fileName}
                 </h4>
                 <MonacoEditor
                     width={800}
-                    height={400}
-                    language="java"
+                    height={height}
+                    language={language}
                     theme="vs-light"
                     value={value}
-                    // options={{
-                    //     readOnly: disabled,
-                    //     folding: false,
-                    //     formatOnType: true,
-                    //     formatOnPaste: true,
-                    // }}
                     onChange={onValueChange}
-                    editorDidMount={editorDidMount}
+                    editorDidMount={editorDidMountAction}
+                    options={{
+                        readOnly: disabled
+                    }}
                 />
             </>
         );
-    };
+    }
 
     const codeEditor = (value, onValueChange, disabled = false) => {
         return (
@@ -126,7 +110,7 @@ function LabelingScreen() {
         );
     };
 
-    const updateStuff = (text) => {
+    const updateRelatedFields = (text) => {
         setGrammarText(text);
         fetch(`http://localhost:5000/grammarToCode?grammar=${text}`)
             .then((response) => {
@@ -166,8 +150,18 @@ function LabelingScreen() {
                     );
 
                     setNewDecorations(newDecorations);
-
                     setRuleCode(codeText.trim());
+
+                    const properties = json.properties
+                    if (properties) {
+                        const [name, text] = properties
+                        setPropertiesFileData({
+                            name, text
+                        })
+                    } else {
+                        setPropertiesFileData(null)
+                    }
+                    
                 }
             });
     };
@@ -176,10 +170,11 @@ function LabelingScreen() {
         <div className="flautas">
             <div className="code-example">
                 <div className="code-snippet-sidebar">
-                    {newCodeEditor(code, (value) => {
-                        setRuleCode(value);
-                        
-                    })}
+                    {newCodeEditor(code, (value) => {setRuleCode(value);})}
+                    {propertiesFileData == null ? 
+                        null 
+                        :   
+                        newCodeEditor(propertiesFileData.text, setRuleCode, (a, b) => {}, propertiesFileData.name, true, null)}
                 </div>
             </div>
 
@@ -187,7 +182,7 @@ function LabelingScreen() {
                 <div className="code-description">
                     <TextualRuleEditor
                         text={grammarText}
-                        onChange={(text) => updateStuff(text)}
+                        onChange={(text) => updateRelatedFields(text)}
                     />
                 </div>
                 <div className="code-snippet-examples">
