@@ -116,7 +116,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
 
     # Enter a parse tree produced by RulepadGrammarParser#declarationStatements.
     def enterDeclarationStatements(self, ctx:RulepadGrammarParser.DeclarationStatementsContext):
-        field = self.initObj(Field(self.initObj(Type("Object")), []))
+        field = self.initObj(Field(Type("Object"), []))
         
         prev = self.__stack[-1]
         if prev['comingFrom'] == 'class':

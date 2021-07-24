@@ -1,12 +1,12 @@
 from app import app
 from flask import request
-from grammar.converter import *
+import grammar as G
 
 @app.route('/grammarToCode')
 def index():
     try:
         grammar = request.args["grammar"]
-        code = convert(grammar)
+        code = G.convert(grammar)
         return {
             "code": code
         }, 200
