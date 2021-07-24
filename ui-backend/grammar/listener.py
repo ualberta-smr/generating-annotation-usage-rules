@@ -13,7 +13,7 @@ else:
 class ConcreteRulepadGrammarListener(RulepadGrammarListener):
     def __init__(self) -> None:
         super().__init__()
-        self.__clazz = JavaClass([], None, [], None, None)
+        self.__clazz = JavaClass([], None, [], None, None, None)
         self.__stack = [{
             'comingFrom': 'class',
             'node': self.__clazz
@@ -79,6 +79,8 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             prev['node'].returnType = type
         elif prev['comingFrom'] == 'field':
             prev['node'].type = type
+        elif prev['comingFrom'] == 'property':
+            prev['node'].type = type
     
     def enterParameters(self, ctx:RulepadGrammarParser.ParametersContext):
         prev = self.__stack[-1]
@@ -137,6 +139,41 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
         prev = self.__stack[-1]
         if prev['comingFrom'] == 'parameter':
             prev['node'].name = name
+        elif prev['comingFrom'] == 'property':
+            prev['node'].name = name
+
+    # Enter a parse tree produced by RulepadGrammarParser#configurationFiles.
+    def enterConfigurationFiles(self, ctx:RulepadGrammarParser.ConfigurationFilesContext):
+        configFile = self.initObj(ConfigurationFile("config.properties", []))
+
+        prev = self.__stack[-1]
+        if prev['comingFrom'] == 'class':
+            prev['node'].configurationFile = configFile
+
+        self.__stack.append({
+            'comingFrom': 'config-file',
+            'node': configFile
+        })
+
+    # Exit a parse tree produced by RulepadGrammarParser#configurationFiles.
+    def exitConfigurationFiles(self, ctx:RulepadGrammarParser.ConfigurationFilesContext):
+        self.__stack.pop()
+
+    # Enter a parse tree produced by RulepadGrammarParser#configurationProperties.
+    def enterConfigurationProperties(self, ctx:RulepadGrammarParser.ConfigurationPropertiesContext):
+        prop = self.initObj(ConfigurationProperty(None, None))
+        prev = self.__stack[-1]
+        if prev['comingFrom'] == 'config-file':
+            prev['node'].properties.append(prop)
+        
+        self.__stack.append({
+            'comingFrom': 'property',
+            'node': prop
+        })
+
+    def exitConfigurationProperties(self, ctx:RulepadGrammarParser.ConfigurationPropertiesContext):
+        self.__stack.pop()
+
 
     def initObj(self, obj):
         obj.is_antecedent = self.__is_antecedent

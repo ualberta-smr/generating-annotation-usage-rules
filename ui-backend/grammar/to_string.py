@@ -75,7 +75,7 @@ def javaClass(clazz: JavaClass):
             .replace("<ExtendsTemplate>", extends(clazz.extendedClass))\
             .replace("<ImplementsTemplate>", implements(clazz.implementedInterfaces))
 
-def findRanges(code: str):
+def findRanges(code: str): # -> List[List[str, List[Tuple[int, int, int, str]]]]:
     import re
     rgx = r"(\<[a-zA-Z0-9@)(=\s]+\>|\[[a-zA-Z0-9@)(=\s]+\])"
     lines = code.splitlines()
@@ -93,3 +93,10 @@ def findRanges(code: str):
             found = re.search(rgx, line)
     
     return newLines
+
+def configFiles(cf: ConfigurationFile) -> Tuple[str, str]:
+    if cf is None:
+        return None
+    lines = "\n".join(
+        map(lambda t: f"{t[0]}={t[1]}", map(lambda x: (x.name, x.type.name), cf.properties)))
+    return cf.name, lines 

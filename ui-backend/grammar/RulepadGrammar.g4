@@ -401,6 +401,52 @@ declarationStatementExpression
     | declarationStatementExpression SPACE
     ;
 
+/*
+    configurationFile
+*/
+
+ConfigurationFile
+    : 'configuration file '
+    ;
+
+configurationFiles
+    : ConfigurationFile configurationFileCondition?
+    ;
+
+configurationFileCondition
+    : withWord configurationFileExpression
+    ;
+
+configurationFileExpression
+    : LPAREN configurationFileExpression RPAREN
+    | left=configurationFileExpression op=binary right=configurationFileExpression
+    | ( configurationProperties)
+    | configurationFileExpression SPACE
+    ;
+
+/*
+    configurationProperties
+*/
+
+CONFIGURATION_PROPERTIES
+    :  'property '
+    ;
+
+configurationProperties
+    : CONFIGURATION_PROPERTIES configurationPropertyCondition?
+    ;
+
+configurationPropertyCondition
+    : withWord configurationPropertyExpression
+    ;
+
+configurationPropertyExpression
+    : LPAREN configurationPropertyExpression RPAREN
+    | left=configurationPropertyExpression op=binary right=configurationPropertyExpression
+    | ( types | names )
+    | configurationPropertyExpression SPACE
+    ;
+
 
 /*
     expressions
@@ -486,7 +532,7 @@ classExpression
     : LPAREN classExpression RPAREN
     | left=classExpression op=binary right=classExpression
     | ( annotations | specifiers | visibilities | names | extensions | implementations | functions
-            | abstractFunctions | constructors | declarationStatements | returnValues  | comments | subclasses)
+            | abstractFunctions | constructors | declarationStatements | returnValues  | comments | subclasses | configurationFiles)
     | classExpression SPACE
     ;
 

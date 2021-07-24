@@ -26,7 +26,25 @@ def convert(input):
     j = listener.getJavaClass()
     import json
     # print(json.dumps(j, default=lambda x: x.__dict__, indent=4))
-    return findRanges(javaClass(j).strip())
+    return findRanges(javaClass(j).strip()), configFiles(j.configurationFile)
+
+def check(input):
+    lexer = RulepadGrammarLexer(InputStream(input))
+    parser = RulepadGrammarParser(CommonTokenStream(lexer))
+    parser.setTrace(True)
+    tree = parser.inputSentence()
+
+    listener = ConcreteRulepadGrammarListener()
+    walker = ParseTreeWalker()
+    walker.walk(listener, tree)
+    j = listener.getJavaClass()
+    import json
+    print(json.dumps(j, default=lambda x: x.__dict__, indent=4))
+    return javaClass(j).strip()
+
+# check(
+#     """class with annotation "Config" must have configuration file with property with (name "name" and type "String" ) """
+# )
 
 # print(convert('class with annotation "Demo" must have extension of "SomeOtherClass" and (implementation of "IInterface" and implementation of "BInterface" )'))
 # print(convert('class must have function with (parameter with type "HelloWorldItsAMe" and parameter with type "RequestObject" ) '))
@@ -45,3 +63,5 @@ def convert(input):
 # a = """class with function with (parameter with type "String" and annotation "AnnoA" ) must have declaration statement with (type "Bean" and annotation "AnnoB" ) """
 
 # print(convert(a))
+
+

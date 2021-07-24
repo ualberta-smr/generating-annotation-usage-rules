@@ -1,4 +1,5 @@
 # Generated from RulepadGrammar.g4 by ANTLR 4.9.2
+from re import L
 from typing import List
 from dataclasses import *
 
@@ -9,6 +10,16 @@ class Part:
 @dataclass
 class Type(Part):
     name: str
+
+@dataclass
+class ConfigurationProperty(Part):
+    name: str
+    type: Type
+
+@dataclass
+class ConfigurationFile(Part):
+    name: str
+    properties: List[ConfigurationProperty] = field(default_factory=[])
 
 @dataclass
 class Param(Part):
@@ -38,3 +49,4 @@ class JavaClass(Part):
     implementedInterfaces: List[Type] = field(default_factory=[])
     field: Field = None
     method: Method = None
+    configurationFile: ConfigurationFile = None

@@ -485,6 +485,60 @@ class RulepadGrammarListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by RulepadGrammarParser#configurationFiles.
+    def enterConfigurationFiles(self, ctx:RulepadGrammarParser.ConfigurationFilesContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#configurationFiles.
+    def exitConfigurationFiles(self, ctx:RulepadGrammarParser.ConfigurationFilesContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#configurationFileCondition.
+    def enterConfigurationFileCondition(self, ctx:RulepadGrammarParser.ConfigurationFileConditionContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#configurationFileCondition.
+    def exitConfigurationFileCondition(self, ctx:RulepadGrammarParser.ConfigurationFileConditionContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#configurationFileExpression.
+    def enterConfigurationFileExpression(self, ctx:RulepadGrammarParser.ConfigurationFileExpressionContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#configurationFileExpression.
+    def exitConfigurationFileExpression(self, ctx:RulepadGrammarParser.ConfigurationFileExpressionContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#configurationProperties.
+    def enterConfigurationProperties(self, ctx:RulepadGrammarParser.ConfigurationPropertiesContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#configurationProperties.
+    def exitConfigurationProperties(self, ctx:RulepadGrammarParser.ConfigurationPropertiesContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#configurationPropertyCondition.
+    def enterConfigurationPropertyCondition(self, ctx:RulepadGrammarParser.ConfigurationPropertyConditionContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#configurationPropertyCondition.
+    def exitConfigurationPropertyCondition(self, ctx:RulepadGrammarParser.ConfigurationPropertyConditionContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#configurationPropertyExpression.
+    def enterConfigurationPropertyExpression(self, ctx:RulepadGrammarParser.ConfigurationPropertyExpressionContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#configurationPropertyExpression.
+    def exitConfigurationPropertyExpression(self, ctx:RulepadGrammarParser.ConfigurationPropertyExpressionContext):
+        pass
+
+
     # Enter a parse tree produced by RulepadGrammarParser#expressionStatements.
     def enterExpressionStatements(self, ctx:RulepadGrammarParser.ExpressionStatementsContext):
         pass

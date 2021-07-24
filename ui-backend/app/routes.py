@@ -6,12 +6,14 @@ import grammar as G
 def index():
     try:
         grammar = request.args["grammar"]
-        code = G.convert(grammar)
+        code, properties = G.convert(grammar)
         return {
-            "code": code
+            "code": code, 
+            "properties": properties
         }, 200
     except Exception as e:
         print(e)
         return {
-            "code": ""
+            "code": "",
+            "properties": None
         }, 401
