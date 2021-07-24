@@ -51,8 +51,6 @@ function TextualRuleEditor(props) {
         <MonacoEditor
             width="90%"
             height="40%"
-            language="modernizer"
-            theme="modernizer-th"
             value={props.text}
             options={{
                 readOnly: false,

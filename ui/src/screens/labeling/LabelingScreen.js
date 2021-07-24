@@ -2,7 +2,7 @@ import "./LabelingScreen.css";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import Prism from "prismjs";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs/components/prism-core";
@@ -16,6 +16,7 @@ import TextualRuleEditor from "./TextualRuleEditor";
 
 function LabelingScreen() {
     const [grammarText, setGrammarText] = useState("");
+    const [oldDecorations, setNewDecorations] = useState([])
 
     useEffect(() => {
         const rule = getNextRuleToLabel();
@@ -36,6 +37,7 @@ function LabelingScreen() {
     const [compliant, setCompliantCode] = useState("");
     const [nonCompliant, setNonCompliantCode] = useState("");
     const [ruleLabel, setRuleLabel] = useState(null);
+    const [editorData, setEditor] = useState(null);
 
     const updateFields = (rule) => {
         if (rule != null) {
@@ -63,8 +65,8 @@ function LabelingScreen() {
         updateFields(getPreviousRuleToLabel());
     };
 
-    const editorWillMount = (editor, monaco) => {
-        // const r = new monaco.Range(1, 1, 1, 3);
+    const editorDidMount = (editor, monaco) => {
+        // const r = new monaco.Range(2, 1, 2, 10);
         // editor.deltaDecorations(
         //     [],
         //     [
@@ -76,6 +78,7 @@ function LabelingScreen() {
         //         },
         //     ]
         // );
+        setEditor({editor, monaco})
     };
 
     const newCodeEditor = (value, onValueChange, disabled = false) => {
@@ -92,7 +95,7 @@ function LabelingScreen() {
                     width={800}
                     height={400}
                     language="java"
-                    // theme="vs-dark"
+                    theme="vs-light"
                     value={value}
                     // options={{
                     //     readOnly: disabled,
@@ -101,7 +104,7 @@ function LabelingScreen() {
                     //     formatOnPaste: true,
                     // }}
                     onChange={onValueChange}
-                    editorDidMount={editorWillMount}
+                    editorDidMount={editorDidMount}
                 />
             </>
         );
@@ -139,7 +142,32 @@ function LabelingScreen() {
                     console.log("Error");
                 } else {
                     const code = json.code;
-                    setRuleCode(code.trim());
+
+                    const codeText = code.map((e) => e[0]).join("\n")
+                    const ranges = code.map((e) => e[1]).flat()
+
+                    const {editor, monaco} = editorData;
+
+                    const rangez = ranges.map((rangeData) => {
+                        const row = rangeData[0] + 1
+                        const s = rangeData[1] + 1
+                        const e = rangeData[2] + 1
+                        const isAntecedent = rangeData[3] === "["
+                        const r = new monaco.Range(row, s, row, e);
+                        return {
+                            range: r,
+                            options: { inlineClassName: isAntecedent ? "antecedent" : "consequent"},
+                        }
+                    })
+
+                    const newDecorations = editor.deltaDecorations(
+                        oldDecorations,
+                        rangez
+                    );
+
+                    setNewDecorations(newDecorations);
+
+                    setRuleCode(codeText.trim());
                 }
             });
     };
@@ -148,7 +176,10 @@ function LabelingScreen() {
         <div className="flautas">
             <div className="code-example">
                 <div className="code-snippet-sidebar">
-                    {newCodeEditor(code, setRuleCode)}
+                    {newCodeEditor(code, (value) => {
+                        setRuleCode(value);
+                        
+                    })}
                 </div>
             </div>
 
