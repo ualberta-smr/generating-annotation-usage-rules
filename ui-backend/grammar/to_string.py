@@ -77,7 +77,7 @@ def javaClass(clazz: JavaClass):
 
 def findRanges(code: str): # -> List[List[str, List[Tuple[int, int, int, str]]]]:
     import re
-    rgx = r"(\<[a-zA-Z0-9@)(=\s]+\>|\[[a-zA-Z0-9@)(=\s]+\])"
+    rgx = r"(\<[a-zA-Z0-9@)(=\s.,]+\>|\[[a-zA-Z0-9@)(=\s.,]+\])"
     lines = code.splitlines()
     newLines = [[line, []] for line in lines]
     for i, line in enumerate(lines):

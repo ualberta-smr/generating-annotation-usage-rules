@@ -24,7 +24,8 @@ def convert(input):
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
     j = listener.getJavaClass()
-    import json
+    # print(j)
+    # import json
     # print(json.dumps(j, default=lambda x: x.__dict__, indent=4))
     return findRanges(javaClass(j).strip()), configFiles(j.configurationFile)
 
@@ -61,6 +62,8 @@ def check(input):
 # print(convert(a))
 
 # a = """class with function with (parameter with type "String" and annotation "AnnoA" ) must have declaration statement with (type "Bean" and annotation "AnnoB" ) """
+
+# a = """class with function with annotation "ABC" must have function with (annotation "ABC" with parameter with (name "className" and type "Class" ) and annotation "XYZ" with parameter with (type "int" and name "wait" ) ) """
 
 # print(convert(a))
 

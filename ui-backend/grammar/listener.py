@@ -10,6 +10,12 @@ else:
     from RulepadGrammarListener import RulepadGrammarListener
     from model import *
 
+def mergeAnnotations(a: Annotation, b: Annotation) -> Annotation:
+    param = a.param if b.param is None else b.param
+    an = Annotation(a.type, param)
+    an.is_antecedent = a.is_antecedent or b.is_antecedent
+    return an
+
 class ConcreteRulepadGrammarListener(RulepadGrammarListener):
     def __init__(self) -> None:
         super().__init__()
@@ -20,7 +26,24 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
         }]
         self.__is_antecedent = True
 
+    def mergeDuplicateAnnotations(self, oldAnnotations):
+        if oldAnnotations == []:
+            return oldAnnotations
+        import itertools
+        from functools import reduce
+
+        tuples = itertools.groupby(oldAnnotations, lambda a: a.type.name)
+        newAnnotations = []
+        for t, annotations in tuples:
+            newAnnotations.append(reduce(mergeAnnotations, annotations))
+        return newAnnotations
+
     def getJavaClass(self) -> JavaClass:
+        self.__clazz.annotations = self.mergeDuplicateAnnotations(self.__clazz.annotations)
+        if self.__clazz.method:
+            self.__clazz.method.annotations = self.mergeDuplicateAnnotations(self.__clazz.method.annotations)
+        if self.__clazz.field:
+            self.__clazz.field.annotations = self.mergeDuplicateAnnotations(self.__clazz.field.annotations)
         return self.__clazz
 
     # Enter a parse tree produced by RulepadGrammarParser#must.
@@ -100,7 +123,11 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
 
     # Enter a parse tree produced by RulepadGrammarParser#functions.
     def enterFunctions(self, ctx:RulepadGrammarParser.FunctionsContext):
-        method = self.initObj(Method(self.initObj(Type("void")), [], []))
+        classMethod = self.__clazz.method
+        if classMethod is None:
+            method = self.initObj(Method(self.initObj(Type("void")), [], []))
+        else:
+            method = classMethod
 
         prev = self.__stack[-1]
         if prev['comingFrom'] == 'class':
