@@ -61,9 +61,12 @@ def implements(interfaces: List[Type]):
 
 def annotations(annotations: List[Annotation], ch = "") -> str:
     def annotation(a: Annotation) -> str:
-        result = f"@{a.type.name}"
-        if a.param is not None:
-            result += f"({'='.join(filter(lambda x: x is not None, [a.param.name, a.param.type.name]))})"
+        result = f"@{a.type.name}("
+        if a.parameters != []:
+            result += ",".join(map(lambda p: f"{'='.join(filter(lambda x: x is not None, [p.name, p.type.name]))}", a.parameters))
+            result = f"{result})"
+        else:
+            result = result[:-1]
         return addSigns(a.is_antecedent, result)
     return f"\n{ch}".join(map(annotation, annotations))
 
@@ -75,9 +78,9 @@ def javaClass(clazz: JavaClass):
             .replace("<ExtendsTemplate>", extends(clazz.extendedClass))\
             .replace("<ImplementsTemplate>", implements(clazz.implementedInterfaces))
 
-def findRanges(code: str):
+def findRanges(code: str): # -> List[List[str, List[Tuple[int, int, int, str]]]]:
     import re
-    rgx = r"(\<[a-zA-Z0-9@)(=\s]+\>|\[[a-zA-Z0-9@)(=\s]+\])"
+    rgx = r"(\<[a-zA-Z0-9@)(=\s.,]+\>|\[[a-zA-Z0-9@)(=\s.,]+\])"
     lines = code.splitlines()
     newLines = [[line, []] for line in lines]
     for i, line in enumerate(lines):
@@ -93,3 +96,10 @@ def findRanges(code: str):
             found = re.search(rgx, line)
     
     return newLines
+
+def configFiles(cf: ConfigurationFile) -> Tuple[str, str]:
+    if cf is None:
+        return None
+    lines = "\n".join(
+        map(lambda t: f"{t[0]}={t[1]}", map(lambda x: (x.name, x.type.name), cf.properties)))
+    return cf.name, lines 
