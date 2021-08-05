@@ -15,8 +15,8 @@ import TextualRuleEditor from "./TextualRuleEditor";
 
 function LabelingScreen() {
     const [grammarText, setGrammarText] = useState("");
-    const [oldDecorations, setNewDecorations] = useState([])
-    const [propertiesFileData, setPropertiesFileData] = useState(null)
+    const [oldDecorations, setNewDecorations] = useState([]);
+    const [propertiesFileData, setPropertiesFileData] = useState(null);
 
     const [code, setRuleCode] = useState("");
     const [compliant, setCompliantCode] = useState("");
@@ -56,28 +56,29 @@ function LabelingScreen() {
     const getPrevRule = () => {};
 
     const editorDidMount = (editor, monaco) => {
-        setEditor({editor, monaco})
+        setEditor({ editor, monaco });
     };
 
     const newCodeEditor = (
-            value, 
-            onValueChange, 
-            editorDidMountAction = null, 
-            fileName = "Foo.java", 
-            disabled=false, 
-            language="java"
+        value,
+        onValueChange,
+        editorDidMountAction = null,
+        fileName = "Foo.java",
+        disabled = false,
+        language = "java"
     ) => {
-        if (editorDidMountAction == null) editorDidMountAction = editorDidMount
-        const height = 400 * ( 1 / (propertiesFileData == null ? 1 : 2))
+        if (editorDidMountAction == null) editorDidMountAction = editorDidMount;
+        const height = 400 * (1 / (propertiesFileData == null ? 1 : 2));
         return (
-            <>
-                <h4
-                    style={{
-                        color: "white",
-                    }}
-                >
-                    {fileName}
-                </h4>
+            <fieldset
+                style={{
+                    color: "white",
+                    border: "4px solid white",
+                }}
+            >
+                <legend>
+                    <strong>Code editor:</strong> <em>{fileName}</em>
+                </legend>
                 <MonacoEditor
                     width={800}
                     height={height}
@@ -87,12 +88,12 @@ function LabelingScreen() {
                     onChange={onValueChange}
                     editorDidMount={editorDidMountAction}
                     options={{
-                        readOnly: disabled
+                        readOnly: disabled,
                     }}
                 />
-            </>
+            </fieldset>
         );
-    }
+    };
 
     const codeEditor = (value, onValueChange, disabled = false) => {
         return (
@@ -127,22 +128,26 @@ function LabelingScreen() {
                 } else {
                     const code = json.code;
 
-                    const codeText = code.map((e) => e[0]).join("\n")
-                    const ranges = code.map((e) => e[1]).flat()
+                    const codeText = code.map((e) => e[0]).join("\n");
+                    const ranges = code.map((e) => e[1]).flat();
 
-                    const {editor, monaco} = editorData;
+                    const { editor, monaco } = editorData;
 
                     const rangez = ranges.map((rangeData) => {
-                        const row = rangeData[0] + 1
-                        const s = rangeData[1] + 1
-                        const e = rangeData[2] + 1
-                        const isAntecedent = rangeData[3] === "["
+                        const row = rangeData[0] + 1;
+                        const s = rangeData[1] + 1;
+                        const e = rangeData[2] + 1;
+                        const isAntecedent = rangeData[3] === "[";
                         const r = new monaco.Range(row, s, row, e);
                         return {
                             range: r,
-                            options: { inlineClassName: isAntecedent ? "antecedent" : "consequent"},
-                        }
-                    })
+                            options: {
+                                inlineClassName: isAntecedent
+                                    ? "antecedent"
+                                    : "consequent",
+                            },
+                        };
+                    });
 
                     const newDecorations = editor.deltaDecorations(
                         oldDecorations,
@@ -152,16 +157,16 @@ function LabelingScreen() {
                     setNewDecorations(newDecorations);
                     setRuleCode(codeText.trim());
 
-                    const properties = json.properties
+                    const properties = json.properties;
                     if (properties) {
-                        const [name, text] = properties
+                        const [name, text] = properties;
                         setPropertiesFileData({
-                            name, text
-                        })
+                            name,
+                            text,
+                        });
                     } else {
-                        setPropertiesFileData(null)
+                        setPropertiesFileData(null);
                     }
-                    
                 }
             });
     };
@@ -169,12 +174,41 @@ function LabelingScreen() {
     return (
         <div className="flautas">
             <div className="code-example">
+                <div className="instructions">
+                    <h2>Candidate Rule 15</h2>
+                    <fieldset
+                        style={{
+                            color: "white",
+                            border: "4px solid white",
+                        }}
+                    >
+                        <legend>
+                            <strong>Instructions</strong>
+                        </legend>
+                        <p>
+                            <em>
+                                Edit the candidate rule as needed and then confirm
+                                the rule once done. If the candidate rule is
+                                completely not correct or not useful for
+                                authoring a rule, click <strong>"Not rule"</strong>
+                            </em>
+                        </p>
+                    </fieldset>
+                </div>
                 <div className="code-snippet-sidebar">
-                    {newCodeEditor(code, (value) => {setRuleCode(value);})}
-                    {propertiesFileData == null ? 
-                        null 
-                        :   
-                        newCodeEditor(propertiesFileData.text, setRuleCode, (a, b) => {}, propertiesFileData.name, true, null)}
+                    {newCodeEditor(code, (value) => {
+                        setRuleCode(value);
+                    })}
+                    {propertiesFileData == null
+                        ? null
+                        : newCodeEditor(
+                              propertiesFileData.text,
+                              setRuleCode,
+                              (a, b) => {},
+                              propertiesFileData.name,
+                              true,
+                              null
+                          )}
                 </div>
             </div>
 
@@ -187,12 +221,26 @@ function LabelingScreen() {
                 </div>
                 <div className="code-snippet-examples">
                     <div className="correct">
-                        <h1>Compliant</h1>
-                        {codeEditor(compliant, setRuleCode, true)}
+                        <h1>Example of Complying Code</h1>
+                        {codeEditor(
+                            `class Foo   {
+    @Fallback(fallbackMethod="doWhenFails")
+    public void method() {}
+}`,
+                            setRuleCode,
+                            true
+                        )}
                     </div>
                     <div className="violation">
-                        <h1>Non-compliant</h1>
-                        {codeEditor(nonCompliant, setRuleCode, true)}
+                        <h1>Example of Violation</h1>
+                        {codeEditor(
+                            `class Foo   {
+    @Fallback
+    public void method() {}
+}`,
+                            setRuleCode,
+                            true
+                        )}
                     </div>
                 </div>
                 <div className="controls">
@@ -214,17 +262,7 @@ function LabelingScreen() {
                             }`}
                             onClick={() => handleLabeling("correct")}
                         >
-                            CORRECT
-                        </button>
-                        <button
-                            className={`btn best-practice ${
-                                ruleLabel === "best_practice"
-                                    ? "btn-selected"
-                                    : ""
-                            }`}
-                            onClick={() => handleLabeling("best_practice")}
-                        >
-                            BEST PRACTICE
+                            CONFIRM RULE
                         </button>
                         <button
                             className={`btn btn-incorrect ${

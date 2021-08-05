@@ -63,7 +63,7 @@ def check(input):
 
 # a = """class with function with (parameter with type "String" and annotation "AnnoA" ) must have declaration statement with (type "Bean" and annotation "AnnoB" ) """
 
-# a = """class with function with annotation "ABC" must have function with (annotation "ABC" with parameter with (name "className" and type "Class" ) and annotation "XYZ" with parameter with (type "int" and name "wait" ) ) """
+# a = """class with function with annotation "Fallback" must have function with annotation "Fallback" with parameter with (name "fallbackMethod" and type "String" ) """
 
 # print(convert(a))
 

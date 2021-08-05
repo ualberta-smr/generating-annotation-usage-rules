@@ -1,3 +1,4 @@
+import "./TextualRuleEditor.css";
 import MonacoEditor from "react-monaco-editor";
 import { useState } from "react";
 
@@ -6,7 +7,7 @@ function TextualRuleEditor(props) {
 
     const handleChange = (text) => {
         setGrammarText(text);
-        props.onChange(text)
+        props.onChange(text);
     };
 
     const editorWillMount = (monaco) => {
@@ -17,7 +18,10 @@ function TextualRuleEditor(props) {
         monaco.languages.setMonarchTokensProvider("modernizer", {
             tokenizer: {
                 root: [
-                    [/(class|annotation|function|declaration statement)/, "label-modern"],
+                    [
+                        /(class|annotation|function|declaration statement)/,
+                        "label-modern",
+                    ],
                     [/(".+?")/, "str-modern"],
                     [/(must have)/, "must-have-modern"],
                 ],
@@ -39,8 +43,8 @@ function TextualRuleEditor(props) {
                 },
                 {
                     token: "must-have-modern",
-                    foreground: "0000FF"
-                }
+                    foreground: "0000FF",
+                },
             ],
         });
 
@@ -48,24 +52,26 @@ function TextualRuleEditor(props) {
     };
 
     return (
-        <MonacoEditor
-            width="90%"
-            height="40%"
-            value={props.text}
-            options={{
-                readOnly: false,
-                folding: false,
-                minimap: {
-                    enabled: false,
-                },
-                lineNumbers: "off",
-                wordWrap: "on",
-            }}
-            onChange={handleChange}
-            // editorWillMount={editorWillMount}
-            className="code-description-text"
-        />
+        <fieldset>
+            <legend><strong>Rule Authoring Editor</strong></legend>
+            <MonacoEditor
+                width={750}
+                height={120}
+                value={props.text}
+                options={{
+                    readOnly: false,
+                    folding: false,
+                    minimap: {
+                        enabled: false,
+                    },
+                    lineNumbers: "off",
+                    wordWrap: "on",
+                }}
+                onChange={handleChange}
+                className="code-description-text"
+            />
+        </fieldset>
     );
-};
+}
 
 export default TextualRuleEditor;

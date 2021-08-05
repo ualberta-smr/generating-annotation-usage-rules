@@ -29,7 +29,7 @@ class Param(Part):
 @dataclass
 class Annotation(Part):
     type: Type
-    param: Param = field(default=None)
+    parameters: List[Param] = field(default_factory=[])
 
 @dataclass
 class Field(Part):

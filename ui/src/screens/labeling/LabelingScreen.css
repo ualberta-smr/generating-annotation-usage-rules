@@ -19,8 +19,26 @@
     border: 1px solid black;
     background-color: white;
     display: grid;
-    /* grid-template-columns: 100%; */
-    /* grid-template-rows: 50% 48%; */
+    grid-template-columns: 100%;
+    grid-template-rows: 18% 82%;
+}
+
+.flautas .code-example .instructions {
+    background-color: #414260;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.flautas .code-example .instructions h2 {
+    margin: 0;
+    color: white;
+}
+
+.flautas .code-example .instructions fieldset {
+    width: 80%;
+    font-size: 19px;
 }
 
 .flautas .code-desc-container {
@@ -36,6 +54,11 @@
     grid-template-rows: max-content;
     grid-column-gap: 1%;
     padding: 1%;
+    text-align: center;
+}
+
+.flautas .code-snippet-examples h1 {
+    font-size: 1.7em !important;
 }
 
 .flautas .code-snippet-examples .correct {
@@ -184,9 +207,13 @@
     padding: 1%;
     background-color: #414260;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     flex-direction: column;
+}
+
+.flautas .code-snippet-sidebar .instructions {
+    align-self: flex-start;
 }
 
 .flautas .code-snippet-textbar {

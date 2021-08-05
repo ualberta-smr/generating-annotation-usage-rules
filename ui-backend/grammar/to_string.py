@@ -61,9 +61,12 @@ def implements(interfaces: List[Type]):
 
 def annotations(annotations: List[Annotation], ch = "") -> str:
     def annotation(a: Annotation) -> str:
-        result = f"@{a.type.name}"
-        if a.param is not None:
-            result += f"({'='.join(filter(lambda x: x is not None, [a.param.name, a.param.type.name]))})"
+        result = f"@{a.type.name}("
+        if a.parameters != []:
+            result += ",".join(map(lambda p: f"{'='.join(filter(lambda x: x is not None, [p.name, p.type.name]))}", a.parameters))
+            result = f"{result})"
+        else:
+            result = result[:-1]
         return addSigns(a.is_antecedent, result)
     return f"\n{ch}".join(map(annotation, annotations))
 

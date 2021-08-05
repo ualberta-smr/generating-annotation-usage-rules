@@ -11,8 +11,8 @@ else:
     from model import *
 
 def mergeAnnotations(a: Annotation, b: Annotation) -> Annotation:
-    param = a.param if b.param is None else b.param
-    an = Annotation(a.type, param)
+    parameters = a.parameters + b.parameters
+    an = Annotation(a.type, parameters)
     an.is_antecedent = a.is_antecedent or b.is_antecedent
     return an
 
@@ -58,7 +58,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
         except:
             annotationType = None
 
-        annotation = self.initObj(Annotation(annotationType))
+        annotation = self.initObj(Annotation(annotationType, []))
 
         prev = self.__stack[-1]
         if prev['comingFrom'] in ['class', 'function', 'field']:
@@ -73,7 +73,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
         self.__stack.pop()
     
     def enterExtensions(self, ctx:RulepadGrammarParser.ExtensionsContext):
-        '''there can be multiple extensions'''
+        # TODO: there can be multiple extensions, currently not supported
         extendedClass = ctx.extensionCondition().words().getText().replace('"', "")
 
         prev = self.__stack[-1]
@@ -81,7 +81,6 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             prev['node'].extendedClass = self.initObj(Type(extendedClass))
     
     def enterImplementations(self, ctx:RulepadGrammarParser.ImplementationsContext):
-        '''there can be multiple extensions'''
         prev = self.__stack[-1]
         if prev['comingFrom'] == 'class':
             className = ctx.implementationCondition().words().getText().replace('"', "")
@@ -94,23 +93,18 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             type = ctx.typeCondition().words()
 
         type = self.initObj(Type(type.getText().replace("\"", "")))
+        print(type)
 
         prev = self.__stack[-1]
-        if prev['comingFrom'] == 'parameter':
+        if prev['comingFrom'] in ['parameter', 'field', 'property']:
             prev['node'].type = type
         elif prev['comingFrom'] == 'function':
             prev['node'].returnType = type
-        elif prev['comingFrom'] == 'field':
-            prev['node'].type = type
-        elif prev['comingFrom'] == 'property':
-            prev['node'].type = type
     
     def enterParameters(self, ctx:RulepadGrammarParser.ParametersContext):
         prev = self.__stack[-1]
         param = self.initObj(Param(None, None))
-        if prev['comingFrom'] == 'annotation':
-            prev['node'].param = param
-        elif prev['comingFrom'] == 'function':
+        if prev['comingFrom'] in ['annotation', 'function']:
             prev['node'].parameters.append(param)
         
         self.__stack.append({
