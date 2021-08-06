@@ -1,0 +1,161 @@
+$backgroundColor: #414260;
+
+@mixin fieldsetMixin {
+    fieldset {
+        border: 2px solid white;
+        color: white;
+        @content;
+    }
+}
+
+.app {
+    background-color: $backgroundColor;
+    display: grid;
+    grid-template-rows: 65% 35%;
+}
+
+.editors-row-wrapper {
+    height: 65vh;
+}
+
+.editors-row {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    border: 5px solid white;
+    box-sizing: border-box;
+    height: 100%;
+}
+
+.code-editors {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+
+    @include fieldsetMixin;
+}
+
+.rule-authoring-editor-wrapper {
+    display: grid;
+    grid-template-rows: 30% 70%;
+
+    .instructions {
+        width: 80%;
+        justify-self: center;
+
+        color: white;
+
+        @include fieldsetMixin {
+            font-size: 18px;
+        }
+    }
+
+    .rule-authoring-editor {
+        justify-self: center;
+        align-self: center;
+
+        @include fieldsetMixin;
+    }
+}
+
+.examples-and-controls-row {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    height: 35vh;
+}
+
+.examples {
+    display: flex;
+    justify-content: space-around;
+
+    h1 {
+        color: white;
+    }
+
+    .code-snippet-textbar {
+        background-color: white;
+    }
+}
+
+.controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    .buttons {
+        display: flex;
+        justify-content: space-evenly;
+        flex: 1;
+    }
+
+    .btn {
+        background-color: #f6f6f5;
+        border-style: dashed;
+        padding: 1% 2%;
+        width: 160px;
+        height: 45px;
+
+        &:hover {
+            border-style: solid;
+        }
+
+        &:active {
+            border-style: dotted;
+        }
+    }
+
+    .btn-selected {
+        background-color: orange;
+    }
+
+    .btn-round {
+        min-width: 80px;
+        max-width: 20px;
+        text-decoration: none;
+        display: inline-block;
+        outline: none;
+        cursor: pointer;
+        background-color: unset;
+        border-radius: 100%;
+        overflow: none;
+        text-align: center;
+        padding: 0;
+        background-color: white;
+
+        &:before {
+            content: "";
+            display: inline-block;
+            vertical-align: middle;
+            padding-top: 100%;
+        }
+
+        &:hover {
+            border: 1px solid black;
+        }
+
+        &:active {
+            background-color: black;
+            color: white;
+        }
+
+        span {
+            display: inline-flex;
+            vertical-align: middle;
+            max-width: 90%;
+            font-size: 70px;
+        }
+    }
+
+    .buttons {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex: 0.5;
+    }
+
+    .left-btn-div,
+    .right-btn-div {
+        display: flex;
+        align-items: center;
+    }
+}

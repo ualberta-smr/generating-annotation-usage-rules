@@ -52,25 +52,22 @@ function TextualRuleEditor(props) {
     };
 
     return (
-        <fieldset>
-            <legend><strong>Rule Authoring Editor</strong></legend>
-            <MonacoEditor
-                width={750}
-                height={120}
-                value={props.text}
-                options={{
-                    readOnly: false,
-                    folding: false,
-                    minimap: {
-                        enabled: false,
-                    },
-                    lineNumbers: "off",
-                    wordWrap: "on",
-                }}
-                onChange={handleChange}
-                className="code-description-text"
-            />
-        </fieldset>
+        <MonacoEditor
+            width={750}
+            height={120}
+            value={props.text}
+            options={{
+                readOnly: false,
+                folding: false,
+                minimap: {
+                    enabled: false,
+                },
+                lineNumbers: "off",
+                wordWrap: "on",
+            }}
+            onChange={handleChange}
+            className={props.className}
+        />
     );
 }
 

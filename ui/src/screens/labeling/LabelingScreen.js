@@ -16,7 +16,10 @@ import TextualRuleEditor from "./TextualRuleEditor";
 function LabelingScreen() {
     const [grammarText, setGrammarText] = useState("");
     const [oldDecorations, setNewDecorations] = useState([]);
-    const [propertiesFileData, setPropertiesFileData] = useState(null);
+    const [propertiesFileData, setPropertiesFileData] = useState({
+        text: "aa",
+        name: "aa"
+    });
 
     const [code, setRuleCode] = useState("");
     const [compliant, setCompliantCode] = useState("");
