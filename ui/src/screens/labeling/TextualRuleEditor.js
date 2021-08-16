@@ -54,7 +54,7 @@ function TextualRuleEditor(props) {
     return (
         <MonacoEditor
             width={750}
-            height={120}
+            height={220}
             value={props.text}
             options={{
                 readOnly: false,

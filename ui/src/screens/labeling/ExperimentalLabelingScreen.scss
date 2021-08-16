@@ -1,9 +1,10 @@
 $backgroundColor: #414260;
+$hotColor: #ffcf00;
 
-@mixin fieldsetMixin {
+@mixin fieldsetMixin($borderSize: 3px, $borderColor: white) {
     fieldset {
-        border: 2px solid white;
-        color: white;
+        border: $borderSize solid $borderColor;
+        color: $borderColor;
         @content;
     }
 }
@@ -11,11 +12,11 @@ $backgroundColor: #414260;
 .app {
     background-color: $backgroundColor;
     display: grid;
-    grid-template-rows: 65% 35%;
+    grid-template-rows: 10% 55% 35%;
 }
 
 .editors-row-wrapper {
-    height: 65vh;
+    height: 55vh;
 }
 
 .editors-row {
@@ -32,29 +33,38 @@ $backgroundColor: #414260;
     justify-content: space-around;
     align-items: center;
 
-    @include fieldsetMixin;
+    @include fieldsetMixin(3px, $hotColor);
+}
+
+.instructions {
+    height: 10vh;
+    width: 80%;
+    justify-self: center;
+    color: white;
+    font-size: 18px;
+
+    fieldset {
+        border: none;
+    }
+
+    h2 {
+        margin-top: 0.5%;
+        margin-bottom: 0.5%;
+    }
+
+    p {
+        font-size: 1em;
+    }
 }
 
 .rule-authoring-editor-wrapper {
     display: grid;
-    grid-template-rows: 30% 70%;
-
-    .instructions {
-        width: 80%;
-        justify-self: center;
-
-        color: white;
-
-        @include fieldsetMixin {
-            font-size: 18px;
-        }
-    }
 
     .rule-authoring-editor {
         justify-self: center;
         align-self: center;
 
-        @include fieldsetMixin;
+        @include fieldsetMixin(3px, $hotColor);
     }
 }
 
@@ -77,10 +87,17 @@ $backgroundColor: #414260;
     }
 }
 
+.controls-wrapper {
+    display: flex;
+    align-items: flex-end;
+}
+
 .controls {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    flex: 1;
+    margin-bottom: 1%;
 
     .buttons {
         display: flex;

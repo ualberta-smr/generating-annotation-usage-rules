@@ -15,8 +15,8 @@ function LabelingScreen() {
     const [grammarText, setGrammarText] = useState("");
     const [oldDecorations, setNewDecorations] = useState([]);
     const [propertiesFileData, setPropertiesFileData] = useState({
-        text: "a",
-        name: "b",
+        text: "",
+        name: "a.prop",
     });
 
     const [code, setRuleCode] = useState("");
@@ -190,27 +190,21 @@ function LabelingScreen() {
     const renderUI = () => {
         return (
             <div className="app">
+                <div className="instructions">
+                    <h2>Candidate Rule 15</h2>
+                    <p>
+                        <strong>Instructions: </strong>
+                        <em>
+                            Edit the candidate rule as needed and then confirm
+                            the rule once done. If the candidate rule is
+                            completely not correct or not useful for authoring a
+                            rule, click <strong>"Not a rule"</strong>
+                        </em>
+                    </p>
+                </div>
                 <div className="editors-row-wrapper">
                     <div className="editors-row">
                         <div className="rule-authoring-editor-wrapper">
-                            <div className="instructions">
-                                <h2>Candidate Rule 15</h2>
-                                <fieldset>
-                                    <legend>
-                                        <strong>Instructions</strong>
-                                    </legend>
-                                    <p>
-                                        <em>
-                                            Edit the candidate rule as needed
-                                            and then confirm the rule once done.
-                                            If the candidate rule is completely
-                                            not correct or not useful for
-                                            authoring a rule, click{" "}
-                                            <strong>"Not rule"</strong>
-                                        </em>
-                                    </p>
-                                </fieldset>
-                            </div>
                             <div className="rule-authoring-editor">
                                 {fieldSetWrap(
                                     "Rule Authoring Editor",
@@ -265,50 +259,52 @@ function LabelingScreen() {
                             )}
                         </div>
                     </div>
-                    <div className="controls">
-                        <div className="left-btn-div">
-                            <button
-                                className="btn-round btn-left"
-                                onClick={() => getPrevRule()}
-                            >
-                                <span>
-                                    <FaArrowLeft />
-                                </span>
-                            </button>
-                        </div>
+                    <div className="controls-wrapper">
+                        <div className="controls">
+                            <div className="left-btn-div">
+                                <button
+                                    className="btn-round btn-left"
+                                    onClick={() => getPrevRule()}
+                                >
+                                    <span>
+                                        <FaArrowLeft />
+                                    </span>
+                                </button>
+                            </div>
 
-                        <div className="buttons">
-                            <button
-                                className={`btn btn-correct ${
-                                    ruleLabel === "correct"
-                                        ? "btn-selected"
-                                        : ""
-                                }`}
-                                onClick={() => handleLabeling("correct")}
-                            >
-                                CONFIRM RULE
-                            </button>
-                            <button
-                                className={`btn btn-incorrect ${
-                                    ruleLabel === "not_a_rule"
-                                        ? "btn-selected"
-                                        : ""
-                                }`}
-                                onClick={() => handleLabeling("not_a_rule")}
-                            >
-                                NOT A RULE
-                            </button>
-                        </div>
+                            <div className="buttons">
+                                <button
+                                    className={`btn btn-correct ${
+                                        ruleLabel === "correct"
+                                            ? "btn-selected"
+                                            : ""
+                                    }`}
+                                    onClick={() => handleLabeling("correct")}
+                                >
+                                    CONFIRM RULE
+                                </button>
+                                <button
+                                    className={`btn btn-incorrect ${
+                                        ruleLabel === "not_a_rule"
+                                            ? "btn-selected"
+                                            : ""
+                                    }`}
+                                    onClick={() => handleLabeling("not_a_rule")}
+                                >
+                                    NOT A RULE
+                                </button>
+                            </div>
 
-                        <div className="right-btn-div">
-                            <button
-                                className="btn-round btn-right"
-                                onClick={() => getNextRule()}
-                            >
-                                <span>
-                                    <FaArrowRight />
-                                </span>
-                            </button>
+                            <div className="right-btn-div">
+                                <button
+                                    className="btn-round btn-right"
+                                    onClick={() => getNextRule()}
+                                >
+                                    <span>
+                                        <FaArrowRight />
+                                    </span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
