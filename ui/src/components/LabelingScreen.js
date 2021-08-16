@@ -1,49 +1,20 @@
-import "./ExperimentalLabelingScreen.scss";
-import { useEffect, useState } from "react";
+import "./LabelingScreen.scss";
+import { useState } from "react";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
-import Prism from "prismjs";
-import Editor from "react-simple-code-editor";
-import { highlight, languages } from "prismjs/components/prism-core";
-import "prismjs/components/prism-clike";
-import "prismjs/components/prism-java";
-import "prismjs/themes/prism.css";
 import MonacoEditor from "react-monaco-editor";
 
-import TextualRuleEditor from "./TextualRuleEditor";
+import FieldsetWrapper from "./FieldsetWrapper";
+import RuleAuthoringEditor from "./RuleAuthoringEditor";
+import CodeExampleVisualizer from "./CodeExampleVisualizer";
 
 function LabelingScreen() {
     const [grammarText, setGrammarText] = useState("");
     const [oldDecorations, setNewDecorations] = useState([]);
-    const [propertiesFileData, setPropertiesFileData] = useState({
-        text: "",
-        name: "a.prop",
-    });
+    const [propertiesFileData, setPropertiesFileData] = useState();
 
     const [code, setRuleCode] = useState("");
-    const [compliant, setCompliantCode] = useState("");
-    const [nonCompliant, setNonCompliantCode] = useState("");
     const [ruleLabel, setRuleLabel] = useState(null);
     const [editorData, setEditor] = useState(null);
-
-    useEffect(() => {
-        updateFields({
-            grammar: "",
-            ruleCode: "",
-            compliantExamples: [""],
-            nonCompliantExamples: [""],
-            label: null,
-        });
-    }, []);
-
-    const updateFields = (rule) => {
-        if (rule != null) {
-            setGrammarText(rule.grammar);
-            setRuleCode(rule.ruleCode);
-            setCompliantCode(rule.compliantExamples[0]); // TODO: dangerous
-            setNonCompliantCode(rule.nonCompliantExamples[0]); // TODO: dangerous
-            setRuleLabel(rule.label);
-        }
-    };
 
     const handleLabeling = (label) => {
         if (["correct", "not_a_rule", "best_practice"].includes(label)) {
@@ -60,31 +31,7 @@ function LabelingScreen() {
         setEditor({ editor, monaco });
     };
 
-    const fieldSetWrap = (title, element) => {
-        let legend = null;
-        if (title.includes(":")) {
-            const [editor, fileName] = title.split(":");
-            legend = (
-                <legend>
-                    <strong>{editor.trim()}</strong>: <em>{fileName.trim()}</em>
-                </legend>
-            );
-        } else {
-            legend = (
-                <legend>
-                    <strong>{title}</strong>
-                </legend>
-            );
-        }
-        return (
-            <fieldset>
-                {legend}
-                {element}
-            </fieldset>
-        );
-    };
-
-    const newCodeEditor = (
+    const codeEditor = (
         value,
         onValueChange,
         editorDidMountAction = null,
@@ -94,49 +41,31 @@ function LabelingScreen() {
     ) => {
         if (editorDidMountAction == null) editorDidMountAction = editorDidMount;
         const height = 400 * (1 / (propertiesFileData == null ? 1 : 2));
-        return fieldSetWrap(
-            `Code editor: ${fileName}`,
-            <MonacoEditor
-                width={800}
-                height={height}
-                language={language}
-                theme="vs-light"
-                value={value}
-                onChange={onValueChange}
-                editorDidMount={editorDidMountAction}
-                options={{
-                    readOnly: disabled,
-                }}
-            />
-        );
-    };
-
-    const codeEditor = (value, onValueChange, disabled = false) => {
         return (
-            <Editor
-                value={value}
-                onValueChange={(code) => onValueChange(code)}
-                highlight={(code) => highlight(code, languages.java)}
-                padding={10}
-                style={{
-                    fontFamily: '"Fira code", "Fira Mono", monospace',
-                }}
-                className="code-snippet-textbar"
-                disabled={disabled}
-            />
+            <FieldsetWrapper title={`Code editor: ${fileName}`}>
+                <MonacoEditor
+                    width={800}
+                    height={height}
+                    language={language}
+                    theme="vs-light"
+                    value={value}
+                    onChange={onValueChange}
+                    editorDidMount={editorDidMountAction}
+                    options={{
+                        readOnly: disabled,
+                    }}
+                />
+            </FieldsetWrapper>
         );
     };
 
     const updateRelatedFields = (text) => {
         setGrammarText(text);
+
         fetch(`http://localhost:5000/grammarToCode?grammar=${text}`)
             .then((response) => {
-                const status = response.status;
-                if (status === 200) {
-                    return response.json();
-                } else {
-                    return null;
-                }
+                if (response.status === 200) return response.json();
+                return null;
             })
             .then((json) => {
                 if (json == null) {
@@ -206,24 +135,25 @@ function LabelingScreen() {
                     <div className="editors-row">
                         <div className="rule-authoring-editor-wrapper">
                             <div className="rule-authoring-editor">
-                                {fieldSetWrap(
-                                    "Rule Authoring Editor",
-                                    <TextualRuleEditor
+                                <FieldsetWrapper
+                                    title={"Rule Authoring Editor"}
+                                >
+                                    <RuleAuthoringEditor
                                         text={grammarText}
                                         onChange={(text) =>
                                             updateRelatedFields(text)
                                         }
                                     />
-                                )}
+                                </FieldsetWrapper>
                             </div>
                         </div>
                         <div className="code-editors">
-                            {newCodeEditor(code, (value) => {
+                            {codeEditor(code, (value) => {
                                 setRuleCode(value);
                             })}
                             {propertiesFileData == null
                                 ? null
-                                : newCodeEditor(
+                                : codeEditor(
                                       propertiesFileData.text,
                                       setRuleCode,
                                       (a, b) => {},
@@ -236,28 +166,17 @@ function LabelingScreen() {
                 </div>
                 <div className="examples-and-controls-row">
                     <div className="examples">
-                        <div className="correct">
-                            <h1>Example of Complying Code</h1>
-                            {codeEditor(
-                                `class Foo   {
-    @Fallback(fallbackMethod="doWhenFails")
-    public void method() {}
-}`,
-                                setRuleCode,
-                                true
-                            )}
-                        </div>
-                        <div className="violation">
-                            <h1>Example of Violation</h1>
-                            {codeEditor(
-                                `class Foo   {
-    @Fallback
-    public void method() {}
-}`,
-                                setRuleCode,
-                                true
-                            )}
-                        </div>
+                        <CodeExampleVisualizer
+                            title="Example of Complying Code"
+                            className="correct"
+                            code={`class Foo {\n    @Fallback(fallbackMethod="doWhenFails")\n    public void method() {}\n}`}
+                        ></CodeExampleVisualizer>
+
+                        <CodeExampleVisualizer
+                            title="Example of Violation"
+                            className="violation"
+                            code={`class Foo {\n    @Fallback\n    public void method() {}\n}`}
+                        ></CodeExampleVisualizer>
                     </div>
                     <div className="controls-wrapper">
                         <div className="controls">

@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import LabelingScreen from "./screens/labeling/ExperimentalLabelingScreen";
+import LabelingScreen from "./components/LabelingScreen";
 
 ReactDOM.render(
     <React.StrictMode>
