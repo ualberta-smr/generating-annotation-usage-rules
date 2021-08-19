@@ -1,4 +1,5 @@
 from dataclasses import *
+from typing import Union
 from antlr4 import *
 
 if __name__ is not None and "." in __name__:
@@ -28,8 +29,10 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
         # }]
         self.__stack = []
         self.__is_antecedent = True
-        self.__initial_element = None
-        self.__initial_node = None
+        self.__initial = {
+            'node': None,
+            'type': None
+        }
 
     def mergeDuplicateAnnotations(self, oldAnnotations):
         if oldAnnotations == []:
@@ -54,29 +57,31 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
                 self.__clazz.field.annotations)
         return self.__clazz
 
+    def get(self) -> Union[JavaClass, Method, Field]:
+        return self.__initial['node']
+
     # Enter a parse tree produced by RulepadGrammarParser#must.
     def enterMust(self, ctx: RulepadGrammarParser.MustContext):
         self.__is_antecedent = False
-        if self.__initial_element == 'class':
-            node = self.__clazz
-        elif self.__initial_element == 'function':
-            node = self.__clazz.method
-        elif self.__initial_element == 'field':
-            node = self.__clazz.field
-        if self.__initial_element in ['class', 'field', 'function']:
-            self.__stack.append({
-                'comingFrom': self.__initial_element,
-                'node': node
-            })
+        self.__stack.append({
+            'comingFrom': self.__initial['type'],
+            'node': self.__initial['node']
+        })
 
     # Enter a parse tree produced by RulepadGrammarParser#classes.
     def enterClasses(self, ctx: RulepadGrammarParser.ClassesContext):
         if len(self.__stack) == 0:
-            self.__initial_element = 'class'
-        self.__stack.append({
-            'comingFrom': 'class',
-            'node': self.__clazz
-        })
+            self.__initial = {
+                'node': JavaClass([], None, [], None, None, None),
+                'type': 'class'
+            }
+            self.__stack.append({
+                'comingFrom': 'class',
+                'node': self.__initial['node']
+            })
+        else:
+            # there's actually no other case when a rule can use class (for now)
+            pass
 
     # Exit a parse tree produced by RulepadGrammarParser#classes.
     def exitClasses(self, ctx: RulepadGrammarParser.ClassesContext):
@@ -160,24 +165,23 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
     # Enter a parse tree produced by RulepadGrammarParser#functions.
     def enterFunctions(self, ctx: RulepadGrammarParser.FunctionsContext):
         if len(self.__stack) > 0:
-            classMethod = self.__clazz.method
-            if classMethod is None:
-                method = self.initObj(
-                    Method(self.initObj(Type("void")), [], []))
-            else:
-                method = classMethod
-
             prev = self.__stack[-1]
             if prev['comingFrom'] == 'class':
+                classMethod = prev['node'].method
+                if classMethod is None:
+                    method = self.initObj(
+                        Method(self.initObj(Type("void")), [], []))
+                else:
+                    method = classMethod
                 prev['node'].method = method
         else:
             if self.__is_antecedent:
-                self.__initial_element = 'function'
-                method = self.initObj(
-                    Method(self.initObj(Type("void")), [], []))
-                self.__clazz.method = method
-            else:
-                method = self.__clazz.method
+                # if the rule starts with 'function'
+                self.__initial = {
+                    'node': self.initObj(Method(self.initObj(Type("void")), [], [])),
+                    'type': 'function'
+                }
+            method = self.__initial['node']
 
         self.__stack.append({
             'comingFrom': 'function',
@@ -198,12 +202,12 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
                 prev['node'].field = field
         else:
             if self.__is_antecedent:
-                self.__initial_element = 'field'
-                field = self.initObj(Field(Type("Object"), []))
-                self.__clazz.field = field
-            else:
-                field = self.__clazz.field
-                
+                self.__initial = {
+                    'node': self.initObj(Field(Type("Object"), [])),
+                    'type': 'field'
+                }
+            field = self.__initial['node']
+
         self.__stack.append({
             'comingFrom': 'field',
             'node': field

@@ -38,10 +38,10 @@ def check(input):
     listener = ConcreteRulepadGrammarListener()
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
-    j = listener.getJavaClass()
+    j = listener.get()
     import json
     print(json.dumps(j, default=lambda x: x.__dict__, indent=4))
-    return javaClass(j).strip()
+    return None #javaClass(j).strip()
 
 # check(
 #     """class with annotation "Config" must have configuration file with property with (name "name" and type "String" ) """
