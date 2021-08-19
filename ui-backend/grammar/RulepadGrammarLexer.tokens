@@ -77,7 +77,6 @@ SUBCLASSES=45
 'specifier '=35
 'visibility '=36
 'return value '=37
-'declaration statement '=38
 'configuration file '=39
 'property '=40
 'expression statement '=41

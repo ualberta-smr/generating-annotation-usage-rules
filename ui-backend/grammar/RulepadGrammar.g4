@@ -296,6 +296,7 @@ parameters
 
 parameterCondition
     : withWord parameterExpression
+    | combinatorialWords SPACE
     ;
 
 parameterExpression
@@ -380,6 +381,7 @@ returnValueCondition
 
 DeclarationStatement
     : 'declaration statement '
+    | 'field '
     ;
 
 declarationStatements
@@ -433,11 +435,12 @@ CONFIGURATION_PROPERTIES
     ;
 
 configurationProperties
-    : CONFIGURATION_PROPERTIES configurationPropertyCondition?
+    : CONFIGURATION_PROPERTIES configurationPropertyCondition
     ;
 
 configurationPropertyCondition
     : withWord configurationPropertyExpression
+    | combinatorialWords SPACE
     ;
 
 configurationPropertyExpression
