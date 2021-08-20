@@ -1,6 +1,7 @@
 from dataclasses import *
-from typing import Union
 from antlr4 import *
+import itertools
+from functools import reduce
 
 if __name__ is not None and "." in __name__:
     from .RulepadGrammarParser import RulepadGrammarParser
@@ -18,15 +19,18 @@ def mergeAnnotations(a: Annotation, b: Annotation) -> Annotation:
     an.is_antecedent = a.is_antecedent or b.is_antecedent
     return an
 
+def mergeDuplicateAnnotations(oldAnnotations):
+    if oldAnnotations is None or oldAnnotations == []:
+        return oldAnnotations
+    tuples = itertools.groupby(oldAnnotations, lambda a: a.type.name)
+    newAnnotations = []
+    for t, annotations in tuples:
+        newAnnotations.append(reduce(mergeAnnotations, annotations))
+    return newAnnotations
 
 class ConcreteRulepadGrammarListener(RulepadGrammarListener):
     def __init__(self) -> None:
         super().__init__()
-        self.__clazz = JavaClass([], None, [], None, None, None)
-        # self.__stack = [{
-        #     'comingFrom': 'class',
-        #     'node': self.__clazz
-        # }]
         self.__stack = []
         self.__is_antecedent = True
         self.__initial = {
@@ -34,31 +38,25 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             'type': None
         }
 
-    def mergeDuplicateAnnotations(self, oldAnnotations):
-        if oldAnnotations == []:
-            return oldAnnotations
-        import itertools
-        from functools import reduce
-
-        tuples = itertools.groupby(oldAnnotations, lambda a: a.type.name)
-        newAnnotations = []
-        for t, annotations in tuples:
-            newAnnotations.append(reduce(mergeAnnotations, annotations))
-        return newAnnotations
-
     def getJavaClass(self) -> JavaClass:
-        self.__clazz.annotations = self.mergeDuplicateAnnotations(
-            self.__clazz.annotations)
-        if self.__clazz.method:
-            self.__clazz.method.annotations = self.mergeDuplicateAnnotations(
-                self.__clazz.method.annotations)
-        if self.__clazz.field:
-            self.__clazz.field.annotations = self.mergeDuplicateAnnotations(
-                self.__clazz.field.annotations)
-        return self.__clazz
+        type_ = self.__initial["type"]
+        node_ = self.__initial["node"]
+        if type_ == 'class':
+            node_.annotations = mergeDuplicateAnnotations(node_.annotations)
+            if node_.method:
+                node_.method.annotations = mergeDuplicateAnnotations(node_.method.annotations)
+            if node_.field:
+                node_.field.annotations = mergeDuplicateAnnotations(node_.field.annotations)
+            return node_
+        elif type_ == 'function':
+            node_.annotations = mergeDuplicateAnnotations(node_.annotations)
+            return JavaClass([], None, [], None, node_, None)
+        elif type_ == 'field':
+            node_.annotations = mergeDuplicateAnnotations(node_.annotations)
+            return JavaClass([], None, [], node_, None, None)
+        else:
+            return None
 
-    def get(self) -> Union[JavaClass, Method, Field]:
-        return self.__initial['node']
 
     # Enter a parse tree produced by RulepadGrammarParser#must.
     def enterMust(self, ctx: RulepadGrammarParser.MustContext):
@@ -255,7 +253,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             else:
                 type_, name_ = elements[0], None
             prop.name = name_
-            prop.type = type_
+            prop.type = self.initObj(Type(type_))
         else:
             self.__stack.append({
                 'comingFrom': 'property',

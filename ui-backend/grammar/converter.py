@@ -24,9 +24,6 @@ def convert(input):
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
     j = listener.getJavaClass()
-    # print(j)
-    # import json
-    # print(json.dumps(j, default=lambda x: x.__dict__, indent=4))
     return findRanges(javaClass(j).strip()), configFiles(j.configurationFile)
 
 def check(input):
@@ -38,10 +35,10 @@ def check(input):
     listener = ConcreteRulepadGrammarListener()
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
-    j = listener.get()
+    j = listener.getJavaClass()
     import json
     print(json.dumps(j, default=lambda x: x.__dict__, indent=4))
-    return None #javaClass(j).strip()
+    return None
 
 # check(
 #     """class with annotation "Config" must have configuration file with property with (name "name" and type "String" ) """
@@ -63,9 +60,17 @@ def check(input):
 #     """function with annotation "Bulkhead" with parameter "int waitingTaskQueue" must have annotation "Asynchronous" """
 # )
 
-check(
-    """class with function with annotation "RolesAllowed" must have (annotation "LoginConfig" and extension of "Application" ) or configuration file with property "String login-config" """
-)
+# check(
+#     """function with annotation "A" must have type "B" """
+# )
+
+# check(
+#     """class must have configuration file with property "String hello" """
+# )
+
+# check(
+#     """class with function with annotation "RolesAllowed" must have (annotation "LoginConfig" and extension of "Application" ) or configuration file with property "String login-config" """
+# )
 
 # print(convert('class with annotation "Demo" must have extension of "SomeOtherClass" and (implementation of "IInterface" and implementation of "BInterface" )'))
 # print(convert('class must have function with (parameter with type "HelloWorldItsAMe" and parameter with type "RequestObject" ) '))
