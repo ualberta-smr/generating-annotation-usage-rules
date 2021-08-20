@@ -1,11 +1,12 @@
 import "./LabelingScreen.scss";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import MonacoEditor from "react-monaco-editor";
 
 import FieldsetWrapper from "./FieldsetWrapper";
 import RuleAuthoringEditor from "./RuleAuthoringEditor";
 import CodeExampleVisualizer from "./CodeExampleVisualizer";
+import makeCancellablePromise from "./superPromise";
 
 function LabelingScreen() {
     const [grammarText, setGrammarText] = useState("");
@@ -15,6 +16,10 @@ function LabelingScreen() {
     const [code, setRuleCode] = useState("");
     const [ruleLabel, setRuleLabel] = useState(null);
     const [editorData, setEditor] = useState(null);
+
+    const [cancelPreviousRequest, setCancelCurrentRequestHandle] = useState({
+        cancel: () => {},
+    });
 
     const handleLabeling = (label) => {
         if (["correct", "not_a_rule", "best_practice"].includes(label)) {
@@ -59,30 +64,50 @@ function LabelingScreen() {
         );
     };
 
+    const clearCodeEditor = () => {
+        const { editor, monaco } = editorData;
+        setNewDecorations(
+            editor.deltaDecorations(oldDecorations, [
+                { range: new monaco.Range(1, 1, 1, 1), options: {} },
+            ])
+        );
+    };
+
     const updateRelatedFields = (text) => {
+        // console.log(`[${text}]`);
+        clearCodeEditor();
         setGrammarText(text);
 
-        fetch(`http://localhost:5000/grammarToCode?grammar=${text}`)
-            .then((response) => {
-                if (response.status === 200) return response.json();
-                return null;
-            })
-            .then((json) => {
+        cancelPreviousRequest.cancel();
+
+        if (text.trim() === "") {
+            setRuleCode("");
+            setPropertiesFileData(null);
+            return null;
+        }
+
+        const cancelPromise = makeCancellablePromise(
+            `http://localhost:5000/grammarToCode?grammar=${text}`,
+            (json) => {
                 if (json == null) {
                     console.log("Error");
+                    setRuleCode("");
+                    setPropertiesFileData(null);
+                    clearCodeEditor();
                 } else {
+                    // console.log(json)
                     const code = json.code;
 
                     const codeText = code.map((e) => e[0]).join("\n");
-                    const ranges = code.map((e) => e[1]).flat();
+                    const rangeValues = code.map((e) => e[1]).flat();
 
                     const { editor, monaco } = editorData;
 
-                    const rangez = ranges.map((rangeData) => {
+                    const ranges = rangeValues.map((rangeData) => {
                         const row = rangeData[0] + 1;
                         const s = rangeData[1] + 1;
                         const e = rangeData[2] + 1;
-                        const isAntecedent = rangeData[3] === "[";
+                        const isAntecedent = rangeData[3] === "["; // TODO: fix this
                         const r = new monaco.Range(row, s, row, e);
                         return {
                             range: r,
@@ -96,7 +121,7 @@ function LabelingScreen() {
 
                     const newDecorations = editor.deltaDecorations(
                         oldDecorations,
-                        rangez
+                        ranges
                     );
 
                     setNewDecorations(newDecorations);
@@ -113,7 +138,10 @@ function LabelingScreen() {
                         setPropertiesFileData(null);
                     }
                 }
-            });
+            }
+        );
+
+        setCancelCurrentRequestHandle(cancelPromise);
     };
 
     const renderUI = () => {
