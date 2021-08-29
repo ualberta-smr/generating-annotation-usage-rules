@@ -24,15 +24,14 @@ def convert(input):
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
     j = listener.getJavaClass()
-    # print(j)
-    # import json
-    # print(json.dumps(j, default=lambda x: x.__dict__, indent=4))
     return findRanges(javaClass(j).strip()), configFiles(j.configurationFile)
+    # return javaClass(j), configFiles(j.configurationFile)
+    # return j, configFiles(j.configurationFile)
 
 def check(input):
     lexer = RulepadGrammarLexer(InputStream(input))
     parser = RulepadGrammarParser(CommonTokenStream(lexer))
-    parser.setTrace(True)
+    parser.setTrace(not True)
     tree = parser.inputSentence()
 
     listener = ConcreteRulepadGrammarListener()
@@ -41,10 +40,38 @@ def check(input):
     j = listener.getJavaClass()
     import json
     print(json.dumps(j, default=lambda x: x.__dict__, indent=4))
-    return javaClass(j).strip()
+    return None
 
 # check(
 #     """class with annotation "Config" must have configuration file with property with (name "name" and type "String" ) """
+# )
+
+# check(
+    # """class with annotation "Config" must have configuration file with property "List<String> name" """
+# )
+
+# check(
+#     """function with annotation "ABC" must have type "String" and annotation "Hello" """
+# )
+
+# check (
+#     """field with annotation "ABC" must have type "WebToken" """
+# )
+
+# check(
+#     """function with annotation "Bulkhead" with parameter "int waitingTaskQueue" must have annotation "Asynchronous" """
+# )
+
+# check(
+#     """function with annotation "A" must have type "B" """
+# )
+
+# check(
+#     """class must have configuration file with property "String hello" """
+# )
+
+# check(
+#     """class with function with annotation "RolesAllowed" must have (annotation "LoginConfig" and extension of "Application" ) or configuration file with property "String login-config" """
 # )
 
 # print(convert('class with annotation "Demo" must have extension of "SomeOtherClass" and (implementation of "IInterface" and implementation of "BInterface" )'))

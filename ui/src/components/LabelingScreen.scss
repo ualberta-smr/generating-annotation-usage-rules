@@ -1,5 +1,7 @@
 $backgroundColor: #414260;
 $hotColor: #ffcf00;
+$antecedentColor: orange;
+$consequentColor: green;
 
 @mixin fieldsetMixin($borderSize: 3px, $borderColor: white) {
     fieldset {
@@ -167,4 +169,14 @@ $hotColor: #ffcf00;
         display: flex;
         align-items: center;
     }
+}
+
+.antecedent {
+    background-color: $antecedentColor;
+    color: black !important;
+}
+
+.consequent {
+    background-color: $consequentColor;
+    color: white !important;
 }
