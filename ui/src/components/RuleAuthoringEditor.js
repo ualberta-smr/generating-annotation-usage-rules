@@ -1,12 +1,18 @@
 import "./RuleAuthoringEditor.scss";
 import MonacoEditor from "react-monaco-editor";
-import { useState } from "react";
+
+const __MONACO_EDITOR_OPTIONS = {
+    readOnly: false,
+    folding: false,
+    minimap: {
+        enabled: false,
+    },
+    lineNumbers: "off",
+    wordWrap: "on",
+}
 
 function RuleAuthoringEditor(props) {
-    const [grammarText, setGrammarText] = useState(props.text);
-
     const handleChange = (text) => {
-        setGrammarText(text);
         props.onChange(text);
     };
 
@@ -15,15 +21,7 @@ function RuleAuthoringEditor(props) {
             width={750}
             height={220}
             value={props.text}
-            options={{
-                readOnly: false,
-                folding: false,
-                minimap: {
-                    enabled: false,
-                },
-                lineNumbers: "off",
-                wordWrap: "on",
-            }}
+            options={__MONACO_EDITOR_OPTIONS}
             onChange={handleChange}
             className={props.className}
         />

@@ -3,9 +3,8 @@ from re import L
 from typing import List
 from dataclasses import *
 
-@dataclass
 class Part:
-    is_antecedent: bool = field(default=None, init=False)
+    is_antecedent: bool = None
 
 @dataclass
 class Type(Part):
@@ -38,7 +37,7 @@ class Field(Part):
 
 @dataclass
 class Method(Part):
-    returnType: Type = field(default=Type("void"))
+    returnType: Type
     parameters: List[Param] = field(default_factory=[])
     annotations: List[Annotation] = field(default_factory=[])
 

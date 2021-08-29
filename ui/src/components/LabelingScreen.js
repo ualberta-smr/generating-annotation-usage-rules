@@ -1,5 +1,5 @@
 import "./LabelingScreen.scss";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import MonacoEditor from "react-monaco-editor";
 
@@ -74,7 +74,6 @@ function LabelingScreen() {
     };
 
     const updateRelatedFields = (text) => {
-        // console.log(`[${text}]`);
         clearCodeEditor();
         setGrammarText(text);
 
@@ -90,16 +89,13 @@ function LabelingScreen() {
             `http://localhost:5000/grammarToCode?grammar=${text}`,
             (json) => {
                 if (json == null) {
-                    console.log("Error");
                     setRuleCode("");
                     setPropertiesFileData(null);
                     clearCodeEditor();
                 } else {
-                    // console.log(json)
-                    const code = json.code;
-
-                    const codeText = code.map((e) => e[0]).join("\n");
-                    const rangeValues = code.map((e) => e[1]).flat();
+                    const source = json.code.source;
+                    const codeText = source.map((e) => e[0]).join("\n");
+                    const rangeValues = source.map((e) => e[1]).flat();
 
                     const { editor, monaco } = editorData;
 
@@ -107,7 +103,7 @@ function LabelingScreen() {
                         const row = rangeData[0] + 1;
                         const s = rangeData[1] + 1;
                         const e = rangeData[2] + 1;
-                        const isAntecedent = rangeData[3] === "["; // TODO: fix this
+                        const isAntecedent = rangeData[3];
                         const r = new monaco.Range(row, s, row, e);
                         return {
                             range: r,

@@ -25,6 +25,8 @@ def convert(input):
     walker.walk(listener, tree)
     j = listener.getJavaClass()
     return findRanges(javaClass(j).strip()), configFiles(j.configurationFile)
+    # return javaClass(j), configFiles(j.configurationFile)
+    # return j, configFiles(j.configurationFile)
 
 def check(input):
     lexer = RulepadGrammarLexer(InputStream(input))

@@ -144,7 +144,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             if len(elements) >= 2:
                 type_, name_ = elements[0], elements[1]
             else:
-                type_ = elements[0]
+                type_, name_ = elements[0], None
             type_ = self.initObj(Type(type_))
             param = self.initObj(Param(type_, name_))
         else:
@@ -168,7 +168,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
                 classMethod = prev['node'].method
                 if classMethod is None:
                     method = self.initObj(
-                        Method(self.initObj(Type("void")), [], []))
+                        Method(Type("void"), [], []))
                 else:
                     method = classMethod
                 prev['node'].method = method
@@ -176,7 +176,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             if self.__is_antecedent:
                 # if the rule starts with 'function'
                 self.__initial = {
-                    'node': self.initObj(Method(self.initObj(Type("void")), [], [])),
+                    'node': self.initObj(Method(Type("void"), [], [])),
                     'type': 'function'
                 }
             method = self.__initial['node']
