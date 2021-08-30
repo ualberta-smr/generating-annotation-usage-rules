@@ -1,3 +1,5 @@
+import "./FieldsetWrapper.scss";
+
 function FieldsetWrapper(props) {
     const { title } = props;
 
@@ -17,7 +19,10 @@ function FieldsetWrapper(props) {
         );
     }
     return (
-        <fieldset>
+        <fieldset style={{
+            border: "3px solid #ffcf00",
+            color: "#ffcf00"
+        }}>
             {legend}
             {props.children}
         </fieldset>

@@ -6,10 +6,15 @@ if __name__ is not None and "." in __name__:
 else:
     from model import *
 
-ANTECEDENT_SIGN_START = "["
-ANTECEDENT_SIGN_END = "]"
-CONSEQUENT_SIGN_START = "<"
-CONSEQUENT_SIGN_END = ">"
+ANTECEDENT_SIGN_START = """<span class="antecedent">"""
+ANTECEDENT_SIGN_END = "</span>"
+CONSEQUENT_SIGN_START = """<span class="consequent">"""
+CONSEQUENT_SIGN_END = "</span>"
+
+O_ANTECEDENT_SIGN_START = "["
+O_ANTECEDENT_SIGN_END = "]"
+O_CONSEQUENT_SIGN_START = "<"
+O_CONSEQUENT_SIGN_END = ">"
 
 TEMPLATE = '''
 <ClassAnnotations>

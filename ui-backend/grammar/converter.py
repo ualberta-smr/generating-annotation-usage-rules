@@ -24,8 +24,10 @@ def convert(input):
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
     j = listener.getJavaClass()
-    return findRanges(javaClass(j).strip()), configFiles(j.configurationFile)
-    # return javaClass(j), configFiles(j.configurationFile)
+    import json
+    print(json.dumps(j, default=lambda x: x.__dict__, indent=4))
+    # return findRanges(javaClass(j).strip()), configFiles(j.configurationFile)
+    return javaClass(j).strip(), configFiles(j.configurationFile)
     # return j, configFiles(j.configurationFile)
 
 def check(input):

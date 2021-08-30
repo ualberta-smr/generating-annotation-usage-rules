@@ -9,7 +9,7 @@ import "./CodeExampleVisualizer.scss"
 // title
 // code
 function CodeExampleVisualizer(props) {
-    const codeVisualizer = (value) => {
+    const codeVisualizer = (value, style) => {
         return (
             <Editor
                 value={value}
@@ -17,6 +17,7 @@ function CodeExampleVisualizer(props) {
                 padding={10}
                 style={{
                     fontFamily: '"Fira code", "Fira Mono", monospace',
+                    ...style
                 }}
                 className="code-snippet-textbar"
                 disabled={true}
@@ -26,8 +27,8 @@ function CodeExampleVisualizer(props) {
 
     return (
         <div className={props.className}>
-            <h1>{props.title}</h1>
-            {codeVisualizer(props.code)}
+            {props.title ? <h1>{props.title}</h1> : null}
+            {codeVisualizer(props.code, props.style)}
         </div>
     );
 }

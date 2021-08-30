@@ -1,80 +1,38 @@
 import "./LabelingScreen.scss";
 import { useState } from "react";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
-import MonacoEditor from "react-monaco-editor";
 
 import FieldsetWrapper from "./FieldsetWrapper";
 import RuleAuthoringEditor from "./RuleAuthoringEditor";
 import CodeExampleVisualizer from "./CodeExampleVisualizer";
 import makeCancellablePromise from "./superPromise";
+import CodeEditor from "./CodeEditor";
 
 function LabelingScreen() {
     const [grammarText, setGrammarText] = useState("");
-    const [oldDecorations, setNewDecorations] = useState([]);
     const [propertiesFileData, setPropertiesFileData] = useState();
 
     const [code, setRuleCode] = useState("");
+    const [ranges, setRuleRanges] = useState([]);
     const [ruleLabel, setRuleLabel] = useState(null);
-    const [editorData, setEditor] = useState(null);
 
     const [cancelPreviousRequest, setCancelCurrentRequestHandle] = useState({
         cancel: () => {},
     });
 
     const handleLabeling = (label) => {
-        if (["correct", "not_a_rule", "best_practice"].includes(label)) {
-            setRuleLabel(label);
-        } else {
-            setRuleLabel(null);
-        }
+        const ruleLabel = ["correct", "not_a_rule", "best_practice"].includes(
+            label
+        )
+            ? label
+            : null;
+        setRuleLabel(ruleLabel);
     };
 
     const getNextRule = () => {};
     const getPrevRule = () => {};
 
-    const editorDidMount = (editor, monaco) => {
-        setEditor({ editor, monaco });
-    };
-
-    const codeEditor = (
-        value,
-        onValueChange,
-        editorDidMountAction = null,
-        fileName = "Foo.java",
-        disabled = false,
-        language = "java"
-    ) => {
-        if (editorDidMountAction == null) editorDidMountAction = editorDidMount;
-        const height = 400 * (1 / (propertiesFileData == null ? 1 : 2));
-        return (
-            <FieldsetWrapper title={`Code editor: ${fileName}`}>
-                <MonacoEditor
-                    width={800}
-                    height={height}
-                    language={language}
-                    theme="vs-light"
-                    value={value}
-                    onChange={onValueChange}
-                    editorDidMount={editorDidMountAction}
-                    options={{
-                        readOnly: disabled,
-                    }}
-                />
-            </FieldsetWrapper>
-        );
-    };
-
-    const clearCodeEditor = () => {
-        const { editor, monaco } = editorData;
-        setNewDecorations(
-            editor.deltaDecorations(oldDecorations, [
-                { range: new monaco.Range(1, 1, 1, 1), options: {} },
-            ])
-        );
-    };
-
     const updateRelatedFields = (text) => {
-        clearCodeEditor();
         setGrammarText(text);
 
         cancelPreviousRequest.cancel();
@@ -91,37 +49,14 @@ function LabelingScreen() {
                 if (json == null) {
                     setRuleCode("");
                     setPropertiesFileData(null);
-                    clearCodeEditor();
                 } else {
                     const source = json.code.source;
-                    const codeText = source.map((e) => e[0]).join("\n");
-                    const rangeValues = source.map((e) => e[1]).flat();
+                    const codeText = source //.map((e) => e[0]).join("\n");
+                    // const rangeValues = source.map((e) => e[1]).flat();
 
-                    const { editor, monaco } = editorData;
-
-                    const ranges = rangeValues.map((rangeData) => {
-                        const row = rangeData[0] + 1;
-                        const s = rangeData[1] + 1;
-                        const e = rangeData[2] + 1;
-                        const isAntecedent = rangeData[3];
-                        const r = new monaco.Range(row, s, row, e);
-                        return {
-                            range: r,
-                            options: {
-                                inlineClassName: isAntecedent
-                                    ? "antecedent"
-                                    : "consequent",
-                            },
-                        };
-                    });
-
-                    const newDecorations = editor.deltaDecorations(
-                        oldDecorations,
-                        ranges
-                    );
-
-                    setNewDecorations(newDecorations);
+                    // handle range values somehow
                     setRuleCode(codeText.trim());
+                    // setRuleRanges(rangeValues);
 
                     const properties = json.properties;
                     if (properties) {
@@ -172,19 +107,39 @@ function LabelingScreen() {
                             </div>
                         </div>
                         <div className="code-editors">
-                            {codeEditor(code, (value) => {
-                                setRuleCode(value);
-                            })}
-                            {propertiesFileData == null
-                                ? null
-                                : codeEditor(
-                                      propertiesFileData.text,
-                                      setRuleCode,
-                                      (a, b) => {},
-                                      propertiesFileData.name,
-                                      true,
-                                      null
-                                  )}
+                            <CodeEditor
+                                value={{ code, ranges }}
+                                onValueChange={setRuleCode}
+                                measurements={{
+                                    width: 800,
+                                    height:
+                                        400 *
+                                        (1 /
+                                            (propertiesFileData == null
+                                                ? 1
+                                                : 2)),
+                                }}
+                            />
+
+                            {/* {propertiesFileData == null ? null : (
+                                <CodeEditor
+                                    value={propertiesFileData.text}
+                                    onValueChange={setRuleCode}
+                                    editorDidMountAction={(a, b) => {}}
+                                    fileName={propertiesFileData.name}
+                                    disabled={true}
+                                    language={"null"}
+                                    measurements={{
+                                        width: 800,
+                                        height:
+                                            400 *
+                                            (1 /
+                                                (propertiesFileData == null
+                                                    ? 1
+                                                    : 2)),
+                                    }}
+                                />
+                            )} */}
                         </div>
                     </div>
                 </div>
