@@ -25,18 +25,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+def get_config(config):
+    if config:
+        return {
+                "filename": config[0],
+                "code": config[1]
+            }
+    return None
+
 @app.get('/grammarToCode')
 def index(response: Response, grammar: Optional[str] = ""):
     try:
         grammar = grammar.strip() + " "
         print(f"Requested: [{grammar}]")
-        code, properties = G.convert(grammar)
+        code, config = G.convert(grammar)
         response.status_code = 200
         return {
-            "code": {
-                "source": code
-            }, 
-            "properties": properties
+            "code": code, 
+            "configuration": get_config(config)
         }
     except Exception as e:
         import traceback
@@ -44,6 +50,6 @@ def index(response: Response, grammar: Optional[str] = ""):
         print(e)
         response.status_code = 401
         return {
-            "code": "",
-            "properties": None
+            "code": None, 
+            "configuration": None
         }

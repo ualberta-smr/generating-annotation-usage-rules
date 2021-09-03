@@ -1,0 +1,9 @@
+$backgroundColor: #414260;
+$hotColor: #ffcf00;
+
+fieldset {
+    border: 3px solid $hotColor;
+    legend {
+        color: $hotColor;
+    }
+}

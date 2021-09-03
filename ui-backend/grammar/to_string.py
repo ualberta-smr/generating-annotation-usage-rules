@@ -6,10 +6,10 @@ if __name__ is not None and "." in __name__:
 else:
     from model import *
 
-ANTECEDENT_SIGN_START = "["
-ANTECEDENT_SIGN_END = "]"
-CONSEQUENT_SIGN_START = "<"
-CONSEQUENT_SIGN_END = ">"
+ANTECEDENT_SIGN_START = """<span class="antecedent">"""
+ANTECEDENT_SIGN_END = "</span>"
+CONSEQUENT_SIGN_START = """<span class="consequent">"""
+CONSEQUENT_SIGN_END = "</span>"
 
 TEMPLATE = '''
 <ClassAnnotations>
@@ -77,38 +77,6 @@ def javaClass(clazz: JavaClass):
             .replace("<MethodDeclaration>", function(clazz.method))\
             .replace("<ExtendsTemplate>", extends(clazz.extendedClass))\
             .replace("<ImplementsTemplate>", implements(clazz.implementedInterfaces))
-
-def shiftLeftIfOverlapping(elements: List[Tuple[int, int, int, bool]]):
-    if not elements:
-        return elements
-    biggest = max(elements, key=lambda tpl: tpl[2] - tpl[1])
-    start, end = biggest[1], biggest[2]
-    for i, element in enumerate(elements):
-        if element != biggest:
-            _start, _end = element[1], element[2]
-            _start_diff, _end_diff = start - _start, end - _end
-            if _start_diff <= 0 and _end_diff >= 0:
-                a, b, c, d = element
-                elements[i] = (a, b-1, c-1, d)
-
-
-def findRanges(code: str):
-    rgx = r"(\<[a-zA-Z0-9@)(=\s.,]+\>|\[[a-zA-Z0-9@)(=\s.,]+\])"
-    lines = code.splitlines()
-    newLines = [[line, []] for line in lines]
-    for i, line in enumerate(lines):
-        found = re.search(rgx, line)
-        while found:
-            start, end = found.start(), found.end()
-            old, new = line[start:end], line[start+1:end-1]
-            rng = (i, start, end-2, line[start] == ANTECEDENT_SIGN_START)
-            line = line.replace(old, new, 1)
-            newLines[i][0] = line
-            newLines[i][1].append(rng)
-            found = re.search(rgx, line)
-        shiftLeftIfOverlapping(newLines[i][1])
-    
-    return newLines
 
 def configFiles(cf: ConfigurationFile) -> Tuple[str, str]:
     if cf is None:

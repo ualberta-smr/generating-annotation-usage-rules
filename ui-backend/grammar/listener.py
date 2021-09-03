@@ -193,10 +193,13 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
     # Enter a parse tree produced by RulepadGrammarParser#declarationStatements.
     def enterDeclarationStatements(self, ctx: RulepadGrammarParser.DeclarationStatementsContext):
         if len(self.__stack) > 0:
-            field = self.initObj(Field(Type("Object"), []))
-
             prev = self.__stack[-1]
             if prev['comingFrom'] == 'class':
+                classField = prev['node'].field
+                if classField is None:
+                    field = self.initObj(Field(Type("Object"), []))
+                else:
+                    field = classField
                 prev['node'].field = field
         else:
             if self.__is_antecedent:

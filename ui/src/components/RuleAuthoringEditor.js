@@ -1,4 +1,5 @@
 import "./RuleAuthoringEditor.scss";
+import { useState } from "react";
 import MonacoEditor from "react-monaco-editor";
 
 const __MONACO_EDITOR_OPTIONS = {
@@ -9,11 +10,18 @@ const __MONACO_EDITOR_OPTIONS = {
     },
     lineNumbers: "off",
     wordWrap: "on",
-}
+    fontSize: "17px"
+};
 
 function RuleAuthoringEditor(props) {
+    const [editorData, setEditor] = useState(null);
+
     const handleChange = (text) => {
         props.onChange(text);
+    };
+
+    const editorDidMount = (editor, monaco) => {
+        setEditor({ editor, monaco });
     };
 
     return (
@@ -24,6 +32,9 @@ function RuleAuthoringEditor(props) {
             options={__MONACO_EDITOR_OPTIONS}
             onChange={handleChange}
             className={props.className}
+            editorDidMount={editorDidMount}
+            theme="shortRulePadTheme"
+            language="shortRulepad"
         />
     );
 }

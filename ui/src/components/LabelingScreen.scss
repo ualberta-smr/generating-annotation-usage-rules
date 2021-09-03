@@ -3,14 +3,6 @@ $hotColor: #ffcf00;
 $antecedentColor: orange;
 $consequentColor: green;
 
-@mixin fieldsetMixin($borderSize: 3px, $borderColor: white) {
-    fieldset {
-        border: $borderSize solid $borderColor;
-        color: $borderColor;
-        @content;
-    }
-}
-
 .app {
     background-color: $backgroundColor;
     display: grid;
@@ -34,8 +26,6 @@ $consequentColor: green;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-
-    @include fieldsetMixin(3px, $hotColor);
 }
 
 .instructions {
@@ -65,8 +55,6 @@ $consequentColor: green;
     .rule-authoring-editor {
         justify-self: center;
         align-self: center;
-
-        @include fieldsetMixin(3px, $hotColor);
     }
 }
 
