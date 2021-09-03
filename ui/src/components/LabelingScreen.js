@@ -13,17 +13,15 @@ function LabelingScreen() {
     const [propertiesFileData, setPropertiesFileData] = useState();
 
     const [code, setRuleCode] = useState("");
-    const [ranges, setRuleRanges] = useState([]);
     const [ruleLabel, setRuleLabel] = useState(null);
 
-    const [cancelPreviousRequest, setCancelCurrentRequestHandle] = useState({
-        cancel: () => {},
-    });
+    const [previousGrammarToCodeRequest, setCancelCurrentRequestHandle] =
+        useState({
+            cancel: () => {},
+        });
 
     const handleLabeling = (label) => {
-        const ruleLabel = ["correct", "not_a_rule", "best_practice"].includes(
-            label
-        )
+        const ruleLabel = ["correct", "not_a_rule"].includes(label)
             ? label
             : null;
         setRuleLabel(ruleLabel);
@@ -32,47 +30,49 @@ function LabelingScreen() {
     const getNextRule = () => {};
     const getPrevRule = () => {};
 
+    const clearData = () => {
+        setRuleCode("");
+        setPropertiesFileData(null);
+    };
+
+    const processGrammarToCodeResponse = (json) => {
+        if (json == null) {
+            clearData();
+        } else {
+            const codeText = json.code;
+            if (codeText) {
+                setRuleCode(codeText.trim());
+            }
+
+            const configuration = json.configuration;
+            if (configuration) {
+                const { filename, code } = configuration;
+                setPropertiesFileData({
+                    name: filename,
+                    text: code,
+                });
+            } else {
+                setPropertiesFileData(null);
+            }
+        }
+    };
+
     const updateRelatedFields = (text) => {
         setGrammarText(text);
 
-        cancelPreviousRequest.cancel();
+        previousGrammarToCodeRequest.cancel();
 
         if (text.trim() === "") {
-            setRuleCode("");
-            setPropertiesFileData(null);
+            clearData();
             return null;
         }
 
-        const cancelPromise = makeCancellablePromise(
-            `http://localhost:5000/grammarToCode?grammar=${text}`,
-            (json) => {
-                if (json == null) {
-                    setRuleCode("");
-                    setPropertiesFileData(null);
-                } else {
-                    const source = json.code.source;
-                    const codeText = source //.map((e) => e[0]).join("\n");
-                    // const rangeValues = source.map((e) => e[1]).flat();
-
-                    // handle range values somehow
-                    setRuleCode(codeText.trim());
-                    // setRuleRanges(rangeValues);
-
-                    const properties = json.properties;
-                    if (properties) {
-                        const [name, text] = properties;
-                        setPropertiesFileData({
-                            name,
-                            text,
-                        });
-                    } else {
-                        setPropertiesFileData(null);
-                    }
-                }
-            }
+        setCancelCurrentRequestHandle(
+            makeCancellablePromise(
+                `http://localhost:5000/grammarToCode?grammar=${text}`,
+                processGrammarToCodeResponse
+            )
         );
-
-        setCancelCurrentRequestHandle(cancelPromise);
     };
 
     const renderUI = () => {
@@ -108,12 +108,11 @@ function LabelingScreen() {
                         </div>
                         <div className="code-editors">
                             <CodeEditor
-                                value={{ code, ranges }}
-                                onValueChange={setRuleCode}
+                                code={code}
                                 measurements={{
                                     width: 800,
                                     height:
-                                        400 *
+                                        300 *
                                         (1 /
                                             (propertiesFileData == null
                                                 ? 1
@@ -121,25 +120,21 @@ function LabelingScreen() {
                                 }}
                             />
 
-                            {/* {propertiesFileData == null ? null : (
+                            {propertiesFileData == null ? null : (
                                 <CodeEditor
                                     value={propertiesFileData.text}
-                                    onValueChange={setRuleCode}
-                                    editorDidMountAction={(a, b) => {}}
                                     fileName={propertiesFileData.name}
-                                    disabled={true}
-                                    language={"null"}
                                     measurements={{
                                         width: 800,
                                         height:
-                                            400 *
+                                            300 *
                                             (1 /
                                                 (propertiesFileData == null
                                                     ? 1
                                                     : 2)),
                                     }}
                                 />
-                            )} */}
+                            )}
                         </div>
                     </div>
                 </div>

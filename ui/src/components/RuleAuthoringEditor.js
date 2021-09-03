@@ -10,6 +10,7 @@ const __MONACO_EDITOR_OPTIONS = {
     },
     lineNumbers: "off",
     wordWrap: "on",
+    fontSize: "17px"
 };
 
 function RuleAuthoringEditor(props) {
@@ -32,7 +33,7 @@ function RuleAuthoringEditor(props) {
             onChange={handleChange}
             className={props.className}
             editorDidMount={editorDidMount}
-            theme="myCoolTheme"
+            theme="shortRulePadTheme"
             language="shortRulepad"
         />
     );
