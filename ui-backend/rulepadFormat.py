@@ -72,8 +72,10 @@ def configToRulePad(cf: ConfigurationFile) -> str:
     prop_str = None
     if cf.properties:
         prop_str = " and ".join(map(paramToRulePad, cf.properties))
+        if len(cf.properties) > 1:
+            prop_str = "(" + prop_str + " )"
     if prop_str:
-        return f"configuration file with ({prop_str} )"
+        return f"configuration file with {prop_str}"
 
 
 def classToRulePad(clazz: JavaClass) -> str:
@@ -123,12 +125,9 @@ def toRulePad(element: Union[JavaClass, Field, Method, ConfigurationFile]):
             return func(element)
 
 
-""" converting JSON rules to Java class """
-
-
 def toShortRulePad(jsonRule: JsonRule) -> str:
     ant = toJavaConstruct(jsonRule.antecedent, None)
-    con = toJavaConstruct(jsonRule.consequent, type(ant))
+    con = toJavaConstruct(jsonRule.consequent, ant)
 
     ant_str = toRulePad(ant)
     con_str: str = toRulePad(con)
@@ -145,7 +144,7 @@ def toShortRulePad(jsonRule: JsonRule) -> str:
     return f"{ant_str} must have {con_str} "
 
 
-def toJavaConstruct(facts: List[str], parentParamType: None) -> Union[JavaClass, Field, Method, ConfigurationFile]:
+def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Field, Method]) -> Union[JavaClass, Field, Method, ConfigurationFile]:
     field = Field(None, annotations=[])
     method = Method(None, parameters=[], annotations=[])
     clazz = JavaClass(
@@ -210,7 +209,7 @@ def toJavaConstruct(facts: List[str], parentParamType: None) -> Union[JavaClass,
             configFile.properties.append(cp)
             configFile.name = str_related.split("_")[1]
 
-    danglingAnnotations = []
+    danglingAnnotations: List[Annotation] = []
 
     for annotation_str, params in all_annotation_params.items():
         if annotation_str in all_annotations:
@@ -219,10 +218,22 @@ def toJavaConstruct(facts: List[str], parentParamType: None) -> Union[JavaClass,
             danglingAnnotation = Annotation(Type(annotation_str), params)
             danglingAnnotations.append(danglingAnnotation)
 
+    for da in danglingAnnotations:
+        t = findAnnotationParentType(antecedentConstruct, da.type.name)
+        print(t)
+        if t is JavaClass:
+            has_class = True
+            clazz.annotations.append(da)
+        elif t is Method:
+            has_method = True
+            method.annotations.append(da)
+        elif t is Field:
+            has_field = True
+            field.annotations.append(da)
+
     # determine what to return based on the input
     if has_class or (len(list(filter(lambda x: x, [has_config, has_field, has_method]))) >= 2):
         # when class is present or more than 2 elements which need to be in a class are present
-        clazz.annotations.extend(danglingAnnotations)
         if has_method:
             clazz.method = method
         if has_field:
@@ -232,21 +243,44 @@ def toJavaConstruct(facts: List[str], parentParamType: None) -> Union[JavaClass,
         return clazz
     elif has_method:
         # when only a method is available
-        method.annotations.extend(danglingAnnotations)
         return method
     elif has_field:
         # when only a field is available
-        field.annotations.extend(danglingAnnotations)
         return field
     elif has_config:
         # when only a configuration file is available
         return configFile
-    else:
-        # when in consequent there's only an "Annotation hasParam" relation
-        # then we need to set up a parent for that
-        if parentParamType == Method:
-            return Method(None, [], danglingAnnotations)
-        elif parentParamType == JavaClass:
-            return JavaClass(danglingAnnotations, None, [], None, None, None)
-        elif parentParamType == Field:
-            return Field(None, danglingAnnotations)
+
+
+def findAnnotationParentType(container, annotation_str):
+    if type(container) in [Method, Field]:
+        for a in container.annotations:
+            if a.type.name == annotation_str:
+                return type(container)
+    elif type(container) is JavaClass:
+        for a in container.annotations:
+            if a.type.name == annotation_str:
+                return JavaClass
+        if container.field:
+            for a in container.field.annotations:
+                if a.type.name == annotation_str:
+                    return Field
+        if container.method:
+            for a in container.method.annotations:
+                if a.type.name == annotation_str:
+                    return Method
+
+
+# print(toShortRulePad(
+#     JsonRule(
+#         1,
+#         [
+#             "Class --(annotatedWith)--> Annotation_javax.ws.rs.Path",
+#             "Field --(annotatedWith)--> Annotation_org.eclipse.microprofile.config.inject.ConfigProperty"
+#         ],
+#         [
+#             "Param_name:java.lang.String --(definedIn)--> ConfigFile_microprofile-config.properties",
+#             "Annotation_org.eclipse.microprofile.config.inject.ConfigProperty --(hasParam)--> Param_name:java.lang.String",
+#         ],
+#     )
+# ))

@@ -1,5 +1,5 @@
 import "./LabelingScreen.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 
 import FieldsetWrapper from "./FieldsetWrapper";
@@ -9,6 +9,11 @@ import makeCancellablePromise from "./superPromise";
 import CodeEditor from "./CodeEditor";
 
 function LabelingScreen() {
+    const [currentRuleId, setCurrentRuleId] = useState(null);
+    const [buttonAvailability, setButtonAvailability] = useState({
+        hasPrev: false,
+        hasNext: false,
+    });
     const [grammarText, setGrammarText] = useState("");
     const [propertiesFileData, setPropertiesFileData] = useState();
 
@@ -27,24 +32,65 @@ function LabelingScreen() {
         setRuleLabel(ruleLabel);
     };
 
-    const getNextRule = () => {};
-    const getPrevRule = () => {};
+    useEffect(() => {
+        getNextRule();
+    }, []);
+
+    const getNextRule = () => {
+        const id_str = currentRuleId == null ? "" : `/${currentRuleId}/next`;
+        makeCancellablePromise(
+            `http://localhost:5000/rules${id_str}`,
+            (json) => {
+                const { hasNext, hasPrev } = json;
+                setButtonAvailability({
+                    hasNext,
+                    hasPrev,
+                });
+                const data = json.data;
+
+                const { id, ruleString, grammar } = data;
+
+                setCurrentRuleId(id);
+                setGrammarText(ruleString);
+                processGrammarToCodeResponse(grammar);
+            }
+        );
+    };
+    const getPrevRule = () => {
+        makeCancellablePromise(
+            `http://localhost:5000/rules/${currentRuleId}/prev`,
+            (json) => {
+                const { hasNext, hasPrev } = json;
+                setButtonAvailability({
+                    hasNext,
+                    hasPrev,
+                });
+                const data = json.data;
+
+                const { id, ruleString, grammar } = data;
+
+                setCurrentRuleId(id);
+                setGrammarText(ruleString);
+                processGrammarToCodeResponse(grammar);
+            }
+        );
+    };
 
     const clearData = () => {
         setRuleCode("");
         setPropertiesFileData(null);
     };
 
-    const processGrammarToCodeResponse = (json) => {
-        if (json == null) {
+    const processGrammarToCodeResponse = (grammar) => {
+        if (grammar == null) {
             clearData();
         } else {
-            const codeText = json.code;
+            const codeText = grammar.code;
             if (codeText) {
                 setRuleCode(codeText.trim());
             }
 
-            const configuration = json.configuration;
+            const configuration = grammar.configuration;
             if (configuration) {
                 const { filename, code } = configuration;
                 setPropertiesFileData({
@@ -79,7 +125,7 @@ function LabelingScreen() {
         return (
             <div className="app">
                 <div className="instructions">
-                    <h2>Candidate Rule 15</h2>
+                    <h2>Candidate Rule {currentRuleId}</h2>
                     <p>
                         <strong>Instructions: </strong>
                         <em>
@@ -122,7 +168,7 @@ function LabelingScreen() {
 
                             {propertiesFileData == null ? null : (
                                 <CodeEditor
-                                    value={propertiesFileData.text}
+                                    code={propertiesFileData.text}
                                     fileName={propertiesFileData.name}
                                     measurements={{
                                         width: 800,
@@ -154,10 +200,18 @@ function LabelingScreen() {
                     </div>
                     <div className="controls-wrapper">
                         <div className="controls">
-                            <div className="left-btn-div">
+                            <div
+                                className={
+                                    "left-btn-div" +
+                                    (buttonAvailability.hasPrev
+                                        ? ""
+                                        : " disabledBtn")
+                                }
+                            >
                                 <button
                                     className="btn-round btn-left"
                                     onClick={() => getPrevRule()}
+                                    disabled={!buttonAvailability.hasPrev}
                                 >
                                     <span>
                                         <FaArrowLeft />
@@ -188,10 +242,18 @@ function LabelingScreen() {
                                 </button>
                             </div>
 
-                            <div className="right-btn-div">
+                            <div
+                                className={
+                                    "right-btn-div" +
+                                    (buttonAvailability.hasNext
+                                        ? ""
+                                        : " disabledBtn")
+                                }
+                            >
                                 <button
                                     className="btn-round btn-right"
                                     onClick={() => getNextRule()}
+                                    disabled={!buttonAvailability.hasNext}
                                 >
                                     <span>
                                         <FaArrowRight />

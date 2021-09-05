@@ -1,4 +1,7 @@
+from dataclasses import dataclass
 import json
+from typing import Any
+
 import rulepadFormat as rf
 
 
@@ -15,11 +18,27 @@ def getDataFromMinedSource():
         def toJsonRule(x):
             ant = x["antecedent"]
             con = x["consequent"]
-            con.append(ant.pop())
+
+            new_ant = []
+            cand = []
+
+            for a in ant:
+                if "(definedIn)" in a or (a.startswith("Annotation_") and "(hasParam)" in a):
+                    cand.append(a)
+                else:
+                    new_ant.append(a)
+
+            con = cand if cand else [ant.pop()]
+            ant = new_ant if cand else ant
             return rf.JsonRule(x["id"], ant, con)
 
         return map(toJsonRule, values)
 
+@dataclass
+class Triplet:
+    data: Any
+    hasPrev: bool
+    hasNext: bool
 
 class Database:
     def __init__(self) -> None:
@@ -28,29 +47,36 @@ class Database:
     def initialize(self):
         data = getDataFromMinedSource()
         self.__data = list(map(lambda jf: {"id": jf.id,
-                                           "rule_string": rf.toShortRulePad(jf)},
+                                           "ruleString": rf.toShortRulePad(jf)},
                                data))
 
     def data(self):
         return self.__data
 
-    def __findNextInDatabase(self, id: int):
+    def __findNextInDatabase(self, id: int) -> Triplet:
         for i, rule in enumerate(self.__data):
             if id == rule["id"]:
-                hasNext = i < len(self.__data) - 2
-                datum = self.__data[i +
-                                    1] if i < len(self.__data) - 1 else None
-                return datum, hasNext
-        return None, False
+                l = len(self.__data)
+                hasNext = i < l - 2
+                datum = self.__data[i + 1] if i < l - 1 else None
+                return Triplet(datum, True, hasNext)
+        return Triplet(None, False, False)
 
-    def getNext(self, id: int):
+    def __findPrevInDatabase(self, id: int) -> Triplet:
+        for i in range(len(self.__data) - 1, -1, -1):
+            rule = self.__data[i]
+            if id == rule["id"]:
+                hasPrev = i > 1
+                datum = self.__data[i - 1] if i > 0 else None
+                return Triplet(datum, hasPrev, True)
+        return Triplet(None, False, False)
+
+    def getNext(self, id: int) -> Triplet:
         if id is None:
-            return {
-                "data": self.__data[0],
-                "hasNext": True  # TODO: might be false
-            }
-        datum, hasNext = self.__findNextInDatabase(id)
-        return {
-            "data": datum,
-            "hasNext": hasNext
-        }
+            return Triplet(self.__data[0], False, True) # TODO: might be false when there's only 1 element
+        return self.__findNextInDatabase(id)
+
+    def getPrev(self, id: int) -> Triplet:
+        if id is None:
+            return Triplet(self.__data[0], False, True) # TODO: might be false when there's only 1 element
+        return self.__findPrevInDatabase(id)
