@@ -5,7 +5,8 @@ from dataclasses import *
 from model import *
 
 def fqnToSimpleName(fully_qualified_name: str)-> str:
-    return fully_qualified_name#.split(".")[-1]
+    # return fully_qualified_name#.split(".")[-1]
+    return fully_qualified_name.split(".")[-1]
 
 def annotationsToGrammar(annos: List[Annotation]) -> str:
     return " and ".join(map(lambda anno: f"annotation \"{fqnToSimpleName(anno.name)}\"", annos))
@@ -105,8 +106,10 @@ def toGrammarAll(candidatesFile: str) -> List[str]:
 
 # candidates file and grammar output file need to be json files
 if __name__ == "__main__":
-    _, candidatesFile, grammarRulesOutput = sys.argv
-    # candidatesFile = "./rules.json"
-    # grammarRulesOutput = "./out.json"
-    with open(grammarRulesOutput, "w+") as f:
-        json.dump(toGrammarAll(candidatesFile), f, indent=4)
+    if len(sys.argv) == 2:
+        _, candidatesFile = sys.argv
+        print(json.dumps(toGrammarAll(candidatesFile), indent=4))
+    elif len(sys.argv) == 3:
+        _, candidatesFile, grammarRulesOutput = sys.argv
+        with open(grammarRulesOutput, "w+") as f:
+            json.dump(toGrammarAll(candidatesFile), f, indent=4)

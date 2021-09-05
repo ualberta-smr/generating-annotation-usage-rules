@@ -80,8 +80,8 @@ def loadRulesFromFile(candidatesFile:str) -> List[CandidateRule]:
     with open(candidatesFile) as f:
         rules = json.load(f)
         return list(
-            map(lambda r: CandidateRule(r["id"], r["antecedent"], r["consequent"], r["label"]),
-                filter(lambda r: r["label"] != "not a rule", rules)))
+            map(lambda r: CandidateRule(r["id"], r["antecedent"], r["consequent"], ""),
+                rules))
 
 
 def makeRule(d: CandidateRule) -> Rule:
