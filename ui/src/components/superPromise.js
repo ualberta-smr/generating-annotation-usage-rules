@@ -6,7 +6,7 @@ export default function makeCancellablePromise(url, jsonCallback) {
             if (stop === true) {
                 throw new Error("Stop requested");
             }
-            if (r.status === 200) return r.json();
+            if (r.status >= 200 && r.status <= 206) return r.json();
             return null;
         })
         .then((json) => {

@@ -1,5 +1,3 @@
-# Generated from RulepadGrammar.g4 by ANTLR 4.9.2
-from re import L
 from typing import List
 from dataclasses import *
 
