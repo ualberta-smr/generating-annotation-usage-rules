@@ -26,10 +26,52 @@ function LabelingScreen() {
         });
 
     const handleLabeling = (label) => {
-        const ruleLabel = ["correct", "not_a_rule"].includes(label)
+        let newRuleLabel = ["correct", "not_a_rule"].includes(label)
             ? label
-            : null;
-        setRuleLabel(ruleLabel);
+            : "unlabeled";
+        
+        /* 
+            Basic idea is that if it is 'correct' already and you click the button again,
+            it will be unlabeled...the same for 'not_a_rule' as well
+            and if it is 'unlabeled' for some reason, we do nothing
+        */
+
+        let requestOptions = {}
+        if (newRuleLabel === "correct") {
+            if (newRuleLabel === ruleLabel) {
+                newRuleLabel = "unlabeled"
+            } else {
+                // label to correct
+                requestOptions = {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        ruleString: grammarText,
+                    })
+                }
+            }
+        } else if (newRuleLabel === "not_a_rule") {
+            if (newRuleLabel === ruleLabel) {
+                newRuleLabel = "unlabeled"
+            } else {
+                // label to not a rule
+            }
+        } else if (newRuleLabel === "unlabeled") {
+            return
+        }
+
+        fetch(`http://localhost:5000/rules/${currentRuleId}/${newRuleLabel}`, {
+                method: "POST", ...requestOptions
+            })
+                .then((resp) => {
+                    if (resp.status === 204) {
+                        setRuleLabel(newRuleLabel);
+                    }
+                })
+                .catch((e) => {
+                    console.error(e);
+                });
     };
 
     useEffect(() => {
@@ -41,11 +83,12 @@ function LabelingScreen() {
         makeCancellablePromise(
             `http://localhost:5000/rules${id_str}`,
             (json) => {
-                const { hasNext, hasPrev } = json;
+                const { hasNext, hasPrev, label } = json;
                 setButtonAvailability({
                     hasNext,
                     hasPrev,
                 });
+                setRuleLabel(label);
                 const data = json.data;
 
                 const { id, ruleString, grammar } = data;
@@ -60,11 +103,13 @@ function LabelingScreen() {
         makeCancellablePromise(
             `http://localhost:5000/rules/${currentRuleId}/prev`,
             (json) => {
-                const { hasNext, hasPrev } = json;
+                const { hasNext, hasPrev, label } = json;
                 setButtonAvailability({
                     hasNext,
                     hasPrev,
                 });
+                setRuleLabel(label);
+
                 const data = json.data;
 
                 const { id, ruleString, grammar } = data;

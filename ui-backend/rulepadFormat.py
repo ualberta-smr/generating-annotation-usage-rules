@@ -220,7 +220,6 @@ def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Fiel
 
     for da in danglingAnnotations:
         t = findAnnotationParentType(antecedentConstruct, da.type.name)
-        print(t)
         if t is JavaClass:
             has_class = True
             clazz.annotations.append(da)
