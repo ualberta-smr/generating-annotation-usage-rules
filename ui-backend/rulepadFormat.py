@@ -16,8 +16,9 @@ def typeToRulePad(t: Type) -> str:
 
 def paramToRulePad(p: Union[Param, ConfigurationProperty]) -> str:
     keyword = "parameter" if isinstance(p, Param) else "property"
-    name = f" {p.name}" if p.name else ""
-    return f"{keyword} \"{p.type.name}{name}\""
+    name = f"{p.name}" if p.name else ""
+    form = " ".join([p.type.name, name]).strip()
+    return f"{keyword} \"{form}\""
 
 
 def annotationToRulePad(a: Annotation):
@@ -25,7 +26,7 @@ def annotationToRulePad(a: Annotation):
     if a.parameters:
         param_str = " and ".join(map(paramToRulePad, a.parameters))
         if len(a.parameters) > 1:
-            param_str = "(" + param_str + ")"
+            param_str = "(" + param_str + " )"
         res = res + " with " + param_str
     return res
 
@@ -39,10 +40,10 @@ def fieldToRulePad(f: Field) -> str:
     if f.type:
         type_str = typeToRulePad(f.type)
     if anno_str and type_str:
-        return f"field with ({type_str} and {anno_str} )"
+        return f"(field with ({type_str} and {anno_str} ) )"
     elif anno_str:
-        return f"field with {anno_str}"
-    return f"field with {type_str}"
+        return f"(field with {anno_str} )"
+    return f"(field with {type_str} )"
 
 
 def methodToRulePad(f: Method) -> str:
@@ -54,17 +55,19 @@ def methodToRulePad(f: Method) -> str:
     if f.returnType:
         type_str = typeToRulePad(f.returnType)
     if f.parameters:
-        param_str = "(" + (" and ".join(map(paramToRulePad, f.parameters))) + " )"
+        param_str = (" and ".join(map(paramToRulePad, f.parameters)))
+        if len(f.parameters) > 1:
+            param_str = "(" + param_str + " )"
     abc = list(filter(lambda x: x is not None, [
-               anno_str, type_str, param_str]))
+               type_str, param_str, anno_str]))
     if len(abc) >= 2:
         tmp = " and ".join(abc)
-        return f"function with ({tmp} )"
+        return f"(function with ({tmp} ) )"
     elif anno_str:
-        return f"function with {anno_str}"
+        return f"(function with {anno_str} )"
     elif type_str:
-        return f"function with {type_str}"
-    return f"function with {param_str}"
+        return f"(function with {type_str} )"
+    return f"(function with {param_str} )"
 
 
 def configToRulePad(cf: ConfigurationFile) -> str:
@@ -105,7 +108,7 @@ def classToRulePad(clazz: JavaClass) -> str:
                extends, implements, field, method, cf, anno]))
     if len(abc) >= 2:
         tmp = " and ".join(abc)
-        return f"class with ({tmp} )"
+        return f"class with {tmp}"
     else:
         for v in abc:
             if v is not None:
@@ -124,13 +127,17 @@ def toRulePad(element: Union[JavaClass, Field, Method, ConfigurationFile]):
         if isinstance(element, type):
             return func(element)
 
+def removeParenthesis(st):
+    if st[0] == "(" and st[-1] == ")":
+        return st[1:-1]
+    return st
 
 def toShortRulePad(jsonRule: JsonRule) -> str:
     ant = toJavaConstruct(jsonRule.antecedent, None)
     con = toJavaConstruct(jsonRule.consequent, ant)
 
-    ant_str = toRulePad(ant)
-    con_str: str = toRulePad(con)
+    ant_str = removeParenthesis(toRulePad(ant))
+    con_str = removeParenthesis(toRulePad(con))
     dependent_types = [Field, Method, ConfigurationFile]
     if type(ant) == type(con):
         con_str = con_str[con_str.index("with")+4+1:]
@@ -141,7 +148,8 @@ def toShortRulePad(jsonRule: JsonRule) -> str:
         con_str = con_str[con_str.index("with")+4+1:]
     elif type(ant) in dependent_types and type(con) in dependent_types:
         ant_str = f"class with {ant_str}"
-    return f"{ant_str} must have {con_str} "
+    result = f"{ant_str} must have {con_str} "
+    return result
 
 
 def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Field, Method]) -> Union[JavaClass, Field, Method, ConfigurationFile]:

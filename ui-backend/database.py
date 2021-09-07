@@ -1,39 +1,60 @@
 from enum import Enum
 from dataclasses import dataclass
 import json
-from typing import Any, Dict
+from typing import Any, Dict, Iterator
 
 import rulepadFormat as rf
 
 
-def getDataFromSourceConfirmed():
-    with open("data_confirmed.json") as j:
+def getDataFromSourceConfirmed() -> Iterator[rf.JsonRule]:
+    with open("./data/data_confirmed.json") as j:
         values = json.load(j)
         return map(lambda x: rf.JsonRule(x["id"], x["antecedent"], x["consequent"]), values)
 
+def getDataFromSourceMicroProfile() -> Iterator[rf.JsonRule]:
+    with open("./data/data_final_mp.json") as j:
+        values = json.load(j)
+        return map(lambda x: rf.JsonRule(x["id"], x["antecedent"], x["consequent"]), values)
 
-def getDataFromMinedSource():
-    with open("data_mined.json") as j:
+def getDataFromMinedSource() -> Iterator[rf.JsonRule]:
+    with open("./data/data_mined_no_consequent.json") as j:
         values = json.load(j)
 
         def toJsonRule(x):
-            ant = x["antecedent"]
-            con = x["consequent"]
+            antecedents = x["antecedent"]
 
-            new_ant = []
-            cand = []
+            annotations_hasParam = set(
+                map(
+                    lambda x: x.split()[0].split("_")[-1],
+                    filter(lambda x: x.startswith("Annotation_") and "hasParam" in x, antecedents))
+            )
 
-            for a in ant:
-                if "(definedIn)" in a or (a.startswith("Annotation_") and "(hasParam)" in a):
-                    cand.append(a)
-                else:
-                    new_ant.append(a)
+            consequent_candidate = None
+            for a in antecedents:
+                if "(definedIn)" in a:
+                    consequent_candidate = a
+                    break
+                if "(annotatedWith)" in a:
+                    simpleName = a.split()[-1].split("_")[-1]
+                    if simpleName not in annotations_hasParam:
+                        consequent_candidate = a
+                        break
 
-            con = cand if cand else [ant.pop()]
-            ant = new_ant if cand else ant
-            return rf.JsonRule(x["id"], ant, con)
+            # handling special case where there are only 2 elements and 1 of them is hasParam on annotation
+            if len(antecedents) == 2:
+                ll = list(filter(lambda x: x.startswith(
+                    "Annotation_") and "hasParam" in x, antecedents))
+                if len(ll) != 0:
+                    consequents = ll
+                    antecedents = [item for item in antecedents if item not in consequents]
+                    return rf.JsonRule(x["id"], antecedents, consequents)
+
+            consequents = [consequent_candidate] if consequent_candidate else [antecedents.pop(-1)]
+            antecedents = [item for item in antecedents if item not in consequent_candidate]
+            return rf.JsonRule(x["id"], antecedents, consequents)
 
         return map(toJsonRule, values)
+
 
 @dataclass
 class RuleDTO:
@@ -42,9 +63,11 @@ class RuleDTO:
     hasNext: bool
     label: str
 
+
 class RuleLabels(Enum):
     CORRECT = 1
     NOT_A_RULE = 2
+
 
 class Database:
     def __init__(self) -> None:
@@ -53,7 +76,7 @@ class Database:
         self.__labeledRules: Dict[int, str] = {}
 
     def initialize(self):
-        data = getDataFromMinedSource()
+        data = getDataFromSourceMicroProfile()
         self.__data = list(map(lambda jf: {"id": jf.id,
                                            "ruleString": rf.toShortRulePad(jf)},
                                data))
@@ -82,13 +105,15 @@ class Database:
     def getNext(self, id: int) -> RuleDTO:
         if id is None:
             e = self.__data[0]
-            return RuleDTO(e, False, True, self.__getRuleLabel(e["id"])) # TODO: prev or next might be false when there's only 1 element
+            # TODO: prev or next might be false when there's only 1 element
+            return RuleDTO(e, False, True, self.__getRuleLabel(e["id"]))
         return self.__findNextInDatabase(id)
 
     def getPrev(self, id: int) -> RuleDTO:
         if id is None:
             e = self.__data[0]
-            return RuleDTO(e, False, True, self.__getRuleLabel(e["id"])) # TODO: prev or next might be false when there's only 1 element
+            # TODO: prev or next might be false when there's only 1 element
+            return RuleDTO(e, False, True, self.__getRuleLabel(e["id"]))
         return self.__findPrevInDatabase(id)
 
     def labelRuleCorrect(self, id: int, rulePadString: str):
@@ -97,7 +122,7 @@ class Database:
             if rule["id"] == id:
                 rule["ruleString"] = rulePadString
         self.__labeledRules[id] = RuleLabels.CORRECT
-    
+
     def labelNotARule(self, id: int):
         self.__labeledRules[id] = RuleLabels.NOT_A_RULE
 
