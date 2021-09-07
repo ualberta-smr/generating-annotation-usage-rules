@@ -221,7 +221,7 @@ functionCondition
 functionExpression
     : LPAREN functionExpression RPAREN
     | left=functionExpression op=binary right=functionExpression
-    | ( annotations | specifiers | visibilities | types | names | parameters | returnValues
+    | ( annotations | specifiers | visibilities | types | names | functionParameters | returnValues
         | declarationStatements | expressionStatements | comments)
     | functionExpression SPACE
     ;
@@ -283,7 +283,7 @@ constructorExpression
     ;
 
 /*
-    parameters
+    parameters-> mainly annotations for now 
 */
 
 PARAMETER
@@ -305,7 +305,32 @@ parameterExpression
     | ( types | names )
     | parameterExpression SPACE
     ;
+/*
+    function parameters
 
+    function with parameter "String value" with annotation "a.b.c.Hello"
+    function with parameter with (type "String" and name "value" and annotation "a.b.c.Hello" )
+*/
+
+functionParameters
+    : PARAMETER functionParameterCondition?
+    ;
+
+functionParameterCondition
+    : combinatorialWords SPACE functionParameterConditionTransition?
+    | functionParameterConditionTransition
+    ;
+
+functionParameterConditionTransition
+    : withWord functionParameterExpression
+    ;
+
+functionParameterExpression
+    : LPAREN functionParameterExpression RPAREN
+    | left=functionParameterExpression op=binary right=functionParameterExpression
+    | ( types | names | annotations )
+    | functionParameterExpression SPACE
+    ;
 
 /*
     types

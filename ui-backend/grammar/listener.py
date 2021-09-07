@@ -12,6 +12,25 @@ else:
     from RulepadGrammarListener import RulepadGrammarListener
     from model import *
 
+def mergeParameters(a: Param, b: Param) -> Param:
+    p = Param(a.type, a.name, a.annotations + b.annotations)
+    p.is_antecedent = a.is_antecedent or b.is_antecedent
+    return p
+
+def mergeDuplicateParameters(oldParameters: List[Param]):
+    if oldParameters is None or oldParameters == []:
+        return oldParameters
+    def key(p: Param):
+        type_name = p.type.name if p.type else ""
+        name = p.name if p.name else ""
+        return (type_name, name)
+    tuples = itertools.groupby(sorted(oldParameters, key=key), key=key)
+
+    newParameters = []
+    for _, annotations in tuples:
+        newParameters.append(reduce(mergeParameters, annotations))
+    
+    return newParameters
 
 def mergeAnnotations(a: Annotation, b: Annotation) -> Annotation:
     parameters = a.parameters + b.parameters
@@ -49,11 +68,13 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             node_.annotations = mergeDuplicateAnnotations(node_.annotations)
             if node_.method:
                 node_.method.annotations = mergeDuplicateAnnotations(node_.method.annotations)
+                node_.method.parameters = mergeDuplicateParameters(node_.method.parameters)
             if node_.field:
                 node_.field.annotations = mergeDuplicateAnnotations(node_.field.annotations)
             return node_
         elif type_ == 'function':
             node_.annotations = mergeDuplicateAnnotations(node_.annotations)
+            node_.parameters = mergeDuplicateParameters(node_.parameters)
             return JavaClass([], None, [], None, node_, None)
         elif type_ == 'field':
             node_.annotations = mergeDuplicateAnnotations(node_.annotations)
@@ -101,7 +122,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
         annotation = self.initObj(Annotation(annotationType, []))
 
         prev = self.__stack[-1]
-        if prev['comingFrom'] in ['class', 'function', 'field']:
+        if prev['comingFrom'] in ['class', 'function', 'field', 'parameter']:
             prev['node'].annotations.append(annotation)
 
         self.__stack.append({
@@ -150,11 +171,11 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             else:
                 type_, name_ = elements[0], None
             type_ = self.initObj(Type(type_))
-            param = self.initObj(Param(type_, name_))
+            param = self.initObj(Param(type_, name_, []))
         else:
-            param = self.initObj(Param(None, None))
+            param = self.initObj(Param(None, None, []))
         prev = self.__stack[-1]
-        if prev['comingFrom'] in ['annotation', 'function']:
+        if prev['comingFrom'] in ['annotation']:
             prev['node'].parameters.append(param)
         self.__stack.append({
             'comingFrom': 'parameter',
@@ -162,6 +183,31 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
         })
 
     def exitParameters(self, ctx: RulepadGrammarParser.ParametersContext):
+        self.__stack.pop()
+
+    # Enter a parse tree produced by RulepadGrammarParser#functionParameters.
+    def enterFunctionParameters(self, ctx:RulepadGrammarParser.FunctionParametersContext):
+        words = ctx.functionParameterCondition().combinatorialWords()
+        if words:
+            elements = words.getText().replace("\"", "").split()
+            if len(elements) >= 2:
+                type_, name_ = elements[0], elements[1]
+            else:
+                type_, name_ = elements[0], None
+            type_ = self.initObj(Type(type_))
+            param = self.initObj(Param(type_, name_, []))
+        else:
+            param = self.initObj(Param(None, None, []))
+        prev = self.__stack[-1]
+        if prev['comingFrom'] in ['function']:
+            prev['node'].parameters.append(param)
+        self.__stack.append({
+            'comingFrom': 'parameter',
+            'node': param
+        })
+
+    # Exit a parse tree produced by RulepadGrammarParser#functionParameters.
+    def exitFunctionParameters(self, ctx:RulepadGrammarParser.FunctionParametersContext):
         self.__stack.pop()
 
     # Enter a parse tree produced by RulepadGrammarParser#functions.

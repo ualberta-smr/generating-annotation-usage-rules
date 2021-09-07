@@ -33,7 +33,7 @@ def shortenTypeName(type: Type) -> str:
         return type.name
 
 
-def addSigns(obj: Part, string) -> str:
+def addSigns(obj: AntecedentOrConsequent, string) -> str:
     if obj.is_antecedent is None:
         return string
     start, end = (ANTECEDENT_SIGN_START, ANTECEDENT_SIGN_END) if obj.is_antecedent else (
@@ -45,7 +45,7 @@ def field(field: Field):
     if field is None:
         return ""
     t = "\t<FieldAnnotations>\n\tprivate <ReturnType> field;"
-    annos = annotations(field.annotations, ch="\t").strip()
+    annos = handleAnnotations(field.annotations, ch="\t").strip()
     return t.replace("<FieldAnnotations>", annos).replace("<ReturnType>", addSigns(field.type, shortenTypeName(field.type)))
 
 
@@ -54,10 +54,12 @@ def functionParameters(function: Method):
         return ""
 
     def functionParameter(p: Tuple[int, Param]) -> str:
+        # @A @B @C String value
         param = p[1]
+        anno_str = " ".join(handleAnnotations(param.annotations).splitlines()) + " " if param.annotations else ""
         type_name = shortenTypeName(param.type)
         name = param.name if param.name else f"p{p[0]}"
-        return addSigns(param, f"{type_name} {name}")
+        return addSigns(param, f"{anno_str}{type_name} {name}")
 
     return map(functionParameter, enumerate(function.parameters, start=1))
 
@@ -66,7 +68,7 @@ def function(function: Method):
     if function is None:
         return ""
     t = "\t<MethodAnnotations>\n\tpublic <ReturnType> method(<FunctionParameters>) {}"
-    annos = annotations(function.annotations, ch="\t").strip()
+    annos = handleAnnotations(function.annotations, ch="\t").strip()
     params = ", ".join(functionParameters(function))
     return t.replace("<MethodAnnotations>", annos)\
             .replace("<ReturnType>", addSigns(function.returnType, shortenTypeName(function.returnType)))\
@@ -83,7 +85,7 @@ def implements(interfaces: List[Type]):
     return "" if len(interfaces) == 0 else "implements " + ", ".join(map(interface, interfaces))
 
 
-def annotations(annotations: List[Annotation], ch="") -> str:
+def handleAnnotations(annotations: List[Annotation], ch="") -> str:
     def annotation(a: Annotation) -> str:
         result = f"@{shortenTypeName(a.type)}"
         if a.parameters != []:
@@ -96,7 +98,7 @@ def annotations(annotations: List[Annotation], ch="") -> str:
 
 def javaClass(clazz: JavaClass):
     return TEMPLATE\
-        .replace("<ClassAnnotations>", annotations(clazz.annotations))\
+        .replace("<ClassAnnotations>", handleAnnotations(clazz.annotations))\
         .replace("<FieldDeclaration>", field(clazz.field))\
         .replace("<MethodDeclaration>", function(clazz.method))\
         .replace("<ExtendsTemplate>", extends(clazz.extendedClass))\

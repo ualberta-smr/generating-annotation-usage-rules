@@ -202,14 +202,14 @@ def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Fiel
                 method.returnType = Type(str_related)
             elif "hasParam" in str_operation:
                 _type = str_related.split("_")[1]
-                method.parameters.append(Param(Type(_type), None))
+                method.parameters.append(Param(Type(_type), None, []))
         elif str_target.startswith("Annotation_") and "hasParam" in str_operation:
             annotation_type = str_target.strip().split("_")[1]
             if annotation_type not in all_annotation_params:
                 all_annotation_params[annotation_type] = []
             _name, _type = str_related.split("_")[1].split(":")
             all_annotation_params[annotation_type].append(
-                Param(Type(_type), _name))
+                Param(Type(_type), _name, []))
         elif "definedIn" in str_operation and str_related.startswith("ConfigFile"):
             has_config = True
             _name, _type = str_target.split("_")[1].split(":")
