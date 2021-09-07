@@ -3,6 +3,9 @@ $hotColor: #ffcf00;
 $antecedentColor: orange;
 $consequentColor: green;
 
+$antecedentColorLight: #FFD580;
+$consequentColorLight: #0fc80f;
+
 .app {
     background-color: $backgroundColor;
     display: grid;
@@ -162,11 +165,33 @@ $consequentColor: green;
 .antecedent {
     background-color: $antecedentColor;
     color: black !important;
+
+    &:hover {
+        background-color: $antecedentColorLight;
+    }
+
+    > .antecedent {
+        &:hover {
+            border: 1px solid black;
+            box-sizing: border-box;
+        }
+    }
 }
 
 .consequent {
     background-color: $consequentColor;
     color: white !important;
+
+    &:hover {
+        background-color: $consequentColorLight;
+    }
+
+    > .consequent {
+        &:hover {
+            border: 1px solid black;
+            box-sizing: border-box;
+        }
+    }
 }
 
 .disabledBtn {

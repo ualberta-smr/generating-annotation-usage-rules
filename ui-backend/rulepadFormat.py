@@ -18,7 +18,16 @@ def paramToRulePad(p: Union[Param, ConfigurationProperty]) -> str:
     keyword = "parameter" if isinstance(p, Param) else "property"
     name = f"{p.name}" if p.name else ""
     form = " ".join([p.type.name, name]).strip()
-    return f"{keyword} \"{form}\""
+
+    withAnnotation = ""
+    if isinstance(p, Param) and p.annotations:
+        anno_str = " and ".join(map(annotationToRulePad, p.annotations))
+        if len(p.annotations) > 1:
+            anno_str = "(" + anno_str + " )"
+
+        withAnnotation = f" with {anno_str}"
+
+    return f"{keyword} \"{form}\"{withAnnotation}"
 
 
 def annotationToRulePad(a: Annotation):
@@ -166,7 +175,7 @@ def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Fiel
     # 'annotation_name': Annotation() object
     all_annotations: Dict[str, Annotation] = dict()
 
-    # 'annotation_name': List[Param]
+    # 'annotation_name': List[Param] object
     all_annotation_params: Dict[str, List[Param]] = dict()
 
     def extractAnnotation(annotation_str):
@@ -175,6 +184,12 @@ def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Fiel
             all_annotations[annotation_type] = Annotation(
                 Type(annotation_type), parameters=[])
         return all_annotations[annotation_type]
+
+    # 'param_type': Param() object
+    method_parameters: Dict[str, Param] = dict()
+
+    # 'param_type': List[Annotation] object
+    method_parameter_annotations: Dict[str, List[Annotation]] = dict()
 
     for fact in facts:
         str_target, str_operation, str_related = fact.strip().split()
@@ -202,21 +217,31 @@ def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Fiel
                 method.returnType = Type(str_related)
             elif "hasParam" in str_operation:
                 _type = str_related.split("_")[1]
-                method.parameters.append(Param(Type(_type), None))
+                p = Param(Type(_type), None, [])
+                method_parameters[_type] = p
+                method.parameters.append(p)
         elif str_target.startswith("Annotation_") and "hasParam" in str_operation:
             annotation_type = str_target.strip().split("_")[1]
             if annotation_type not in all_annotation_params:
                 all_annotation_params[annotation_type] = []
             _name, _type = str_related.split("_")[1].split(":")
             all_annotation_params[annotation_type].append(
-                Param(Type(_type), _name))
+                Param(Type(_type), _name, []))
         elif "definedIn" in str_operation and str_related.startswith("ConfigFile"):
             has_config = True
             _name, _type = str_target.split("_")[1].split(":")
             cp = ConfigurationProperty(_name, Type(_type))
             configFile.properties.append(cp)
             configFile.name = str_related.split("_")[1]
-
+        elif "annotatedWith" in str_operation and str_target.startswith("Param"):
+            has_method = True
+            param_type = str_target.split("_")[1]
+            annotation_type = Annotation(Type(str_related.split("_")[1]), [])
+            if param_type not in method_parameter_annotations:
+                method_parameter_annotations[param_type] = []
+            method_parameter_annotations[param_type].append(annotation_type)
+                
+    ### Handling Dangling Annotations
     danglingAnnotations: List[Annotation] = []
 
     for annotation_str, params in all_annotation_params.items():
@@ -237,6 +262,17 @@ def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Fiel
         elif t is Field:
             has_field = True
             field.annotations.append(da)
+
+    ### Handling method parameter annotations
+    danglingParametersWithAnnotations = []
+    for param_type, __annotations in method_parameter_annotations.items():
+        if param_type in method_parameters:
+            method_parameters[param_type].annotations.extend(__annotations)
+        else:
+            danglingParametersWithAnnotations.append(Param(Type(param_type), None, __annotations))
+
+    if danglingParametersWithAnnotations and has_method:
+        method.parameters.append(danglingParametersWithAnnotations)
 
     # determine what to return based on the input
     if has_class or (len(list(filter(lambda x: x, [has_config, has_field, has_method]))) >= 2):
