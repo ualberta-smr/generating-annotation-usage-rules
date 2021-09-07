@@ -44,9 +44,9 @@ def check(input):
 #     """function with parameter "String value" with (annotation "Hello" and annotation "Bello" ) must have type "String" """
 # )
 
-check(
-    """class with (function with parameter "java.lang.String" with annotation "PathParam" ) and annotation "org.eclipse.microprofile.rest.client.inject.RegisterRestClient" must have function with annotation "javax.ws.rs.Path" """
-)
+# check(
+#     """class with (function with parameter "java.lang.String" with annotation "PathParam" ) and annotation "org.eclipse.microprofile.rest.client.inject.RegisterRestClient" must have function with annotation "javax.ws.rs.Path" """
+# )
 
 # check(
 #     """function with parameter with (type "String" and name "value" and annotation "a.b.c.Hello" ) must have type "String" """

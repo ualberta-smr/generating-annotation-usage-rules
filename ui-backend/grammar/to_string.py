@@ -6,9 +6,9 @@ if __name__ is not None and "." in __name__:
 else:
     from model import *
 
-ANTECEDENT_SIGN_START = """<span class="antecedent">"""
+ANTECEDENT_SIGN_START = """<span class="antecedent" title="Antecedent">"""
 ANTECEDENT_SIGN_END = "</span>"
-CONSEQUENT_SIGN_START = """<span class="consequent">"""
+CONSEQUENT_SIGN_START = """<span class="consequent" title="Consequent">"""
 CONSEQUENT_SIGN_END = "</span>"
 
 TEMPLATE = '''

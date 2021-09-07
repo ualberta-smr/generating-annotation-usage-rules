@@ -13,7 +13,7 @@ else:
     from model import *
 
 def mergeParameters(a: Param, b: Param) -> Param:
-    p = Param(a.type, a.name, a.annotations + b.annotations)
+    p = Param(a.type, a.name, mergeDuplicateAnnotations(a.annotations + b.annotations))
     p.is_antecedent = a.is_antecedent or b.is_antecedent
     return p
 
