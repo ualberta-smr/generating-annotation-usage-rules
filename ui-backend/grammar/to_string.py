@@ -107,5 +107,5 @@ def configFiles(cf: ConfigurationFile) -> Tuple[str, str]:
     if cf is None:
         return None
     lines = "\n".join(
-        map(lambda t: f"{t[0]}={t[1]}", map(lambda x: (x.name, x.type.name), cf.properties)))
+        map(lambda t: f"{t[0]}={t[1]}", map(lambda x: (x.name, shortenTypeName(x.type)), cf.properties)))
     return cf.name, lines

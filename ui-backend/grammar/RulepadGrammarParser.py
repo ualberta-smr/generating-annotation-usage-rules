@@ -200,12 +200,12 @@ def serializedATN():
         buf.write("\3\2\2\2\u0162\u0160\3\2\2\2\u0163\u0166\3\2\2\2\u0164")
         buf.write("\u0162\3\2\2\2\u0164\u0165\3\2\2\2\u0165-\3\2\2\2\u0166")
         buf.write("\u0164\3\2\2\2\u0167\u0168\7\34\2\2\u0168\u0169\5\60\31")
-        buf.write("\2\u0169/\3\2\2\2\u016a\u016f\5\26\f\2\u016b\u016c\5\6")
-        buf.write("\4\2\u016c\u016d\7\25\2\2\u016d\u0170\3\2\2\2\u016e\u0170")
+        buf.write("\2\u0169/\3\2\2\2\u016a\u016f\5\26\f\2\u016b\u016c\5\n")
+        buf.write("\6\2\u016c\u016d\7\25\2\2\u016d\u0170\3\2\2\2\u016e\u0170")
         buf.write("\7\35\2\2\u016f\u016b\3\2\2\2\u016f\u016e\3\2\2\2\u0170")
         buf.write("\61\3\2\2\2\u0171\u0172\7\36\2\2\u0172\u0173\5\64\33\2")
-        buf.write("\u0173\63\3\2\2\2\u0174\u0179\5\26\f\2\u0175\u0176\5\6")
-        buf.write("\4\2\u0176\u0177\7\25\2\2\u0177\u017a\3\2\2\2\u0178\u017a")
+        buf.write("\u0173\63\3\2\2\2\u0174\u0179\5\26\f\2\u0175\u0176\5\n")
+        buf.write("\6\2\u0176\u0177\7\25\2\2\u0177\u017a\3\2\2\2\u0178\u017a")
         buf.write("\7\37\2\2\u0179\u0175\3\2\2\2\u0179\u0178\3\2\2\2\u017a")
         buf.write("\65\3\2\2\2\u017b\u017d\7 \2\2\u017c\u017e\5:\36\2\u017d")
         buf.write("\u017c\3\2\2\2\u017d\u017e\3\2\2\2\u017e\u0180\3\2\2\2")
@@ -2223,8 +2223,8 @@ class RulepadGrammarParser ( Parser ):
             return self.getTypedRuleContext(RulepadGrammarParser.OfContext,0)
 
 
-        def words(self):
-            return self.getTypedRuleContext(RulepadGrammarParser.WordsContext,0)
+        def combinatorialWords(self):
+            return self.getTypedRuleContext(RulepadGrammarParser.CombinatorialWordsContext,0)
 
 
         def SPACE(self):
@@ -2260,7 +2260,7 @@ class RulepadGrammarParser ( Parser ):
             token = self._input.LA(1)
             if token in [RulepadGrammarParser.T__0]:
                 self.state = 361
-                self.words()
+                self.combinatorialWords()
                 self.state = 362
                 self.match(RulepadGrammarParser.SPACE)
                 pass
@@ -2338,8 +2338,8 @@ class RulepadGrammarParser ( Parser ):
             return self.getTypedRuleContext(RulepadGrammarParser.OfContext,0)
 
 
-        def words(self):
-            return self.getTypedRuleContext(RulepadGrammarParser.WordsContext,0)
+        def combinatorialWords(self):
+            return self.getTypedRuleContext(RulepadGrammarParser.CombinatorialWordsContext,0)
 
 
         def SPACE(self):
@@ -2375,7 +2375,7 @@ class RulepadGrammarParser ( Parser ):
             token = self._input.LA(1)
             if token in [RulepadGrammarParser.T__0]:
                 self.state = 371
-                self.words()
+                self.combinatorialWords()
                 self.state = 372
                 self.match(RulepadGrammarParser.SPACE)
                 pass

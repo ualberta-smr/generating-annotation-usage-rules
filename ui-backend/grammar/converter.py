@@ -24,8 +24,6 @@ def convert(input):
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
     j = listener.getJavaClass()
-    # import json
-    # print(json.dumps(j, default=lambda x: x.__dict__, indent=4))
     return javaClass(j).strip(), configFiles(j.configurationFile)
 
 def check(input):
@@ -41,6 +39,10 @@ def check(input):
     import json
     print(json.dumps(j, default=lambda x: x.__dict__, indent=4))
     return None
+
+# check(
+#     """class with (function with (annotation "org.eclipse.microprofile.reactive.messaging.Incoming" and annotation "org.eclipse.microprofile.reactive.messaging.Outgoing" with parameter "java.lang.String value" ) ) and annotation "javax.enterprise.context.ApplicationScoped" must have (function with annotation "org.eclipse.microprofile.reactive.messaging.Incoming" with parameter "java.lang.String value" ) """
+# )
 
 # check(
 #     """class with annotation "Config" must have configuration file with property with (name "name" and type "String" ) """

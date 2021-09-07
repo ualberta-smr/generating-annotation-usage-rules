@@ -77,6 +77,7 @@ def __getRule(rule_id: int, response: Response, next=True):
     except Exception as e:
         traceback.print_exc()
         print(e)
+        print(r)
         response.status_code = 400
         return DB.RuleDTO(None, False, False, False)
 

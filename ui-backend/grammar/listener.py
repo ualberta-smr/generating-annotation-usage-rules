@@ -19,13 +19,17 @@ def mergeAnnotations(a: Annotation, b: Annotation) -> Annotation:
     an.is_antecedent = a.is_antecedent or b.is_antecedent
     return an
 
-def mergeDuplicateAnnotations(oldAnnotations):
+def mergeDuplicateAnnotations(oldAnnotations: List[Annotation]):
     if oldAnnotations is None or oldAnnotations == []:
         return oldAnnotations
-    tuples = itertools.groupby(oldAnnotations, lambda a: a.type.name)
+
+    key = lambda anno: anno.type.name
+    tuples = itertools.groupby(sorted(oldAnnotations, key=key), key=key)
+
     newAnnotations = []
-    for t, annotations in tuples:
+    for _, annotations in tuples:
         newAnnotations.append(reduce(mergeAnnotations, annotations))
+    
     return newAnnotations
 
 class ConcreteRulepadGrammarListener(RulepadGrammarListener):
@@ -110,7 +114,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
 
     def enterExtensions(self, ctx: RulepadGrammarParser.ExtensionsContext):
         # TODO: there can be multiple extensions, currently not supported
-        extendedClass = ctx.extensionCondition().words().getText().replace('"', "")
+        extendedClass = ctx.extensionCondition().combinatorialWords().getText().replace('"', "")
 
         prev = self.__stack[-1]
         if prev['comingFrom'] == 'class':
@@ -119,7 +123,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
     def enterImplementations(self, ctx: RulepadGrammarParser.ImplementationsContext):
         prev = self.__stack[-1]
         if prev['comingFrom'] == 'class':
-            className = ctx.implementationCondition().words().getText().replace('"', "")
+            className = ctx.implementationCondition().combinatorialWords().getText().replace('"', "")
             prev['node'].implementedInterfaces.append(
                 self.initObj(Type(className)))
 
