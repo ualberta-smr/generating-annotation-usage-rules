@@ -1,46 +1,50 @@
-package com.apimisuse;
+package ca.ualberta.smr;
 
-import com.github.javaparser.ParseProblemException;
-import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.*;
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.*;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JarTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class TypeResolver {
 
     /**
-     * Need to resolve:
-     * Annotations:
-     * - annotations on top of any class
-     * - annotations on top of any interface [Optional]
-     * - annotations on top of any method
-     * - annotations on top of any field
-     * <p>
-     * Types:
-     * - data types of field declarations
-     * - data types of method parameters
-     * - data types of method returns
+     * Stores the location of jar files
      */
-    public static void main(String[] args) throws IOException {
-        if (args.length != 2) {
-            System.err.println("2 argument is required: <Java file> <Lib folder>");
-            System.exit(2);
-        }
-        final String filePath = args[0];
-        final String libFolder = args[1];
+    private final JavaParser javaParser;
 
-        configureParser(libFolder);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TypeResolver.class);
 
+    public TypeResolver(final String libFolder) throws IOException {
+        this.javaParser = configureParser(libFolder);
+    }
+
+    public String resolveTypesInFile(String filePath) {
+        return getResolvedCompilationUnit(filePath).map(Objects::toString).orElse("");
+    }
+
+    public Optional<CompilationUnit> getResolvedCompilationUnit(String filePath) {
         try {
-            final CompilationUnit cu = StaticJavaParser.parse(new File(filePath));
+            final Optional<CompilationUnit> maybeParsed = this.javaParser.parse(new File(filePath)).getResult();
+            if (maybeParsed.isEmpty()) return Optional.empty();
+
+            final CompilationUnit cu = maybeParsed.get();
 
             final Map<String, String> imports = ClassNameCollector.getImports(cu);
 
@@ -48,11 +52,14 @@ public class TypeResolver {
             convertFieldDeclarations(cu, imports);
             convertClassInterfaceDeclarations(cu, imports);
 
-            System.out.print(cu);
-        } catch (Exception ignore) {}
+            return Optional.of(cu);
+        } catch (Exception exception) {
+            LOGGER.warn("Resolving types in file {} resulted in exception {}", filePath, exception);
+            return Optional.empty();
+        }
     }
 
-    private static void convertClassInterfaceDeclarations(CompilationUnit cu, Map<String, String> imports) {
+    private void convertClassInterfaceDeclarations(CompilationUnit cu, Map<String, String> imports) {
         cu.findAll(ClassOrInterfaceDeclaration.class)
                 .forEach(e -> {
                     convertAnnotations(imports, e.getAnnotations());
@@ -69,7 +76,7 @@ public class TypeResolver {
                 });
     }
 
-    private static void convertFieldDeclarations(CompilationUnit cu, Map<String, String> imports) {
+    private void convertFieldDeclarations(CompilationUnit cu, Map<String, String> imports) {
         cu.findAll(FieldDeclaration.class)
                 .forEach(e -> {
                     for (VariableDeclarator variable : e.getVariables()) {
@@ -81,7 +88,7 @@ public class TypeResolver {
                 });
     }
 
-    private static void convertMethodDeclarations(CompilationUnit cu, Map<String, String> imports) {
+    private void convertMethodDeclarations(CompilationUnit cu, Map<String, String> imports) {
         cu.findAll(MethodDeclaration.class)
                 .forEach(e -> {
                     for (Parameter param : e.getParameters()) {
@@ -96,21 +103,27 @@ public class TypeResolver {
                 });
     }
 
-    private static void convertAnnotations(Map<String, String> imports, NodeList<AnnotationExpr> annotations) {
+    private void convertAnnotations(Map<String, String> imports, NodeList<AnnotationExpr> annotations) {
         for (AnnotationExpr annotation : annotations) {
             final String simple = annotation.getName().asString();
             setIfExists(imports, simple, annotation::setName);
         }
     }
 
-    private static void setIfExists(Map<String, String> imports, String key, Consumer<String> setter) {
+    /**
+     * Perform the setter action when given key exists in the map with the value of the key
+     * @param imports the map
+     * @param key the key
+     * @param setter the action to be performed
+     */
+    private void setIfExists(Map<String, String> imports, String key, Consumer<String> setter) {
         final String value = imports.get(key);
         if (value != null) {
             setter.accept(value);
         }
     }
 
-    private static void configureParser(String libFolder) throws IOException {
+    private JavaParser configureParser(String libFolder) throws IOException {
         CombinedTypeSolver cts = new CombinedTypeSolver(new ReflectionTypeSolver());
 
         Files.list(new File(libFolder).toPath())
@@ -122,9 +135,7 @@ public class TypeResolver {
                     }
                 });
 
-        StaticJavaParser
-                .getConfiguration()
-                .setSymbolResolver(new JavaSymbolSolver(cts));
+        return new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(cts)));
     }
 
 }

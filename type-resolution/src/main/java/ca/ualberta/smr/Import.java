@@ -1,10 +1,10 @@
-package com.apimisuse;
+package ca.ualberta.smr;
 
 import java.util.Objects;
 
 class Import {
-    private String simpleName;
-    private String fullyQualifiedName;
+    private final String simpleName;
+    private final String fullyQualifiedName;
 
     public Import(String a, String b) {
         this.simpleName = a;
