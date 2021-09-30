@@ -1,4 +1,4 @@
-package ca.ualberta.smr.model;
+package ca.ualberta.smr.model.javaelements;
 
 import lombok.Builder;
 import lombok.Getter;

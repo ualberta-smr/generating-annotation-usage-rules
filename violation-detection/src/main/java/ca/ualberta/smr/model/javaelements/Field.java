@@ -1,4 +1,4 @@
-package ca.ualberta.smr.model;
+package ca.ualberta.smr.model.javaelements;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +11,8 @@ import java.util.Collection;
 @Getter
 @Accessors(fluent = true)
 public final class Field implements AnalysisItem {
-    private final Type type;
     @Builder.Default
-    private final Collection<Annotation> annotations = new ArrayList<>();
+    private final Condition<Type> type = Condition.empty();
+    @Builder.Default
+    private final Collection<Condition<Annotation>> annotations = new ArrayList<>();
 }

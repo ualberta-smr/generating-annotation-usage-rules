@@ -1,6 +1,7 @@
 package ca.ualberta.smr.consequent;
 
 import ca.ualberta.smr.model.*;
+import ca.ualberta.smr.model.javaelements.*;
 import com.github.javaparser.ast.body.*;
 
 import java.util.*;
@@ -14,49 +15,49 @@ import static ca.ualberta.smr.utils.AnnotationUtils.*;
 public class FieldConsequentFilter {
 
     @SuppressWarnings("unchecked")
-    public static <T extends BodyDeclaration<T>> Collection<ViolationInfo> doFilter(Collection<T> declarations, Field field) {
+    public static <T extends BodyDeclaration<T>> Collection<ViolationInfo> doFilter(Collection<T> declarations, Condition<Field> fieldCondition) {
         if (declarations.isEmpty()) return emptyList();
 
         var sampleItem = declarations.stream().findAny().get();
         if (sampleItem instanceof ClassOrInterfaceDeclaration) {
-            return doFilterFromClassDeclarations((Collection<ClassOrInterfaceDeclaration>) declarations, field);
+            return doFilterFromClassDeclarations((Collection<ClassOrInterfaceDeclaration>) declarations, fieldCondition);
         } else if (sampleItem instanceof FieldDeclaration) {
-            return doFilterFromFieldDeclarations((Collection<FieldDeclaration>) declarations, field);
+            return doFilterFromFieldDeclarations((Collection<FieldDeclaration>) declarations, fieldCondition);
         }
         throw new IllegalArgumentException("Required a collection of one of the following types (ClassOrInterfaceDeclaration, FieldDeclaration) got %s instead".formatted(sampleItem.getClass()));
     }
 
-    private static Collection<ViolationInfo> doFilterFromClassDeclarations(Collection<ClassOrInterfaceDeclaration> declarations, Field field) {
+    private static Collection<ViolationInfo> doFilterFromClassDeclarations(Collection<ClassOrInterfaceDeclaration> declarations, Condition<Field> fieldCondition) {
         var fieldDeclarations = declarations.stream()
                 .flatMap(cd -> cd.findAll(FieldDeclaration.class).stream())
                 .collect(toList());
-        return doFilterFromFieldDeclarations(fieldDeclarations, field);
+        return doFilterFromFieldDeclarations(fieldDeclarations, fieldCondition);
     }
 
-    private static <T extends BodyDeclaration<T>> Collection<ViolationInfo> doFilterFromFieldDeclarations(Collection<FieldDeclaration> fieldDeclarations, Field field) {
+    private static <T extends BodyDeclaration<T>> Collection<ViolationInfo> doFilterFromFieldDeclarations(Collection<FieldDeclaration> fieldDeclarations, Condition<Field> field) {
         return fieldDeclarations.stream()
                 .map(fd -> doFilter(fd, field))
                 .flatMap(Collection::stream)
                 .collect(toList());
     }
 
-    private static Collection<ViolationInfo> doFilter(FieldDeclaration fieldDeclaration, Field expected) {
+    private static Collection<ViolationInfo> doFilter(FieldDeclaration fieldDeclaration, Condition<Field> expected) {
         // TODO: annotations
-        var requiredAnnotations = getMissingAnnotations(fieldDeclaration, expected.annotations());
-        var requiredAnnotationParameters = getMissingParameters(fieldDeclaration, expected.annotations());
+        var requiredAnnotations = getMissingAnnotations(fieldDeclaration, expected.flatMap(Field::annotations));
+        var requiredAnnotationParameters = getMissingParameters(fieldDeclaration, expected.flatMap(Field::annotations));
         // TODO: type
-        Type requiredType = null;
-        final boolean hasType = expected.type() == null || fieldDeclaration.getElementType().asString().equals(expected.type().name());
+        Collection<Condition<Type>> requiredType = List.of();
+        var hasType = expected.test(f -> f.type().test(t -> t.equalsTypeString(fieldDeclaration.getElementType().asString())));
         if (!hasType) {
-            requiredType = expected.type();
+            requiredType = expected.map(Field::type);
         }
 
-        var missingAnnotations = new ViolationInfo(fieldDeclaration, requiredAnnotations.stream().map(Annotation::toString).collect(toList()));
-        var missingType = new ViolationInfo(fieldDeclaration, requiredType == null ? emptyList() : singleton(requiredType.name()));
+        var missingAnnotations = new ViolationInfo(fieldDeclaration, requiredAnnotations.stream().map(Condition::toString).collect(toList()));
+        var missingType = new ViolationInfo(fieldDeclaration, requiredType.stream().map(Condition::toString).collect(toList()));
 
         var missingAnnotationParameters = requiredAnnotationParameters
                 .stream()
-                .map(p -> new ViolationInfo(p.key(), p.value().stream().map(AnnotationParameter::toString).collect(toList())));
+                .map(p -> new ViolationInfo(p.key(), p.value().stream().map(Condition::toString).collect(toList())));
 
 
         return concat(Stream.of(missingType, missingAnnotations), missingAnnotationParameters)

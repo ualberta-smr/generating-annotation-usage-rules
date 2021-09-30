@@ -1,4 +1,4 @@
-package ca.ualberta.smr.model;
+package ca.ualberta.smr.model.javaelements;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,9 +13,10 @@ import java.util.Collection;
 @Accessors(fluent = true)
 @ToString
 public final class Method implements AnalysisItem{
-    private final Type returnType;
     @Builder.Default
-    private final Collection<Annotation> annotations = new ArrayList<>();
+    private final Condition<Type> returnType = Condition.empty();
     @Builder.Default
-    private final Collection<Parameter> parameters = new ArrayList<>();
+    private final Collection<Condition<Annotation>> annotations = new ArrayList<>();
+    @Builder.Default
+    private final Collection<Condition<Parameter>> parameters = new ArrayList<>();
 }

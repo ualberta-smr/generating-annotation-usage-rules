@@ -1,7 +1,8 @@
 package ca.ualberta.smr.utils;
 
-import ca.ualberta.smr.model.Annotation;
-import ca.ualberta.smr.model.AnnotationParameter;
+import ca.ualberta.smr.model.javaelements.Annotation;
+import ca.ualberta.smr.model.javaelements.AnnotationParameter;
+import ca.ualberta.smr.model.javaelements.Condition;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class AnnotationUtils {
 
-    public static Collection<Annotation> getMissingAnnotations(NodeWithAnnotations<?> node, Collection<Annotation> annotations) {
+    public static Collection<Condition<Annotation>> getMissingAnnotations(NodeWithAnnotations<?> node, Collection<Condition<Annotation>> annotations) {
         return annotations
                 .stream()
                 .filter(annotation -> !containsAnnotation(node, annotation))
@@ -21,16 +22,19 @@ public class AnnotationUtils {
     }
 
 
-    public static boolean containsAnnotation(NodeWithAnnotations<?> node, Annotation annotation) {
+    public static boolean containsAnnotation(NodeWithAnnotations<?> node, Condition<Annotation> annotationCondition) {
         return node.getAnnotations()
                 .stream()
                 .map(AnnotationExpr::getName)
                 .map(Node::toString)
-                .anyMatch(e -> e.equals(annotation.type().name()));
+                .anyMatch(e ->
+                        annotationCondition.test(annotation ->
+                                annotation.type().test(type -> type.equalsTypeString(e))));
     }
 
-    public static Collection<Pair<AnnotationExpr, Collection<AnnotationParameter>>> getMissingParameters(NodeWithAnnotations<?> node, Collection<Annotation> annotations) {
-        return annotations
+    public static Collection<Pair<AnnotationExpr, Collection<Condition<AnnotationParameter>>>> getMissingParameters(NodeWithAnnotations<?> node,
+                                                                                                                    Collection<Condition<Annotation>> annotationConditions) {
+        return annotationConditions
                 .stream()
                 .map(annotation -> getMissingParameters(node, annotation))
                 .filter(p -> p.hasValue() && !p.value().isEmpty())
@@ -38,10 +42,10 @@ public class AnnotationUtils {
     }
 
 
-    public static Pair<AnnotationExpr, Collection<AnnotationParameter>> getMissingParameters(NodeWithAnnotations<?> node, Annotation annotation) {
+    public static Pair<AnnotationExpr, Collection<Condition<AnnotationParameter>>> getMissingParameters(NodeWithAnnotations<?> node, Condition<Annotation> annotationCondition) {
         final Optional<AnnotationExpr> annotationFound = node.getAnnotations()
                 .stream()
-                .filter(a -> a.getName().toString().equals(annotation.type().name()))
+                .filter(a -> annotationCondition.test(annotation -> annotation.type().test(type -> type.equalsTypeString(a.getName().toString()))))
                 .findAny();
 
         if (annotationFound.isEmpty()) return Pair.empty();
@@ -49,22 +53,22 @@ public class AnnotationUtils {
         final var nodeAnnotation = annotationFound.get();
 
         if (nodeAnnotation instanceof MarkerAnnotationExpr) {
-            return new Pair<>(nodeAnnotation, annotation.parameters());
+            return new Pair<>(nodeAnnotation, annotationCondition.flatMap(Annotation::parameters));
         } else if (nodeAnnotation instanceof SingleMemberAnnotationExpr) {
             return Pair.empty();
         } else if (nodeAnnotation instanceof NormalAnnotationExpr nae) {
-            return getMissingParameters(annotation, nae);
+            return getMissingParameters(annotationCondition, nae);
         }
         return Pair.empty();
     }
 
-    private static Pair<AnnotationExpr, Collection<AnnotationParameter>> getMissingParameters(Annotation expected, NormalAnnotationExpr actual) {
-        Collection<AnnotationParameter> missingParams = new ArrayList<>();
-        for (var parameter : expected.parameters()) {
+    private static Pair<AnnotationExpr, Collection<Condition<AnnotationParameter>>> getMissingParameters(Condition<Annotation> expected, NormalAnnotationExpr actual) {
+        Collection<Condition<AnnotationParameter>> missingParams = new ArrayList<>();
+        for (var parameter : expected.flatMap(Annotation::parameters)) {
             boolean found = false;
             for (MemberValuePair pair : actual.getPairs()) {
                 final String toString = pair.toString();
-                if (toString.contains(parameter.name()) || toString.contains(parameter.type().name())) {
+                if (parameter.test(p -> toString.contains(p.name()) || toString.contains(p.type().name()))) {
                     found = true;
                     break;
                 }

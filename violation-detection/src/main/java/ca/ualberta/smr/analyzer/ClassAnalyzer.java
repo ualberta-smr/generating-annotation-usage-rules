@@ -5,6 +5,7 @@ import ca.ualberta.smr.consequent.ClassConsequentFilter;
 import ca.ualberta.smr.consequent.FieldConsequentFilter;
 import ca.ualberta.smr.consequent.MethodConsequentFilter;
 import ca.ualberta.smr.model.*;
+import ca.ualberta.smr.model.javaelements.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 
@@ -36,9 +37,9 @@ final public class ClassAnalyzer implements AnalysisRunner {
     private static Map<Class<? extends AnalysisItem>, ConsequentFilterFunction> initializeClassConsequentFilterMap() {
         Map<Class<? extends AnalysisItem>, ConsequentFilterFunction> map = new HashMap<>();
 
-        map.put(JavaClass.class, (items, consequent) -> ClassConsequentFilter.doFilter(items, (JavaClass) consequent));
-        map.put(Method.class, (items, consequent) -> MethodConsequentFilter.doFilter(items, (Method) consequent));
-        map.put(Field.class, (items, consequent) -> FieldConsequentFilter.doFilter(items, (Field) consequent));
+        map.put(JavaClass.class, (items, consequent) -> ClassConsequentFilter.doFilter(items, Condition.single((JavaClass) consequent)));
+        map.put(Method.class, (items, consequent) -> MethodConsequentFilter.doFilter(items, Condition.single((Method) consequent)));
+        map.put(Field.class, (items, consequent) -> FieldConsequentFilter.doFilter(items, Condition.single((Field) consequent)));
 
         return map;
     }

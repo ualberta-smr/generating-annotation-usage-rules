@@ -1,5 +1,6 @@
 package ca.ualberta.smr.model;
 
+import ca.ualberta.smr.model.javaelements.AnalysisItem;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;

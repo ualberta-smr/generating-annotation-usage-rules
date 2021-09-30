@@ -1,14 +1,12 @@
-package ca.ualberta.smr.model;
+package ca.ualberta.smr.model.javaelements;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Builder
 @Getter
@@ -17,7 +15,7 @@ public class Parameter {
     private final Type type;
     private final String name;
     @Builder.Default
-    private final Collection<Annotation> annotations = new ArrayList<>();
+    private final Collection<Condition<Annotation>> annotations = new ArrayList<>();
 
     @Override
     public String toString() {
