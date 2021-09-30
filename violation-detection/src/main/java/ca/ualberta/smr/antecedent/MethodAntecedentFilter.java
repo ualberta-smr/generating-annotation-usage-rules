@@ -7,7 +7,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static ca.ualberta.smr.utils.Utils.containsAnnotation;
+import static ca.ualberta.smr.utils.AnnotationUtils.containsAnnotation;
 
 public class MethodAntecedentFilter {
 

@@ -1,13 +1,10 @@
 package ca.ualberta.smr;
 
+import ca.ualberta.smr.analyzer.*;
 import ca.ualberta.smr.model.*;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static ca.ualberta.smr.model.Annotation.annotation;
 
@@ -32,14 +29,34 @@ public class Main {
                 .annotations(List.of(name))
                 .build()).build();
 
-        final ViolationDetector violationDetector = new ViolationDetector(typeResolver, List.of(
-            new StaticAnalysisRule(antecedent, consequent)
-        ));
+        final var violationDetector = new ViolationDetector(
+                typeResolver,
+                List.of(new StaticAnalysisRule(antecedent, consequent), getJsonWebTokenRule()),
+                List.of(new ClassAnalyzer(), new MethodAnalyzer(), new FieldAnalyzer())
+        );
 
         final var strings = violationDetector
-                .detectViolations("D:\\Projects\\CodeQL\\sample_projects\\java_code_ql_samples\\src\\main\\java\\io\\code\\annotations\\DemoDemo.java");
+                .detectViolations("D:\\Projects\\CodeQL\\sample_projects\\java_code_ql_samples\\src\\main\\java\\io\\code\\annotations\\WebTokenThing.java");
 
-        strings.entrySet().forEach(System.out::println);
+        for (Map.Entry<StaticAnalysisRule, Collection<ViolationInfo>> entry : strings.entrySet()) {
+            for (ViolationInfo violationInfo : entry.getValue()) {
+                System.out.println(violationInfo.treeElement());
+                System.out.println(violationInfo.missingElements());
+                System.out.println("=======");
+            }
+        }
+    }
+
+    private static StaticAnalysisRule getJsonWebTokenRule() {
+        var antecedent = Field.builder()
+                .type(new Type("org.eclipse.microprofile.jwt.JsonWebToken"))
+                .build();
+
+        var consequent = Field.builder()
+                .annotations(List.of(Annotation.builder().type(new Type("javax.inject.Inject")).build()))
+                .build();
+
+        return new StaticAnalysisRule(antecedent, consequent);
     }
 
 }

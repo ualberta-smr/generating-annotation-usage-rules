@@ -12,5 +12,6 @@ import java.util.Collection;
 @Accessors(fluent = true)
 public final class Field implements AnalysisItem {
     private final Type type;
+    @Builder.Default
     private final Collection<Annotation> annotations = new ArrayList<>();
 }

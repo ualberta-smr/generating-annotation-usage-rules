@@ -6,6 +6,10 @@ import java.util.Collection;
 
 public record ViolationInfo(Object treeElement, Collection<String> missingElements) {
 
+    public boolean isNotEmpty() {
+        return !missingElements.isEmpty();
+    }
+
     @Override
     public String toString() {
         final String name;

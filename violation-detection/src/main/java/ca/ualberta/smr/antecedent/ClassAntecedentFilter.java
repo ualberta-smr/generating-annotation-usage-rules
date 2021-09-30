@@ -2,15 +2,13 @@ package ca.ualberta.smr.antecedent;
 
 import ca.ualberta.smr.model.*;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.*;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static ca.ualberta.smr.utils.Utils.containsAnnotation;
 import static ca.ualberta.smr.antecedent.MethodAntecedentFilter.*;
+import static ca.ualberta.smr.utils.AnnotationUtils.containsAnnotation;
 
 /**
  * Used when the topmost (hierarchy-wise) antecedent element is a java class

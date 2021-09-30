@@ -7,7 +7,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static ca.ualberta.smr.utils.Utils.containsAnnotation;
+import static ca.ualberta.smr.utils.AnnotationUtils.containsAnnotation;
 
 public class FieldAntecedentFilter {
 
@@ -21,7 +21,7 @@ public class FieldAntecedentFilter {
     }
 
     static boolean fieldHasAnnotations(FieldDeclaration fieldDeclaration, Field field) {
-        return field.annotations().stream().allMatch(a -> containsAnnotation(fieldDeclaration, a));
+        return field.annotations().isEmpty() || field.annotations().stream().allMatch(a -> containsAnnotation(fieldDeclaration, a));
     }
 
     static boolean fieldHasType(FieldDeclaration fieldDeclaration, Field field) {

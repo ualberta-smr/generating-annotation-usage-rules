@@ -5,10 +5,6 @@ public record Pair<K, V>(K key, V value) {
         return this.value != null;
     }
 
-    public boolean isEmpty() {
-        return this.value == null && this.key == null;
-    }
-
     public static <K, V> Pair<K, V> empty() {
         return new Pair<>(null, null);
     }
