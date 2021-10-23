@@ -2,12 +2,15 @@
 
 Developed and maintained by [Mansur Gulami](https://github.com/MensurOwary).
 
-The repository consists of 3 projects:
+The repository consists of 2 projects:
 
-1. [rules-to-grammar](./rules-to-grammar): it converts the candidate rules to RulePad grammar
-2. [grammar-to-xpath](./grammar-to-xpath): it converts the grammar generated in the step 1 to srcML XPath queries
-3. [violation-detector](./violation-detector): it utilizes the XPath rules to detect violations
-4. [ui](./ui): it allows users to label rules
+1. Rule authoring UI
+    1. [ui](./ui): it allows users to edit, confirm, discard rules
+    2. [ui-backend](./ui-backend): handles the backend needs (e.g. retrieving the next rule to label) of the UI
+2. Violation Detection
+    1. [violation detection library](./violation-detection): main violation detection component that uses JavaParser to find violations of the rules
+    2. [maven plugin](./violation-detector-maven-plugin): the Maven plugin that uses the violation detection library
+
 
 # Credit
 
