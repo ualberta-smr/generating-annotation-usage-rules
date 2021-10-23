@@ -6,19 +6,15 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.FieldDeclaration;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 import static ca.ualberta.smr.utils.AnnotationUtils.containsAnnotation;
 
 public class FieldAntecedentFilter {
 
     public static Collection<FieldDeclaration> doFilter(CompilationUnit cu, Condition<Field> field) {
-        final var fields = cu.findAll(FieldDeclaration.class);
-
-        return fields.stream()
-                .filter(m -> fieldHasAnnotations(m, field))
-                .filter(m -> fieldHasType(m, field))
-                .collect(Collectors.toList());
+        return cu.findAll(FieldDeclaration.class, fd ->
+                fieldHasAnnotations(fd, field) &&
+                        fieldHasType(fd, field));
     }
 
     static boolean fieldHasAnnotations(FieldDeclaration fieldDeclaration, Condition<Field> fieldCondition) {
@@ -27,10 +23,9 @@ public class FieldAntecedentFilter {
     }
 
     static boolean fieldHasType(FieldDeclaration fieldDeclaration, Condition<Field> fieldCondition) {
-        return fieldCondition.test(field -> {
-            if (field.type() == null) return true;
-            return field.type().test(t -> t.equalsTypeString(fieldDeclaration.getElementType().asString()));
-        });
+        return fieldCondition.test(field ->
+                field.type() == null || field.type().test(t -> t.equalsTypeString(fieldDeclaration.getElementType().asString()))
+        );
     }
 
 }

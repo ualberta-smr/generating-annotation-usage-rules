@@ -6,6 +6,7 @@ import ca.ualberta.smr.model.javaelements.Condition;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import lombok.var;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,7 +49,7 @@ public class AnnotationUtils {
                 .filter(a -> annotationCondition.test(annotation -> annotation.type().test(type -> type.equalsTypeString(a.getName().toString()))))
                 .findAny();
 
-        if (annotationFound.isEmpty()) return Pair.empty();
+        if (!annotationFound.isPresent()) return Pair.empty();
 
         final var nodeAnnotation = annotationFound.get();
 
@@ -56,8 +57,8 @@ public class AnnotationUtils {
             return new Pair<>(nodeAnnotation, annotationCondition.flatMap(Annotation::parameters));
         } else if (nodeAnnotation instanceof SingleMemberAnnotationExpr) {
             return Pair.empty();
-        } else if (nodeAnnotation instanceof NormalAnnotationExpr nae) {
-            return getMissingParameters(annotationCondition, nae);
+        } else if (nodeAnnotation instanceof NormalAnnotationExpr) {
+            return getMissingParameters(annotationCondition, (NormalAnnotationExpr) nodeAnnotation);
         }
         return Pair.empty();
     }
@@ -67,8 +68,9 @@ public class AnnotationUtils {
         for (var parameter : expected.flatMap(Annotation::parameters)) {
             boolean found = false;
             for (MemberValuePair pair : actual.getPairs()) {
-                final String toString = pair.toString();
-                if (parameter.test(p -> toString.contains(p.name()) || toString.contains(p.type().name()))) {
+                var toString = pair.toString();
+                var annotationMatches = parameter.test(p -> toString.contains(p.name()) || toString.contains(p.type().name()));
+                if (annotationMatches) {
                     found = true;
                     break;
                 }

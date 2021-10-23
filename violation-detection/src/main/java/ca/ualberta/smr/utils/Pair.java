@@ -1,6 +1,16 @@
 package ca.ualberta.smr.utils;
 
-public record Pair<K, V>(K key, V value) {
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+
+@RequiredArgsConstructor
+@Accessors(fluent = true)
+@Getter
+public class Pair<K, V> {
+    private final K key;
+    private final V value;
+
     public boolean hasValue() {
         return this.value != null;
     }

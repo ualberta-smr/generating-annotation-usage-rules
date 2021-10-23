@@ -10,9 +10,17 @@ import java.util.Collection;
 @Builder
 @Getter
 @Accessors(fluent = true)
-public final class Field implements AnalysisItem {
+public final class Field implements AnalysisItem, ProgramElement {
     @Builder.Default
-    private final Condition<Type> type = Condition.empty();
+    private final Condition<Type> type = Condition.empty(Type.class);
     @Builder.Default
     private final Collection<Condition<Annotation>> annotations = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Field{" +
+                "type=" + type +
+                ", annotations=" + annotations +
+                '}';
+    }
 }

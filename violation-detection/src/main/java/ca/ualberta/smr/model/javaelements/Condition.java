@@ -1,24 +1,42 @@
 package ca.ualberta.smr.model.javaelements;
 
+import ca.ualberta.smr.model.ViolationInfo;
 import lombok.RequiredArgsConstructor;
+import lombok.var;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static ca.ualberta.smr.utils.Utils.listOf;
+import static java.util.Collections.emptyList;
+
 @RequiredArgsConstructor
-public class Condition<T> {
+public final class Condition<T extends ProgramElement> {
 
     private final Collection<T> elements;
     private final ConditionOperation operation;
+    private final Class<T> type;
+
+    public Class<T> getType() {
+        return this.type;
+    }
 
     public boolean test(Predicate<T> condition) {
-        return switch (operation) {
-            case OR -> elements.stream().anyMatch(condition);
-            case AND -> elements.stream().allMatch(condition);
-            case EMPTY -> true;
+        switch (operation) {
+            case OR:
+                return elements.stream().anyMatch(condition);
+            case AND:
+                return elements.stream().allMatch(condition);
+            case EMPTY:
+                return true;
         };
+        throw new RuntimeException("Illegal ConditionOperation : " + operation);
+    }
+
+    public boolean isNotEmpty() {
+        return operation != ConditionOperation.EMPTY;
     }
 
     public <R> Collection<R> map(Function<T, R> fieldExtractor) {
@@ -34,22 +52,56 @@ public class Condition<T> {
                 .collect(Collectors.toList());
     }
 
-    public static <T> Condition<T> single(T element) {
-        return new Condition<T>(Collections.singletonList(element), ConditionOperation.AND);
+    public Collection<ViolationInfo> evaluate(Function<T, ? extends Collection<ViolationInfo>> fieldExtractor) {
+        switch (operation) {
+            case OR:
+                return handleOr(fieldExtractor);
+            case AND:
+                return flatMap(fieldExtractor);
+            case EMPTY:
+                return emptyList();
+        };
+        throw new RuntimeException("Illegal ConditionOperation : " + operation);
     }
 
-    public static <T> Condition<T> empty() {
-        return new Condition<T>(List.of(), ConditionOperation.EMPTY);
+    private Collection<ViolationInfo> handleOr(Function<T, ? extends Collection<ViolationInfo>> fieldExtractor) {
+        final Collection<Collection<ViolationInfo>> violations = this.elements
+                .stream()
+                .map(fieldExtractor)
+                .collect(Collectors.toList());
+
+        final boolean atLeastOneConditionSatisfies = violations.stream().anyMatch(Collection::isEmpty);
+        final boolean doesMissingElementConditionSatisfy = violations.stream().flatMap(Collection::stream).anyMatch(ViolationInfo::isMissingElement);
+        if (atLeastOneConditionSatisfies && !doesMissingElementConditionSatisfy) {
+            // No violation is present (one of the conditions hold)
+            return emptyList();
+        }
+
+        var maybeViolations = violations.stream()
+                .filter(vc -> !vc.isEmpty())
+                .filter(vc -> vc.stream().noneMatch(ViolationInfo::isMissingElement))
+                .findAny();
+
+        return maybeViolations.orElse(emptyList());
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends ProgramElement> Condition<T> single(T element) {
+        return new Condition<T>(Collections.singletonList(element), ConditionOperation.AND, (Class<T>) element.getClass());
+    }
+
+    public static <T extends ProgramElement> Condition<T> empty(Class<T> clazz) {
+        return new Condition<T>(emptyList(), ConditionOperation.EMPTY, clazz);
     }
 
     @SafeVarargs
-    public static <T> Condition<T> any(T... elements) {
-        return new Condition<T>(Arrays.asList(elements), ConditionOperation.OR);
+    public static <T extends ProgramElement> Condition<T> any(Class<T> clazz, T... elements) {
+        return new Condition<T>(listOf(elements), ConditionOperation.OR, clazz);
     }
 
     @SafeVarargs
-    public static <T> Condition<T> all(T... elements) {
-        return new Condition<T>(Arrays.asList(elements), ConditionOperation.AND);
+    public static <T extends ProgramElement> Condition<T> all(Class<T> clazz, T... elements) {
+        return new Condition<T>(listOf(elements), ConditionOperation.AND, clazz);
     }
 
     @Override
@@ -60,7 +112,7 @@ public class Condition<T> {
             return elements
                     .stream()
                     .map(Objects::toString)
-                    .collect(Collectors.joining(", ", "[", "]"));
+                    .collect(Collectors.joining(", "));
         }
     }
 

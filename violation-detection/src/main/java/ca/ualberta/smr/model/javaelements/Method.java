@@ -12,9 +12,9 @@ import java.util.Collection;
 @Getter
 @Accessors(fluent = true)
 @ToString
-public final class Method implements AnalysisItem{
+public final class Method implements AnalysisItem, ProgramElement {
     @Builder.Default
-    private final Condition<Type> returnType = Condition.empty();
+    private final Condition<Type> returnType = Condition.empty(Type.class);
     @Builder.Default
     private final Collection<Condition<Annotation>> annotations = new ArrayList<>();
     @Builder.Default

@@ -8,19 +8,25 @@ import ca.ualberta.smr.model.*;
 import ca.ualberta.smr.model.javaelements.*;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import lombok.val;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+import static java.util.Collections.emptyList;
+
 final public class ClassAnalyzer implements AnalysisRunner {
 
     @Override
     public Collection<ViolationInfo> analyze(CompilationUnit cu, StaticAnalysisRule rule) {
-        var classDeclarations = ClassAntecedentFilter.doFilter(cu, (JavaClass) rule.antecedent());
-        return classConsequentDelegator(rule.consequent())
-                .apply(classDeclarations, rule.consequent());
+        val classDeclarations = ClassAntecedentFilter.doFilter(cu, (JavaClass) rule.antecedent());
+        if (classDeclarations.isEmpty()) return emptyList();
+
+        val consequentType = rule.consequent().getType();
+        return findCorrectConsequentFilter(consequentType)
+                .filter(classDeclarations, rule.consequent());
     }
 
     @Override
@@ -28,24 +34,29 @@ final public class ClassAnalyzer implements AnalysisRunner {
         return item instanceof JavaClass;
     }
 
-    private ConsequentFilterFunction classConsequentDelegator(AnalysisItem consequent) {
-        return CLASS_CONSEQUENT_FILTER_MAP.get(consequent.getClass());
+    private ConsequentFilterFunction findCorrectConsequentFilter(Class<? extends AnalysisItem> consequentType) {
+        return CLASS_CONSEQUENT_FILTER_MAP.get(consequentType);
     }
 
     private static final Map<Class<? extends AnalysisItem>, ConsequentFilterFunction> CLASS_CONSEQUENT_FILTER_MAP = initializeClassConsequentFilterMap();
 
+    @SuppressWarnings("unchecked")
     private static Map<Class<? extends AnalysisItem>, ConsequentFilterFunction> initializeClassConsequentFilterMap() {
         Map<Class<? extends AnalysisItem>, ConsequentFilterFunction> map = new HashMap<>();
 
-        map.put(JavaClass.class, (items, consequent) -> ClassConsequentFilter.doFilter(items, Condition.single((JavaClass) consequent)));
-        map.put(Method.class, (items, consequent) -> MethodConsequentFilter.doFilter(items, Condition.single((Method) consequent)));
-        map.put(Field.class, (items, consequent) -> FieldConsequentFilter.doFilter(items, Condition.single((Field) consequent)));
+        map.put(JavaClass.class, (items, consequent) -> ClassConsequentFilter.filterFromClassDeclarations(items, (Condition<JavaClass>) consequent));
+        map.put(Method.class, (items, consequent) -> MethodConsequentFilter.filterFromClassDeclarations(items, (Condition<Method>) consequent));
+        map.put(Field.class, (items, consequent) -> FieldConsequentFilter.filterFromClassDeclarations(items, (Condition<Field>) consequent));
 
         return map;
     }
 
     @FunctionalInterface
-    interface ConsequentFilterFunction extends BiFunction<Collection<ClassOrInterfaceDeclaration>, AnalysisItem, Collection<ViolationInfo>> {
+    interface ConsequentFilterFunction extends BiFunction<Collection<ClassOrInterfaceDeclaration>, Condition<? extends AnalysisItem>, Collection<ViolationInfo>> {
         // acts like a type alias
+
+        default Collection<ViolationInfo> filter(Collection<ClassOrInterfaceDeclaration> t, Condition<? extends AnalysisItem> u) {
+            return apply(t, u);
+        }
     }
 }

@@ -8,6 +8,7 @@ import ca.ualberta.smr.model.javaelements.Method;
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.ViolationInfo;
 import com.github.javaparser.ast.CompilationUnit;
+import lombok.val;
 
 import java.util.Collection;
 
@@ -15,8 +16,10 @@ final public class MethodAnalyzer implements AnalysisRunner {
 
     @Override
     public Collection<ViolationInfo> analyze(CompilationUnit cu, StaticAnalysisRule rule) {
-        var methodDeclarations = MethodAntecedentFilter.doFilter(cu, Condition.single((Method) rule.antecedent()));
-        return MethodConsequentFilter.doFilter(methodDeclarations, Condition.single((Method) rule.consequent()));
+        val methodDeclarations = MethodAntecedentFilter.doFilter(cu, Condition.single((Method) rule.antecedent()));
+        // TODO: actually it should not be flatmap, we need to consider the operation too
+        return rule.consequent()
+                .evaluate(m -> MethodConsequentFilter.filterFromMethodDeclarations(methodDeclarations, Condition.single((Method) m)));
     }
 
     @Override

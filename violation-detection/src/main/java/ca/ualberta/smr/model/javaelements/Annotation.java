@@ -10,9 +10,9 @@ import java.util.Collection;
 @Builder
 @Getter
 @Accessors(fluent = true)
-public class Annotation {
+public class Annotation implements ProgramElement {
     @Builder.Default
-    private final Condition<Type> type = Condition.empty();
+    private final Condition<Type> type = Condition.empty(Type.class);
     @Builder.Default
     private final Collection<Condition<AnnotationParameter>> parameters = new ArrayList<>();
 

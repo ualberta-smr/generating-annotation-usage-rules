@@ -2,7 +2,9 @@ package ca.ualberta.smr.antecedent;
 
 import ca.ualberta.smr.model.javaelements.*;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
+import lombok.val;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -17,17 +19,23 @@ import static ca.ualberta.smr.utils.AnnotationUtils.containsAnnotation;
  */
 public class ClassAntecedentFilter {
 
+    // TODO: Extends is missing
     public static Collection<ClassOrInterfaceDeclaration> doFilter(CompilationUnit cu, JavaClass klass) {
-        var classes = cu.findAll(ClassOrInterfaceDeclaration.class)
-                .stream()
-                .filter(e -> !e.isAbstract() && !e.isInterface());
+        val classes = cu.findAll(ClassOrInterfaceDeclaration.class, e -> !e.isAbstract() && !e.isInterface());
 
-        var classesWithAnnotations = classes.filter(clazz -> classHasAnnotations(clazz, klass.annotations()));
-        var classesWithMethod = klass.method() != null ?
-                classesWithAnnotations.filter(clazz -> classHasMethod(clazz, klass.method())) : classesWithAnnotations;
-        var classesWithField = klass.field() != null ?
-                classesWithMethod.filter(clazz -> classHasField(clazz, klass.field())) : classesWithMethod;
-        return classesWithField.filter(clazz -> classImplements(clazz, klass.implementedInterfaces())).collect(Collectors.toList());
+        val classesWithAnnotations = classes.stream().filter(clazz -> classHasAnnotations(clazz, klass.annotations()));
+
+        val classesWithMethod = klass.method().isNotEmpty() ?
+                classesWithAnnotations.filter(clazz -> classHasMethod(clazz, klass.method()))
+                : classesWithAnnotations;
+
+        val classesWithField = klass.field().isNotEmpty() ?
+                classesWithMethod.filter(clazz -> classHasField(clazz, klass.field()))
+                : classesWithMethod;
+
+        return classesWithField
+                .filter(clazz -> classImplements(clazz, klass.implementedInterfaces()))
+                .collect(Collectors.toList());
     }
 
     private static boolean classImplements(ClassOrInterfaceDeclaration clazz, Collection<Condition<Type>> implementedInterfaces) {
@@ -40,26 +48,55 @@ public class ClassAntecedentFilter {
                 .anyMatch(e -> e.getName().asString().equals(anInterface.name())));
     }
 
-    private static boolean classHasAnnotations(ClassOrInterfaceDeclaration klass, Collection<Condition<Annotation>> annotations) {
-        return annotations.stream().allMatch(a -> containsAnnotation(klass, a));
+    /**
+     * Checks if the class has the annotations given with the condition
+     *
+     * @param clazz                 class declaration to query
+     * @param annotationsConditions can be something like: List[any(annotationsA, annotationsB), all(any(annotationsC, annotationsD))]
+     * @return true if annotationsCondition exists, false otherwise
+     */
+    private static boolean classHasAnnotations(ClassOrInterfaceDeclaration clazz, Collection<Condition<Annotation>> annotationsConditions) {
+        return annotationsConditions.stream().allMatch(a -> containsAnnotation(clazz, a));
     }
 
-    private static boolean classHasMethod(ClassOrInterfaceDeclaration klass, Condition<Method> method) {
-        final var methodDeclarations = klass.findAll(MethodDeclaration.class);
-
-        final var methodStream = methodDeclarations.stream();
-
-        return methodStream
-                .filter(m -> methodHasAnnotations(m, method))
-                .filter(m -> methodHasReturnType(m, method))
-                .anyMatch(m -> methodHasParameters(m, method));
+    /**
+     * Checks if the class has the method given with the condition
+     *
+     * @param clazz           class declaration to query
+     * @param methodCondition can be something like: any(methodA, methodB)
+     * @return true if methodCondition exists, false otherwise
+     */
+    private static boolean classHasMethod(ClassOrInterfaceDeclaration clazz, Condition<Method> methodCondition) {
+        return clazz.findAll(MethodDeclaration.class, m -> isFirstLevelChild(clazz, m))
+                .stream()
+                .filter(m -> methodHasAnnotations(m, methodCondition))
+                .filter(m -> methodHasReturnType(m, methodCondition))
+                .anyMatch(m -> methodHasParameters(m, methodCondition));
     }
 
-    private static boolean classHasField(ClassOrInterfaceDeclaration klass, Condition<Field> fieldCondition) {
-        return klass.findAll(FieldDeclaration.class)
+    /**
+     * Checks if the class has the field given with the condition
+     *
+     * @param clazz          class declaration to query
+     * @param fieldCondition can be something like: any(fieldA, fieldB)
+     * @return true if fieldCondition exists, false otherwise
+     */
+    private static boolean classHasField(ClassOrInterfaceDeclaration clazz, Condition<Field> fieldCondition) {
+        return clazz.findAll(FieldDeclaration.class, f -> isFirstLevelChild(clazz, f))
                 .stream()
                 .filter(f -> fieldHasAnnotations(f, fieldCondition))
                 .anyMatch(f -> fieldHasType(f, fieldCondition));
+    }
+
+    /**
+     * Checks if the node is a first-level element in the class. First-level being direct child, and not something declared in an inner class
+     * @param clazz is the class we are querying in
+     * @param node is the node that we are checking
+     * @return true if node is a first-level child, false otherwise
+     */
+    // TODO: check against inheritance
+    private static boolean isFirstLevelChild(ClassOrInterfaceDeclaration clazz, Node node) {
+        return node.getParentNode().filter(p -> p.equals(clazz)).isPresent();
     }
 
 }

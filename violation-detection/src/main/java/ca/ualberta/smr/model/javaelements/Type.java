@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 @RequiredArgsConstructor
 @Getter
 @Accessors(fluent = true)
-public class Type {
+public class Type implements ProgramElement{
     private final String name;
 
     public static Condition<Type> type(String name) {
