@@ -203,7 +203,7 @@ def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Fiel
                 clazz.extendedClass = t
                 # TODO: probably need to do the implements in a different way
                 # clazz.implementedInterfaces.append(t)
-        elif str_target == "Field":
+        elif str_target in ["Field", "FieldTypeDecl"]:
             has_field = True
             if "annotatedWith" in str_operation:
                 field.annotations.append(extractAnnotation(str_related))
