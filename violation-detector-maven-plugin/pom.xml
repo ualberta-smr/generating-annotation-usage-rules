@@ -24,13 +24,13 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>3.8.3</version>
+            <version>3.6.3</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
-            <version>3.8.3</version>
+            <version>3.6.3</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -39,11 +39,15 @@
             <version>3.5</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>ca.ualberta.smr</groupId>
             <artifactId>violation-detection</artifactId>
             <version>0.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.20</version>
         </dependency>
     </dependencies>
 
@@ -60,16 +64,6 @@
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.8.2</version>
                 </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.0</version>
-                    <configuration>
-                        <release>17</release>
-                    </configuration>
-                </plugin>
-
             </plugins>
         </pluginManagement>
     </build>

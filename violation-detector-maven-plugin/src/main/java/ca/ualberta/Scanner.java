@@ -1,54 +1,45 @@
 package ca.ualberta;
 
-import ca.ualberta.smr.DefaultViolationDetector;
-import ca.ualberta.smr.model.StaticAnalysisRule;
-import ca.ualberta.smr.model.ViolationInfo;
-import ca.ualberta.smr.utils.ViolationReporting;
+import ca.ualberta.report.ViolationReporter;
+import ca.ualberta.smr.model.*;
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.*;
 import org.apache.maven.project.MavenProject;
 
+import javax.inject.Inject;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.Map;
+import java.nio.file.*;
+import java.util.*;
 
-@Mojo(name = "list")
-public class Demo extends AbstractMojo {
+@Mojo(name = "scan")
+public class Scanner extends AbstractMojo {
 
     @Parameter(property = "project", readonly = true)
     private MavenProject project;
 
-    private final DefaultViolationDetector vd = initVD();
+    @Inject
+    private ViolationReporter reporter;
 
-    private DefaultViolationDetector initVD() {
-        try {
-            return new DefaultViolationDetector();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+    @Inject
+    private DefaultViolationDetector violationDetector;
 
     @Override
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() {
         final String absolutePath = project.getBasedir().getAbsolutePath();
+        // TODO: maybe make this a bit more configurable?
+        // INFO: currently only uses to src/main/java for source files
         final Path path = Paths.get(absolutePath, "src", "main", "java");
         try {
             Files.walk(path)
                     .filter(Files::isRegularFile)
                     .map(f -> f.toAbsolutePath().toString())
-                    .map(this.vd::analyze)
+                    .map(this.violationDetector::analyze)
                     .forEach(e -> {
                         for (Map.Entry<StaticAnalysisRule, Collection<ViolationInfo>> entry : e.entrySet()) {
                             if (!entry.getValue().isEmpty()) {
                                 System.out.println("For rule: " + entry.getKey().toString());
                                 for (ViolationInfo violationInfo : entry.getValue()) {
-                                    ViolationReporting.report(violationInfo);
+                                    reporter.report(violationInfo);
                                 }
                             }
                         }

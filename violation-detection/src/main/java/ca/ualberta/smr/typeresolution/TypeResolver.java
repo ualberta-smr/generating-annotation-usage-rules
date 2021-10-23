@@ -16,7 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,6 +35,10 @@ public class TypeResolver {
 
     public TypeResolver(final String libFolder) throws IOException {
         this.javaParser = configureParser(libFolder);
+    }
+
+    public TypeResolver(Collection<InputStream> fileStreams) {
+        this.javaParser = configureParser(fileStreams);
     }
 
     public String resolveTypesInFile(String filePath) {
@@ -134,6 +140,20 @@ public class TypeResolver {
                         ioException.printStackTrace();
                     }
                 });
+
+        return new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(cts)));
+    }
+
+    private JavaParser configureParser(Collection<InputStream> fileStreams) {
+        CombinedTypeSolver cts = new CombinedTypeSolver(new ReflectionTypeSolver());
+
+        fileStreams.forEach(fs -> {
+            try {
+                cts.add(new JarTypeSolver(fs));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
         return new JavaParser(new ParserConfiguration().setSymbolResolver(new JavaSymbolSolver(cts)));
     }

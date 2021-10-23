@@ -1,62 +1,46 @@
-package ca.ualberta.smr;
+package ca.ualberta;
 
-import ca.ualberta.smr.analyzer.*;
 import ca.ualberta.smr.model.StaticAnalysisRule;
-import ca.ualberta.smr.model.ViolationInfo;
 import ca.ualberta.smr.model.javaelements.*;
-import ca.ualberta.smr.typeresolution.TypeResolver;
-import lombok.var;
+import lombok.val;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
 
 import static ca.ualberta.smr.model.javaelements.Annotation.annotation;
 import static ca.ualberta.smr.model.javaelements.Condition.single;
 import static ca.ualberta.smr.utils.Utils.listOf;
 
-class DefaultViolationDetector {
+@Named
+@Singleton
+public class DefaultRuleProvider implements RuleProvider {
 
-    private final ViolationDetector violationDetector;
-
-    public DefaultViolationDetector() throws IOException {
-        final TypeResolver typeResolver = new TypeResolver(System.getenv("JAR_FILES"));
-        final List<StaticAnalysisRule> rules = listOf(getJsonWebTokenRule(), getJsonWebTokenRule2(), getJsonWebTokenRule3(), getJsonWebToken4());
-        final List<AnalysisRunner> analyzers = listOf(new ClassAnalyzer(), new MethodAnalyzer(), new FieldAnalyzer());
-        this.violationDetector = new ViolationDetector(typeResolver, rules, analyzers);
+    @Override
+    public Collection<StaticAnalysisRule> getRules() {
+        return listOf(
+                getJsonWebTokenRule1(),
+                getJsonWebTokenRule2(),
+                getJsonWebTokenRule3(),
+                getJsonWebTokenRule4()
+        );
     }
 
-    public Map<StaticAnalysisRule, Collection<ViolationInfo>> analyze(String filename) {
-        return violationDetector.detectViolations(filename);
-    }
-
-    public void analyze(Path folder) throws IOException {
-        try (final Stream<Path> files = Files.walk(folder)) {
-            files.filter(Files::isRegularFile)
-                    .map(file -> violationDetector.detectViolations(file.toAbsolutePath().toString()))
-                    .forEach(System.out::println);
-        }
-    }
-
-    private static StaticAnalysisRule getJsonWebTokenRule() {
-        var antecedent = Field.builder()
+    private StaticAnalysisRule getJsonWebTokenRule1() {
+        val antecedent = Field.builder()
                 .type(Type.type("org.eclipse.microprofile.jwt.JsonWebToken"))
                 .build();
 
         final Annotation build = Annotation.builder().type(Type.type("javax.inject.Inject")).build();
-        var consequent = Field.builder()
+        val consequent = Field.builder()
                 .annotations(listOf(single(build)))
                 .build();
 
         return new StaticAnalysisRule("JsonWebTokenRule1", antecedent, single(consequent));
     }
 
-    private static StaticAnalysisRule getJsonWebTokenRule2() {
-        var antecedent = JavaClass.builder()
+    private StaticAnalysisRule getJsonWebTokenRule2() {
+        val antecedent = JavaClass.builder()
                 .annotations(
                         listOf(single(annotation("org.eclipse.microprofile.rest.client.inject.RegisterRestClient")))
                 ).build();
@@ -77,8 +61,8 @@ class DefaultViolationDetector {
         return new StaticAnalysisRule("JsonWebTokenRule2", antecedent, consequent);
     }
 
-    private static StaticAnalysisRule getJsonWebTokenRule3() {
-        var antecedent = JavaClass.builder()
+    private StaticAnalysisRule getJsonWebTokenRule3() {
+        val antecedent = JavaClass.builder()
                 .annotations(listOf(single(annotation("org.eclipse.microprofile.rest.client.inject.RegisterRestClient")))).build();
 
         final Condition<Field> consequent = Condition.any(Field.class, Field.builder().type(single(new Type("java.lang.String"))).build());
@@ -86,8 +70,8 @@ class DefaultViolationDetector {
         return new StaticAnalysisRule("JsonWebTokenRule3", antecedent, consequent);
     }
 
-    private static StaticAnalysisRule getJsonWebToken4() {
-        var antecedent = JavaClass.builder()
+    private StaticAnalysisRule getJsonWebTokenRule4() {
+        val antecedent = JavaClass.builder()
                 .field(single(Field.builder().type(single(new Type("java.lang.String"))).build()))
                 .build();
 
@@ -99,5 +83,4 @@ class DefaultViolationDetector {
                 JavaClass.builder().field(field).build()
         ));
     }
-
 }
