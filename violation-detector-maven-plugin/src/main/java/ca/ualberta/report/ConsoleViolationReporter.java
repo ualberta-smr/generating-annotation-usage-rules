@@ -18,7 +18,7 @@ import static java.util.Optional.empty;
 
 @Named
 @Singleton
-public class DefaultViolationReporter implements ViolationReporter {
+public class ConsoleViolationReporter implements ViolationReporter {
 
     @Override
     public void report(ViolationInfo violation) {

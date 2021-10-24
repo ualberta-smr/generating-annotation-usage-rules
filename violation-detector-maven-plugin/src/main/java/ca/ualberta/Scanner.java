@@ -5,17 +5,27 @@ import ca.ualberta.smr.model.*;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.*;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.FileUtils;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
 import java.util.*;
 
-@Mojo(name = "scan")
+@Mojo(name = "scan", defaultPhase = LifecyclePhase.VERIFY, threadSafe = true)
 public class Scanner extends AbstractMojo {
 
     @Parameter(property = "project", readonly = true)
     private MavenProject project;
+
+    @Parameter(required = true, defaultValue = "${project.basedir}/src/main/java")
+    private File targetDirectory;
+
+    @Parameter
+    private String excludes;
+
+    @Parameter( defaultValue = JAVA_FILES_PATTERN, required = true )
+    private String includes;
 
     @Inject
     private ViolationReporter reporter;
@@ -25,14 +35,10 @@ public class Scanner extends AbstractMojo {
 
     @Override
     public void execute() {
-        final String absolutePath = project.getBasedir().getAbsolutePath();
-        // TODO: maybe make this a bit more configurable?
-        // INFO: currently only uses to src/main/java for source files
-        final Path path = Paths.get(absolutePath, "src", "main", "java");
         try {
-            Files.walk(path)
-                    .filter(Files::isRegularFile)
-                    .map(f -> f.toAbsolutePath().toString())
+            FileUtils.getFiles(targetDirectory, includes, excludes)
+                    .stream()
+                    .filter(this::isJavaFile)
                     .map(this.violationDetector::analyze)
                     .forEach(e -> {
                         for (Map.Entry<StaticAnalysisRule, Collection<ViolationInfo>> entry : e.entrySet()) {
@@ -48,4 +54,10 @@ public class Scanner extends AbstractMojo {
             e.printStackTrace();
         }
     }
+
+    private boolean isJavaFile(File file) {
+        return file.isFile() && file.getName().endsWith(".java");
+    }
+
+    private static final String JAVA_FILES_PATTERN = "**\\/*.java";
 }

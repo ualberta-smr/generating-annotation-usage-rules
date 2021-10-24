@@ -6,6 +6,7 @@ import ca.ualberta.smr.model.*;
 import ca.ualberta.smr.typeresolution.TypeResolver;
 
 import javax.inject.*;
+import java.io.File;
 import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,6 +34,10 @@ public class DefaultViolationDetector {
 
     public Map<StaticAnalysisRule, Collection<ViolationInfo>> analyze(String filename) {
         return violationDetector.detectViolations(filename);
+    }
+
+    public Map<StaticAnalysisRule, Collection<ViolationInfo>> analyze(File file) {
+        return violationDetector.detectViolations(file.getAbsolutePath());
     }
 
     private static final Collection<String> JAR_FILES = Arrays.asList(
