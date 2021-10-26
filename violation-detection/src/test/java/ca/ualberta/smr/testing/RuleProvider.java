@@ -1,22 +1,18 @@
-package ca.ualberta;
+package ca.ualberta.smr.testing;
 
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.javaelements.*;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
-import java.util.Collection;
+import java.util.List;
 
 import static ca.ualberta.smr.model.javaelements.Annotation.annotation;
-import static ca.ualberta.smr.model.javaelements.Condition.*;
+import static ca.ualberta.smr.model.javaelements.Condition.any;
+import static ca.ualberta.smr.model.javaelements.Condition.single;
 import static ca.ualberta.smr.utils.Utils.listOf;
 
-@Named
-@Singleton
-public class DefaultRuleProvider implements RuleProvider {
+public class RuleProvider {
 
-    @Override
-    public Collection<StaticAnalysisRule> getRules() {
+    public static List<StaticAnalysisRule> getRules() {
         return listOf(
                 getRule_OutgoingAndScope(),
                 getRule_RestClientInjectField(),
@@ -137,4 +133,5 @@ public class DefaultRuleProvider implements RuleProvider {
         Condition<? extends AnalysisItem> consequent = single(javaClass);
         return new StaticAnalysisRule("QueryMutationGraphQLAPI", antecedent, consequent);
     }
+
 }

@@ -6,6 +6,7 @@ import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.ViolationInfo;
 import ca.ualberta.smr.model.javaelements.*;
 import ca.ualberta.smr.typeresolution.TypeResolver;
+import lombok.val;
 import lombok.var;
 
 import java.io.IOException;
@@ -23,13 +24,8 @@ class DefaultViolationDetector {
 
     public DefaultViolationDetector() throws IOException {
         final TypeResolver typeResolver = new TypeResolver(System.getenv("JAR_FILES"));
-        final List<StaticAnalysisRule> rules = listOf(
-                getJsonWebTokenRule2(),
-                getJsonWebTokenRule3(),
-                getJsonWebToken5()
-        );
         final List<AnalysisRunner> analyzers = listOf(new ClassAnalyzer(), new MethodAnalyzer(), new FieldAnalyzer());
-        this.violationDetector = new ViolationDetector(typeResolver, rules, analyzers);
+        this.violationDetector = new ViolationDetector(typeResolver, RuleProvider.getRules(), analyzers);
     }
 
     public Map<StaticAnalysisRule, Collection<ViolationInfo>> analyze(String filename) {
@@ -37,32 +33,33 @@ class DefaultViolationDetector {
     }
 
     private static StaticAnalysisRule getJsonWebTokenRule2() {
-        var antecedent = JavaClass.builder()
-                .annotations(
-                        listOf(single(annotation("org.eclipse.microprofile.rest.client.inject.RegisterRestClient")))
-                ).build();
+        val antecedent = new JavaClass();
+        antecedent.annotations().add(single(annotation("org.eclipse.microprofile.rest.client.inject.RegisterRestClient")));
 
-        final Condition<JavaClass> consequent = Condition.any(JavaClass.class,
-                JavaClass.builder().annotations(
-                        listOf(single(annotation("org.eclipse.microprofile.config.inject.ConfigProperty")))
-                ).build(),
+        val consequent1 = new JavaClass();
+        consequent1.annotations().add(single(annotation("org.eclipse.microprofile.config.inject.ConfigProperty")));
 
-                JavaClass.builder()
-                        .field(
-                                single(Field.builder().type(Type.type("java.lang.String")).annotations(
-                                        listOf(single(annotation("javax.inject.Inject")))
-                                ).build()))
-                        .build()
+        val consequent2 = new JavaClass();
+        final Field field = new Field();
+        field.type(Type.type("java.lang.String"));
+        field.annotations().add(single(annotation("javax.inject.Inject")));
+        consequent2.field(single(field));
+
+        final Condition<JavaClass> consequent = Condition.any(
+                consequent1,
+                consequent2
         );
 
         return new StaticAnalysisRule("JsonWebTokenRule2", antecedent, consequent);
     }
 
     private static StaticAnalysisRule getJsonWebTokenRule3() {
-        var antecedent = JavaClass.builder()
-                .annotations(listOf(single(annotation("org.eclipse.microprofile.rest.client.inject.RegisterRestClient")))).build();
+        val antecedent = new JavaClass();
+        antecedent.annotations().add(single(annotation("org.eclipse.microprofile.rest.client.inject.RegisterRestClient")));
 
-        final Condition<Field> consequent = Condition.any(Field.class, Field.builder().type(single(new Type("java.lang.String"))).build());
+        final Field field = new Field();
+        field.type(single(new Type("java.lang.String")));
+        final Condition<Field> consequent = Condition.single(field);
 
         return new StaticAnalysisRule("JsonWebTokenRule3", antecedent, consequent);
     }
@@ -71,11 +68,12 @@ class DefaultViolationDetector {
      * class with (field with (type \"org.eclipse.microprofile.jwt.JsonWebToken\" ) ) must have (declaration statement with (annotation \"javax.inject.Inject\" ) )
      */
     private static StaticAnalysisRule getJsonWebToken5() {
-        final Field antecedent = Field.builder()
-                .type(single(new Type("org.eclipse.microprofile.jwt.JsonWebToken"))).build();
+        final Field antecedent = new Field();
+        antecedent.type(single(new Type("org.eclipse.microprofile.jwt.JsonWebToken")));
 
-        final Condition<Field> consequent = single(Field.builder()
-                .annotations(listOf(single(annotation("javax.inject.Inject")))).build());
+        final Field field = new Field();
+        field.annotations().add(single(annotation("javax.inject.Inject")));
+        final Condition<Field> consequent = single(field);
 
         return new StaticAnalysisRule("JWT-Inject-OnField", antecedent, consequent);
     }

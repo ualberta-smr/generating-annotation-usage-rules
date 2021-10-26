@@ -1,12 +1,9 @@
 package ca.ualberta.report;
 
-import ca.ualberta.smr.model.ViolationInfo;
-import ca.ualberta.smr.model.ViolationRange;
+import ca.ualberta.smr.model.*;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.*;
 import lombok.val;
 
 import javax.inject.Named;
@@ -34,13 +31,16 @@ public class ConsoleViolationReporter implements ViolationReporter {
         val treeElement = violation.treeElement();
 
         final String name;
+        final String elementType;
         if (treeElement instanceof ClassOrInterfaceDeclaration) {
             val c = (ClassOrInterfaceDeclaration) treeElement;
             name = c.getFullyQualifiedName().orElseGet(c::getNameAsString);
+            elementType = "Class";
         } else if (treeElement instanceof MethodDeclaration) {
             val m = (MethodDeclaration) treeElement;
             val fullyQualifiedName = getParentClassName(m);
             name = String.format("%s#%s", fullyQualifiedName, m.getSignature().toString());
+            elementType = "Method";
         } else if (treeElement instanceof FieldDeclaration) {
             val f = (FieldDeclaration) treeElement;
             val fullyQualifiedName = getParentClassName(f);
@@ -49,10 +49,12 @@ public class ConsoleViolationReporter implements ViolationReporter {
                     .map(v -> v.getName().asString())
                     .map(varName -> String.format("%s#%s", fullyQualifiedName, varName))
                     .collect(Collectors.joining("; "));
+            elementType = "Field";
         } else {
             name = treeElement.getClass().toString();
+            elementType = "Element";
         }
-        return String.format("%s is missing the following element(s): %s", name, violation.missingElements().toString());
+        return String.format("%s %s is missing the following element(s): %s", elementType, name, violation.missingElements().toString());
     }
 
     private String getParentClassName(Node node) {

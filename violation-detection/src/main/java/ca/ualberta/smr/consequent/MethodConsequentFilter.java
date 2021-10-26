@@ -2,7 +2,7 @@ package ca.ualberta.smr.consequent;
 
 import ca.ualberta.smr.model.*;
 import ca.ualberta.smr.model.javaelements.*;
-import ca.ualberta.smr.model.javaelements.Parameter;
+import ca.ualberta.smr.model.javaelements.MethodParameter;
 import com.github.javaparser.ast.body.*;
 import lombok.val;
 
@@ -11,11 +11,24 @@ import java.util.stream.Stream;
 
 import static ca.ualberta.smr.utils.Utils.*;
 import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
 import static ca.ualberta.smr.utils.AnnotationUtils.*;
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.*;
 
 public class MethodConsequentFilter {
+
+    @SuppressWarnings("unchecked")
+    public static Collection<ViolationInfo> filter(Collection<MethodDeclaration> declarations, Condition<? extends AnalysisItem> condition) {
+        final Class<? extends AnalysisItem> type = condition.getType();
+        if (type.equals(JavaClass.class)){
+            val javaClassCondition = (Condition<JavaClass>) condition;
+            val classDeclarations = getClassDeclarations(declarations);
+
+            return ClassConsequentFilter.filterFromClassDeclarations(classDeclarations, javaClassCondition);
+        } else if (type.equals(Method.class)) {
+            return filterFromMethodDeclarations(declarations, (Condition<Method>) condition);
+        }
+        throw new RuntimeException("Analysis item type should be one of the following: [JavaClass, Method]");
+    }
 
     /**
      * Returns violations on methods based on the provided condition
@@ -48,8 +61,8 @@ public class MethodConsequentFilter {
                 violations.add(new ViolationInfo(classDeclaration, collectionToString(listOf(methodCondition)), true));
             } else {
                 val results = doFilterFromMethodDeclarations(methods, methodCondition);
-                final boolean foundMatchingMethod = results.stream().anyMatch(Collection::isEmpty);
-                if (!foundMatchingMethod) {
+                final boolean noMatchingMethod = results.stream().noneMatch(Collection::isEmpty);
+                if (noMatchingMethod) {
                     // if all the elements are violations, then we are missing that method in the class
                     violations.add(new ViolationInfo(classDeclaration, collectionToString(listOf(methodCondition))));
                 }
@@ -85,7 +98,7 @@ public class MethodConsequentFilter {
         }
 
         // TODO: check parameter annotations as well
-        List<Condition<Parameter>> requiredParameters = new ArrayList<>();
+        List<Condition<MethodParameter>> requiredParameters = new ArrayList<>();
         for (val expectedParam : method.parameters()) {
             for (val actualParam : methodDeclaration.getParameters()) {
                 val hasParam = expectedParam.test(p -> p.type().equalsTypeString(actualParam.getTypeAsString()));

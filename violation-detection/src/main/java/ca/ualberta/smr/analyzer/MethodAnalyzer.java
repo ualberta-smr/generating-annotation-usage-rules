@@ -19,7 +19,7 @@ final public class MethodAnalyzer implements AnalysisRunner {
         val methodDeclarations = MethodAntecedentFilter.doFilter(cu, Condition.single((Method) rule.antecedent()));
         // TODO: actually it should not be flatmap, we need to consider the operation too
         return rule.consequent()
-                .evaluate(m -> MethodConsequentFilter.filterFromMethodDeclarations(methodDeclarations, Condition.single((Method) m)));
+                .evaluate(m -> MethodConsequentFilter.filter(methodDeclarations, Condition.single(m)));
     }
 
     @Override

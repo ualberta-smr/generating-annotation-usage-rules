@@ -2,6 +2,8 @@ package ca.ualberta.smr.consequent;
 
 import ca.ualberta.smr.model.*;
 import ca.ualberta.smr.model.javaelements.*;
+import com.github.javaparser.HasParentNode;
+import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import lombok.val;
 
@@ -14,6 +16,20 @@ import static ca.ualberta.smr.utils.AnnotationUtils.*;
 import static java.util.stream.Collectors.*;
 
 public class FieldConsequentFilter {
+
+    @SuppressWarnings("unchecked")
+    public static Collection<ViolationInfo> filter(Collection<FieldDeclaration> declarations, Condition<? extends AnalysisItem> condition) {
+        final Class<? extends AnalysisItem> type = condition.getType();
+        if (type.equals(JavaClass.class)) {
+            val javaClassCondition = (Condition<JavaClass>) condition;
+            val classDeclarations = getClassDeclarations(declarations);
+
+            return ClassConsequentFilter.filterFromClassDeclarations(classDeclarations, javaClassCondition);
+        } else if (type.equals(Field.class)) {
+            return filterFromFieldDeclarations(declarations, (Condition<Field>) condition);
+        }
+        throw new RuntimeException("Analysis item type should be one of the following: [JavaClass, Field]");
+    }
 
     public static Collection<ViolationInfo> filterFromFieldDeclarations(Collection<FieldDeclaration> declarations, Condition<Field> fieldCondition) {
         return findViolations(declarations, fieldCondition).stream()

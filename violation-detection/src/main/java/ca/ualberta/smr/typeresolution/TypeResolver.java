@@ -100,6 +100,8 @@ public class TypeResolver {
                     for (Parameter param : e.getParameters()) {
                         final String simple = param.getType().asString();
                         setIfExists(imports, simple, param::setType);
+
+                        convertAnnotations(imports, param.getAnnotations());
                     }
 
                     final String simpleName = e.getType().asString();

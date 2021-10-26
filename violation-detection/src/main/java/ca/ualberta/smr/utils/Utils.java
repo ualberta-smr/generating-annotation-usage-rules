@@ -1,15 +1,14 @@
 package ca.ualberta.smr.utils;
 
-import ca.ualberta.smr.model.javaelements.Condition;
-import ca.ualberta.smr.model.javaelements.ProgramElement;
+import ca.ualberta.smr.model.javaelements.*;
+import com.github.javaparser.HasParentNode;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 public class Utils {
 
@@ -26,6 +25,16 @@ public class Utils {
     @SafeVarargs
     public static <T> List<T> listOf(T...args) {
         return Arrays.asList(args);
+    }
+
+    public static Collection<ClassOrInterfaceDeclaration> getClassDeclarations(Collection<? extends HasParentNode<? extends Node>> declarations) {
+        return declarations
+                .stream()
+                .map(HasParentNode::getParentNode)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(node -> ((ClassOrInterfaceDeclaration) node))
+                .collect(toSet());
     }
 
 }

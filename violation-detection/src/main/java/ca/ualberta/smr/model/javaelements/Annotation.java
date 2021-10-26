@@ -1,25 +1,23 @@
 package ca.ualberta.smr.model.javaelements;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Builder
 @Getter
+@Setter
 @Accessors(fluent = true)
 public class Annotation implements ProgramElement {
-    @Builder.Default
-    private final Condition<Type> type = Condition.empty(Type.class);
-    @Builder.Default
-    private final Collection<Condition<AnnotationParameter>> parameters = new ArrayList<>();
+    private Condition<Type> type = Condition.empty(Type.class);
+    private Collection<Condition<AnnotationParameter>> parameters = new ArrayList<>();
 
     public static Annotation annotation(String typeName) {
-        return Annotation.builder()
-                .type(Type.type(typeName))
-                .build();
+        final Annotation annotation = new Annotation();
+        annotation.type(Type.type(typeName));
+        return annotation;
     }
 
     @Override

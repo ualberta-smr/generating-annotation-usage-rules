@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 @RequiredArgsConstructor
 @Getter
 @Accessors(fluent = true)
-public class Type implements ProgramElement{
+public class Type implements ProgramElement {
     private final String name;
 
     public static Condition<Type> type(String name) {
@@ -18,8 +18,14 @@ public class Type implements ProgramElement{
         return typeString.equals(name);
     }
 
+    public boolean isEmpty() {
+        return this == EMPTY_TYPE;
+    }
+
     @Override
     public String toString() {
         return name;
     }
+
+    public static final Type EMPTY_TYPE = new Type("__EMPTY__");
 }

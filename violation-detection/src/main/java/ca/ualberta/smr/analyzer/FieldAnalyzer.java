@@ -19,7 +19,7 @@ final public class FieldAnalyzer implements AnalysisRunner {
     public Collection<ViolationInfo> analyze(CompilationUnit cu, StaticAnalysisRule rule) {
         val fieldDeclarations = FieldAntecedentFilter.doFilter(cu, single((Field) rule.antecedent()));
         return rule.consequent()
-                .evaluate(r -> FieldConsequentFilter.filterFromFieldDeclarations(fieldDeclarations, single((Field) r)));
+                .evaluate(r -> FieldConsequentFilter.filter(fieldDeclarations, single((Field) r)));
     }
 
     @Override

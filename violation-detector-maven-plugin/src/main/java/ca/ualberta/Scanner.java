@@ -1,5 +1,6 @@
 package ca.ualberta;
 
+import ca.ualberta.report.ConsoleViolationReporter;
 import ca.ualberta.report.ViolationReporter;
 import ca.ualberta.smr.model.*;
 import org.apache.maven.plugin.AbstractMojo;
@@ -18,13 +19,13 @@ public class Scanner extends AbstractMojo {
     @Parameter(property = "project", readonly = true)
     private MavenProject project;
 
-    @Parameter(required = true, defaultValue = "${project.basedir}/src/main/java")
+    @Parameter(property = "targetDirectory", required = true, defaultValue = "${project.basedir}/src/main/java")
     private File targetDirectory;
 
-    @Parameter
+    @Parameter(property = "excludes")
     private String excludes;
 
-    @Parameter( defaultValue = JAVA_FILES_PATTERN, required = true )
+    @Parameter(property = "includes", defaultValue = JAVA_FILES_PATTERN, required = true )
     private String includes;
 
     @Inject
@@ -43,7 +44,7 @@ public class Scanner extends AbstractMojo {
                     .forEach(e -> {
                         for (Map.Entry<StaticAnalysisRule, Collection<ViolationInfo>> entry : e.entrySet()) {
                             if (!entry.getValue().isEmpty()) {
-                                System.out.println("For rule: " + entry.getKey().toString());
+                                getLog().info("For rule: " + entry.getKey().toString());
                                 for (ViolationInfo violationInfo : entry.getValue()) {
                                     reporter.report(violationInfo);
                                 }
@@ -51,7 +52,7 @@ public class Scanner extends AbstractMojo {
                         }
                     });
         } catch (IOException e) {
-            e.printStackTrace();
+            getLog().error("Exception occurred while processing the directory", e);
         }
     }
 

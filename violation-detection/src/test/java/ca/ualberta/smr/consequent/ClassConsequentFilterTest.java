@@ -63,17 +63,17 @@ class ClassConsequentFilterTest {
 
     private Condition<JavaClass> getAntecedent1() {
         // class must have (annotation ConfigProperty) or (field with annotation Inject)
-        return Condition.any(JavaClass.class,
-                JavaClass.builder()
-                        .field(
-                                single(Field.builder().type(Type.type("String")).annotations(
-                                        listOf(single(annotation("Inject")))
-                                ).build()))
-                        .build(),
+        final JavaClass antecedent1 = new JavaClass();
+        final Field field = new Field();
+        field.type(Type.type("String"));
+        field.annotations().add(single(annotation("Inject")));
+        antecedent1.field(single(field));
+        final JavaClass antecedent2 = new JavaClass();
+        antecedent2.annotations().add(single(annotation("ConfigProperty")));
 
-                JavaClass.builder().annotations(
-                        listOf(single(annotation("ConfigProperty")))
-                ).build()
+        return Condition.any(
+                antecedent1,
+                antecedent2
         );
     }
 
@@ -81,7 +81,7 @@ class ClassConsequentFilterTest {
         return StaticJavaParser.parse(classBody).findAll(ClassOrInterfaceDeclaration.class);
     }
 
-    private String lines(String...lines) {
+    private String lines(String... lines) {
         val sb = new StringBuilder();
         for (String line : lines) {
             sb.append(line);

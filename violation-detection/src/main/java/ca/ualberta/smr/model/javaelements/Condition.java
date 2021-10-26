@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import static ca.ualberta.smr.utils.Utils.listOf;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.list;
 
 @RequiredArgsConstructor
 public final class Condition<T extends ProgramElement> {
@@ -21,6 +22,15 @@ public final class Condition<T extends ProgramElement> {
 
     public Class<T> getType() {
         return this.type;
+    }
+
+    // TODO: going with mutating value for now, but change later
+    public void merge(T item) {
+        this.elements.add(item);
+    }
+
+    public void merge(String operation) {
+
     }
 
     public boolean test(Predicate<T> condition) {
@@ -95,13 +105,13 @@ public final class Condition<T extends ProgramElement> {
     }
 
     @SafeVarargs
-    public static <T extends ProgramElement> Condition<T> any(Class<T> clazz, T... elements) {
-        return new Condition<T>(listOf(elements), ConditionOperation.OR, clazz);
-    }
+    @SuppressWarnings("unchecked")
+    public static <T extends ProgramElement> Condition<T> any(T element, T... elements) {
+        final ArrayList<T> nodes = new ArrayList<>();
+        nodes.add(element);
+        nodes.addAll(listOf(elements));
 
-    @SafeVarargs
-    public static <T extends ProgramElement> Condition<T> all(Class<T> clazz, T... elements) {
-        return new Condition<T>(listOf(elements), ConditionOperation.AND, clazz);
+        return new Condition<T>(nodes, ConditionOperation.OR, (Class<T>) element.getClass());
     }
 
     @Override
@@ -112,7 +122,7 @@ public final class Condition<T extends ProgramElement> {
             return elements
                     .stream()
                     .map(Objects::toString)
-                    .collect(Collectors.joining(", "));
+                    .collect(Collectors.joining(String.format(" %s ", operation.name())));
         }
     }
 

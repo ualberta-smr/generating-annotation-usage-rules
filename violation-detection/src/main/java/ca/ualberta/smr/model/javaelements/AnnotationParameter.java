@@ -1,14 +1,14 @@
 package ca.ualberta.smr.model.javaelements;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 import static ca.ualberta.smr.utils.Utils.listOf;
 
-@Builder
 @Getter
 @Accessors(fluent = true)
+@RequiredArgsConstructor
 public class AnnotationParameter implements ProgramElement{
 
     private final Type type;
