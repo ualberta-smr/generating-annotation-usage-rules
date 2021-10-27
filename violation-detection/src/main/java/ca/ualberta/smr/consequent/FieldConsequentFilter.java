@@ -40,12 +40,7 @@ public class FieldConsequentFilter {
     @SuppressWarnings("unchecked")
     private static <T extends BodyDeclaration<T>> Collection<ViolationInfo> findViolations(Collection<FieldDeclaration> declarations, Condition<Field> fieldCondition) {
         val results = doFilterFromFieldDeclarations(declarations, fieldCondition);
-        val foundMatchingField = results.stream().anyMatch(Collection::isEmpty);
-        if (foundMatchingField) {
-            return emptyList();
-        } else {
-            return results.stream().flatMap(Collection::stream).collect(toList());
-        }
+        return results.stream().flatMap(Collection::stream).collect(toList());
     }
 
     public static Collection<ViolationInfo> filterFromClassDeclarations(Collection<ClassOrInterfaceDeclaration> declarations, Condition<Field> fieldCondition) {

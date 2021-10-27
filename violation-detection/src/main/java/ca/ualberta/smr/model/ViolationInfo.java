@@ -55,4 +55,10 @@ public class ViolationInfo {
         return !missingElements.isEmpty();
     }
 
+    @Override
+    public String toString() {
+        return "ViolationInfo{" +
+                "missingElements=" + missingElements +
+                '}';
+    }
 }

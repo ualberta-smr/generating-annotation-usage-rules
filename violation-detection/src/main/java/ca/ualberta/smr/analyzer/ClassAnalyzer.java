@@ -34,6 +34,12 @@ final public class ClassAnalyzer implements AnalysisRunner {
         return item instanceof JavaClass;
     }
 
+    /**
+     * Based on the consequent type, the filtering process can be delegated to 3 different consequent filters, <br>
+     * and this method decides which one it will be.
+     * @param consequentType type of the consequent element
+     * @return function that will do the analysis/filtering
+     */
     private ConsequentFilterFunction findCorrectConsequentFilter(Class<? extends AnalysisItem> consequentType) {
         return CLASS_CONSEQUENT_FILTER_MAP.get(consequentType);
     }
@@ -51,12 +57,19 @@ final public class ClassAnalyzer implements AnalysisRunner {
         return map;
     }
 
+    /**
+     * Represents consequent filters <br>
+     * It's used to simplify complicated BiFunction signature
+     */
     @FunctionalInterface
     interface ConsequentFilterFunction extends BiFunction<Collection<ClassOrInterfaceDeclaration>, Condition<? extends AnalysisItem>, Collection<ViolationInfo>> {
-        // acts like a type alias
 
+        /**
+         * This function just gives more context to the apply function of BiFunction class
+         */
         default Collection<ViolationInfo> filter(Collection<ClassOrInterfaceDeclaration> t, Condition<? extends AnalysisItem> u) {
             return apply(t, u);
         }
+
     }
 }

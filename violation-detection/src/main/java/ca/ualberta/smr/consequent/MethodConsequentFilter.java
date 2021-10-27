@@ -10,7 +10,6 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static ca.ualberta.smr.utils.Utils.*;
-import static java.util.Collections.emptyList;
 import static ca.ualberta.smr.utils.AnnotationUtils.*;
 import static java.util.stream.Collectors.*;
 
@@ -44,11 +43,6 @@ public class MethodConsequentFilter {
 
     private static List<ViolationInfo> findViolations(Collection<MethodDeclaration> declarations, Condition<Method> methodCondition) {
         val results = doFilterFromMethodDeclarations(declarations, methodCondition);
-        final boolean foundMatchingMethod = results.stream().anyMatch(Collection::isEmpty);
-        if (foundMatchingMethod) {
-            // if there's a match, it means no violations
-            return emptyList();
-        }
         return results.stream().flatMap(Collection::stream).collect(toList());
     }
 

@@ -33,7 +33,14 @@ public class ClassAntecedentFilter {
                 classesWithMethod.filter(clazz -> classHasField(clazz, klass.field()))
                 : classesWithMethod;
 
-        return classesWithField
+        val classesWithExtends = klass.extendedClass().isNotEmpty() ?
+                classesWithField
+                        .filter(clazz ->
+                                klass.extendedClass().test(aClass ->
+                                        clazz.getExtendedTypes().stream().anyMatch(c -> c.getName().asString().equals(aClass.name()))))
+                : classesWithField;
+
+        return classesWithExtends
                 .filter(clazz -> classImplements(clazz, klass.implementedInterfaces()))
                 .collect(Collectors.toList());
     }
@@ -90,8 +97,9 @@ public class ClassAntecedentFilter {
 
     /**
      * Checks if the node is a first-level element in the class. First-level being direct child, and not something declared in an inner class
+     *
      * @param clazz is the class we are querying in
-     * @param node is the node that we are checking
+     * @param node  is the node that we are checking
      * @return true if node is a first-level child, false otherwise
      */
     // TODO: check against inheritance

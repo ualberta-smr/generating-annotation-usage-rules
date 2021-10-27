@@ -49,9 +49,9 @@ public class Main {
 
     private static List<String> projectsFolder() {
         return listOf(
-            "C:\\Users\\mensu\\Downloads\\projects\\guide-microprofile-reactive-messaging\\finish\\food",
-                "C:\\Users\\mensu\\Downloads\\projects\\trellis-main\\trellis-main",
                 "C:\\Users\\mensu\\Downloads\\projects\\capstone-ccp",
+                "C:\\Users\\mensu\\Downloads\\projects\\guide-microprofile-reactive-messaging\\finish\\food",
+                "C:\\Users\\mensu\\Downloads\\projects\\trellis-main\\trellis-main",
                 "C:\\Users\\mensu\\Downloads\\projects\\guide-reactive-rest-client",
                 "C:\\Users\\mensu\\Downloads\\projects\\guide-microprofile-jwt-a0867bf",
                 "C:\\Users\\mensu\\Downloads\\projects\\guide-microprofile-jwt-7d1da9a",
