@@ -1,6 +1,8 @@
 package ca.ualberta.smr.model.javaelements;
 
 import ca.ualberta.smr.model.ViolationInfo;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.var;
 
@@ -13,11 +15,12 @@ import static ca.ualberta.smr.utils.Utils.listOf;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.list;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public final class Condition<T extends ProgramElement> {
 
     private final Collection<T> elements;
-    private final ConditionOperation operation;
+    private ConditionOperation operation;
     private final Class<T> type;
 
     public Class<T> getType() {
@@ -25,12 +28,9 @@ public final class Condition<T extends ProgramElement> {
     }
 
     // TODO: going with mutating value for now, but change later
-    public void merge(T item) {
+    public void update(T item, ConditionOperation operation) {
         this.elements.add(item);
-    }
-
-    public void merge(String operation) {
-
+        this.operation = operation;
     }
 
     public boolean test(Predicate<T> condition) {
@@ -97,11 +97,11 @@ public final class Condition<T extends ProgramElement> {
 
     @SuppressWarnings("unchecked")
     public static <T extends ProgramElement> Condition<T> single(T element) {
-        return new Condition<T>(Collections.singletonList(element), ConditionOperation.AND, (Class<T>) element.getClass());
+        return new Condition<T>(listOf(element), ConditionOperation.AND, (Class<T>) element.getClass());
     }
 
     public static <T extends ProgramElement> Condition<T> empty(Class<T> clazz) {
-        return new Condition<T>(emptyList(), ConditionOperation.EMPTY, clazz);
+        return new Condition<T>(listOf(), ConditionOperation.EMPTY, clazz);
     }
 
     @SafeVarargs
@@ -126,7 +126,7 @@ public final class Condition<T extends ProgramElement> {
         }
     }
 
-    enum ConditionOperation {
+    public enum ConditionOperation {
         OR, AND, EMPTY
     }
 

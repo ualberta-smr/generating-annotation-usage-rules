@@ -23,7 +23,8 @@ class DefaultViolationDetector {
     public DefaultViolationDetector() throws IOException {
         final TypeResolver typeResolver = new TypeResolver(System.getenv("JAR_FILES"));
         final List<AnalysisRunner> analyzers = listOf(new ClassAnalyzer(), new MethodAnalyzer(), new FieldAnalyzer());
-        this.violationDetector = new ViolationDetector(typeResolver, RuleProvider.getRules(), analyzers);
+        final Collection<StaticAnalysisRule> rules = RuleProvider.getRules();
+        this.violationDetector = new ViolationDetector(typeResolver, rules, analyzers);
     }
 
     public Map<StaticAnalysisRule, Collection<ViolationInfo>> analyze(String filename) {

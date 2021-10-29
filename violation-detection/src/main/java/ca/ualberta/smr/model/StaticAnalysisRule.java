@@ -1,6 +1,7 @@
 package ca.ualberta.smr.model;
 
 import ca.ualberta.smr.model.javaelements.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
@@ -8,6 +9,7 @@ import lombok.experimental.Accessors;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @Getter
+@EqualsAndHashCode
 public class StaticAnalysisRule {
     private final String name;
     private final AnalysisItem antecedent;

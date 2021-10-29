@@ -69,7 +69,7 @@ public class AnnotationUtils {
             boolean found = false;
             for (MemberValuePair pair : actual.getPairs()) {
                 var toString = pair.toString();
-                var annotationMatches = parameter.test(p -> toString.contains(p.name()) || toString.contains(p.type().name()));
+                var annotationMatches = parameter.test(p -> toString.contains(p.name()) || p.type().test(t -> toString.contains(t.name())));
                 if (annotationMatches) {
                     found = true;
                     break;

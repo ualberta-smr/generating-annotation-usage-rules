@@ -2,9 +2,12 @@ package ca.ualberta;
 
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.javaelements.*;
+import ca.ualberta.smr.rules.RuleParser;
+import lombok.SneakyThrows;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
+import java.io.InputStream;
 import java.util.Collection;
 
 import static ca.ualberta.smr.model.javaelements.Annotation.annotation;
@@ -16,15 +19,18 @@ import static ca.ualberta.smr.utils.Utils.listOf;
 public class DefaultRuleProvider implements RuleProvider {
 
     @Override
+    @SneakyThrows
     public Collection<StaticAnalysisRule> getRules() {
-        return listOf(
-                getRule_OutgoingAndScope(),
-                getRule_RestClientInjectField(),
-                getRule_ClaimInjectField(),
-                getRule_JsonWebTokenField(),
-                getRule_QueryMutationGraphQLAPI(),
-                getRule_PathParam()
-        );
+        final InputStream rulesStream = DefaultRuleProvider.class.getResourceAsStream("/rules.json");
+        return RuleParser.parseRules(rulesStream);
+//        return listOf(
+//                getRule_OutgoingAndScope(),
+//                getRule_RestClientInjectField(),
+//                getRule_ClaimInjectField(),
+//                getRule_JsonWebTokenField(),
+//                getRule_QueryMutationGraphQLAPI(),
+//                getRule_PathParam()
+//        );
     }
 
     private static StaticAnalysisRule getRule_OutgoingAndScope() {

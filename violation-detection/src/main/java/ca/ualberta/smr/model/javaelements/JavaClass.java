@@ -1,5 +1,6 @@
 package ca.ualberta.smr.model.javaelements;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -10,7 +11,8 @@ import java.util.Collection;
 @Getter
 @Setter
 @Accessors(fluent = true)
-public final class JavaClass implements AnalysisItem, ProgramElement {
+@EqualsAndHashCode
+public final class JavaClass implements AnalysisItem, ProgramElement, WithAnnotation {
     private Condition<Field> field = Condition.empty(Field.class);
     private Condition<Method> method = Condition.empty(Method.class);
     private Collection<Condition<Annotation>> annotations = new ArrayList<>();

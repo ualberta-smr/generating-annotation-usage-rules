@@ -35,7 +35,7 @@ public class MethodAntecedentFilter {
     static boolean parameterMatches(Parameter parameterDeclaration, Condition<MethodParameter> parameterCondition) {
         return parameterCondition
                 .test(p -> {
-                    final boolean sameType = p.type().isEmpty() || p.type().equalsTypeString(parameterDeclaration.getTypeAsString());
+                    final boolean sameType = p.type().test(t -> t.equalsTypeString(parameterDeclaration.getTypeAsString()));
                     // checks for sameType and containing all required annotations
                     return sameType && p.annotations().stream().allMatch(a -> containsAnnotation(parameterDeclaration, a));
                 });

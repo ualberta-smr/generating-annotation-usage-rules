@@ -1,5 +1,6 @@
 package ca.ualberta.smr.model.javaelements;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
@@ -7,6 +8,7 @@ import lombok.experimental.Accessors;
 @RequiredArgsConstructor
 @Getter
 @Accessors(fluent = true)
+@EqualsAndHashCode
 public class Type implements ProgramElement {
     private final String name;
 

@@ -26,29 +26,29 @@ public class AndOrTest {
         // field with type "C" and type "D"
     }
 
-    void test2() {
-        // field with (annotation "A" or annotation "B") and type "C"
-
-        final Field field = new Field();
-
-        final Annotation a = annotation("A");
-
-        field.annotations().add(single(a));
-
-        // OR
-
-        List<Condition<Annotation>> annotations = (List<Condition<Annotation>>) field.annotations();
-        Condition<Annotation> lastAnnotation = annotations.get(annotations.size() - 1);
-        lastAnnotation.merge("OR"); // -> changes lastAnnotation from Single/AND to OR
-
-        // annotation "B"
-        final Annotation b = annotation("B");
-        // TODO: we have to know that we're coming from OR
-        annotations = (List<Condition<Annotation>>) field.annotations();
-        lastAnnotation = annotations.get(annotations.size() - 1);
-        lastAnnotation.merge(b);
-
-
-    }
+//    void test2() {
+//        // field with (annotation "A" or annotation "B") and type "C"
+//
+//        final Field field = new Field();
+//
+//        final Annotation a = annotation("A");
+//
+//        field.annotations().add(single(a));
+//
+//        // OR
+//
+//        List<Condition<Annotation>> annotations = (List<Condition<Annotation>>) field.annotations();
+//        Condition<Annotation> lastAnnotation = annotations.get(annotations.size() - 1);
+//        lastAnnotation.merge("OR"); // -> changes lastAnnotation from Single/AND to OR
+//
+//        // annotation "B"
+//        final Annotation b = annotation("B");
+//        // TODO: we have to know that we're coming from OR
+//        annotations = (List<Condition<Annotation>>) field.annotations();
+//        lastAnnotation = annotations.get(annotations.size() - 1);
+//        lastAnnotation.merge(b);
+//
+//
+//    }
 
 }

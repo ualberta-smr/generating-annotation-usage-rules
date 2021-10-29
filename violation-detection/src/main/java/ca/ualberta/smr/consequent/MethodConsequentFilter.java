@@ -95,7 +95,7 @@ public class MethodConsequentFilter {
         List<Condition<MethodParameter>> requiredParameters = new ArrayList<>();
         for (val expectedParam : method.parameters()) {
             for (val actualParam : methodDeclaration.getParameters()) {
-                val hasParam = expectedParam.test(p -> p.type().equalsTypeString(actualParam.getTypeAsString()));
+                val hasParam = expectedParam.test(p -> p.type().test(t -> t.equalsTypeString(actualParam.getTypeAsString())));
                 if (!hasParam) {
                     requiredParameters.add(expectedParam);
                 }

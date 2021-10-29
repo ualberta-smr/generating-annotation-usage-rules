@@ -24,7 +24,7 @@ public class Utils {
 
     @SafeVarargs
     public static <T> List<T> listOf(T...args) {
-        return Arrays.asList(args);
+        return new ArrayList<>(Arrays.asList(args));
     }
 
     public static Collection<ClassOrInterfaceDeclaration> getClassDeclarations(Collection<? extends HasParentNode<? extends Node>> declarations) {
