@@ -3,7 +3,6 @@ package ca.ualberta.smr.model.javaelements;
 import ca.ualberta.smr.model.ViolationInfo;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
 import lombok.var;
 
 import java.util.*;
@@ -13,7 +12,6 @@ import java.util.stream.Collectors;
 
 import static ca.ualberta.smr.utils.Utils.listOf;
 import static java.util.Collections.emptyList;
-import static java.util.Collections.list;
 
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -31,6 +29,11 @@ public final class Condition<T extends ProgramElement> {
     public void update(T item, ConditionOperation operation) {
         this.elements.add(item);
         this.operation = operation;
+    }
+
+    // TODO: going with mutating value for now, but change later
+    public void update(T item) {
+        update(item, operation);
     }
 
     public boolean test(Predicate<T> condition) {
@@ -114,6 +117,26 @@ public final class Condition<T extends ProgramElement> {
         return new Condition<T>(nodes, ConditionOperation.OR, (Class<T>) element.getClass());
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T extends ProgramElement> Condition<T> any(Class<T> type) {
+        return new Condition<T>(new ArrayList<>(), ConditionOperation.OR, type);
+    }
+
+    @SafeVarargs
+    @SuppressWarnings("unchecked")
+    public static <T extends ProgramElement> Condition<T> all(T element, T... elements) {
+        final ArrayList<T> nodes = new ArrayList<>();
+        nodes.add(element);
+        nodes.addAll(listOf(elements));
+
+        return new Condition<T>(nodes, ConditionOperation.AND, (Class<T>) element.getClass());
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends ProgramElement> Condition<T> all(Class<T> type) {
+        return new Condition<T>(new ArrayList<>(), ConditionOperation.AND, type);
+    }
+
     @Override
     public String toString() {
         if (elements.size() == 1) {
@@ -124,6 +147,11 @@ public final class Condition<T extends ProgramElement> {
                     .map(Objects::toString)
                     .collect(Collectors.joining(String.format(" %s ", operation.name())));
         }
+    }
+
+    @Deprecated
+    public T getFirst() {
+        return elements.stream().findFirst().get();
     }
 
     public enum ConditionOperation {

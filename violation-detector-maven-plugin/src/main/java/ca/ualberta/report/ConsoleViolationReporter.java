@@ -5,9 +5,11 @@ import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.*;
 import lombok.val;
+import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -15,16 +17,26 @@ import static java.util.Optional.empty;
 
 @Named
 @Singleton
-public class ConsoleViolationReporter implements ViolationReporter {
+public class ConsoleViolationReporter extends AbstractLogEnabled implements ViolationReporter {
 
     @Override
+    public void report(StaticAnalysisRule rule, Collection<ViolationInfo> violations) {
+        getLogger().warn("------------------------------------------------------------------------");
+        getLogger().warn("For rule: " + rule.name());
+        getLogger().warn("\t" + rule.description());
+        for (val violation : violations) {
+            report(violation);
+        }
+        getLogger().warn("------------------------------------------------------------------------");
+    }
+
     public void report(ViolationInfo violation) {
         val message = getMessage(violation);
         val location = getLocation(violation);
 
         // printing
-        System.out.println(message);
-        location.ifPresent(l -> System.out.printf("\tLocation: %s\n", l));
+        getLogger().warn(message);
+        location.ifPresent(l -> getLogger().warn(String.format("\tLocation: %s", l)));
     }
 
     private String getMessage(ViolationInfo violation) {

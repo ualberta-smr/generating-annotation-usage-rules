@@ -1,4 +1,4 @@
-package ca.ualberta.smr.rules;
+package ca.ualberta.smr.visualize;
 
 import ca.ualberta.grammar.RulepadGrammarListener;
 import ca.ualberta.grammar.RulepadGrammarParser;
@@ -751,6 +751,8 @@ public class DummyListener implements RulepadGrammarListener {
     @Override
     public void enterClassExpression(RulepadGrammarParser.ClassExpressionContext ctx) {
         System.out.println("enterClassExpression");
+        final RulepadGrammarParser.BinaryContext op = ctx.op;
+        System.out.println("Operation: " + (op == null ? "NULL" : op.getText().toString()));
     }
 
     @Override

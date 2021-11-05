@@ -3,6 +3,7 @@ package ca.ualberta.smr.grammar;
 import ca.ualberta.grammar.RulepadGrammarParser;
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.javaelements.*;
+import ca.ualberta.smr.rules.Rule;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.val;
@@ -33,20 +34,22 @@ public class ConcreteRulePadGrammarListener extends AbstractRulePadGrammarListen
     private Data initialItem;
     private ProgramElement previousCompleteElement;
 
-    private final String name;
+    private final Rule rule;
 
-    public ConcreteRulePadGrammarListener(String name) {
+    private boolean isConsequent = false;
+
+    public ConcreteRulePadGrammarListener(Rule rule) {
         // TODO: init stuff here
         this.stack = new Stack<>();
         this.antecedent = null;
         this.consequent = null;
         this.initialItem = null;
         this.previousCompleteElement = null;
-        this.name = name;
+        this.rule = rule;
     }
 
     public StaticAnalysisRule getRule() {
-        return new StaticAnalysisRule(name, antecedent, consequent);
+        return new StaticAnalysisRule(rule.getId(), antecedent, consequent, rule.getSpecification());
     }
 
     @Override
@@ -64,16 +67,6 @@ public class ConcreteRulePadGrammarListener extends AbstractRulePadGrammarListen
     @Override
     public void exitClasses(RulepadGrammarParser.ClassesContext ctx) {
         this.previousCompleteElement = popFromStack().node;
-    }
-
-    @Override
-    public void enterClassExpression(RulepadGrammarParser.ClassExpressionContext ctx) {
-
-    }
-
-    @Override
-    public void exitClassExpression(RulepadGrammarParser.ClassExpressionContext ctx) {
-
     }
 
     @Override
@@ -224,6 +217,7 @@ public class ConcreteRulePadGrammarListener extends AbstractRulePadGrammarListen
         } else if (initialItem.comingFrom == NodeType.METHOD) {
             pushToStack(NodeType.METHOD, new Method());
         }
+        this.isConsequent = true;
     }
 
     @Override

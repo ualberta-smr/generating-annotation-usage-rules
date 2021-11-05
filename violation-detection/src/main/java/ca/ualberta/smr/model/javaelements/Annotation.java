@@ -12,7 +12,7 @@ import java.util.Collection;
 @Setter
 @Accessors(fluent = true)
 @EqualsAndHashCode
-public class Annotation implements ProgramElement {
+public class Annotation implements ProgramElement, WithType {
     private Condition<Type> type = Condition.empty(Type.class);
     private Collection<Condition<AnnotationParameter>> parameters = new ArrayList<>();
 
@@ -20,6 +20,10 @@ public class Annotation implements ProgramElement {
         final Annotation annotation = new Annotation();
         annotation.type(Type.type(typeName));
         return annotation;
+    }
+
+    public void type(Condition<Type> type) {
+        this.type = type;
     }
 
     @Override

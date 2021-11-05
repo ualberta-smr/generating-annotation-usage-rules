@@ -1,5 +1,6 @@
 package ca.ualberta.smr.consequent;
 
+import ca.ualberta.smr.antecedent.MethodAntecedentFilter;
 import ca.ualberta.smr.model.*;
 import ca.ualberta.smr.model.javaelements.*;
 import com.github.javaparser.ast.body.*;
@@ -14,14 +15,23 @@ import static java.util.stream.Collectors.toList;
 
 public class ClassConsequentFilter {
 
-    public static Collection<ViolationInfo> filterFromClassDeclarations(Collection<ClassOrInterfaceDeclaration> declarations, Condition<JavaClass> klass) {
+    @SuppressWarnings("unchecked")
+    public static Collection<ViolationInfo> filterFromClassDeclarations(Collection<ClassOrInterfaceDeclaration> declarations, StaticAnalysisRule rule) {
+        Condition<JavaClass> klass = (Condition<JavaClass>) rule.consequent();
         return declarations.stream()
-                .map(cd -> doFilter(cd, klass))
+                .map(cd -> doFilter(cd, klass, rule))
                 .flatMap(Collection::stream)
                 .collect(toList());
     }
 
-    private static Collection<ViolationInfo> doFilter(ClassOrInterfaceDeclaration declaration, Condition<JavaClass> classCondition) {
+    public static Collection<ViolationInfo> filterFromClassDeclarations(Collection<ClassOrInterfaceDeclaration> declarations, Condition<JavaClass> klass){
+        return declarations.stream()
+                .map(cd -> doFilter(cd, klass, null))
+                .flatMap(Collection::stream)
+                .collect(toList());
+    }
+
+    private static Collection<ViolationInfo> doFilter(ClassOrInterfaceDeclaration declaration, Condition<JavaClass> classCondition, StaticAnalysisRule rule) {
         return classCondition.evaluate(javaClass -> {
             val requiredAnnotations = getMissingAnnotations(declaration, javaClass.annotations());
             val requiredAnnotationParameters = getMissingParameters(declaration, javaClass.annotations());
@@ -37,13 +47,17 @@ public class ClassConsequentFilter {
 
             Collection<Condition<Type>> requiredTypeToExtend = new ArrayList<>();
 
-            val hasExtended = declaration.getExtendedTypes().stream().anyMatch(e -> javaClass.extendedClass().test(t -> t.equalsTypeString(e.getNameAsString())));
+            val hasExtended = declaration.getExtendedTypes().stream()
+                    .anyMatch(e ->
+                            javaClass.extendedClass().test(t -> t.equalsTypeString(e.getNameAsString())));
 
             if (!hasExtended) {
                 requiredTypeToExtend.add(javaClass.extendedClass());
             }
 
-            val methodViolations = getMethodViolations(declaration, javaClass.method());
+            final JavaClass antecedent = (JavaClass) rule.antecedent();
+            final Condition<Method> methodAntecedentCondition = antecedent.method();
+            val methodViolations = getMethodViolations(declaration, javaClass.method(), methodAntecedentCondition);
             val fieldViolations = getFieldViolations(declaration, javaClass.field());
 
             val missingAnnotations = new ViolationInfo(declaration, collectionToString(requiredAnnotations));
@@ -65,13 +79,17 @@ public class ClassConsequentFilter {
         });
     }
 
-    private static Collection<ViolationInfo> getMethodViolations(ClassOrInterfaceDeclaration declaration, Condition<Method> methodCondition) {
+    private static Collection<ViolationInfo> getMethodViolations(ClassOrInterfaceDeclaration declaration, Condition<Method> methodCondition, Condition<Method> methodAntecedentCondition) {
         val methods = declaration.getMethods();
         if (methods.isEmpty()) {
             // element is missing
             return listOf(new ViolationInfo(declaration, collectionToString(listOf(methodCondition)), true));
         }
-        return MethodConsequentFilter.filterFromMethodDeclarations(declaration.getMethods(), methodCondition);
+        if (methodAntecedentCondition != null) {
+            final Collection<MethodDeclaration> filteredMethods = MethodAntecedentFilter.doFilter(methods, methodAntecedentCondition);
+            return MethodConsequentFilter.filterFromMethodDeclarations(filteredMethods, methodCondition);
+        }
+        return MethodConsequentFilter.filterFromMethodDeclarations(methods, methodCondition);
     }
 
     private static Collection<ViolationInfo> getFieldViolations(ClassOrInterfaceDeclaration declaration, Condition<Field> fieldCondition) {

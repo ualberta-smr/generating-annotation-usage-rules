@@ -26,7 +26,7 @@ final public class ClassAnalyzer implements AnalysisRunner {
 
         val consequentType = rule.consequent().getType();
         return findCorrectConsequentFilter(consequentType)
-                .filter(classDeclarations, rule.consequent());
+                .filter(classDeclarations, rule);
     }
 
     @Override
@@ -50,9 +50,9 @@ final public class ClassAnalyzer implements AnalysisRunner {
     private static Map<Class<? extends AnalysisItem>, ConsequentFilterFunction> initializeClassConsequentFilterMap() {
         Map<Class<? extends AnalysisItem>, ConsequentFilterFunction> map = new HashMap<>();
 
-        map.put(JavaClass.class, (items, consequent) -> ClassConsequentFilter.filterFromClassDeclarations(items, (Condition<JavaClass>) consequent));
-        map.put(Method.class, (items, consequent) -> MethodConsequentFilter.filterFromClassDeclarations(items, (Condition<Method>) consequent));
-        map.put(Field.class, (items, consequent) -> FieldConsequentFilter.filterFromClassDeclarations(items, (Condition<Field>) consequent));
+        map.put(JavaClass.class, ClassConsequentFilter::filterFromClassDeclarations);
+        map.put(Method.class, (items, rule) -> MethodConsequentFilter.filterFromClassDeclarations(items, (Condition<Method>) rule.consequent()));
+        map.put(Field.class, (items, rule) -> FieldConsequentFilter.filterFromClassDeclarations(items, (Condition<Field>) rule.consequent()));
 
         return map;
     }
@@ -62,12 +62,12 @@ final public class ClassAnalyzer implements AnalysisRunner {
      * It's used to simplify complicated BiFunction signature
      */
     @FunctionalInterface
-    interface ConsequentFilterFunction extends BiFunction<Collection<ClassOrInterfaceDeclaration>, Condition<? extends AnalysisItem>, Collection<ViolationInfo>> {
+    interface ConsequentFilterFunction extends BiFunction<Collection<ClassOrInterfaceDeclaration>, StaticAnalysisRule, Collection<ViolationInfo>> {
 
         /**
          * This function just gives more context to the apply function of BiFunction class
          */
-        default Collection<ViolationInfo> filter(Collection<ClassOrInterfaceDeclaration> t, Condition<? extends AnalysisItem> u) {
+        default Collection<ViolationInfo> filter(Collection<ClassOrInterfaceDeclaration> t, StaticAnalysisRule u) {
             return apply(t, u);
         }
 

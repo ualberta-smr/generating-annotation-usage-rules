@@ -12,7 +12,6 @@ import java.util.Collection;
 
 import static ca.ualberta.smr.model.javaelements.Annotation.annotation;
 import static ca.ualberta.smr.model.javaelements.Condition.*;
-import static ca.ualberta.smr.utils.Utils.listOf;
 
 @Named
 @Singleton
@@ -22,15 +21,9 @@ public class DefaultRuleProvider implements RuleProvider {
     @SneakyThrows
     public Collection<StaticAnalysisRule> getRules() {
         final InputStream rulesStream = DefaultRuleProvider.class.getResourceAsStream("/rules.json");
-        return RuleParser.parseRules(rulesStream);
-//        return listOf(
-//                getRule_OutgoingAndScope(),
-//                getRule_RestClientInjectField(),
-//                getRule_ClaimInjectField(),
-//                getRule_JsonWebTokenField(),
-//                getRule_QueryMutationGraphQLAPI(),
-//                getRule_PathParam()
-//        );
+        final Collection<StaticAnalysisRule> rulesFromJson = RuleParser.parseRules(rulesStream);
+        rulesFromJson.add(getRule_PathParam());
+        return rulesFromJson;
     }
 
     private static StaticAnalysisRule getRule_OutgoingAndScope() {
@@ -57,7 +50,7 @@ public class DefaultRuleProvider implements RuleProvider {
         );
 
         Condition<? extends AnalysisItem> consequent = single(javaClass);
-        return new StaticAnalysisRule("[In|Out]goingAndScopeOnFieldOnClass", antecedent, consequent);
+        return new StaticAnalysisRule("[In|Out]goingAndScopeOnFieldOnClass", antecedent, consequent, "");
     }
 
     private static StaticAnalysisRule getRule_RestClientInjectField() {
@@ -70,7 +63,7 @@ public class DefaultRuleProvider implements RuleProvider {
         field.annotations().add(single(annotation("javax.inject.Inject")));
         final Condition<Field> consequent = single(field);
 
-        return new StaticAnalysisRule("RestClientInjectOnField", antecedent, consequent);
+        return new StaticAnalysisRule("RestClientInjectOnField", antecedent, consequent, "");
     }
 
     private static StaticAnalysisRule getRule_ClaimInjectField() {
@@ -83,7 +76,7 @@ public class DefaultRuleProvider implements RuleProvider {
         field.annotations().add(single(annotation("javax.inject.Inject")));
         final Condition<Field> consequent = single(field);
 
-        return new StaticAnalysisRule("ClaimInjectOnField", antecedent, consequent);
+        return new StaticAnalysisRule("ClaimInjectOnField", antecedent, consequent, "");
     }
 
     private static StaticAnalysisRule getRule_JsonWebTokenField() {
@@ -96,7 +89,7 @@ public class DefaultRuleProvider implements RuleProvider {
         field.annotations().add(single(annotation("javax.inject.Inject")));
         final Condition<Field> consequent = single(field);
 
-        return new StaticAnalysisRule("JWT-Inject-OnField", antecedent, consequent);
+        return new StaticAnalysisRule("JWT-Inject-OnField", antecedent, consequent, "");
     }
 
     private static StaticAnalysisRule getRule_PathParam() {
@@ -119,7 +112,7 @@ public class DefaultRuleProvider implements RuleProvider {
                 method, klass
         );
 
-        return new StaticAnalysisRule("PathParamPath", antecedentMethod, consequent);
+        return new StaticAnalysisRule("PathParam-Path", antecedentMethod, consequent, "class with function with parameter with annotation \"javax.ws.rs.PathParam\" must have annotation \"javax.ws.rs.Path\" or function with annotation \"javax.ws.rs.Path\" ");
     }
 
     private static StaticAnalysisRule getRule_QueryMutationGraphQLAPI() {
@@ -141,6 +134,6 @@ public class DefaultRuleProvider implements RuleProvider {
         javaClass.annotations().add(single(annotation("org.eclipse.microprofile.graphql.GraphQLApi")));
 
         Condition<? extends AnalysisItem> consequent = single(javaClass);
-        return new StaticAnalysisRule("QueryMutationGraphQLAPI", antecedent, consequent);
+        return new StaticAnalysisRule("QueryMutationGraphQLAPI", antecedent, consequent, "");
     }
 }

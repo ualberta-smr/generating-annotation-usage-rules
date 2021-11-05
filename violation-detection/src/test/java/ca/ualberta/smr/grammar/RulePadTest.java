@@ -4,7 +4,7 @@ import ca.ualberta.grammar.RulepadGrammarLexer;
 import ca.ualberta.grammar.RulepadGrammarParser;
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.javaelements.*;
-import ca.ualberta.smr.rules.DummyListener;
+import ca.ualberta.smr.rules.Rule;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.*;
@@ -24,9 +24,9 @@ public class RulePadTest {
         final ParseTree tree = getTree(rulePadRule);
 
         final ParseTreeWalker walker = new ParseTreeWalker();
-        final ConcreteRulePadGrammarListener listener = new ConcreteRulePadGrammarListener("");
-
-        walker.walk(new DummyListener(), tree);
+        final ConcreteRulePadGrammarListener listener = new ConcreteRulePadGrammarListener(new Rule());
+//        final CopyRPGListener listener = new CopyRPGListener("");
+        walker.walk(listener, tree);
 
         final StaticAnalysisRule actualRule = listener.getRule();
 
@@ -42,7 +42,7 @@ public class RulePadTest {
         antecedent.annotations().add(single(annotation("Demo")));
         final Field consequent = new Field();
         consequent.annotations().add(single(annotation("Hello")));
-        final StaticAnalysisRule expected = new StaticAnalysisRule("", antecedent, single(consequent));
+        final StaticAnalysisRule expected = new StaticAnalysisRule("", antecedent, single(consequent), "");
         // Construction of the expected rule ends here
         parseAndCheckRule(ruleString, expected);
     }
@@ -55,7 +55,7 @@ public class RulePadTest {
         antecedent.annotations().add(single(annotation("Demo")));
         final JavaClass consequent = new JavaClass();
         consequent.annotations().add(single(annotation("Hello")));
-        final StaticAnalysisRule expected = new StaticAnalysisRule("", antecedent, single(consequent));
+        final StaticAnalysisRule expected = new StaticAnalysisRule("", antecedent, single(consequent), "");
         // Construction of the expected rule ends here
         parseAndCheckRule(ruleString, expected);
     }
@@ -68,7 +68,7 @@ public class RulePadTest {
         antecedent.annotations().add(single(annotation("Demo")));
         final Method consequent = new Method();
         consequent.annotations().add(single(annotation("Hello")));
-        final StaticAnalysisRule expected = new StaticAnalysisRule("", antecedent, single(consequent));
+        final StaticAnalysisRule expected = new StaticAnalysisRule("", antecedent, single(consequent), "");
         // Construction of the expected rule ends here
         parseAndCheckRule(ruleString, expected);
     }
@@ -151,7 +151,7 @@ public class RulePadTest {
         );
 
         Condition<? extends AnalysisItem> consequent = single(javaClass);
-        return new StaticAnalysisRule("", antecedent, consequent);
+        return new StaticAnalysisRule("", antecedent, consequent, "");
     }
 
     private StaticAnalysisRule getRule_RestClientInjectField() {
@@ -164,7 +164,7 @@ public class RulePadTest {
         field.annotations().add(single(annotation("Inject")));
         final Condition<Field> consequent = single(field);
 
-        return new StaticAnalysisRule("", antecedent, consequent);
+        return new StaticAnalysisRule("", antecedent, consequent, "");
     }
 
     private StaticAnalysisRule getRule_ClaimInjectField() {
@@ -177,7 +177,7 @@ public class RulePadTest {
         field.annotations().add(single(annotation("Inject")));
         final Condition<Field> consequent = single(field);
 
-        return new StaticAnalysisRule("", antecedent, consequent);
+        return new StaticAnalysisRule("", antecedent, consequent, "");
     }
 
     private StaticAnalysisRule getRule_JsonWebTokenField() {
@@ -190,7 +190,7 @@ public class RulePadTest {
         field.annotations().add(single(annotation("Inject")));
         final Condition<Field> consequent = single(field);
 
-        return new StaticAnalysisRule("", antecedent, consequent);
+        return new StaticAnalysisRule("", antecedent, consequent, "");
     }
 
     private StaticAnalysisRule getRule_PathParam() {
@@ -216,7 +216,7 @@ public class RulePadTest {
                 klass, method
         );
 
-        return new StaticAnalysisRule("", antecedent, consequent);
+        return new StaticAnalysisRule("", antecedent, consequent, "");
     }
 
     private StaticAnalysisRule getRule_QueryMutationGraphQLAPI() {
@@ -238,6 +238,6 @@ public class RulePadTest {
         javaClass.annotations().add(single(annotation("GraphQLApi")));
 
         Condition<? extends AnalysisItem> consequent = single(javaClass);
-        return new StaticAnalysisRule("", antecedent, consequent);
+        return new StaticAnalysisRule("", antecedent, consequent, "");
     }
 }

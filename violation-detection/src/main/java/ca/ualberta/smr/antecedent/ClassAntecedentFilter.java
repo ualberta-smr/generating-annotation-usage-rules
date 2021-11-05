@@ -7,6 +7,8 @@ import com.github.javaparser.ast.body.*;
 import lombok.val;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static ca.ualberta.smr.antecedent.FieldAntecedentFilter.fieldHasAnnotations;
@@ -19,7 +21,6 @@ import static ca.ualberta.smr.utils.AnnotationUtils.containsAnnotation;
  */
 public class ClassAntecedentFilter {
 
-    // TODO: Extends is missing
     public static Collection<ClassOrInterfaceDeclaration> doFilter(CompilationUnit cu, JavaClass klass) {
         val classes = cu.findAll(ClassOrInterfaceDeclaration.class, e -> !e.isAbstract() && !e.isInterface());
 

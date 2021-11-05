@@ -53,7 +53,7 @@ public class RuleProvider {
         );
 
         Condition<? extends AnalysisItem> consequent = single(javaClass);
-        return new StaticAnalysisRule("[In|Out]goingAndScopeOnFieldOnClass", antecedent, consequent);
+        return new StaticAnalysisRule("[In|Out]goingAndScopeOnFieldOnClass", antecedent, consequent, "");
     }
 
     private static StaticAnalysisRule getRule_RestClientInjectField() {
@@ -66,7 +66,7 @@ public class RuleProvider {
         field.annotations().add(single(annotation("javax.inject.Inject")));
         final Condition<Field> consequent = single(field);
 
-        return new StaticAnalysisRule("RestClientInjectOnField", antecedent, consequent);
+        return new StaticAnalysisRule("RestClientInjectOnField", antecedent, consequent, "");
     }
 
     private static StaticAnalysisRule getRule_ClaimInjectField() {
@@ -79,7 +79,7 @@ public class RuleProvider {
         field.annotations().add(single(annotation("javax.inject.Inject")));
         final Condition<Field> consequent = single(field);
 
-        return new StaticAnalysisRule("ClaimInjectOnField", antecedent, consequent);
+        return new StaticAnalysisRule("ClaimInjectOnField", antecedent, consequent, "");
     }
 
     private static StaticAnalysisRule getRule_JsonWebTokenField() {
@@ -92,7 +92,7 @@ public class RuleProvider {
         field.annotations().add(single(annotation("javax.inject.Inject")));
         final Condition<Field> consequent = single(field);
 
-        return new StaticAnalysisRule("JWT-Inject-OnField", antecedent, consequent);
+        return new StaticAnalysisRule("JWT-Inject-OnField", antecedent, consequent, "");
     }
 
     private static StaticAnalysisRule getRule_PathParam() {
@@ -115,7 +115,7 @@ public class RuleProvider {
                 method, klass
         );
 
-        return new StaticAnalysisRule("PathParamPath", antecedentMethod, consequent);
+        return new StaticAnalysisRule("PathParamPath", antecedentMethod, consequent, "");
     }
 
     private static StaticAnalysisRule getRule_QueryMutationGraphQLAPI() {
@@ -137,7 +137,7 @@ public class RuleProvider {
         javaClass.annotations().add(single(annotation("org.eclipse.microprofile.graphql.GraphQLApi")));
 
         Condition<? extends AnalysisItem> consequent = single(javaClass);
-        return new StaticAnalysisRule("QueryMutationGraphQLAPI", antecedent, consequent);
+        return new StaticAnalysisRule("QueryMutationGraphQLAPI", antecedent, consequent, "");
     }
 
 }

@@ -66,7 +66,7 @@ public class MethodConsequentFilter {
         return violations;
     }
 
-    private static Collection<Collection<ViolationInfo>> doFilterFromMethodDeclarations(Collection<MethodDeclaration> methodDeclarations, Condition<Method> methodCondition) {
+    public static Collection<Collection<ViolationInfo>> doFilterFromMethodDeclarations(Collection<MethodDeclaration> methodDeclarations, Condition<Method> methodCondition) {
         return methodDeclarations.stream()
                 .map(md -> doFilter(md, methodCondition))
                 .collect(toList());

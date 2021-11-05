@@ -14,8 +14,16 @@ import java.util.Collection;
 @Accessors(fluent = true)
 @ToString
 @EqualsAndHashCode
-public final class Method implements AnalysisItem, ProgramElement, WithAnnotation {
+public final class Method implements AnalysisItem, ProgramElement, WithAnnotation, WithType {
     private Condition<Type> returnType = Condition.empty(Type.class);
     private final Collection<Condition<Annotation>> annotations = new ArrayList<>();
     private final Collection<Condition<MethodParameter>> parameters = new ArrayList<>();
+
+    /**
+     * It's an alias for returnType()
+     */
+    @Override
+    public void type(Condition<Type> newType) {
+        this.returnType = newType;
+    }
 }

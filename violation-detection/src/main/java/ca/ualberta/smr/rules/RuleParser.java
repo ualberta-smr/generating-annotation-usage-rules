@@ -2,7 +2,7 @@ package ca.ualberta.smr.rules;
 
 import ca.ualberta.grammar.RulepadGrammarLexer;
 import ca.ualberta.grammar.RulepadGrammarParser;
-import ca.ualberta.smr.grammar.ConcreteRulePadGrammarListener;
+import ca.ualberta.smr.grammar.DefaultRulePadGrammarListener;
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.antlr.v4.runtime.CharStreams;
@@ -26,7 +26,8 @@ public class RuleParser {
                     final ParseTree tree = parser.inputSentence();
 
                     final ParseTreeWalker walker = new ParseTreeWalker();
-                    final ConcreteRulePadGrammarListener listener = new ConcreteRulePadGrammarListener(r.getId());
+//                    final ConcreteRulePadGrammarListener listener = new ConcreteRulePadGrammarListener(r);
+                    final DefaultRulePadGrammarListener listener = new DefaultRulePadGrammarListener(r);
 
                     walker.walk(listener, tree);
 

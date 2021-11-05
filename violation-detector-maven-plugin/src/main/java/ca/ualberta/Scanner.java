@@ -1,6 +1,5 @@
 package ca.ualberta;
 
-import ca.ualberta.report.ConsoleViolationReporter;
 import ca.ualberta.report.ViolationReporter;
 import ca.ualberta.smr.model.*;
 import org.apache.maven.plugin.AbstractMojo;
@@ -44,10 +43,7 @@ public class Scanner extends AbstractMojo {
                     .forEach(e -> {
                         for (Map.Entry<StaticAnalysisRule, Collection<ViolationInfo>> entry : e.entrySet()) {
                             if (!entry.getValue().isEmpty()) {
-                                getLog().info("For rule: " + entry.getKey().toString());
-                                for (ViolationInfo violationInfo : entry.getValue()) {
-                                    reporter.report(violationInfo);
-                                }
+                                reporter.report(entry.getKey(), entry.getValue());
                             }
                         }
                     });

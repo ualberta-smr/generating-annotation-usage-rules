@@ -8,6 +8,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import static ca.ualberta.smr.utils.AnnotationUtils.containsAnnotation;
 
@@ -19,6 +20,14 @@ public class MethodAntecedentFilter {
                         && methodHasParameters(m, method)
                         && methodHasReturnType(m, method)
         );
+    }
+
+    public static Collection<MethodDeclaration> doFilter(Collection<MethodDeclaration> methodDeclarations, Condition<Method> method) {
+        return methodDeclarations
+                .stream()
+                .filter(m -> methodHasAnnotations(m, method)
+                        && methodHasParameters(m, method)
+                        && methodHasReturnType(m, method)).collect(Collectors.toList());
     }
 
     static boolean methodHasAnnotations(MethodDeclaration methodDeclaration, Condition<Method> methodCondition) {

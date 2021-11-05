@@ -15,9 +15,13 @@ import static ca.ualberta.smr.utils.Utils.listOf;
 @Setter
 @Accessors(fluent = true)
 @EqualsAndHashCode
-public class MethodParameter implements ProgramElement, WithAnnotation{
+public class MethodParameter implements ProgramElement, WithAnnotation, WithType {
     private Condition<Type> type = Condition.empty(Type.class);
     private final Collection<Condition<Annotation>> annotations = new ArrayList<>();
+
+    public void type(Condition<Type> type) {
+        this.type = type;
+    }
 
     @Override
     public String toString() {
