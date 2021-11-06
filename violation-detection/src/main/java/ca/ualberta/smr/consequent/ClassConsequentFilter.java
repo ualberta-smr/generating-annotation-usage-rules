@@ -1,5 +1,6 @@
 package ca.ualberta.smr.consequent;
 
+import ca.ualberta.smr.antecedent.FieldAntecedentFilter;
 import ca.ualberta.smr.antecedent.MethodAntecedentFilter;
 import ca.ualberta.smr.model.*;
 import ca.ualberta.smr.model.javaelements.*;
@@ -35,30 +36,11 @@ public class ClassConsequentFilter {
         return classCondition.evaluate(javaClass -> {
             val requiredAnnotations = getMissingAnnotations(declaration, javaClass.annotations());
             val requiredAnnotationParameters = getMissingParameters(declaration, javaClass.annotations());
+            val requiredInterfaces = getRequiredInterfaces(declaration, javaClass);
+            val requiredTypeToExtend = getRequiredTypeToExtend(declaration, javaClass);
 
-            Collection<Condition<Type>> requiredInterfaces = new ArrayList<>();
-            for (val anInterface : javaClass.implementedInterfaces()) {
-                for (val implementedType : declaration.getImplementedTypes()) {
-                    if (anInterface.test(i -> !i.equalsTypeString(implementedType.getNameAsString()))) {
-                        requiredInterfaces.add(anInterface);
-                    }
-                }
-            }
-
-            Collection<Condition<Type>> requiredTypeToExtend = new ArrayList<>();
-
-            val hasExtended = declaration.getExtendedTypes().stream()
-                    .anyMatch(e ->
-                            javaClass.extendedClass().test(t -> t.equalsTypeString(e.getNameAsString())));
-
-            if (!hasExtended) {
-                requiredTypeToExtend.add(javaClass.extendedClass());
-            }
-
-            final JavaClass antecedent = (JavaClass) rule.antecedent();
-            final Condition<Method> methodAntecedentCondition = antecedent.method();
-            val methodViolations = getMethodViolations(declaration, javaClass.method(), methodAntecedentCondition);
-            val fieldViolations = getFieldViolations(declaration, javaClass.field());
+            val methodViolations = getMethodViolations(declaration, javaClass.method(), rule);
+            val fieldViolations = getFieldViolations(declaration, javaClass.field(), rule);
 
             val missingAnnotations = new ViolationInfo(declaration, collectionToString(requiredAnnotations));
             val missingInterfaces = new ViolationInfo(declaration, collectionToString(requiredInterfaces));
@@ -79,25 +61,63 @@ public class ClassConsequentFilter {
         });
     }
 
-    private static Collection<ViolationInfo> getMethodViolations(ClassOrInterfaceDeclaration declaration, Condition<Method> methodCondition, Condition<Method> methodAntecedentCondition) {
+    private static Collection<Condition<Type>> getRequiredTypeToExtend(ClassOrInterfaceDeclaration declaration, JavaClass javaClass) {
+        Collection<Condition<Type>> requiredTypeToExtend = new ArrayList<>();
+
+        val hasExtended = declaration.getExtendedTypes().stream()
+                .anyMatch(e ->
+                        javaClass.extendedClass().test(t -> t.equalsTypeString(e.getNameAsString())));
+
+        if (!hasExtended) {
+            requiredTypeToExtend.add(javaClass.extendedClass());
+        }
+        return requiredTypeToExtend;
+    }
+
+    private static Collection<Condition<Type>> getRequiredInterfaces(ClassOrInterfaceDeclaration declaration, JavaClass javaClass) {
+        Collection<Condition<Type>> requiredInterfaces = new ArrayList<>();
+        for (val anInterface : javaClass.implementedInterfaces()) {
+            for (val implementedType : declaration.getImplementedTypes()) {
+                if (anInterface.test(i -> !i.equalsTypeString(implementedType.getNameAsString()))) {
+                    requiredInterfaces.add(anInterface);
+                }
+            }
+        }
+        return requiredInterfaces;
+    }
+
+    private static Collection<ViolationInfo> getMethodViolations(ClassOrInterfaceDeclaration declaration, Condition<Method> methodCondition, StaticAnalysisRule rule) {
         val methods = declaration.getMethods();
         if (methods.isEmpty()) {
             // element is missing
             return listOf(new ViolationInfo(declaration, collectionToString(listOf(methodCondition)), true));
         }
-        if (methodAntecedentCondition != null) {
-            final Collection<MethodDeclaration> filteredMethods = MethodAntecedentFilter.doFilter(methods, methodAntecedentCondition);
-            return MethodConsequentFilter.filterFromMethodDeclarations(filteredMethods, methodCondition);
+
+        if (rule != null) {
+            final Condition<Method> methodAntecedentCondition = ((JavaClass) rule.antecedent()).method();
+            if (methodAntecedentCondition.isNotEmpty()) {
+                final Collection<MethodDeclaration> filteredMethods = MethodAntecedentFilter.doFilter(methods, methodAntecedentCondition);
+                return MethodConsequentFilter.filterFromMethodDeclarations(filteredMethods, methodCondition);
+            }
         }
+
         return MethodConsequentFilter.filterFromMethodDeclarations(methods, methodCondition);
     }
 
-    private static Collection<ViolationInfo> getFieldViolations(ClassOrInterfaceDeclaration declaration, Condition<Field> fieldCondition) {
+    private static Collection<ViolationInfo> getFieldViolations(ClassOrInterfaceDeclaration declaration, Condition<Field> fieldCondition, StaticAnalysisRule rule) {
         val fields = declaration.getFields();
         if (fields.isEmpty()) {
             // element is missing
             return listOf(new ViolationInfo(declaration, collectionToString(listOf(fieldCondition)), true));
         }
+        if (rule != null) {
+            val fieldAntecedentCondition = ((JavaClass) rule.antecedent()).field();
+            if (fieldAntecedentCondition.isNotEmpty()) {
+                val filteredFields = FieldAntecedentFilter.doFilter(fields, fieldAntecedentCondition);
+                return FieldConsequentFilter.filter(filteredFields, fieldCondition);
+            }
+        }
+
         return FieldConsequentFilter.filterFromFieldDeclarations(fields, fieldCondition);
     }
 

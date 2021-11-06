@@ -7,7 +7,6 @@ import lombok.SneakyThrows;
 
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.List;
 
 import static ca.ualberta.smr.model.javaelements.Annotation.annotation;
 import static ca.ualberta.smr.model.javaelements.Condition.any;
@@ -19,14 +18,6 @@ public class RuleProvider {
     public static Collection<StaticAnalysisRule> getRules() {
         final InputStream is = RuleProvider.class.getResourceAsStream("/rules.json");
         return RuleParser.parseRules(is);
-//        return listOf(
-//                getRule_OutgoingAndScope(),
-//                getRule_RestClientInjectField(),
-//                getRule_ClaimInjectField(),
-//                getRule_JsonWebTokenField(),
-//                getRule_QueryMutationGraphQLAPI(),
-//                getRule_PathParam()
-//        );
     }
 
     private static StaticAnalysisRule getRule_OutgoingAndScope() {

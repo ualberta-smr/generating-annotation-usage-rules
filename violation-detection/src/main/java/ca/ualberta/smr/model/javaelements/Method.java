@@ -20,7 +20,7 @@ public final class Method implements AnalysisItem, ProgramElement, WithAnnotatio
     private final Collection<Condition<MethodParameter>> parameters = new ArrayList<>();
 
     /**
-     * It's an alias for returnType()
+     * It's an alias for returnType(...)
      */
     @Override
     public void type(Condition<Type> newType) {

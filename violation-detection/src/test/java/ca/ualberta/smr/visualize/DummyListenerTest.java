@@ -23,7 +23,7 @@ public class DummyListenerTest {
         final ParseTreeWalker walker = new ParseTreeWalker();
         final DefaultRulePadGrammarListener dasdas = new DefaultRulePadGrammarListener(new Rule());
         walker.walk(dasdas, tree);
-        final StaticAnalysisRule rule = dasdas.getRule();
+        final StaticAnalysisRule rule = dasdas.getStaticAnalysisRule();
         System.out.println("final");
     }
 }

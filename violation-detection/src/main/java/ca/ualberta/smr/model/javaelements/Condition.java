@@ -3,6 +3,7 @@ package ca.ualberta.smr.model.javaelements;
 import ca.ualberta.smr.model.ViolationInfo;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.var;
 
 import java.util.*;
@@ -15,15 +16,12 @@ import static java.util.Collections.emptyList;
 
 @AllArgsConstructor
 @EqualsAndHashCode
+@Getter
 public final class Condition<T extends ProgramElement> {
 
     private final Collection<T> elements;
     private ConditionOperation operation;
     private final Class<T> type;
-
-    public Class<T> getType() {
-        return this.type;
-    }
 
     // TODO: going with mutating value for now, but change later
     public void update(T item, ConditionOperation operation) {
@@ -34,6 +32,21 @@ public final class Condition<T extends ProgramElement> {
     // TODO: going with mutating value for now, but change later
     public void update(T item) {
         update(item, operation);
+    }
+
+    public Condition<T> plus(Condition<T> o, ConditionOperation operation) {
+        if (this.isSingle() && o.isSingle()) {
+            final Collection<T> newElements = listOf(this.elements.stream().findFirst().get(), o.elements.stream().findFirst().get());
+            return new Condition<>(newElements, operation, this.getType());
+        } else if (this.isSingle()) {
+            return o.isEmpty() ? this : o.plus(this, operation);
+        } else if (o.isSingle()) {
+            if (this.isEmpty()) return o;
+            final ArrayList<T> newElements = new ArrayList<>(elements);
+            newElements.add(o.elements.stream().findFirst().get());
+            return new Condition<>(newElements, operation, this.getType());
+        }
+        throw new UnsupportedOperationException("Operation not supported");
     }
 
     public boolean test(Predicate<T> condition) {
@@ -49,7 +62,15 @@ public final class Condition<T extends ProgramElement> {
     }
 
     public boolean isNotEmpty() {
-        return operation != ConditionOperation.EMPTY;
+        return !isEmpty();
+    }
+
+    public boolean isEmpty() {
+        return operation == ConditionOperation.EMPTY;
+    }
+
+    public boolean isSingle() {
+        return elements.size() == 1 && operation == ConditionOperation.AND;
     }
 
     public <R> Collection<R> map(Function<T, R> fieldExtractor) {

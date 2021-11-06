@@ -5,39 +5,48 @@ import ca.ualberta.grammar.RulepadGrammarParser;
 import ca.ualberta.smr.grammar.DefaultRulePadGrammarListener;
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.val;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class RuleParser {
 
+    /**
+     * Given an input stream of a correct json file with a collection of RulePad rules, this function returns <br>
+     * a collection of rules that are represented in the internal representation.
+     * @param stream InputStream of a correct json file
+     * @return a collection of rules in the internal format.
+     * @throws IOException when the input stream is invalid.
+     */
     public static Collection<StaticAnalysisRule> parseRules(InputStream stream) throws IOException {
-        return doParseRules(stream).getRules()
-                .stream()
-                .map(r -> {
-                    final RulepadGrammarLexer lexer = new RulepadGrammarLexer(CharStreams.fromString(r.getSpecification()));
-                    final RulepadGrammarParser parser = new RulepadGrammarParser(new CommonTokenStream(lexer));
-                    final ParseTree tree = parser.inputSentence();
+        return doParseRules(stream).getRules().stream()
+                .map(RuleParser::getStaticAnalysisRule)
+                .collect(toList());
+    }
 
-                    final ParseTreeWalker walker = new ParseTreeWalker();
-//                    final ConcreteRulePadGrammarListener listener = new ConcreteRulePadGrammarListener(r);
-                    final DefaultRulePadGrammarListener listener = new DefaultRulePadGrammarListener(r);
+    private static StaticAnalysisRule getStaticAnalysisRule(Rule rule) {
+        val lexer = new RulepadGrammarLexer(CharStreams.fromString(rule.getSpecification()));
+        val parser = new RulepadGrammarParser(new CommonTokenStream(lexer));
+        val tree = parser.inputSentence();
+        val listener = new DefaultRulePadGrammarListener(rule);
 
-                    walker.walk(listener, tree);
+        val treeWalker = new ParseTreeWalker();
+        treeWalker.walk(listener, tree);
 
-                    return listener.getRule();
-                }).collect(Collectors.toList());
+        return listener.getStaticAnalysisRule();
     }
 
     private static Rules doParseRules(InputStream stream) throws IOException {
-        final ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(stream, Rules.class);
+        return OBJECT_MAPPER.readValue(stream, Rules.class);
     }
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
 }

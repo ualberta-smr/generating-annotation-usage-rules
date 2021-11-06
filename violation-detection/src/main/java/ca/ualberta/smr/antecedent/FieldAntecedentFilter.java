@@ -8,13 +8,18 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import java.util.Collection;
 
 import static ca.ualberta.smr.utils.AnnotationUtils.containsAnnotation;
+import static java.util.stream.Collectors.toList;
 
 public class FieldAntecedentFilter {
 
     public static Collection<FieldDeclaration> doFilter(CompilationUnit cu, Condition<Field> field) {
-        return cu.findAll(FieldDeclaration.class, fd ->
-                fieldHasAnnotations(fd, field) &&
-                        fieldHasType(fd, field));
+        return doFilter(cu.findAll(FieldDeclaration.class), field);
+    }
+
+    public static Collection<FieldDeclaration> doFilter(Collection<FieldDeclaration> fieldDeclarations, Condition<Field> field) {
+        return fieldDeclarations.stream()
+                .filter(fd -> fieldHasAnnotations(fd, field) &&
+                        fieldHasType(fd, field)).collect(toList());
     }
 
     static boolean fieldHasAnnotations(FieldDeclaration fieldDeclaration, Condition<Field> fieldCondition) {

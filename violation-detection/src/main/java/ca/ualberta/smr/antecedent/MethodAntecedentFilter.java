@@ -14,42 +14,61 @@ import static ca.ualberta.smr.utils.AnnotationUtils.containsAnnotation;
 
 public class MethodAntecedentFilter {
 
+    /**
+     * Selects the 'MethodDeclaration's that match the method condition
+     * @param cu Compilation Unit (mostly a class)
+     * @param method method condition that we want to use as a filter
+     * @return a collection of filtered 'MethodDeclaration's
+     */
     public static Collection<MethodDeclaration> doFilter(CompilationUnit cu, Condition<Method> method) {
-        return cu.findAll(MethodDeclaration.class, m ->
-                methodHasAnnotations(m, method)
-                        && methodHasParameters(m, method)
-                        && methodHasReturnType(m, method)
-        );
+        return doFilter(cu.findAll(MethodDeclaration.class), method);
     }
 
+    /**
+     * Selects the 'MethodDeclaration's that match the method condition
+     * @param methodDeclarations a collection of method declarations
+     * @param method method condition that we want to use as a filter
+     * @return a collection of filtered 'MethodDeclaration's
+     */
     public static Collection<MethodDeclaration> doFilter(Collection<MethodDeclaration> methodDeclarations, Condition<Method> method) {
-        return methodDeclarations
-                .stream()
+        return methodDeclarations.stream()
                 .filter(m -> methodHasAnnotations(m, method)
                         && methodHasParameters(m, method)
-                        && methodHasReturnType(m, method)).collect(Collectors.toList());
+                        && methodHasReturnType(m, method))
+                .collect(Collectors.toList());
     }
 
+    /**
+     * Checks if the method has given annotations
+     */
     static boolean methodHasAnnotations(MethodDeclaration methodDeclaration, Condition<Method> methodCondition) {
         return methodCondition.test(method ->
                 method.annotations().stream().allMatch(a -> containsAnnotation(methodDeclaration, a)));
     }
 
+    /**
+     * Checks if the method has given parameters
+     */
     static boolean methodHasParameters(MethodDeclaration methodDeclaration, Condition<Method> methodCondition) {
         return methodCondition.test(method ->
                 method.parameters().stream().allMatch(mp ->
                         methodDeclaration.findAll(Parameter.class).stream().anyMatch(p -> parameterMatches(p, mp))));
     }
 
+    /**
+     * Checks if the parameter matches with the provided condition
+     */
     static boolean parameterMatches(Parameter parameterDeclaration, Condition<MethodParameter> parameterCondition) {
         return parameterCondition
                 .test(p -> {
                     final boolean sameType = p.type().test(t -> t.equalsTypeString(parameterDeclaration.getTypeAsString()));
-                    // checks for sameType and containing all required annotations
                     return sameType && p.annotations().stream().allMatch(a -> containsAnnotation(parameterDeclaration, a));
                 });
     }
 
+    /**
+     * Checks if the method has the given return type
+     */
     static boolean methodHasReturnType(MethodDeclaration methodDeclaration, Condition<Method> methodCondition) {
         return methodCondition.test(method ->
                 method.returnType() == null ||
