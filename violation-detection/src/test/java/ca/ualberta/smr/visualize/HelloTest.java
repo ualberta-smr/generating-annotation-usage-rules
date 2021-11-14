@@ -10,8 +10,12 @@ import java.util.Arrays;
 
 public class HelloTest {
     public static void main(String[] args) {
-        String input = "class with (function with parameter with annotation \"PathParam\" ) must have annotation \"Path\" or function with annotation \"Path\" ";
+//        String input = "class with (function with parameter with annotation \"PathParam\" ) must have annotation \"Path\" or function with annotation \"Path\" ";
 //        String input = "function must have annotation \"A\" or annotation \"B\" ";
+//        String input = "class with annotation \"A\" must have function with (annotation \"B\" or annotation \"C\" ) ";
+//        String input = "class with annotation \"A\" must have function with annotation \"B\" or annotation \"C\" or annotation \"D\" ";
+//        String input = "class with function with annotation \"O\" or annotation \"I\" must have annotation \"A\" or annotation \"D\" ";
+        String input = "class with annotation \"A\" must have function with (annotation \"B\" or annotation \"C\" ) or annotation \"D\" ";
         final RulepadGrammarLexer lexer = new RulepadGrammarLexer(CharStreams.fromString(input));
         final RulepadGrammarParser parser = new RulepadGrammarParser(new CommonTokenStream(lexer));
 //        parser.setTrace(true);
