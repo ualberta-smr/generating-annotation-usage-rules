@@ -72,22 +72,24 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
     // TODO: parenthesis contexts are problematic
     public void enterClassExpression(RulepadGrammarParser.ClassExpressionContext ctx) {
         if (ctx.op == null) {
-            val javaClass = new JavaClass();
-            if (stack.isEmpty()) {
-                // if the stack is empty it means 2 things
-                // 1: either we have just started parsing antecedent
-                // 2: we have finished antecedent section, and we're entering consequent part
-                setAntecedentOrConsequent(single(javaClass));
-            } else {
-                final Data mostRecentData = stack.peek();
-                if (isComingFromBinary(mostRecentData)) {
-                    Condition<JavaClass> binary = (Condition<JavaClass>) mostRecentData.node;
-                    binary.update(javaClass);
+            if (ctx.classExpression().isEmpty()) {
+                val javaClass = new JavaClass();
+                if (stack.isEmpty()) {
+                    // if the stack is empty it means 2 things
+                    // 1: either we have just started parsing antecedent
+                    // 2: we have finished antecedent section, and we're entering consequent part
+                    setAntecedentOrConsequent(single(javaClass));
+                } else {
+                    final Data mostRecentData = stack.peek();
+                    if (isComingFromBinary(mostRecentData)) {
+                        Condition<JavaClass> binary = (Condition<JavaClass>) mostRecentData.node;
+                        binary.update(javaClass);
+                    }
+                    // TODO: in future it may come from a function or a field
+                    // TODO: for now, only <binary context>
                 }
-                // TODO: in future it may come from a function or a field
-                // TODO: for now, only <binary context>
+                pushToStack(NodeType.CLASS, javaClass);
             }
-            pushToStack(NodeType.CLASS, javaClass);
         } else {
             // meaning that we have a rule of form: class ... must have A or/and B
             // class with annotation A or function B
@@ -121,6 +123,9 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
                 return;
             }
         }
+        if (ctx.op == null && !ctx.classExpression().isEmpty()) {
+            return;
+        }
         popFromStack();
     }
 
@@ -128,23 +133,27 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
     @SuppressWarnings("unchecked")
     public void enterFunctionExpression(RulepadGrammarParser.FunctionExpressionContext ctx) {
         if (ctx.op == null) {
-            final Method method = new Method();
-            if (stack.isEmpty()) {
-                // if the stack is empty it means 2 things
-                // 1: either we have just started parsing antecedent
-                // 2: we have finished antecedent section, and we're entering consequent part
-                setAntecedentOrConsequent(single(method));
-            } else {
-                final Data mostRecentData = stack.peek();
-                if (isComingFromBinary(mostRecentData)) {
-                    Condition<Method> binary = (Condition<Method>) mostRecentData.node;
-                    binary.update(method);
-                } else if (mostRecentData.comingFrom == NodeType.CLASS) {
-                    JavaClass javaClass = (JavaClass) mostRecentData.node;
-                    javaClass.method(single(method));
+            if (ctx.functionExpression().isEmpty()) {
+                // function expression being empty simply denotes that
+                // there's no chain of single FunctionExpression -> FunctionExpression
+                final Method method = new Method();
+                if (stack.isEmpty()) {
+                    // if the stack is empty it means 2 things
+                    // 1: either we have just started parsing antecedent
+                    // 2: we have finished antecedent section, and we're entering consequent part
+                    setAntecedentOrConsequent(single(method));
+                } else {
+                    final Data mostRecentData = stack.peek();
+                    if (isComingFromBinary(mostRecentData)) {
+                        Condition<Method> binary = (Condition<Method>) mostRecentData.node;
+                        binary.update(method);
+                    } else if (mostRecentData.comingFrom == NodeType.CLASS) {
+                        JavaClass javaClass = (JavaClass) mostRecentData.node;
+                        javaClass.method(single(method));
+                    }
                 }
+                pushToStack(NodeType.METHOD, method);
             }
-            pushToStack(NodeType.METHOD, method);
         } else {
             final Pair<NodeType, Condition<Method>> values = createBinaryContextValues(ctx.op, Method.class);
             final NodeType operation = values.key();
@@ -182,6 +191,9 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
                 return;
             }
         }
+        if (ctx.op == null && !ctx.functionExpression().isEmpty()) {
+            return;
+        }
         popFromStack();
     }
 
@@ -189,23 +201,25 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
     @SuppressWarnings("unchecked")
     public void enterDeclarationStatementExpression(RulepadGrammarParser.DeclarationStatementExpressionContext ctx) {
         if (ctx.op == null) {
-            final Field field = new Field();
-            if (stack.isEmpty()) {
-                // if the stack is empty it means 2 things
-                // 1: either we have just started parsing antecedent
-                // 2: we have finished antecedent section, and we're entering consequent part
-                setAntecedentOrConsequent(single(field));
-            } else {
-                final Data mostRecentData = stack.peek();
-                if (isComingFromBinary(mostRecentData)) {
-                    Condition<Field> binary = (Condition<Field>) mostRecentData.node;
-                    binary.update(field);
-                } else if (mostRecentData.comingFrom == NodeType.CLASS) {
-                    JavaClass javaClass = (JavaClass) mostRecentData.node;
-                    javaClass.field(single(field));
+            if (ctx.declarationStatementExpression().isEmpty()) {
+                final Field field = new Field();
+                if (stack.isEmpty()) {
+                    // if the stack is empty it means 2 things
+                    // 1: either we have just started parsing antecedent
+                    // 2: we have finished antecedent section, and we're entering consequent part
+                    setAntecedentOrConsequent(single(field));
+                } else {
+                    final Data mostRecentData = stack.peek();
+                    if (isComingFromBinary(mostRecentData)) {
+                        Condition<Field> binary = (Condition<Field>) mostRecentData.node;
+                        binary.update(field);
+                    } else if (mostRecentData.comingFrom == NodeType.CLASS) {
+                        JavaClass javaClass = (JavaClass) mostRecentData.node;
+                        javaClass.field(single(field));
+                    }
                 }
+                pushToStack(NodeType.FIELD, field);
             }
-            pushToStack(NodeType.FIELD, field);
         } else {
             final Pair<NodeType, Condition<Field>> values = createBinaryContextValues(ctx.op, Field.class);
             final NodeType operation = values.key();
@@ -240,6 +254,9 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
             if (weAreOr && isComingFromBinary) {
                 return;
             }
+        }
+        if (ctx.op == null && !ctx.declarationStatementExpression().isEmpty()) {
+            return;
         }
         popFromStack();
     }
