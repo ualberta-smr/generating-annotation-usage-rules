@@ -14,8 +14,9 @@ import static java.util.Collections.emptyList;
 final public class MethodAnalyzer implements AnalysisRunner {
 
     @Override
+    @SuppressWarnings("unchecked")
     public Collection<ViolationInfo> analyze(CompilationUnit cu, StaticAnalysisRule rule) {
-        val methodDeclarations = MethodAntecedentFilter.doFilter(cu, Condition.single((Method) rule.antecedent()));
+        val methodDeclarations = MethodAntecedentFilter.doFilter(cu, (Condition<Method>) rule.antecedent());
         if (methodDeclarations.isEmpty()) return emptyList();
 
         return rule.consequent()
@@ -25,5 +26,10 @@ final public class MethodAnalyzer implements AnalysisRunner {
     @Override
     public boolean supports(AnalysisItem item) {
         return item instanceof Method;
+    }
+
+    @Override
+    public boolean supports(Class<?> item) {
+        return item.equals(Method.class);
     }
 }

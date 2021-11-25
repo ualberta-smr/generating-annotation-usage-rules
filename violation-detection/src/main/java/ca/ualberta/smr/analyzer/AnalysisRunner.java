@@ -10,4 +10,5 @@ import java.util.Collection;
 public interface AnalysisRunner {
     Collection<ViolationInfo> analyze(CompilationUnit cu, StaticAnalysisRule rule);
     boolean supports(AnalysisItem item);
+    boolean supports(Class<?> item);
 }

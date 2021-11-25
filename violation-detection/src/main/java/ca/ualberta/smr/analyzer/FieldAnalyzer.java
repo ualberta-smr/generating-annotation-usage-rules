@@ -15,8 +15,9 @@ import static java.util.Collections.emptyList;
 final public class FieldAnalyzer implements AnalysisRunner {
 
     @Override
+    @SuppressWarnings("unchecked")
     public Collection<ViolationInfo> analyze(CompilationUnit cu, StaticAnalysisRule rule) {
-        val fieldDeclarations = FieldAntecedentFilter.doFilter(cu, single((Field) rule.antecedent()));
+        val fieldDeclarations = FieldAntecedentFilter.doFilter(cu, (Condition<Field>) rule.antecedent());
         if (fieldDeclarations.isEmpty()) return emptyList();
         return rule.consequent()
                 .evaluate(r -> FieldConsequentFilter.filter(fieldDeclarations, single((Field) r)));
@@ -25,6 +26,11 @@ final public class FieldAnalyzer implements AnalysisRunner {
     @Override
     public boolean supports(AnalysisItem item) {
         return item instanceof Field;
+    }
+
+    @Override
+    public boolean supports(Class<?> item) {
+        return item.equals(Field.class);
     }
 }
 

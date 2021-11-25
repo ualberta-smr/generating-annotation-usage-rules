@@ -7,8 +7,6 @@ import com.github.javaparser.ast.body.*;
 import lombok.val;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static ca.ualberta.smr.antecedent.FieldAntecedentFilter.fieldHasAnnotations;
@@ -21,7 +19,11 @@ import static ca.ualberta.smr.utils.AnnotationUtils.containsAnnotation;
  */
 public class ClassAntecedentFilter {
 
-    public static Collection<ClassOrInterfaceDeclaration> doFilter(CompilationUnit cu, JavaClass klass) {
+    public static Collection<ClassOrInterfaceDeclaration> doFilter(CompilationUnit cu, Condition<JavaClass> classCondition) {
+        return classCondition.select(k -> doFilter(cu, k));
+    }
+
+    private static Collection<ClassOrInterfaceDeclaration> doFilter(CompilationUnit cu, JavaClass klass) {
         val classes = cu.findAll(ClassOrInterfaceDeclaration.class, e -> !e.isAbstract() && !e.isInterface());
 
         val classesWithAnnotations = classes.stream().filter(clazz -> classHasAnnotations(clazz, klass.annotations()));

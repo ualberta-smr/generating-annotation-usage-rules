@@ -49,14 +49,11 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
     }
 
     public StaticAnalysisRule getStaticAnalysisRule() {
-        // currently, it only takes the first element from antecedent which is actually incorrect
-        // because there can be 2 or more elements in the `antecedent condition elements`
-        // this code assumes there's only ones
-        return new StaticAnalysisRule(rule.getId(), antecedent.getFirst(), consequent, rule.getSpecification());
+        return new StaticAnalysisRule(rule.getId(), antecedent, consequent, rule.getSpecification());
     }
 
     private boolean isComingFromBinary(Data datum) {
-        return datum.comingFrom == NodeType._OR_;// || datum.comingFrom == NodeType._AND_;
+        return datum.comingFrom == NodeType._OR_ || datum.comingFrom == NodeType._AND_;
     }
 
     private void setAntecedentOrConsequent(Condition<? extends AnalysisItem> newValue) {
@@ -96,37 +93,31 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
             final Pair<NodeType, Condition<JavaClass>> values = createBinaryContextValues(ctx.op, JavaClass.class);
             final NodeType operation = values.key();
             final Condition<JavaClass> condition = values.value();
-            boolean isComingFromBinary = false;
             if (stack.isEmpty()) {
                 // if the stack is empty it means 2 things
                 // 1: either we have just started parsing antecedent
                 // 2: we have finished antecedent section, and we're entering consequent part
                 setAntecedentOrConsequent(condition);
-            } else {
-                isComingFromBinary = isComingFromBinary(stack.peek());
             }
-            if (!isComingFromBinary) {
-                pushToStack(operation, condition);
-            }
+            pushToStack(operation, condition);
         }
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void exitClassExpression(RulepadGrammarParser.ClassExpressionContext ctx) {
-        // TODO: it's actually not a good idea to just consider ORs
-        boolean weAreOr = ctx.op != null && ctx.op.getText().trim().equals("or");
-        final RuleContext parent = ctx.parent;
-        if (parent instanceof RulepadGrammarParser.ClassExpressionContext) {
-            val fParent = (RulepadGrammarParser.ClassExpressionContext) parent;
-            boolean isComingFromBinary = fParent.op != null;
-            if (weAreOr && isComingFromBinary) {
-                return;
-            }
-        }
-        if (ctx.op == null && !ctx.classExpression().isEmpty()) {
+        if ((ctx.op == null) && !ctx.classExpression().isEmpty()) {
             return;
         }
-        popFromStack();
+        final Data data = popFromStack();
+        if (ctx.op != null && isComingFromBinary(data) && !stack.isEmpty()) {
+            final Data mostRecentData = stack.peek();
+            if (isComingFromBinary(mostRecentData)) {
+                Condition<JavaClass> binary = (Condition<JavaClass>) mostRecentData.node;
+                val operation = mostRecentData.comingFrom == NodeType._OR_ ? Condition.ConditionOperation.OR : Condition.ConditionOperation.AND;
+                binary.update((Condition<JavaClass>) data.node, operation);
+            }
+        }
     }
 
     @Override
@@ -158,7 +149,6 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
             final Pair<NodeType, Condition<Method>> values = createBinaryContextValues(ctx.op, Method.class);
             final NodeType operation = values.key();
             final Condition<Method> methodCondition = values.value();
-            boolean isComingFromBinary = false;
             if (stack.isEmpty()) {
                 // if the stack is empty it means 2 things
                 // 1: either we have just started parsing antecedent
@@ -170,31 +160,26 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
                     JavaClass javaClass = (JavaClass) mostRecentData.node;
                     javaClass.method(methodCondition);
                 }
-                isComingFromBinary = isComingFromBinary(mostRecentData);
             }
-            if (!isComingFromBinary) {
-                pushToStack(operation, methodCondition);
-            }
+            pushToStack(operation, methodCondition);
         }
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void exitFunctionExpression(RulepadGrammarParser.FunctionExpressionContext ctx) {
-        // should not pop from the stack if
-        // we are OR and coming from OR
-        boolean weAreOr = ctx.op != null && ctx.op.getText().trim().equals("or");
-        final RuleContext parent = ctx.parent;
-        if (parent instanceof RulepadGrammarParser.FunctionExpressionContext) {
-            val fParent = (RulepadGrammarParser.FunctionExpressionContext) parent;
-            boolean isComingFromBinary = fParent.op != null;
-            if (weAreOr && isComingFromBinary) {
-                return;
-            }
-        }
-        if (ctx.op == null && !ctx.functionExpression().isEmpty()) {
+        if ((ctx.op == null) && !ctx.functionExpression().isEmpty()) {
             return;
         }
-        popFromStack();
+        final Data data = popFromStack();
+        if (ctx.op != null && isComingFromBinary(data) && !stack.isEmpty()) {
+            final Data mostRecentData = stack.peek();
+            if (isComingFromBinary(mostRecentData)) {
+                Condition<Method> binary = (Condition<Method>) mostRecentData.node;
+                val operation = mostRecentData.comingFrom == NodeType._OR_ ? Condition.ConditionOperation.OR : Condition.ConditionOperation.AND;
+                binary.update((Condition<Method>) data.node, operation);
+            }
+        }
     }
 
     @Override
@@ -224,7 +209,6 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
             final Pair<NodeType, Condition<Field>> values = createBinaryContextValues(ctx.op, Field.class);
             final NodeType operation = values.key();
             final Condition<Field> fieldCondition = values.value();
-            boolean isComingFromBinary = false;
             if (stack.isEmpty()) {
                 // if the stack is empty it means 2 things
                 // 1: either we have just started parsing antecedent
@@ -236,29 +220,26 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
                     JavaClass javaClass = (JavaClass) mostRecentData.node;
                     javaClass.field(fieldCondition);
                 }
-                isComingFromBinary = isComingFromBinary(mostRecentData);
             }
-            if (!isComingFromBinary) {
-                pushToStack(operation, fieldCondition);
-            }
+            pushToStack(operation, fieldCondition);
         }
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void exitDeclarationStatementExpression(RulepadGrammarParser.DeclarationStatementExpressionContext ctx) {
-        boolean weAreOr = ctx.op != null && ctx.op.getText().trim().equals("or");
-        final RuleContext parent = ctx.parent;
-        if (parent instanceof RulepadGrammarParser.DeclarationStatementExpressionContext) {
-            val fParent = (RulepadGrammarParser.DeclarationStatementExpressionContext) parent;
-            boolean isComingFromBinary = fParent.op != null;
-            if (weAreOr && isComingFromBinary) {
-                return;
-            }
-        }
-        if (ctx.op == null && !ctx.declarationStatementExpression().isEmpty()) {
+        if ((ctx.op == null) && !ctx.declarationStatementExpression().isEmpty()) {
             return;
         }
-        popFromStack();
+        final Data data = popFromStack();
+        if (ctx.op != null && isComingFromBinary(data) && !stack.isEmpty()) {
+            final Data mostRecentData = stack.peek();
+            if (isComingFromBinary(mostRecentData)) {
+                Condition<Field> binary = (Condition<Field>) mostRecentData.node;
+                val operation = mostRecentData.comingFrom == NodeType._OR_ ? Condition.ConditionOperation.OR : Condition.ConditionOperation.AND;
+                binary.update((Condition<Field>) data.node, operation);
+            }
+        }
     }
 
     @SuppressWarnings("DuplicatedCode")
@@ -371,10 +352,13 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
 
     private void pushToStack(NodeType type, Object element) {
         stack.push(new Data(type, element));
+//        System.out.println("Pushed: " + stack.peek().toString());
     }
 
-    private void popFromStack() {
-        this.stack.pop();
+    private Data popFromStack() {
+        val a = this.stack.pop();
+//        System.out.println("Popped: " + a.toString());
+        return a;
     }
 
     private <T extends ProgramElement> Pair<NodeType, Condition<T>> createBinaryContextValues(RulepadGrammarParser.BinaryContext ctx, Class<T> clazz) {

@@ -1,17 +1,14 @@
 package ca.ualberta.smr.rules;
 
-import ca.ualberta.grammar.RulepadGrammarLexer;
-import ca.ualberta.grammar.RulepadGrammarParser;
+import ca.ualberta.grammar.*;
 import ca.ualberta.smr.grammar.DefaultRulePadGrammarListener;
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.val;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Collection;
 
 import static java.util.stream.Collectors.toList;

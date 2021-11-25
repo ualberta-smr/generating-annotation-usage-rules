@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode
 public class StaticAnalysisRule {
     private final String name;
-    private final AnalysisItem antecedent;
+    private final Condition<? extends AnalysisItem> antecedent;
     private final Condition<? extends AnalysisItem> consequent;
     private final String description;
 

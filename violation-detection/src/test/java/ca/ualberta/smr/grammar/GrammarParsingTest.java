@@ -10,8 +10,6 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -21,52 +19,11 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static ca.ualberta.smr.model.javaelements.Annotation.annotation;
-import static ca.ualberta.smr.model.javaelements.Condition.any;
-import static ca.ualberta.smr.model.javaelements.Condition.single;
+import static ca.ualberta.smr.model.javaelements.Condition.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-public class RulePadTest {
-
-    @Test
-    @Disabled("not yet supported")
-    void test_demo() {
-        String ruleString = "class with annotation \"A\" must have function with (annotation \"B\" or annotation \"C\" ) ";
-        final JavaClass antecedent = new JavaClass();
-        antecedent.annotations().add(single(annotation("A")));
-
-        final Method m1 = new Method();
-        m1.annotations().add(single(annotation("B")));
-        final Method m2 = new Method();
-        m2.annotations().add(single(annotation("C")));
-
-        final JavaClass consequent = new JavaClass();
-        consequent.method(any(m1, m2));
-
-        final StaticAnalysisRule rule = new StaticAnalysisRule("demo", antecedent, single(consequent), ruleString);
-        parseAndCheckRule(rule);
-    }
-
-    @Test
-    @Disabled("Not yet implemented")
-    void test_demo3() {
-        String ruleString = "class with annotation \"A\" must have function with (annotation \"B\" or annotation \"C\" or annotation \"D\" ) ";
-        final JavaClass antecedent = new JavaClass();
-        antecedent.annotations().add(single(annotation("A")));
-
-        final Method m1 = new Method();
-        m1.annotations().add(single(annotation("B")));
-        final Method m2 = new Method();
-        m2.annotations().add(single(annotation("C")));
-        final Method m3 = new Method();
-        m3.annotations().add(single(annotation("D")));
-
-        final JavaClass consequent = new JavaClass();
-        consequent.method(any(m1, m2, m3));
-
-        final StaticAnalysisRule rule = new StaticAnalysisRule("demo", antecedent, single(consequent), ruleString);
-        parseAndCheckRule(rule);
-    }
+public class GrammarParsingTest {
 
     @ParameterizedTest(name = "{index} : {0}")
     @MethodSource("dataProvider")
@@ -93,7 +50,11 @@ public class RulePadTest {
         map.put("function_with_multiple_ors_parenthesis", getRule_function_with_multiple_ors_parenthesis());
         map.put("field_with_multiple_ors_parenthesis", getRule_field_with_multiple_ors_parenthesis());
         map.put("class_with_multiple_ors_parenthesis", getRule_class_with_multiple_ors_parenthesis());
-        map.put("unorthodox", getRule_unorthodox());
+        map.put("antecedent_class_with_or", getRule_antecedent_class_with_or());
+        map.put("antecedent_function_with_or_plus_consequent_with_or", getRule_antecedent_function_with_or_plus_consequent_with_or());
+        map.put("field_with_or_plus_consequent_with_or", getRule_antecedent_field_with_or_plus_consequent_with_or());
+        map.put("field_with_or_plus_consequent_with_and", getRule_antecedent_field_with_and_plus_consequent_with_and());
+        map.put("mixingAll", getRule_mixingAll());
         // actual rules
         map.put("OutgoingAndScope", getRule_OutgoingAndScope());
         map.put("RestClientInjectField", getRule_RestClientInjectField());
@@ -137,7 +98,7 @@ public class RulePadTest {
         antecedent.annotations().add(single(annotation("Demo")));
         final Method consequent = new Method();
         consequent.annotations().add(single(annotation("Hello")));
-        return new StaticAnalysisRule("function_simple", antecedent, single(consequent), "function with annotation \"Demo\" must have annotation \"Hello\" ");
+        return new StaticAnalysisRule("function_simple", single(antecedent), single(consequent), "function with annotation \"Demo\" must have annotation \"Hello\" ");
     }
 
     private static StaticAnalysisRule getRule_field_simple() {
@@ -145,7 +106,7 @@ public class RulePadTest {
         antecedent.annotations().add(single(annotation("Demo")));
         final Field consequent = new Field();
         consequent.annotations().add(single(annotation("Hello")));
-        return new StaticAnalysisRule("field_simple", antecedent, single(consequent), "field with annotation \"Demo\" must have annotation \"Hello\" ");
+        return new StaticAnalysisRule("field_simple", single(antecedent), single(consequent), "field with annotation \"Demo\" must have annotation \"Hello\" ");
     }
 
     private static StaticAnalysisRule getRule_class_simple() {
@@ -153,7 +114,7 @@ public class RulePadTest {
         antecedent.annotations().add(single(annotation("Demo")));
         final JavaClass consequent = new JavaClass();
         consequent.annotations().add(single(annotation("Hello")));
-        return new StaticAnalysisRule("class_simple", antecedent, single(consequent), "class with annotation \"Demo\" must have annotation \"Hello\" ");
+        return new StaticAnalysisRule("class_simple", single(antecedent), single(consequent), "class with annotation \"Demo\" must have annotation \"Hello\" ");
     }
 
     private static StaticAnalysisRule getRule_OutgoingAndScope() {
@@ -180,7 +141,7 @@ public class RulePadTest {
         );
 
         Condition<? extends AnalysisItem> consequent = any(javaClass1, javaClass2);
-        return new StaticAnalysisRule("OutgoingAndScope", antecedent, consequent, "class with function with annotation \"Outgoing\" or annotation \"Incoming\" must have annotation \"ApplicationScoped\" or annotation \"Dependent\" ");
+        return new StaticAnalysisRule("OutgoingAndScope", single(antecedent), consequent, "class with function with annotation \"Outgoing\" or annotation \"Incoming\" must have annotation \"ApplicationScoped\" or annotation \"Dependent\" ");
     }
 
     private static StaticAnalysisRule getRule_RestClientInjectField() {
@@ -193,7 +154,7 @@ public class RulePadTest {
         field.annotations().add(single(annotation("Inject")));
         final Condition<Field> consequent = single(field);
 
-        return new StaticAnalysisRule("RestClientInjectField", antecedent, consequent, "field with annotation \"RestClient\" must have annotation \"Inject\" ");
+        return new StaticAnalysisRule("RestClientInjectField", single(antecedent), consequent, "field with annotation \"RestClient\" must have annotation \"Inject\" ");
     }
 
     private static StaticAnalysisRule getRule_ClaimInjectField() {
@@ -206,7 +167,7 @@ public class RulePadTest {
         field.annotations().add(single(annotation("Inject")));
         final Condition<Field> consequent = single(field);
 
-        return new StaticAnalysisRule("ClaimInjectField", antecedent, consequent, "field with annotation \"Claim\" must have annotation \"Inject\" ");
+        return new StaticAnalysisRule("ClaimInjectField", single(antecedent), consequent, "field with annotation \"Claim\" must have annotation \"Inject\" ");
     }
 
     private static StaticAnalysisRule getRule_JsonWebTokenField() {
@@ -219,7 +180,7 @@ public class RulePadTest {
         field.annotations().add(single(annotation("Inject")));
         final Condition<Field> consequent = single(field);
 
-        return new StaticAnalysisRule("JsonWebTokenField", antecedent, consequent, "field with type \"JsonWebToken\" must have annotation \"Inject\" ");
+        return new StaticAnalysisRule("JsonWebTokenField", single(antecedent), consequent, "field with type \"JsonWebToken\" must have annotation \"Inject\" ");
     }
 
     private static StaticAnalysisRule getRule_PathParam() {
@@ -246,7 +207,7 @@ public class RulePadTest {
                 klass1, klass2
         );
 
-        return new StaticAnalysisRule("PathParam", antecedent, consequent, "class with function with parameter with annotation \"PathParam\" must have annotation \"Path\" or function with annotation \"Path\" ");
+        return new StaticAnalysisRule("PathParam", single(antecedent), consequent, "class with function with parameter with annotation \"PathParam\" must have annotation \"Path\" or function with annotation \"Path\" ");
     }
 
     private static StaticAnalysisRule getRule_QueryMutationGraphQLAPI() {
@@ -266,7 +227,7 @@ public class RulePadTest {
         javaClass.annotations().add(single(annotation("GraphQLApi")));
 
         Condition<? extends AnalysisItem> consequent = single(javaClass);
-        return new StaticAnalysisRule("QueryMutationGraphQLAPI", antecedent, consequent, "class with function with annotation \"Query\" or annotation \"Mutation\" must have annotation \"GraphQLApi\" ");
+        return new StaticAnalysisRule("QueryMutationGraphQLAPI", single(antecedent), consequent, "class with function with annotation \"Query\" or annotation \"Mutation\" must have annotation \"GraphQLApi\" ");
     }
 
     private static StaticAnalysisRule getRule_function_with_OR_in_consequent() {
@@ -283,7 +244,7 @@ public class RulePadTest {
                 method1, method2
         );
 
-        return new StaticAnalysisRule("function_with_OR_in_consequent", antecedent, consequent, "function with type \"C\" must have annotation \"A\" or annotation \"B\" ");
+        return new StaticAnalysisRule("function_with_OR_in_consequent", single(antecedent), consequent, "function with type \"C\" must have annotation \"A\" or annotation \"B\" ");
     }
 
     private static StaticAnalysisRule getRule_field_with_OR_in_consequent() {
@@ -300,7 +261,7 @@ public class RulePadTest {
                 field1, field2
         );
 
-        return new StaticAnalysisRule("field_with_OR_in_consequent", antecedent, consequent, "field with type \"C\" must have annotation \"A\" or annotation \"B\" ");
+        return new StaticAnalysisRule("field_with_OR_in_consequent", single(antecedent), consequent, "field with type \"C\" must have annotation \"A\" or annotation \"B\" ");
     }
 
     private static StaticAnalysisRule getRule_class_field_with_OR_in_consequent() {
@@ -323,7 +284,7 @@ public class RulePadTest {
 
         val consequent = single(consequentClass);
 
-        return new StaticAnalysisRule("class_field_with_OR_in_consequent", antecedent, consequent, "class with field with type \"C\" must have field with annotation \"A\" or annotation \"B\" ");
+        return new StaticAnalysisRule("class_field_with_OR_in_consequent", single(antecedent), consequent, "class with field with type \"C\" must have field with annotation \"A\" or annotation \"B\" ");
     }
 
     private static StaticAnalysisRule getRule_annotation_with_parameter_both_type_and_name() {
@@ -341,7 +302,7 @@ public class RulePadTest {
 
         field.annotations().add(single(annotation));
         val consequent = single(field);
-        return new StaticAnalysisRule("annotation_with_parameter_both_type_and_name", antecedent, consequent, "field with type \"K\" must have annotation \"A\" with parameter \"B C\" ");
+        return new StaticAnalysisRule("annotation_with_parameter_both_type_and_name", single(antecedent), consequent, "field with type \"K\" must have annotation \"A\" with parameter \"B C\" ");
     }
 
     private static StaticAnalysisRule getRule_annotation_with_parameter_both_type_only() {
@@ -358,7 +319,7 @@ public class RulePadTest {
 
         field.annotations().add(single(annotation));
         val consequent = single(field);
-        return new StaticAnalysisRule("annotation_with_parameter_both_type_and_name", antecedent, consequent, "field with type \"K\" must have annotation \"A\" with parameter \"B\" ");
+        return new StaticAnalysisRule("annotation_with_parameter_both_type_and_name", single(antecedent), consequent, "field with type \"K\" must have annotation \"A\" with parameter \"B\" ");
     }
 
     private static StaticAnalysisRule getRule_function_with_param_string() {
@@ -377,7 +338,7 @@ public class RulePadTest {
                 method1, method2
         );
 
-        return new StaticAnalysisRule("function_with_param_string", antecedent, consequent, "function with parameter \"C\" must have annotation \"A\" or annotation \"B\" ");
+        return new StaticAnalysisRule("function_with_param_string", single(antecedent), consequent, "function with parameter \"C\" must have annotation \"A\" or annotation \"B\" ");
     }
 
     private static StaticAnalysisRule getRule_function_with_multiple_ors() {
@@ -395,7 +356,7 @@ public class RulePadTest {
         final JavaClass consequent = new JavaClass();
         consequent.method(any(m1, m2, m3));
 
-        return new StaticAnalysisRule("function_with_multiple_ors", antecedent, single(consequent), ruleString);
+        return new StaticAnalysisRule("function_with_multiple_ors", single(antecedent), single(consequent), ruleString);
     }
 
     private static StaticAnalysisRule getRule_class_with_multiple_ors() {
@@ -410,7 +371,7 @@ public class RulePadTest {
         final JavaClass j3 = new JavaClass();
         j3.annotations().add(single(annotation("D")));
 
-        return new StaticAnalysisRule("class_with_multiple_ors", antecedent, any(j1, j2, j3), ruleString);
+        return new StaticAnalysisRule("class_with_multiple_ors", single(antecedent), any(j1, j2, j3), ruleString);
     }
 
     private static StaticAnalysisRule getRule_field_with_multiple_ors() {
@@ -425,7 +386,7 @@ public class RulePadTest {
         final Field f3 = new Field();
         f3.annotations().add(single(annotation("D")));
 
-        return new StaticAnalysisRule("field_with_multiple_ors", antecedent, any(f1, f2, f3), ruleString);
+        return new StaticAnalysisRule("field_with_multiple_ors", single(antecedent), any(f1, f2, f3), ruleString);
     }
 
     private static StaticAnalysisRule getRule_function_with_multiple_ors_parenthesis() {
@@ -443,7 +404,7 @@ public class RulePadTest {
         final JavaClass consequent = new JavaClass();
         consequent.method(any(m1, m2, m3));
 
-        return new StaticAnalysisRule("function_with_multiple_ors_parenthesis", antecedent, single(consequent), ruleString);
+        return new StaticAnalysisRule("function_with_multiple_ors_parenthesis", single(antecedent), single(consequent), ruleString);
     }
 
     private static StaticAnalysisRule getRule_field_with_multiple_ors_parenthesis() {
@@ -461,7 +422,7 @@ public class RulePadTest {
         final JavaClass consequent = new JavaClass();
         consequent.field(any(f1, f2, f3));
 
-        return new StaticAnalysisRule("field_with_multiple_ors_parenthesis", antecedent, single(consequent), ruleString);
+        return new StaticAnalysisRule("field_with_multiple_ors_parenthesis", single(antecedent), single(consequent), ruleString);
     }
 
     private static StaticAnalysisRule getRule_class_with_multiple_ors_parenthesis() {
@@ -478,10 +439,10 @@ public class RulePadTest {
 
         final Condition<JavaClass> consequent = any(j1, j2, j3);
 
-        return new StaticAnalysisRule("class_with_multiple_ors_parenthesis", antecedent, consequent, ruleString);
+        return new StaticAnalysisRule("class_with_multiple_ors_parenthesis", single(antecedent), consequent, ruleString);
     }
 
-    private static StaticAnalysisRule getRule_unorthodox() {
+    private static StaticAnalysisRule getRule_mixingAll() {
         String ruleString = "class with annotation \"A\" must have (function with annotation \"B\" or annotation \"C\" " +
                 "or annotation \"D\" ) or (field with type \"X\" or type \"Y\" ) or (annotation \"M\" or annotation \"L\" ) ";
 
@@ -514,7 +475,105 @@ public class RulePadTest {
 
         final Condition<JavaClass> consequent = any(j1, j2, j3, j4);
 
-        return new StaticAnalysisRule("unorthodox", antecedent, consequent, ruleString);
+        return new StaticAnalysisRule("mixingAll", single(antecedent), consequent, ruleString);
+    }
+
+    private static StaticAnalysisRule getRule_antecedent_class_with_or() {
+        String ruleString = "class with (annotation \"B\" or annotation \"C\" or annotation \"D\" ) must have annotation \"A\" ";
+
+        final JavaClass j1 = new JavaClass();
+        j1.annotations().add(single(annotation("B")));
+        final JavaClass j2 = new JavaClass();
+        j2.annotations().add(single(annotation("C")));
+        final JavaClass j3 = new JavaClass();
+        j3.annotations().add(single(annotation("D")));
+
+        final Condition<JavaClass> antecedent = any(j1, j2, j3);
+
+        final JavaClass consequent = new JavaClass();
+        consequent.annotations().add(single(annotation("A")));
+
+        return new StaticAnalysisRule("antecedent_class_with_or", antecedent, single(consequent), ruleString);
+    }
+
+    private static StaticAnalysisRule getRule_antecedent_function_with_or_plus_consequent_with_or() {
+        String ruleString = "function with type \"B\" or parameter \"C\" or annotation \"D\" must have annotation \"B\" or annotation \"C\" or annotation \"D\" ";
+
+        final Method m1 = new Method();
+        m1.returnType(Type.type("B"));
+
+        final Method m2 = new Method();
+        final MethodParameter m2p = new MethodParameter();
+        m2p.type(Type.type("C"));
+        m2.parameters().add(single(m2p));
+
+        final Method m3 = new Method();
+        m3.annotations().add(single(annotation("D")));
+
+        Condition<Method> antecedent = any(m1, m2, m3);
+
+        final Method m4 = new Method();
+        m4.annotations().add(single(annotation("B")));
+
+        final Method m5 = new Method();
+        m5.annotations().add(single(annotation("C")));
+
+        final Method m6 = new Method();
+        m6.annotations().add(single(annotation("D")));
+
+        Condition<Method> consequent = any(m4, m5, m6);
+
+        return new StaticAnalysisRule("antecedent_function_with_or_plus_consequent_with_or", antecedent, consequent, ruleString);
+    }
+
+    private static StaticAnalysisRule getRule_antecedent_field_with_or_plus_consequent_with_or() {
+        String ruleString = "field with type \"B\" or annotation \"D\" must have (annotation \"B\" or annotation \"C\" ) or annotation \"D\" ";
+
+        final Field m1 = new Field();
+        m1.type(Type.type("B"));
+
+        final Field m2 = new Field();
+        m2.annotations().add(single(annotation("D")));
+
+        Condition<Field> antecedent = any(m1, m2);
+
+        final Field m4 = new Field();
+        m4.annotations().add(single(annotation("B")));
+
+        final Field m5 = new Field();
+        m5.annotations().add(single(annotation("C")));
+
+        final Field m6 = new Field();
+        m6.annotations().add(single(annotation("D")));
+
+        Condition<Field> consequent = any(m4, m5, m6);
+
+        return new StaticAnalysisRule("antecedent_field_with_or_plus_consequent_with_or", antecedent, consequent, ruleString);
+    }
+
+    private static StaticAnalysisRule getRule_antecedent_field_with_and_plus_consequent_with_and() {
+        String ruleString = "field with type \"B\" and annotation \"D\" must have (annotation \"B\" and annotation \"C\" ) and annotation \"D\" ";
+
+        final Field m1 = new Field();
+        m1.type(Type.type("B"));
+
+        final Field m2 = new Field();
+        m2.annotations().add(single(annotation("D")));
+
+        Condition<Field> antecedent = all(m1, m2);
+
+        final Field m4 = new Field();
+        m4.annotations().add(single(annotation("B")));
+
+        final Field m5 = new Field();
+        m5.annotations().add(single(annotation("C")));
+
+        final Field m6 = new Field();
+        m6.annotations().add(single(annotation("D")));
+
+        Condition<Field> consequent = all(m4, m5, m6);
+
+        return new StaticAnalysisRule("antecedent_field_with_and_plus_consequent_with_and", antecedent, consequent, ruleString);
     }
 
 }

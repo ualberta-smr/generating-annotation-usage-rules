@@ -39,7 +39,7 @@ public class ViolationDetector {
 
     private Optional<AnalysisRunner> findAnalyzer(StaticAnalysisRule rule) {
         return analyzers.stream()
-                .filter(a -> a.supports(rule.antecedent()))
+                .filter(a -> a.supports(rule.antecedent().getType()))
                 .findFirst();
     }
 

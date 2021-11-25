@@ -18,6 +18,13 @@ public class Utils {
                 .reduce(Stream.of(), Stream::concat);
     }
 
+    @SafeVarargs
+    public static <T> Stream<T> concat(Collection<T>...collections) {
+        return Arrays.stream(collections)
+                .map(Collection::stream)
+                .reduce(Stream.of(), Stream::concat);
+    }
+
     public static <T extends ProgramElement> Collection<String> collectionToString(Collection<Condition<T>> elements) {
         return elements.stream().filter(Condition::isNotEmpty).map(Condition::toString).collect(toList());
     }

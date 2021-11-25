@@ -15,13 +15,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+import static ca.ualberta.smr.model.javaelements.Condition.single;
 import static java.util.Collections.emptyList;
 
 final public class ClassAnalyzer implements AnalysisRunner {
 
     @Override
+    @SuppressWarnings("unchecked")
     public Collection<ViolationInfo> analyze(CompilationUnit cu, StaticAnalysisRule rule) {
-        val classDeclarations = ClassAntecedentFilter.doFilter(cu, (JavaClass) rule.antecedent());
+        val classDeclarations = ClassAntecedentFilter.doFilter(cu, (Condition<JavaClass>) rule.antecedent());
         if (classDeclarations.isEmpty()) return emptyList();
 
         val consequentType = rule.consequent().getType();
@@ -32,6 +34,11 @@ final public class ClassAnalyzer implements AnalysisRunner {
     @Override
     public boolean supports(AnalysisItem item) {
         return item instanceof JavaClass;
+    }
+
+    @Override
+    public boolean supports(Class<?> item) {
+        return item.equals(JavaClass.class);
     }
 
     /**

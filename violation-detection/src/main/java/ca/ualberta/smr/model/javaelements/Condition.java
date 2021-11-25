@@ -10,7 +10,9 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static ca.ualberta.smr.utils.Utils.concat;
 import static ca.ualberta.smr.utils.Utils.listOf;
 import static java.util.Collections.emptyList;
 
@@ -34,19 +36,28 @@ public final class Condition<T extends ProgramElement> {
         update(item, operation);
     }
 
+    /**
+     * Merges the condition with another condition, and sets the operation to a new one
+     * @param o other condition
+     * @param operation OR/AND/EMPTY operation
+     */
+    public void update(Condition<T> o, ConditionOperation operation) {
+        final Condition<T> plus = this.plus(o, operation);
+        this.operation = operation;
+        this.elements.clear();
+        this.elements.addAll(plus.elements);
+    }
+
+    /**
+     * Adds 2 conditions and returns a new one without modifying the original ones
+     * @param o other condition
+     * @param operation OR/AND/EMPTY operation
+     * @return a condition that's the combination of 2 conditions
+     */
     public Condition<T> plus(Condition<T> o, ConditionOperation operation) {
-        if (this.isSingle() && o.isSingle()) {
-            final Collection<T> newElements = listOf(this.elements.stream().findFirst().get(), o.elements.stream().findFirst().get());
-            return new Condition<>(newElements, operation, this.getType());
-        } else if (this.isSingle()) {
-            return o.isEmpty() ? this : o.plus(this, operation);
-        } else if (o.isSingle()) {
-            if (this.isEmpty()) return o;
-            final ArrayList<T> newElements = new ArrayList<>(elements);
-            newElements.add(o.elements.stream().findFirst().get());
-            return new Condition<>(newElements, operation, this.getType());
-        }
-        throw new UnsupportedOperationException("Operation not supported");
+        final Collection<T> newElements = concat(this.getElements(), o.getElements())
+                .collect(Collectors.toList());
+        return new Condition<>(newElements, operation, this.getType());
     }
 
     public boolean test(Predicate<T> condition) {
@@ -84,6 +95,21 @@ public final class Condition<T extends ProgramElement> {
                 .map(fieldExtractor)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
+    }
+
+    public <R> Collection<R> select(Function<T, Collection<R>> selectionFunction) {
+        return elements.stream()
+                .map(selectionFunction)
+                .reduce((a, b) -> {
+                    switch (operation) {
+                        case OR:
+                            return Stream.concat(a.stream(), b.stream()).distinct().collect(Collectors.toList());
+                        case AND:
+                            return a.stream().filter(b::contains).collect(Collectors.toList());
+                        default:
+                            return emptyList();
+                    }
+                }).orElseGet(Collections::emptyList);
     }
 
     public Collection<ViolationInfo> evaluate(Function<T, ? extends Collection<ViolationInfo>> fieldExtractor) {

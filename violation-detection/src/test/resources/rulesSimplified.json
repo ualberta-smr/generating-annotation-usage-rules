@@ -1,0 +1,28 @@
+{
+    "rules": [
+        {
+            "id": "OutgoingAndScope",
+            "specification": "class with function with annotation \"Outgoing\" or annotation \"Incoming\" must have annotation \"ApplicationScoped\" or annotation \"Dependent\" "
+        },
+        {
+            "id": "RestClientInjectField",
+            "specification": "field with annotation \"RestClient\" must have annotation \"Inject\" "
+        },
+        {
+            "id": "ClaimInjectField",
+            "specification": "field with annotation \"Claim\" must have annotation \"Inject\" "
+        },
+        {
+            "id": "JsonWebTokenField",
+            "specification": "field with type \"JsonWebToken\" must have annotation \"Inject\" "
+        },
+        {
+            "id": "QueryMutationGraphQLAPI",
+            "specification": "class with function with annotation \"Query\" or annotation \"Mutation\" must have annotation \"GraphQLApi\" "
+        },
+        {
+            "id": "PathParam-Path",
+            "specification": "class with function with parameter with annotation \"PathParam\" must have annotation \"Path\" or function with annotation \"Path\" "
+        }
+    ]
+}

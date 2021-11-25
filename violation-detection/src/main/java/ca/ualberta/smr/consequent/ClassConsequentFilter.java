@@ -93,8 +93,12 @@ public class ClassConsequentFilter {
             return listOf(new ViolationInfo(declaration, collectionToString(listOf(methodCondition)), true));
         }
 
-        if (rule != null) {
-            final Condition<Method> methodAntecedentCondition = ((JavaClass) rule.antecedent()).method();
+        if (rule != null) { // TODO: can it even be null?
+            val methodConditions = rule.antecedent().map(o -> ((JavaClass) o).method());
+            val operation = rule.antecedent().getOperation();
+            val methodAntecedentCondition = methodConditions.stream()
+                    .reduce((a, b) -> a.plus(b, operation))
+                    .orElseGet(() -> Condition.empty(Method.class));
             if (methodAntecedentCondition.isNotEmpty()) {
                 final Collection<MethodDeclaration> filteredMethods = MethodAntecedentFilter.doFilter(methods, methodAntecedentCondition);
                 return MethodConsequentFilter.filterFromMethodDeclarations(filteredMethods, methodCondition);
@@ -110,8 +114,12 @@ public class ClassConsequentFilter {
             // element is missing
             return listOf(new ViolationInfo(declaration, collectionToString(listOf(fieldCondition)), true));
         }
-        if (rule != null) {
-            val fieldAntecedentCondition = ((JavaClass) rule.antecedent()).field();
+        if (rule != null) { // TODO: can it even be null?
+            val fieldConditions = rule.antecedent().map(o -> ((JavaClass) o).field());
+            val operation = rule.antecedent().getOperation();
+            val fieldAntecedentCondition = fieldConditions.stream()
+                    .reduce((a, b) -> a.plus(b, operation))
+                    .orElseGet(() -> Condition.empty(Field.class));
             if (fieldAntecedentCondition.isNotEmpty()) {
                 val filteredFields = FieldAntecedentFilter.doFilter(fields, fieldAntecedentCondition);
                 return FieldConsequentFilter.filter(filteredFields, fieldCondition);

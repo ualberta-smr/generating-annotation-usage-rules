@@ -15,13 +15,15 @@ import java.util.Collection;
  */
 public class StaticRuleOptimizer {
 
+    // FIXME:
     public static StaticAnalysisRule optimize(StaticAnalysisRule rule) {
-        final AnalysisItem rawAntecedent = rule.antecedent();
-        AnalysisItem antecedent = rawAntecedent;
-        if (rawAntecedent instanceof JavaClass) {
-            antecedent = optimize((JavaClass) rawAntecedent);
-        }
-        return new StaticAnalysisRule(rule.name(), antecedent, rule.consequent(), rule.description());
+//        final AnalysisItem rawAntecedent = rule.antecedent();
+//        AnalysisItem antecedent = rawAntecedent;
+//        if (rawAntecedent instanceof JavaClass) {
+//            antecedent = optimize((JavaClass) rawAntecedent);
+//        }
+//        return new StaticAnalysisRule(rule.name(), antecedent, rule.consequent(), rule.description());
+        return null;
     }
 
     private static AnalysisItem optimize(JavaClass jc) {
