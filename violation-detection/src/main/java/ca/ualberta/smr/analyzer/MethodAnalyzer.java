@@ -24,11 +24,6 @@ final public class MethodAnalyzer implements AnalysisRunner {
     }
 
     @Override
-    public boolean supports(AnalysisItem item) {
-        return item instanceof Method;
-    }
-
-    @Override
     public boolean supports(Class<?> item) {
         return item.equals(Method.class);
     }

@@ -10,6 +10,8 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -24,6 +26,34 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 public class GrammarParsingTest {
+
+    @Test
+    @Disabled("not supported yet")
+    void experiment() {
+        String ruleString = "field with type \"B\" and annotation \"D\" must have (annotation \"B\" or annotation \"C\" ) and annotation \"D\" ";
+
+        final Field m1 = new Field();
+        m1.type(Type.type("B"));
+
+        final Field m2 = new Field();
+        m2.annotations().add(single(annotation("D")));
+
+        Condition<Field> antecedent = all(m1, m2);
+
+        final Field m4 = new Field();
+        m4.annotations().add(single(annotation("B")));
+
+        final Field m5 = new Field();
+        m5.annotations().add(single(annotation("C")));
+
+        final Field m6 = new Field();
+        m6.annotations().add(single(annotation("D")));
+
+        Condition<Field> consequent = all(m4, m5, m6);
+
+        val sar =  new StaticAnalysisRule("antecedent_field_with_and_plus_consequent_with_and", antecedent, consequent, ruleString);
+        parseAndCheckRule(sar);
+    }
 
     @ParameterizedTest(name = "{index} : {0}")
     @MethodSource("dataProvider")

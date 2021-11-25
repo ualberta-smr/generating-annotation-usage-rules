@@ -24,11 +24,6 @@ final public class FieldAnalyzer implements AnalysisRunner {
     }
 
     @Override
-    public boolean supports(AnalysisItem item) {
-        return item instanceof Field;
-    }
-
-    @Override
     public boolean supports(Class<?> item) {
         return item.equals(Field.class);
     }

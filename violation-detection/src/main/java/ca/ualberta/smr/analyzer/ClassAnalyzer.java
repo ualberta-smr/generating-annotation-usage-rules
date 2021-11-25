@@ -32,11 +32,6 @@ final public class ClassAnalyzer implements AnalysisRunner {
     }
 
     @Override
-    public boolean supports(AnalysisItem item) {
-        return item instanceof JavaClass;
-    }
-
-    @Override
     public boolean supports(Class<?> item) {
         return item.equals(JavaClass.class);
     }
