@@ -230,7 +230,7 @@ function LabelingScreen() {
                     </div>
                 </div>
                 <div className="examples-and-controls-row">
-                    <div className="examples">
+                    {/* <div className="examples">
                         <CodeExampleVisualizer
                             title="Example of Complying Code"
                             className="correct"
@@ -242,7 +242,7 @@ function LabelingScreen() {
                             className="violation"
                             code={`class Foo {\n    @Fallback\n    public void method() {}\n}`}
                         ></CodeExampleVisualizer>
-                    </div>
+                    </div> */}
                     <div className="controls-wrapper">
                         <div className="controls">
                             <div

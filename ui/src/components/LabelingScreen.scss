@@ -9,11 +9,11 @@ $consequentColorLight: #0fc80f;
 .app {
     background-color: $backgroundColor;
     display: grid;
-    grid-template-rows: 10% 55% 35%;
+    grid-template-rows: 10% 65% 25%;
 }
 
 .editors-row-wrapper {
-    height: 55vh;
+    height: 65vh;
 }
 
 .editors-row {
@@ -62,9 +62,13 @@ $consequentColorLight: #0fc80f;
 }
 
 .examples-and-controls-row {
-    display: grid;
-    grid-template-columns: 50% 50%;
-    height: 35vh;
+    // display: grid;
+    // grid-template-columns: 50% 50%;
+    height: 25vh;
+    // place-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .examples {
@@ -75,6 +79,7 @@ $consequentColorLight: #0fc80f;
 .controls-wrapper {
     display: flex;
     align-items: flex-end;
+    flex: 0.5;
 }
 
 .controls {
