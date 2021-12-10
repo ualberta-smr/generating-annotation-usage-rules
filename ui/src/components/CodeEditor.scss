@@ -8,3 +8,24 @@
     padding: 1%;
     box-sizing: border-box;
 }
+
+$antecedentColor: orange;
+$consequentColor: green;
+
+.label-div {
+    font-family: Consolas, "Courier New", monospace;
+    display: flex;
+    text-align: center;
+
+    .label-antecedent {
+        flex: 1;
+        color: black;
+        background-color: $antecedentColor;
+    }
+
+    .label-consequent {
+        flex: 1;
+        color: white;
+        background-color: $consequentColor; 
+    }
+}

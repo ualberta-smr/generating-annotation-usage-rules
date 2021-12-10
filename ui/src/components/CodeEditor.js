@@ -14,13 +14,19 @@ function CodeEditor(props) {
             <pre
                 style={{
                     width,
-                    minHeight: height
+                    minHeight: height,
+                    marginBottom: 0,
+                    marginTop: 0
                 }}
                 className="code-editor-text"
                 dangerouslySetInnerHTML={{
                     __html: code,
                 }}
             ></pre>
+            <div className="label-div" style={{backgroundColor: "white"}}>
+                <div className="label-antecedent">antecedent</div>
+                <div className="label-consequent">consequent</div>
+            </div>
         </FieldsetWrapper>
     );
 }
