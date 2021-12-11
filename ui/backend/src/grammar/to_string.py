@@ -1,5 +1,4 @@
 from typing import List, Tuple
-import re
 
 if __name__ is not None and "." in __name__:
     from .model import *
