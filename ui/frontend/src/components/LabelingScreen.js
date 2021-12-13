@@ -4,7 +4,6 @@ import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 
 import FieldsetWrapper from "./FieldsetWrapper";
 import RuleAuthoringEditor from "./RuleAuthoringEditor";
-import CodeExampleVisualizer from "./CodeExampleVisualizer";
 import makeCancellablePromise from "./superPromise";
 import CodeEditor from "./CodeEditor";
 
@@ -230,19 +229,6 @@ function LabelingScreen() {
                     </div>
                 </div>
                 <div className="examples-and-controls-row">
-                    {/* <div className="examples">
-                        <CodeExampleVisualizer
-                            title="Example of Complying Code"
-                            className="correct"
-                            code={`class Foo {\n    @Fallback(fallbackMethod="doWhenFails")\n    public void method() {}\n}`}
-                        ></CodeExampleVisualizer>
-
-                        <CodeExampleVisualizer
-                            title="Example of Violation"
-                            className="violation"
-                            code={`class Foo {\n    @Fallback\n    public void method() {}\n}`}
-                        ></CodeExampleVisualizer>
-                    </div> */}
                     <div className="controls-wrapper">
                         <div className="controls">
                             <div

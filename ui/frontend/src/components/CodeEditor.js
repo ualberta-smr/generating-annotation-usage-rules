@@ -16,7 +16,7 @@ function CodeEditor(props) {
                     width,
                     minHeight: height,
                     marginBottom: 0,
-                    marginTop: 0
+                    marginTop: 0,
                 }}
                 className="code-editor-text"
                 dangerouslySetInnerHTML={{

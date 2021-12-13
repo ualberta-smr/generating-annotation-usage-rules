@@ -1,9 +1,5 @@
 from typing import List, Tuple
-
-if __name__ is not None and "." in __name__:
-    from .model import *
-else:
-    from model import *
+from .model import *
 
 ANTECEDENT_SIGN_START = """<span class="antecedent" title="Antecedent">"""
 ANTECEDENT_SIGN_END = "</span>"

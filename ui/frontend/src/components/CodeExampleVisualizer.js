@@ -5,7 +5,8 @@ import "prismjs/components/prism-java";
 import "prismjs/themes/prism.css";
 import "./CodeExampleVisualizer.scss"
 
-// className:
+// props include:
+// className
 // title
 // code
 function CodeExampleVisualizer(props) {
