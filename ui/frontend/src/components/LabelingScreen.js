@@ -157,9 +157,11 @@ function LabelingScreen() {
             return null;
         }
 
+        const sentText = text.replaceAll("\t", " ").replaceAll("\n", " ")
+
         setCancelCurrentRequestHandle(
             makeCancellablePromise(
-                `http://localhost:5000/grammarToCode?grammar=${text}`,
+                `http://localhost:5000/grammarToCode?grammar=${sentText}`,
                 processGrammarToCodeResponse
             )
         );
