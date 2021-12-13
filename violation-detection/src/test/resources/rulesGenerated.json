@@ -1,0 +1,16 @@
+{
+  "rules": [
+    {
+      "id": "44b87d74-e975-481c-b40a-9d32b8bbb592",
+      "specification": "class with function with (parameter \"java.lang.String\" and annotation \"org.eclipse.microprofile.reactive.messaging.Incoming\" with parameter \"java.lang.String value\" )  must have annotation \"javax.enterprise.context.Default\" "
+    },
+    {
+      "id": "93a692fa-ffcb-4755-869d-5ce60fe009fb",
+      "specification": "class with (function with (annotation \"javax.ws.rs.Path\" and annotation \"javax.ws.rs.POST\" ) ) and annotation \"javax.ws.rs.Path\" must have annotation \"org.eclipse.microprofile.rest.client.inject.RegisterRestClient\" "
+    },
+    {
+      "id": "e4ade4fa-3cb9-4afd-8470-7b93adf3af2f",
+      "specification": "function with annotation \"org.eclipse.microprofile.opentracing.Traced\" with parameter \"boolean value\"  must have annotation \"org.eclipse.microprofile.opentracing.Traced\" with parameter \"java.lang.String operationName\"  "
+    }
+  ]
+}

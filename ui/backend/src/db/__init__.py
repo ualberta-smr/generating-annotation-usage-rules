@@ -1,5 +1,5 @@
 from .database import *
-from .operations import RuleDTO, RuleLabelingHandler, RulePackageNavigation
+from .operations import RuleDTO, RuleLabelingHandler, RulePackageNavigation, RulePackageOperations
 from .models import User, Base, CandidateRule, CandidateRulesPackage
 from .constants import *
 

@@ -7,7 +7,7 @@ import rulepadFormat as rf
 import uuid
 
 from .models import *
-from .constants import DEFAULT_USER_ID
+from .constants import DEFAULT_USER_ID, RuleLabels
 
 
 @dataclass
@@ -16,11 +16,6 @@ class RuleDTO:
     hasPrev: bool
     hasNext: bool
     label: str
-
-
-class RuleLabels(Enum):
-    CORRECT = 1
-    NOT_A_RULE = 2
 
 
 class RulePackageNavigation:
@@ -67,25 +62,34 @@ class RulePackageNavigation:
         return RuleDTO(None, False, False, False)
 
     @staticmethod
+    def __getLabelAndRuleString(db: Session, ruleObj: CandidateRule):
+        labeledRule = db.query(LabeledRule).filter_by(
+            candidate_rule_id=ruleObj.id).first()
+
+        if labeledRule and labeledRule.label == RuleLabels.CORRECT:
+            return (labeledRule.label, labeledRule.rule_description)
+        
+        label = labeledRule.label if labeledRule else RuleLabels.UNLABELED
+        # re-generate the rule description if:
+        # - the rule has not been labeled
+        # - the rule has been labeled as 'not_a_rule'
+        antecedents: List[str] = json.loads(ruleObj.antecedent)
+        consequents: List[str] = json.loads(ruleObj.consequent)
+
+        ruleString = rf.toShortRulePad(rf.JsonRule(
+                    id=id,
+                    antecedent=antecedents,
+                    consequent=consequents)
+                )
+        return (label, ruleString)
+
+    @staticmethod
     def __candidateRuleToDTO(db: Session, ruleObj: CandidateRule, hasPrev: bool, hasNext: bool) -> RuleDTO:
         """
             it takes a candidate rule object with some extra data (hasPrev, hasNext) 
             and constructs a RuleDTO object with the correct label
         """
-        antecedents: List[str] = json.loads(ruleObj.antecedent)
-        consequents: List[str] = json.loads(ruleObj.consequent)
-        ruleString = rf.toShortRulePad(rf.JsonRule(
-            id=id,
-            antecedent=antecedents,
-            consequent=consequents)
-        )
-
-        labeledRule = db.query(LabeledRule).filter_by(
-            candidate_rule_id=ruleObj.id).first()
-        label = "unlabeled"
-        if labeledRule:
-            label = labeledRule.label
-
+        label, ruleString = RulePackageNavigation.__getLabelAndRuleString(db, ruleObj)
         return RuleDTO(data={
             "id": ruleObj.id,
             "ruleString": ruleString
@@ -123,8 +127,7 @@ class RuleLabelingHandler:
             Labels the rule with the given id as 'correct' or 'not_a_rule'. 
             It also saves the rulePadString (which can be empty)
         """
-        assert label in ["correct", "not_a_rule"], \
-            f"Label '{label}' is not supported, it needs to be one of ['correct', 'not_a_rule']"
+        RuleLabels.assert_label_is_supported(label)
 
         # update the rule
         labelFromDatabase = db.query(LabeledRule).filter_by(
@@ -150,3 +153,20 @@ class RuleLabelingHandler:
             candidate_rule_id=id).first()
         db.delete(labelFromDatabase)
         db.commit()
+
+
+class RulePackageOperations:
+
+    def getConfirmedRulesByPackageId(package_id: int, db: Session):
+        confirmedLabeledRules: List[LabeledRule] = db.query(LabeledRule).\
+            join(CandidateRule).\
+            filter(CandidateRule.package_id == package_id).\
+            filter(LabeledRule.label == RuleLabels.CORRECT).\
+            all()
+
+        confirmedLabeledRules.sort(key=lambda x: x.candidate_rule_id)
+
+        rules = list(map(lambda r: {"id": r.id, "specification": r.rule_description}, confirmedLabeledRules))
+        return {
+            "rules": rules
+        }

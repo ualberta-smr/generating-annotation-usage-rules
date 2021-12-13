@@ -1,4 +1,4 @@
-from db import RuleDTO, RuleLabelingHandler, RulePackageNavigation
+from db import RuleDTO, RuleLabelingHandler, RulePackageNavigation, RuleLabels
 from sqlalchemy.orm.session import Session
 from fastapi import Response
 import traceback
@@ -59,19 +59,19 @@ class RuleOperationsHandler:
     @staticmethod
     def labelRule(rule_id: int, label: str, response: Response, ruleDto: Optional[ConfirmRuleDTO], db: Session):
         try:
-            if label in ["correct", "not_a_rule"]:
-                rulePadString = ruleDto.ruleString if label == "correct" else ""
+            if RuleLabels.label_is_supported(label):
+                rulePadString = ruleDto.ruleString if label == RuleLabels.CORRECT else ""
                 RuleLabelingHandler.labelRule(
                     db=db,
                     id=rule_id,
                     rulePadString=rulePadString,
                     label=label
                 )
-            elif label == "unlabeled":
+            elif label == RuleLabels.UNLABELED:
                 RuleLabelingHandler.unlabelRule(db=db, id=rule_id)
             else:
                 raise Exception(
-                    f"Rule label string needs to be one of ['correct', 'not_a_rule', 'unlabeled']")
+                    f"Rule label string needs to be one of [{RuleLabels.get_all()}]")
             response.status_code = 204
         except Exception as e:
             traceback.print_exc()

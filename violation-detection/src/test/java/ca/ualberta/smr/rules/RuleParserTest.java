@@ -2,6 +2,7 @@ package ca.ualberta.smr.rules;
 
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.javaelements.*;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -18,7 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class RuleParserTest {
 
     @Test
-    void testParsingRulesFromJsonFile() throws IOException {
+    @SneakyThrows
+    void testParsingRulesFromJsonFile() {
         final InputStream is = RuleParserTest.class.getResourceAsStream("/rulesSimplified.json");
         final Collection<StaticAnalysisRule> parsedRules = RuleParser.parseRules(is);
 
@@ -33,6 +35,15 @@ class RuleParserTest {
 
         assertEquals(6, parsedRules.size());
         assertTrue(parsedRules.containsAll(actualRules));
+    }
+
+    @Test
+    @SneakyThrows
+    void testGeneratedRulesFromJsonFile() {
+        final InputStream is = RuleParserTest.class.getResourceAsStream("/rulesGenerated.json");
+        final Collection<StaticAnalysisRule> parsedRules = RuleParser.parseRules(is);
+
+        assertEquals(3, parsedRules.size());
     }
 
     private static StaticAnalysisRule getRule_OutgoingAndScope() {
