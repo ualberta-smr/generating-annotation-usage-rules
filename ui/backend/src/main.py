@@ -7,7 +7,7 @@ from api import RuleOperationsHandler, ConfirmRuleDTO
 
 import grammar as G
 
-from db import SessionLocal, models, schemas, createAndInitializeDb
+from db import SessionLocal, models, schemas, createAndInitializeDb, RulePackageOperations
 
 from fastapi import FastAPI, Response, Depends
 from fastapi.logger import logger as fastapi_logger
@@ -101,3 +101,7 @@ def getPrevRule(rule_id: int, response: Response, db: Session = Depends(get_db))
 @app.post('/rules/{rule_id}/{label}')
 def labelRule(rule_id: int, label: str, response: Response, ruleDto: Optional[ConfirmRuleDTO] = None, db: Session = Depends(get_db)):
     RuleOperationsHandler.labelRule(rule_id, label, response, ruleDto, db)
+
+@app.get('/packages/{package_id}/confirmed')
+def getRulesPackage(package_id: int, db: Session = Depends(get_db)):
+    return RulePackageOperations.getConfirmedRulesByPackageId(package_id, db)
