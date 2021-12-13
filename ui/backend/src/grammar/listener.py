@@ -3,14 +3,9 @@ from antlr4 import *
 import itertools
 from functools import reduce
 
-if __name__ is not None and "." in __name__:
-    from .RulepadGrammarParser import RulepadGrammarParser
-    from .RulepadGrammarListener import RulepadGrammarListener
-    from .model import *
-else:
-    from RulepadGrammarParser import RulepadGrammarParser
-    from RulepadGrammarListener import RulepadGrammarListener
-    from model import *
+from .RulepadGrammarParser import RulepadGrammarParser
+from .RulepadGrammarListener import RulepadGrammarListener
+from .model import *
 
 def mergeParameters(a: Param, b: Param) -> Param:
     p = Param(a.type, a.name, mergeDuplicateAnnotations(a.annotations + b.annotations))
