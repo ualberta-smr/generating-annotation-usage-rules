@@ -8,7 +8,11 @@ import makeCancellablePromise from "./superPromise";
 import CodeEditor from "./CodeEditor";
 
 function LabelingScreen() {
-    const [currentRuleId, setCurrentRuleId] = useState(null);
+    const [ruleMetaData, setRuleMetaData] = useState({
+        id: null,
+        name: 'Default package name',
+        size: 0
+    });
     const [buttonAvailability, setButtonAvailability] = useState({
         hasPrev: false,
         hasNext: false,
@@ -60,7 +64,7 @@ function LabelingScreen() {
             return
         }
 
-        fetch(`http://localhost:5000/rules/${currentRuleId}/${newRuleLabel}`, {
+        fetch(`http://localhost:5000/rules/${ruleMetaData.id}/${newRuleLabel}`, {
                 method: "POST", ...requestOptions
             })
                 .then((resp) => {
@@ -78,7 +82,7 @@ function LabelingScreen() {
     }, []);
 
     const getNextRule = () => {
-        const id_str = currentRuleId == null ? "" : `/${currentRuleId}/next`;
+        const id_str = ruleMetaData.id == null ? "" : `/${ruleMetaData.id}/next`;
         makeCancellablePromise(
             `http://localhost:5000/rules${id_str}`,
             (json) => {
@@ -90,9 +94,9 @@ function LabelingScreen() {
                 setRuleLabel(label);
                 const data = json.data;
 
-                const { id, ruleString, grammar } = data;
+                const { id, ruleString, grammar, name, size } = data;
 
-                setCurrentRuleId(id);
+                setRuleMetaData({id, name, size});
                 setGrammarText(ruleString);
                 processGrammarToCodeResponse(grammar);
             }
@@ -100,7 +104,7 @@ function LabelingScreen() {
     };
     const getPrevRule = () => {
         makeCancellablePromise(
-            `http://localhost:5000/rules/${currentRuleId}/prev`,
+            `http://localhost:5000/rules/${ruleMetaData.id}/prev`,
             (json) => {
                 const { hasNext, hasPrev, label } = json;
                 setButtonAvailability({
@@ -111,9 +115,9 @@ function LabelingScreen() {
 
                 const data = json.data;
 
-                const { id, ruleString, grammar } = data;
+                const { id, ruleString, grammar, name, size } = data;
 
-                setCurrentRuleId(id);
+                setRuleMetaData({id, name, size});
                 setGrammarText(ruleString);
                 processGrammarToCodeResponse(grammar);
             }
@@ -171,7 +175,7 @@ function LabelingScreen() {
         return (
             <div className="app">
                 <div className="instructions">
-                    <h2>Candidate Rule {currentRuleId}</h2>
+                    <h2>{ruleMetaData.name}: Candidate Rule {ruleMetaData.id}/{ruleMetaData.size}</h2>
                     <p>
                         <strong>Instructions: </strong>
                         <em>

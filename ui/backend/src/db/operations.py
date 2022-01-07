@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from typing import Any, List, Tuple
-from enum import Enum
 import json
 from sqlalchemy.orm import Session
 import rulepadFormat as rf
@@ -63,11 +62,14 @@ class RulePackageNavigation:
 
     @staticmethod
     def __getLabelAndRuleString(db: Session, ruleObj: CandidateRule):
+        name = db.query(CandidateRulesPackage).filter(CandidateRulesPackage.id == ruleObj.package_id).first().name
+        size = db.query(CandidateRule).filter(CandidateRule.package_id == ruleObj.package_id).count()
+
         labeledRule = db.query(LabeledRule).filter_by(
             candidate_rule_id=ruleObj.id).first()
 
         if labeledRule and labeledRule.label == RuleLabels.CORRECT:
-            return (labeledRule.label, labeledRule.rule_description)
+            return (labeledRule.label, labeledRule.rule_description, name, size)
         
         label = labeledRule.label if labeledRule else RuleLabels.UNLABELED
         # re-generate the rule description if:
@@ -80,8 +82,9 @@ class RulePackageNavigation:
                     id=id,
                     antecedent=antecedents,
                     consequent=consequents)
-                )
-        return (label, ruleString)
+        )
+
+        return (label, ruleString, name, size)
 
     @staticmethod
     def __candidateRuleToDTO(db: Session, ruleObj: CandidateRule, hasPrev: bool, hasNext: bool) -> RuleDTO:
@@ -89,10 +92,12 @@ class RulePackageNavigation:
             it takes a candidate rule object with some extra data (hasPrev, hasNext) 
             and constructs a RuleDTO object with the correct label
         """
-        label, ruleString = RulePackageNavigation.__getLabelAndRuleString(db, ruleObj)
+        label, ruleString, name, size = RulePackageNavigation.__getLabelAndRuleString(db, ruleObj)
         return RuleDTO(data={
             "id": ruleObj.id,
-            "ruleString": ruleString
+            "ruleString": ruleString,
+            "name": name,
+            "size": size
         }, hasPrev=hasPrev, hasNext=hasNext, label=label)
 
     @staticmethod
