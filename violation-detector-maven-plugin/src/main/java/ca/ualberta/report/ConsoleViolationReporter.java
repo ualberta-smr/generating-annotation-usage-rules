@@ -11,6 +11,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.empty;
@@ -20,23 +21,23 @@ import static java.util.Optional.empty;
 public class ConsoleViolationReporter extends AbstractLogEnabled implements ViolationReporter {
 
     @Override
-    public void report(StaticAnalysisRule rule, Collection<ViolationInfo> violations) {
-        getLogger().warn("------------------------------------------------------------------------");
-        getLogger().warn("For rule: " + rule.name());
-        getLogger().warn("\t" + rule.description());
+    public void report(StaticAnalysisRule rule, Collection<ViolationInfo> violations, Consumer<String> logger) {
+        logger.accept("------------------------------------------------------------------------");
+        logger.accept("For rule: " + rule.name());
+        logger.accept("\t" + rule.description());
         for (val violation : violations) {
-            report(violation);
+            report(violation, logger);
         }
-        getLogger().warn("------------------------------------------------------------------------");
+        logger.accept("------------------------------------------------------------------------");
     }
 
-    public void report(ViolationInfo violation) {
+    public void report(ViolationInfo violation, Consumer<String> logger) {
         val message = getMessage(violation);
         val location = getLocation(violation);
 
         // printing
-        getLogger().warn(message);
-        location.ifPresent(l -> getLogger().warn(String.format("\tLocation: %s", l)));
+        logger.accept(message);
+        location.ifPresent(l -> logger.accept(String.format("\tLocation: %s", l)));
     }
 
     private String getMessage(ViolationInfo violation) {
