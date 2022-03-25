@@ -20,10 +20,7 @@ def shortenTypeName(type: Type) -> str:
     pieces = type.name.split(".")
     if len(pieces) > 1:
         simpleName = pieces[-1]
-        pieces = pieces[:-1]
-        if len(pieces) == 2 and ".".join(pieces) == "java.lang":
-            return simpleName
-        return ".".join(map(lambda x: x[0], pieces))+"."+simpleName
+        return simpleName
     else:
         return type.name
 
