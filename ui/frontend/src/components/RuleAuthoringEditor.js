@@ -10,7 +10,7 @@ const __MONACO_EDITOR_OPTIONS = {
         enabled: false,
     },
     lineNumbers: "off",
-    wordWrap: "on",
+    wordWrap: "off",
     fontSize: "17px"
 };
 
@@ -21,7 +21,6 @@ function RuleAuthoringEditor(props) {
 
     useEffect(() => {
         if (width || height) {
-            console.log(width, height)
             adjustEditorSize();
         }
     }, [width, height]);
