@@ -1,4 +1,49 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import prettify from "./grammar/formatter";
+
+export class RulepadFormatter {
+
+    getIndentLevel (text) {
+        let level = 0;
+        for (let ch of text) {
+            if (ch !== "\t") {
+                return level;
+            }
+            level++;
+        }
+        return level;
+    }
+
+    tabs(count) {
+        let res = "";
+        for (let i = 0; i < count; i++) {
+            res += "\t"
+        }
+        return res;
+    }
+
+    provideDocumentFormattingEdits (model, options, token) {
+        const allText = model.getValue()
+        const prettified = prettify(allText)
+
+        model.setValue(prettified);
+
+        // actually does not have any effect
+        const result = prettified.split("\n").map((line, ix) => {
+            return {
+                range: new monaco.Range(
+                    ix + 1, 1,
+                    ix + 1, line.length
+                ),
+                text: line
+            }
+        })
+
+
+        return result;
+    }
+
+}
 
 export default function registerSyntaxHighlighting() {
     monaco.languages.register({ id: "shortRulepad" });
@@ -27,78 +72,7 @@ export default function registerSyntaxHighlighting() {
         },
     });
 
-    monaco.languages.registerDocumentFormattingEditProvider('shortRulepad', {
-        provideDocumentFormattingEdits: function (model, options, token) {
-            console.log(model)
-            const getIndentLevel = (text) => {
-                let level = 0;
-                for (let ch of text) {
-                    if (ch !== "\t") {
-                        return level;
-                    }
-                    level++;
-                }
-                return level;
-            }
-
-            const tabs = (count) => {
-                let res = "";
-                for (let i = 0; i < count; i++) {
-                    res += "\t"
-                }
-                return res;
-            }
-
-            const allText = model.getValue()
-
-            let allTextFormatted = allText
-                .replace("\nmust have\n", " must have ")
-                .replaceAll("with\n\t", "with ")
-                .replaceAll("\t", " ")
-                .replaceAll("\n", " ");
-
-            console.log(allTextFormatted);
-
-            allTextFormatted = allText.replace(" must have ", "\nmust have\n");
-            allTextFormatted = allTextFormatted.replaceAll("with ", "with\n\t")
-
-            const partiallyFormattedLines = allTextFormatted.split("\n");
-
-            for (let i = 0; i < partiallyFormattedLines.length; i++) {
-                let currentLine = partiallyFormattedLines[i];
-                if (i > 0) {
-                    if (currentLine.includes("must have")) {
-                        continue;
-                    }
-
-                    const prevIndentLevel = getIndentLevel(partiallyFormattedLines[i - 1]);
-                    const curIndentLevel = getIndentLevel(currentLine);
-
-                    if (prevIndentLevel + 1 !== curIndentLevel) {
-                        partiallyFormattedLines[i] = `${tabs(prevIndentLevel + 1)}${currentLine.trim()} `;
-                    }
-                } else {
-                    partiallyFormattedLines[i] = `${currentLine.trim()} `;
-                }
-
-            }
-
-            model.setValue(partiallyFormattedLines.join("\n"));
-
-            // actually does not have any effect
-            const result = partiallyFormattedLines.map((line, ix) => {
-                return {
-                    range: new monaco.Range(
-                        ix + 1, 1,
-                        ix + 1, line.length
-                    ),
-                    text: line
-                }
-            })
-
-            return result;
-        }
-    })
+    monaco.languages.registerDocumentFormattingEditProvider('shortRulepad', new RulepadFormatter())
 
     // Define a new theme that contains only rules that match this language
     monaco.editor.defineTheme("shortRulePadTheme", {

@@ -6,6 +6,7 @@ import FieldsetWrapper from "./FieldsetWrapper";
 import RuleAuthoringEditor from "./RuleAuthoringEditor";
 import makeCancellablePromise from "./superPromise";
 import CodeEditor from "./CodeEditor";
+import prettify, { onelineify } from "../grammar/formatter";
 
 function LabelingScreen() {
     const [ruleMetaData, setRuleMetaData] = useState({
@@ -81,46 +82,34 @@ function LabelingScreen() {
         getNextRule();
     }, []);
 
+    const processRule = (json) => {
+        const { hasNext, hasPrev, label } = json;
+        setButtonAvailability({
+            hasNext,
+            hasPrev,
+        });
+        setRuleLabel(label);
+
+        const data = json.data;
+
+        const { id, ruleString, grammar, name, size } = data;
+
+        setRuleMetaData({id, name, size});
+        setGrammarText(prettify(ruleString));
+        processGrammarToCodeResponse(grammar);
+    }
+
     const getNextRule = () => {
         const id_str = ruleMetaData.id == null ? "" : `/${ruleMetaData.id}/next`;
         makeCancellablePromise(
             `http://localhost:5000/rules${id_str}`,
-            (json) => {
-                const { hasNext, hasPrev, label } = json;
-                setButtonAvailability({
-                    hasNext,
-                    hasPrev,
-                });
-                setRuleLabel(label);
-                const data = json.data;
-
-                const { id, ruleString, grammar, name, size } = data;
-
-                setRuleMetaData({id, name, size});
-                setGrammarText(ruleString);
-                processGrammarToCodeResponse(grammar);
-            }
+            processRule
         );
     };
     const getPrevRule = () => {
         makeCancellablePromise(
             `http://localhost:5000/rules/${ruleMetaData.id}/prev`,
-            (json) => {
-                const { hasNext, hasPrev, label } = json;
-                setButtonAvailability({
-                    hasNext,
-                    hasPrev,
-                });
-                setRuleLabel(label);
-
-                const data = json.data;
-
-                const { id, ruleString, grammar, name, size } = data;
-
-                setRuleMetaData({id, name, size});
-                setGrammarText(ruleString);
-                processGrammarToCodeResponse(grammar);
-            }
+            processRule
         );
     };
 
@@ -161,7 +150,9 @@ function LabelingScreen() {
             return null;
         }
 
-        const sentText = text.replaceAll("\t", " ").replaceAll("\n", " ")
+        const sentText = onelineify(text);
+
+        console.log(JSON.stringify(sentText))
 
         setCancelCurrentRequestHandle(
             makeCancellablePromise(
