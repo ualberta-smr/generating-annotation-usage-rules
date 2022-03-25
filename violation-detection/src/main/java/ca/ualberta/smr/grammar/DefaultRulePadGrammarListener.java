@@ -8,7 +8,6 @@ import ca.ualberta.smr.utils.Pair;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.val;
-import org.antlr.v4.runtime.RuleContext;
 
 import java.util.List;
 import java.util.Stack;
@@ -352,13 +351,10 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
 
     private void pushToStack(NodeType type, Object element) {
         stack.push(new Data(type, element));
-//        System.out.println("Pushed: " + stack.peek().toString());
     }
 
     private Data popFromStack() {
-        val a = this.stack.pop();
-//        System.out.println("Popped: " + a.toString());
-        return a;
+        return this.stack.pop();
     }
 
     private <T extends ProgramElement> Pair<NodeType, Condition<T>> createBinaryContextValues(RulepadGrammarParser.BinaryContext ctx, Class<T> clazz) {

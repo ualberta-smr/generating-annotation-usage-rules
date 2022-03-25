@@ -34,8 +34,8 @@ public class RuleParser {
         val tree = parser.inputSentence();
         val listener = new DefaultRulePadGrammarListener(rule);
 
-        val treeWalker = new ParseTreeWalker();
-        treeWalker.walk(listener, tree);
+        new ParseTreeWalker()
+                .walk(listener, tree);
 
         return listener.getStaticAnalysisRule();
     }
