@@ -1,4 +1,4 @@
-# Generated from RulepadGrammar.g4 by ANTLR 4.9.2
+# Generated from ../violation-detection/src/main/antlr4/ca/ualberta/grammar/RulepadGrammar.g4 by ANTLR 4.9
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .RulepadGrammarParser import RulepadGrammarParser

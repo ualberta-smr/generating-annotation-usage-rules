@@ -1,4 +1,4 @@
-# Generated from RulepadGrammar.g4 by ANTLR 4.9.2
+# Generated from ../violation-detection/src/main/antlr4/ca/ualberta/grammar/RulepadGrammar.g4 by ANTLR 4.9
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -632,7 +632,7 @@ class RulepadGrammarParser ( Parser ):
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
-        self.checkVersion("4.9.2")
+        self.checkVersion("4.9")
         self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
         self._predicates = None
 
@@ -640,7 +640,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class InputSentenceContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -744,7 +743,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class MustClauseContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -926,7 +924,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class WordsContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1002,7 +999,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class WordContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1196,7 +1192,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class CombinatorialWordsContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1284,7 +1279,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class SymbolsContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1334,7 +1328,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class EndContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1373,7 +1366,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class EmptyLineContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1414,7 +1406,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class CommentsContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1502,7 +1493,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class MustContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1541,7 +1531,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class OfContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1580,7 +1569,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class And_Context(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1619,7 +1607,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class Or_Context(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1658,7 +1645,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class HaveContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1697,7 +1683,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class WithWordContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1736,7 +1721,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class BinaryContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1795,7 +1779,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class NamesContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1848,7 +1831,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class NameConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1895,7 +1877,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class AnnotationsContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -1948,7 +1929,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class AnnotationConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2020,7 +2000,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class AnnotationConditionTransitionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2068,7 +2047,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class AnnotationExpressionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2193,7 +2171,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ExtensionsContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2240,7 +2217,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ExtensionConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2308,7 +2284,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ImplementationsContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2355,7 +2330,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ImplementationConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2423,7 +2397,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class FunctionsContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2488,7 +2461,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class FunctionOfContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2536,7 +2508,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class FunctionConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2584,7 +2555,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class FunctionExpressionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2789,7 +2759,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class AbstractFunctionsContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2854,7 +2823,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class AbstractFunctionOfContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2902,7 +2870,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class AbstractFunctionConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -2950,7 +2917,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class AbstractFunctionExpressionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3123,7 +3089,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ConstructorsContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3188,7 +3153,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ConstructorOfContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3236,7 +3200,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ConstructorConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3284,7 +3247,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ConstructorExpressionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3473,7 +3435,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ParametersContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3526,7 +3487,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ParameterConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3596,7 +3556,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ParameterExpressionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3737,7 +3696,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class FunctionParametersContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3790,7 +3748,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class FunctionParameterConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3862,7 +3819,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class FunctionParameterConditionTransitionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -3910,7 +3866,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class FunctionParameterExpressionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4059,7 +4014,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class TypesContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4112,7 +4066,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class TypeConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4178,7 +4131,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class SpecifiersContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4231,7 +4183,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class SpecifierConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4278,7 +4229,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class VisibilitiesContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4331,7 +4281,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class VisibilityConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4378,7 +4327,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ReturnValuesContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4431,7 +4379,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ReturnValueConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4478,7 +4425,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class DeclarationStatementsContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4543,7 +4489,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class DeclarationStatementOfContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4615,7 +4560,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class DeclarationStatementConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4663,7 +4607,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class DeclarationStatementExpressionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4844,7 +4787,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ConfigurationFilesContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4897,7 +4839,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ConfigurationFileConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -4945,7 +4886,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ConfigurationFileExpressionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -5070,7 +5010,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ConfigurationPropertiesContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -5117,7 +5056,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ConfigurationPropertyConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -5187,7 +5125,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ConfigurationPropertyExpressionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -5328,7 +5265,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ExpressionStatementsContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -5393,7 +5329,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ExpressionStatementOfContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -5462,7 +5397,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ExpressionStatementConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -5510,7 +5444,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ExpressionStatementExpressionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -5651,7 +5584,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ValueContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -5704,7 +5636,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ValueConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -5751,7 +5682,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class InitialValuesContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -5816,7 +5746,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class InitialValueOfContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -5864,7 +5793,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class InitialValueConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -5911,7 +5839,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ClassesContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -5964,7 +5891,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ClassConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -6012,7 +5938,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class ClassExpressionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -6249,7 +6174,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class SubclassesContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -6314,7 +6238,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class SubclassOfContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -6362,7 +6285,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class SubclassConditionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
@@ -6410,7 +6332,6 @@ class RulepadGrammarParser ( Parser ):
 
 
     class SubclassExpressionContext(ParserRuleContext):
-        __slots__ = 'parser'
 
         def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
