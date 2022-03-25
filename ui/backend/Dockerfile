@@ -30,5 +30,4 @@ COPY ./data /code/data
 ENV PYTHONPATH /code/src
 
 # run the app
-# CMD ["python", "-m", "pipenv", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "5000"]
 CMD ["/run.sh"]
