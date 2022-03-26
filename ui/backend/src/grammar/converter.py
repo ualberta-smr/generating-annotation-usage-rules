@@ -41,6 +41,10 @@ def check(input):
     return None
 
 # check(
+#     """function with annotation "a.b.c.[A|B|C]" must have annotation "a.b.c.D" """
+# )
+
+# check(
 #     """function with parameter "String value" with (annotation "Hello" and annotation "Bello" ) must have type "String" """
 # )
 

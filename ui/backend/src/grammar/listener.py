@@ -2,6 +2,7 @@ from dataclasses import *
 from antlr4 import *
 import itertools
 from functools import reduce
+from copy import deepcopy
 
 from .RulepadGrammarParser import RulepadGrammarParser
 from .RulepadGrammarListener import RulepadGrammarListener
@@ -33,9 +34,38 @@ def mergeAnnotations(a: Annotation, b: Annotation) -> Annotation:
     an.is_antecedent = a.is_antecedent or b.is_antecedent
     return an
 
+def unfoldWildcard(inp: str) -> List[str]:
+    """
+        TODO: this method needs to report when 
+        there's a violation in the input string
+    """
+    prefix = ""
+    for i, ch in enumerate(inp):
+        if ch == "[":
+            closing = inp.find("]", i)
+            if closing == -1:
+                return [inp]
+            newInp = inp[i+1:closing]
+            return list(map(lambda x: f"{prefix}{x}", filter(lambda x: x != "", map(str.strip, newInp.split("|")))))
+        else:
+            prefix += ch
+    return [inp]
+
 def mergeDuplicateAnnotations(oldAnnotations: List[Annotation]):
     if oldAnnotations is None or oldAnnotations == []:
         return oldAnnotations
+
+    def unfold(a: Annotation) -> List[Annotation]:
+        unfolded = unfoldWildcard(a.type.name)
+        all = []
+        for s in unfolded:
+            newAnnotation:Annotation = deepcopy(a)
+            newAnnotation.type.name = s
+            all.append(newAnnotation)
+        return all
+       
+
+    oldAnnotations = [item for sublist in map(unfold, oldAnnotations) for item in sublist]
 
     key = lambda anno: anno.type.name
     tuples = itertools.groupby(sorted(oldAnnotations, key=key), key=key)
