@@ -51,7 +51,7 @@ function RuleAuthoringEditor(props) {
                 onChange={handleChange}
                 className={props.className}
                 editorDidMount={editorDidMount}
-                theme="shortRulePadTheme"
+                theme="shortRulepadTheme"
                 language="shortRulepad"
             />
         </div>

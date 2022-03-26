@@ -3,9 +3,9 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import LabelingScreen from "./components/LabelingScreen";
-import registerSyntaxHighlighting from "./monacoSyntaxHighlighting";
+import ShortRulepad from "./monacoSyntaxHighlighting";
 
-registerSyntaxHighlighting();
+new ShortRulepad().register()
 
 ReactDOM.render(
     <React.StrictMode>
