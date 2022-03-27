@@ -9,6 +9,8 @@ import CodeEditor from "./CodeEditor";
 import prettify, { onelineify } from "../grammar/formatter";
 
 function LabelingScreen() {
+    const [username, setUsername] = useState(window.localStorage.getItem("RVT:Username")) 
+
     const [ruleMetaData, setRuleMetaData] = useState({
         id: null,
         name: 'Default package name',
@@ -52,6 +54,7 @@ function LabelingScreen() {
                     },
                     body: JSON.stringify({
                         ruleString: grammarText,
+                        username: username
                     })
                 }
             }
@@ -152,8 +155,6 @@ function LabelingScreen() {
 
         const sentText = onelineify(text);
 
-        console.log(JSON.stringify(sentText))
-
         setCancelCurrentRequestHandle(
             makeCancellablePromise(
                 `http://localhost:5000/grammarToCode?grammar=${sentText}`,
@@ -166,7 +167,7 @@ function LabelingScreen() {
         return (
             <div className="app">
                 <div className="instructions">
-                    <h2>{ruleMetaData.name}: Candidate Rule {ruleMetaData.id}/{ruleMetaData.size}</h2>
+                    <h2>{ruleMetaData.name}: Candidate Rule {ruleMetaData.id}/{ruleMetaData.size} ({username})</h2>
                     <p>
                         <strong>Instructions: </strong>
                         <em>

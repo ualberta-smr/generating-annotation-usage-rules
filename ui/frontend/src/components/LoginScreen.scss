@@ -1,0 +1,41 @@
+$backgroundColor: #414260;
+$hotColor: #ffcf00;
+$antecedentColor: orange;
+$consequentColor: green;
+
+$antecedentColorLight: #FFD580;
+$consequentColorLight: #0fc80f;
+
+.app {
+    background-color: $backgroundColor;
+    display: grid;
+    grid-template-rows: 60% 40%;
+}
+
+.heading {
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    h1 {
+        font-size: 5em;
+        color: white;
+    }
+}
+
+.login-section {
+    height: 40vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    .username {
+        width: 20vw;
+        height: 5vh;
+        font-size: 2rem;
+        text-align: center;
+        font-style: italic;
+    }
+}
