@@ -6,7 +6,8 @@ import rulepadFormat as rf
 import uuid
 
 from .models import *
-from .constants import DEFAULT_USER_ID, RuleLabels
+from .constants import RuleLabels
+from .users import UserOperationsHandler
 
 
 @dataclass
@@ -20,8 +21,12 @@ class RuleDTO:
 class RulePackageNavigation:
 
     @staticmethod
-    def __findNextData(id: int, db: Session) -> Tuple[CandidateRule, bool]:
-        results = db.query(CandidateRule).all()
+    def __findNextData(id: int, package_id: int, db: Session) -> Tuple[CandidateRule, bool]:
+        results = db.query(CandidateRule) \
+            .filter(CandidateRule.package_id == package_id) \
+            .order_by(CandidateRule.id.asc()) \
+            .all()
+
         size = len(results)
         for i, data in enumerate(results):
             if data.id == id:
@@ -34,8 +39,12 @@ class RulePackageNavigation:
         return (None, False)
 
     @staticmethod
-    def __findPrevData(id: int, db: Session) -> Tuple[CandidateRule, bool]:
-        results = db.query(CandidateRule).all()
+    def __findPrevData(id: int, package_id: int, db: Session) -> Tuple[CandidateRule, bool]:
+        results = db.query(CandidateRule) \
+            .filter(CandidateRule.package_id == package_id) \
+            .order_by(CandidateRule.id.asc()) \
+            .all()
+
         for i, data in enumerate(results):
             if data.id == id:
                 if i - 1 >= 0:
@@ -47,30 +56,34 @@ class RulePackageNavigation:
         return (None, False)
 
     @staticmethod
-    def __findNextInDatabase(id: int, db: Session) -> RuleDTO:
-        datum, hasNext = RulePackageNavigation.__findNextData(id, db)
+    def __findNextInDatabase(id: int, user_id: int, package_id: int, db: Session) -> RuleDTO:
+        datum, hasNext = RulePackageNavigation.__findNextData(
+            id, package_id, db)
         if datum:
-            return RulePackageNavigation.__candidateRuleToDTO(db, datum, hasPrev=True, hasNext=hasNext)
+            return RulePackageNavigation.__candidateRuleToDTO(db, datum, user_id, hasPrev=True, hasNext=hasNext)
         return RuleDTO(None, False, False, False)
 
     @staticmethod
-    def __findPrevInDatabase(id: int, db: Session) -> RuleDTO:
-        datum, hasPrev = RulePackageNavigation.__findPrevData(id, db)
+    def __findPrevInDatabase(id: int, user_id: int, package_id: int, db: Session) -> RuleDTO:
+        datum, hasPrev = RulePackageNavigation.__findPrevData(
+            id, package_id, db)
         if datum:
-            return RulePackageNavigation.__candidateRuleToDTO(db, datum, hasPrev=hasPrev, hasNext=True)
+            return RulePackageNavigation.__candidateRuleToDTO(db, datum, user_id, hasPrev=hasPrev, hasNext=True)
         return RuleDTO(None, False, False, False)
 
     @staticmethod
-    def __getLabelAndRuleString(db: Session, ruleObj: CandidateRule):
-        name = db.query(CandidateRulesPackage).filter(CandidateRulesPackage.id == ruleObj.package_id).first().name
-        size = db.query(CandidateRule).filter(CandidateRule.package_id == ruleObj.package_id).count()
+    def __getLabelAndRuleString(db: Session, ruleObj: CandidateRule, user_id: int):
+        name = db.query(CandidateRulesPackage).filter(
+            CandidateRulesPackage.id == ruleObj.package_id).first().name
+        size = db.query(CandidateRule).filter(
+            CandidateRule.package_id == ruleObj.package_id).count()
 
         labeledRule = db.query(LabeledRule).filter_by(
-            candidate_rule_id=ruleObj.id).first()
+            candidate_rule_id=ruleObj.id, user_id=user_id).first()
 
         if labeledRule and labeledRule.label == RuleLabels.CORRECT:
             return (labeledRule.label, labeledRule.rule_description, name, size)
-        
+
         label = labeledRule.label if labeledRule else RuleLabels.UNLABELED
         # re-generate the rule description if:
         # - the rule has not been labeled
@@ -79,20 +92,21 @@ class RulePackageNavigation:
         consequents: List[str] = json.loads(ruleObj.consequent)
 
         ruleString = rf.toShortRulePad(rf.JsonRule(
-                    id=id,
-                    antecedent=antecedents,
-                    consequent=consequents)
+            id=id,
+            antecedent=antecedents,
+            consequent=consequents)
         )
 
         return (label, ruleString, name, size)
 
     @staticmethod
-    def __candidateRuleToDTO(db: Session, ruleObj: CandidateRule, hasPrev: bool, hasNext: bool) -> RuleDTO:
+    def __candidateRuleToDTO(db: Session, ruleObj: CandidateRule, user_id: int, hasPrev: bool, hasNext: bool) -> RuleDTO:
         """
             it takes a candidate rule object with some extra data (hasPrev, hasNext) 
             and constructs a RuleDTO object with the correct label
         """
-        label, ruleString, name, size = RulePackageNavigation.__getLabelAndRuleString(db, ruleObj)
+        label, ruleString, name, size = RulePackageNavigation.__getLabelAndRuleString(
+            db, ruleObj, user_id)
         return RuleDTO(data={
             "id": ruleObj.id,
             "ruleString": ruleString,
@@ -101,33 +115,41 @@ class RulePackageNavigation:
         }, hasPrev=hasPrev, hasNext=hasNext, label=label)
 
     @staticmethod
-    def getNext(db: Session, id: int) -> RuleDTO:
+    def getNext(db: Session, id: int, user_id: int) -> RuleDTO:
         """
             gets the candidate rule and its label after the given 'id'
             if 'id' is not given, then it will return the first element of the rule package
         """
+        package_id = UserOperationsHandler.getPackageIdForUser(user_id)
         if id is None:
-            firstElement = db.query(CandidateRule).first()
+            firstElement = db.query(CandidateRule) \
+                .filter(CandidateRule.package_id == package_id) \
+                .order_by(CandidateRule.id.asc()) \
+                .first()
             # FIXME: hasNext can be false
-            return RulePackageNavigation.__candidateRuleToDTO(db, firstElement, False, True)
-        return RulePackageNavigation.__findNextInDatabase(id, db)
+            return RulePackageNavigation.__candidateRuleToDTO(db, firstElement, user_id, False, True)
+        return RulePackageNavigation.__findNextInDatabase(id, user_id, package_id, db)
 
     @staticmethod
-    def getPrev(db: Session, id: int) -> RuleDTO:
+    def getPrev(db: Session, id: int, user_id: int) -> RuleDTO:
         """
             gets the candidate rule and its label before the given 'id'
             if 'id' is not given, then it will return the first element of the rule package
         """
+        package_id = UserOperationsHandler.getPackageIdForUser(user_id)
         if id is None:
-            firstElement = db.query(CandidateRule).first()
+            firstElement = db.query(CandidateRule) \
+                .filter(CandidateRule.package_id == package_id) \
+                .order_by(CandidateRule.id.asc()) \
+                .first()
             # FIXME: hasNext can be false
-            return RulePackageNavigation.__candidateRuleToDTO(db, firstElement, False, True)
-        return RulePackageNavigation.__findPrevInDatabase(id, db)
+            return RulePackageNavigation.__candidateRuleToDTO(db, firstElement, user_id, False, True)
+        return RulePackageNavigation.__findPrevInDatabase(id, user_id, package_id, db)
 
 
 class RuleLabelingHandler:
 
-    def labelRule(db: Session, id: int, rulePadString: str, label: str):
+    def labelRule(db: Session, id: int, rulePadString: str, label: str, user_id: int):
         """
             Labels the rule with the given id as 'correct' or 'not_a_rule'. 
             It also saves the rulePadString (which can be empty)
@@ -136,28 +158,29 @@ class RuleLabelingHandler:
 
         # update the rule
         labelFromDatabase = db.query(LabeledRule).filter_by(
-            candidate_rule_id=id).first()
+            candidate_rule_id=id, user_id=user_id).first()
         if labelFromDatabase is None:
             db.add(LabeledRule(
                 id=str(uuid.uuid4()),
                 candidate_rule_id=id,
                 rule_description=rulePadString,
                 label=label,
-                user_id=DEFAULT_USER_ID
+                user_id=user_id
             ))
         else:
             labelFromDatabase.label = label
             labelFromDatabase.rule_description = rulePadString
         db.commit()
 
-    def unlabelRule(db: Session, id: int):
+    def unlabelRule(db: Session, id: int, user_id: int):
         """
             Removes the label from a rule with the given id
         """
         labelFromDatabase = db.query(LabeledRule).filter_by(
-            candidate_rule_id=id).first()
-        db.delete(labelFromDatabase)
-        db.commit()
+            candidate_rule_id=id, user_id=user_id).first()
+        if labelFromDatabase:
+            db.delete(labelFromDatabase)
+            db.commit()
 
 
 class RulePackageOperations:
@@ -171,7 +194,8 @@ class RulePackageOperations:
 
         confirmedLabeledRules.sort(key=lambda x: x.candidate_rule_id)
 
-        rules = list(map(lambda r: {"id": r.id, "specification": r.rule_description}, confirmedLabeledRules))
+        rules = list(map(lambda r: {
+                     "id": r.id, "specification": r.rule_description}, confirmedLabeledRules))
         return {
             "rules": rules
         }

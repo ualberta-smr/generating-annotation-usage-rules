@@ -7,13 +7,17 @@ import RuleAuthoringEditor from "./RuleAuthoringEditor";
 import makeCancellablePromise from "./superPromise";
 import CodeEditor from "./CodeEditor";
 import prettify, { onelineify } from "../grammar/formatter";
+import { BACKEND_URL, LS_USERNAME } from "./constants";
 
 function LabelingScreen() {
+    const [username, setUsername] = useState(window.localStorage.getItem(LS_USERNAME)) 
+
     const [ruleMetaData, setRuleMetaData] = useState({
         id: null,
         name: 'Default package name',
         size: 0
     });
+
     const [buttonAvailability, setButtonAvailability] = useState({
         hasPrev: false,
         hasNext: false,
@@ -40,20 +44,21 @@ function LabelingScreen() {
             and if it is 'unlabeled' for some reason, we do nothing
         */
 
-        let requestOptions = {}
+        const requestOptions = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                ruleString: onelineify(grammarText),
+                username: username
+            })
+        }
+
         if (newRuleLabel === "correct") {
             if (newRuleLabel === ruleLabel) {
                 newRuleLabel = "unlabeled"
             } else {
                 // label to correct
-                requestOptions = {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        ruleString: grammarText,
-                    })
-                }
             }
         } else if (newRuleLabel === "not_a_rule") {
             if (newRuleLabel === ruleLabel) {
@@ -65,7 +70,7 @@ function LabelingScreen() {
             return
         }
 
-        fetch(`http://localhost:5000/rules/${ruleMetaData.id}/${newRuleLabel}`, {
+        fetch(`${BACKEND_URL}/rules/${ruleMetaData.id}/${newRuleLabel}`, {
                 method: "POST", ...requestOptions
             })
                 .then((resp) => {
@@ -102,13 +107,14 @@ function LabelingScreen() {
     const getNextRule = () => {
         const id_str = ruleMetaData.id == null ? "" : `/${ruleMetaData.id}/next`;
         makeCancellablePromise(
-            `http://localhost:5000/rules${id_str}`,
+            `${BACKEND_URL}/rules${id_str}?user_id=${username}`,
             processRule
         );
     };
+
     const getPrevRule = () => {
         makeCancellablePromise(
-            `http://localhost:5000/rules/${ruleMetaData.id}/prev`,
+            `${BACKEND_URL}/rules/${ruleMetaData.id}/prev?user_id=${username}`,
             processRule
         );
     };
@@ -152,11 +158,9 @@ function LabelingScreen() {
 
         const sentText = onelineify(text);
 
-        console.log(JSON.stringify(sentText))
-
         setCancelCurrentRequestHandle(
             makeCancellablePromise(
-                `http://localhost:5000/grammarToCode?grammar=${sentText}`,
+                `${BACKEND_URL}/grammarToCode?grammar=${sentText}`,
                 processGrammarToCodeResponse
             )
         );
@@ -166,7 +170,7 @@ function LabelingScreen() {
         return (
             <div className="app">
                 <div className="instructions">
-                    <h2>{ruleMetaData.name}: Candidate Rule {ruleMetaData.id}/{ruleMetaData.size}</h2>
+                    <h2>{ruleMetaData.name}: Candidate Rule {ruleMetaData.id}/{ruleMetaData.size} ({username})</h2>
                     <p>
                         <strong>Instructions: </strong>
                         <em>

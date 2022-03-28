@@ -7,7 +7,8 @@ from .database import Base
 class CandidateRule(Base):
     __tablename__ = "candidate_rules"
 
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    counter = Column(String(50), primary_key=True)
+    id = Column(Integer, index=True)
     antecedent = Column(Text)
     consequent = Column(Text)
     package_id = Column(Integer, ForeignKey("candidate_rule_packages.id"))

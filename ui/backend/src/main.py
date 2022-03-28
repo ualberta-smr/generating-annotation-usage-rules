@@ -7,7 +7,7 @@ from api import RuleOperationsHandler, ConfirmRuleDTO
 
 import grammar as G
 
-from db import SessionLocal, models, schemas, createAndInitializeDb, RulePackageOperations
+from db import SessionLocal, models, schemas, createAndInitializeDb, RulePackageOperations, UserOperationsHandler
 
 from fastapi import FastAPI, Response, Depends
 from fastapi.logger import logger as fastapi_logger
@@ -84,18 +84,18 @@ def grammarToCode(response: Response, grammar: Optional[str] = ""):
 
 
 @app.get('/rules')
-def getFirstRule(response: Response, db: Session = Depends(get_db)):
-    return RuleOperationsHandler.getFirstRule(response, db)
+def getFirstRule(user_id: str, response: Response, db: Session = Depends(get_db)):
+    return RuleOperationsHandler.getFirstRule(user_id, response, db)
 
 
 @app.get('/rules/{rule_id}/next')
-def getNextRule(rule_id: int, response: Response, db: Session = Depends(get_db)):
-    return RuleOperationsHandler.getNextRule(rule_id, response, db)
+def getNextRule(rule_id: int, user_id: str, response: Response, db: Session = Depends(get_db)):
+    return RuleOperationsHandler.getNextRule(rule_id, user_id, response, db)
 
 
 @app.get('/rules/{rule_id}/prev')
-def getPrevRule(rule_id: int, response: Response, db: Session = Depends(get_db)):
-    return RuleOperationsHandler.getPrevRule(rule_id, response, db)
+def getPrevRule(rule_id: int, user_id: str, response: Response, db: Session = Depends(get_db)):
+    return RuleOperationsHandler.getPrevRule(rule_id, user_id, response, db)
 
 
 @app.post('/rules/{rule_id}/{label}')
@@ -105,3 +105,7 @@ def labelRule(rule_id: int, label: str, response: Response, ruleDto: Optional[Co
 @app.get('/packages/{package_id}/confirmed')
 def getRulesPackage(package_id: int, db: Session = Depends(get_db)):
     return RulePackageOperations.getConfirmedRulesByPackageId(package_id, db)
+
+@app.get('/users')
+def checkIfUserExists(q: str, response: Response):
+    UserOperationsHandler.exists(q, response)
