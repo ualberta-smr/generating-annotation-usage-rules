@@ -2,6 +2,7 @@ from .database import *
 from .operations import RuleDTO, RuleLabelingHandler, RulePackageNavigation, RulePackageOperations
 from .models import User, Base, CandidateRule, CandidateRulesPackage
 from .constants import *
+from .users import UserOperationsHandler
 
 import json
 from typing import List, Iterator
@@ -27,7 +28,7 @@ def __getDataFromSourceMicroProfile() -> Iterator[JsonRule]:
 
 def __populate(db: Session):
     # create a user
-    db.add(User(id=DEFAULT_USER_ID, name="Default user"))
+    UserOperationsHandler.initializeAllUsers(db)
     db.add(CandidateRulesPackage(id = DEFAULT_PACKAGE_ID, name = "MicroProfile Candidate Rules"))
     db.commit()
     # create a package

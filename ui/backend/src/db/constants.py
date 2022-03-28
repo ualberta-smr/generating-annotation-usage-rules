@@ -1,7 +1,7 @@
 from typing import List
 
 # both are useful for future plans
-DEFAULT_USER_ID = 1
+DEFAULT_USER_ID = 0
 DEFAULT_PACKAGE_ID = 1
 
 class RuleLabels:

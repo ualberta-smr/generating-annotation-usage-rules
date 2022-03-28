@@ -1,4 +1,4 @@
-from db import RuleDTO, RuleLabelingHandler, RulePackageNavigation, RuleLabels
+from db import RuleDTO, RuleLabelingHandler, RulePackageNavigation, RuleLabels, UserOperationsHandler
 from sqlalchemy.orm.session import Session
 from fastapi import Response
 import traceback
@@ -9,6 +9,7 @@ import grammar as G
 
 class ConfirmRuleDTO(BaseModel):
     ruleString: str
+    username:str
 
 
 def get_config(config):
@@ -23,10 +24,10 @@ def get_config(config):
 class RuleOperationsHandler:
 
     @staticmethod
-    def __getRule(db: Session, rule_id: int, response: Response, next=True):
+    def __getRule(db: Session, rule_id: int, user_id: int, response: Response, next=True):
         try:
             r = RulePackageNavigation.getNext(
-                db, rule_id) if next else RulePackageNavigation.getPrev(db, rule_id)
+                db, rule_id, user_id) if next else RulePackageNavigation.getPrev(db, rule_id, user_id)
             if r and r.data:
                 rule_string = r.data["ruleString"]
                 code, config = G.convert(rule_string)
@@ -45,30 +46,35 @@ class RuleOperationsHandler:
             return RuleDTO(None, False, False, False)
 
     @staticmethod
-    def getFirstRule(response: Response, db: Session):
-        return RuleOperationsHandler.__getRule(db, None, response)
+    def getFirstRule(user_id: str, response: Response, db: Session):
+        user_id = UserOperationsHandler.getUserId(user_id)
+        return RuleOperationsHandler.__getRule(db, None, user_id, response)
 
     @staticmethod
-    def getNextRule(rule_id: int, response: Response, db: Session):
-        return RuleOperationsHandler.__getRule(db, rule_id, response)
+    def getNextRule(rule_id: int, user_id: str, response: Response, db: Session):
+        user_id = UserOperationsHandler.getUserId(user_id)
+        return RuleOperationsHandler.__getRule(db, rule_id, user_id, response)
 
     @staticmethod
-    def getPrevRule(rule_id: int, response: Response, db: Session):
-        return RuleOperationsHandler.__getRule(db, rule_id, response, next=False)
+    def getPrevRule(rule_id: int, user_id: str, response: Response, db: Session):
+        user_id = UserOperationsHandler.getUserId(user_id)
+        return RuleOperationsHandler.__getRule(db, rule_id, user_id, response, next=False)
 
     @staticmethod
     def labelRule(rule_id: int, label: str, response: Response, ruleDto: Optional[ConfirmRuleDTO], db: Session):
         try:
+            user_id = UserOperationsHandler.getUserId(ruleDto.username)
             if RuleLabels.label_is_supported(label):
                 rulePadString = ruleDto.ruleString if label == RuleLabels.CORRECT else ""
                 RuleLabelingHandler.labelRule(
                     db=db,
                     id=rule_id,
                     rulePadString=rulePadString,
-                    label=label
+                    label=label,
+                    user_id=user_id
                 )
             elif label == RuleLabels.UNLABELED:
-                RuleLabelingHandler.unlabelRule(db=db, id=rule_id)
+                RuleLabelingHandler.unlabelRule(db=db, id=rule_id, user_id=user_id)
             else:
                 raise Exception(
                     f"Rule label string needs to be one of [{RuleLabels.get_all()}]")
