@@ -55,7 +55,11 @@ export default class ShortRulepad {
         const allText = model.getValue()
         const prettified = prettify(allText)
 
-        model.setValue(prettified);
+        model.pushEditOperations(
+            [],
+            [{range: model.getFullModelRange(), text: prettified}],
+            () => null
+        );
 
         // actually does not have any effect
         return prettified.split("\n").map((line, ix) => {

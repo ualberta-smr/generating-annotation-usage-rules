@@ -10,7 +10,13 @@ import prettify, { onelineify } from "../grammar/formatter";
 import { BACKEND_URL, LS_USERNAME } from "./constants";
 
 function LabelingScreen() {
-    const [username, setUsername] = useState(window.localStorage.getItem(LS_USERNAME)) 
+    const [username, setUsername] = useState(window.localStorage.getItem(LS_USERNAME));
+    // this is a flag that represents if the current rule is a new rule or not
+    // new rule here refers to the freshly retrieved rule from the server, without any edits
+    // this is actually not a boolean flag but more like a representation of a change
+    // every time there's a new rule, the flag is flipped
+    // listening to its changes, we can run useEffect 
+    const [isNewRule, setIsNewRule] = useState(true); 
 
     const [ruleMetaData, setRuleMetaData] = useState({
         id: null,
@@ -101,6 +107,7 @@ function LabelingScreen() {
 
         setRuleMetaData({id, name, size});
         setGrammarText(prettify(ruleString));
+        setIsNewRule(!isNewRule);
         processGrammarToCodeResponse(grammar);
     }
 
@@ -190,6 +197,7 @@ function LabelingScreen() {
                                 >
                                     <RuleAuthoringEditor
                                         text={grammarText}
+                                        resetEditorUndoStack={isNewRule}
                                         onChange={(text) =>
                                             updateRelatedFields(text)
                                         }
