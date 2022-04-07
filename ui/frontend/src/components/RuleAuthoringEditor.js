@@ -25,6 +25,28 @@ function RuleAuthoringEditor(props) {
         }
     }, [width, height]);
 
+    useEffect(() => {
+        if (editorData) {
+            const {editor, monaco} = editorData; 
+            const model = editor.getModel();
+            // this resets the undo stack
+            // and it is not a good idea
+            model._commandManager._undoRedoService._editStacks.clear();
+            editor.focus();
+
+            const lines = model.getValue().split("\n");
+
+            const startRow = lines.length;
+            const startCol = lines[lines.length - 1].length;
+            const endRow = lines.length;
+            const endCol = startCol;
+    
+            const selection = new monaco.Selection(startRow, startCol, endRow, endCol);
+    
+            editor.setSelection(selection);
+        }
+    }, [props.resetEditorUndoStack])
+
     const handleChange = (text) => {
         props.onChange(text);
     };
@@ -37,7 +59,7 @@ function RuleAuthoringEditor(props) {
         if (editorData) {
             const { editor, monaco } = editorData;
             editor.layout();
-            editor.updateOptions({"fontSize": Math.floor(height * 0.035)})
+            editor.updateOptions({ "fontSize": Math.floor(height * 0.035) })
         }
     }
 
