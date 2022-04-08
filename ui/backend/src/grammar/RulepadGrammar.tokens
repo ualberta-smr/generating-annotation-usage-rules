@@ -75,7 +75,6 @@ SUBCLASSES=48
 'Superclass'=30
 'implementation '=31
 'Interface '=32
-'function '=33
 'abstract function '=34
 'constructor '=35
 'parameter '=36

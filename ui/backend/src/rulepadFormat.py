@@ -71,12 +71,12 @@ def methodToRulePad(f: Method) -> str:
                type_str, param_str, anno_str]))
     if len(abc) >= 2:
         tmp = " and ".join(abc)
-        return f"(function with ({tmp} ) )"
+        return f"(method with ({tmp} ) )"
     elif anno_str:
-        return f"(function with {anno_str} )"
+        return f"(method with {anno_str} )"
     elif type_str:
-        return f"(function with {type_str} )"
-    return f"(function with {param_str} )"
+        return f"(method with {type_str} )"
+    return f"(method with {param_str} )"
 
 
 def configToRulePad(cf: ConfigurationFile) -> str:
