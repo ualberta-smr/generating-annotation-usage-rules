@@ -342,4 +342,8 @@ export default class FormatterListener extends RulepadGrammarListener {
         if (this.closeParenthesisIfRequired(ctx)) return;
     }
 
+    enterBeans(ctx) {
+        this.finalString += this.getPrefix() + ctx.BEAN_DECL().getText();
+    }
+
 }

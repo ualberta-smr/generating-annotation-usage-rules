@@ -24,7 +24,7 @@ def convert(input):
     walker = ParseTreeWalker()
     walker.walk(listener, tree)
     j = listener.getJavaClass()
-    return javaClass(j).strip(), configFiles(j.configurationFile)
+    return javaClass(j).strip(), configurationFiles(j)
 
 def check(input):
     lexer = RulepadGrammarLexer(InputStream(input))

@@ -20,6 +20,11 @@ class ConfigurationFile(AntecedentOrConsequent):
     properties: List[ConfigurationProperty] = field(default_factory=[])
 
 @dataclass
+class BeanDeclaration(AntecedentOrConsequent):
+    name: str
+    declared: bool = field(default=True)
+
+@dataclass
 class Param(AntecedentOrConsequent):
     type: Type
     name: str
@@ -49,3 +54,4 @@ class JavaClass(AntecedentOrConsequent):
     field: Field = None
     method: Method = None
     configurationFile: ConfigurationFile = None
+    declaredInBeans: BeanDeclaration = None

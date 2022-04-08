@@ -16,7 +16,7 @@ function LabelingScreen() {
     // this is actually not a boolean flag but more like a representation of a change
     // every time there's a new rule, the flag is flipped
     // listening to its changes, we can run useEffect 
-    const [isNewRule, setIsNewRule] = useState(true); 
+    const [isNewRule, setIsNewRule] = useState(true);
 
     const [ruleMetaData, setRuleMetaData] = useState({
         id: null,
@@ -36,14 +36,14 @@ function LabelingScreen() {
 
     const [previousGrammarToCodeRequest, setCancelCurrentRequestHandle] =
         useState({
-            cancel: () => {},
+            cancel: () => { },
         });
 
     const handleLabeling = (label) => {
         let newRuleLabel = ["correct", "not_a_rule"].includes(label)
             ? label
             : "unlabeled";
-        
+
         /* 
             Basic idea is that if it is 'correct' already and you click the button again,
             it will be unlabeled...the same for 'not_a_rule' as well
@@ -77,16 +77,16 @@ function LabelingScreen() {
         }
 
         fetch(`${BACKEND_URL}/rules/${ruleMetaData.id}/${newRuleLabel}`, {
-                method: "POST", ...requestOptions
+            method: "POST", ...requestOptions
+        })
+            .then((resp) => {
+                if (resp.status === 204) {
+                    setRuleLabel(newRuleLabel);
+                }
             })
-                .then((resp) => {
-                    if (resp.status === 204) {
-                        setRuleLabel(newRuleLabel);
-                    }
-                })
-                .catch((e) => {
-                    console.error(e);
-                });
+            .catch((e) => {
+                console.error(e);
+            });
     };
 
     useEffect(() => {
@@ -105,7 +105,7 @@ function LabelingScreen() {
 
         const { id, ruleString, grammar, name, size } = data;
 
-        setRuleMetaData({id, name, size});
+        setRuleMetaData({ id, name, size });
         setGrammarText(prettify(ruleString));
         setIsNewRule(!isNewRule);
         processGrammarToCodeResponse(grammar);
@@ -141,12 +141,14 @@ function LabelingScreen() {
             }
 
             const configuration = grammar.configuration;
-            if (configuration) {
-                const { filename, code } = configuration;
-                setPropertiesFileData({
-                    name: filename,
-                    text: code,
+            if (configuration.length > 0) {
+                const configFiles = configuration.map(({ filename, code }) => {
+                    return {
+                        name: filename,
+                        text: code
+                    }
                 });
+                setPropertiesFileData(configFiles);
             } else {
                 setPropertiesFileData(null);
             }
@@ -218,21 +220,18 @@ function LabelingScreen() {
                                                 : 2)),
                                 }}
                             />
-
                             {propertiesFileData == null ? null : (
-                                <CodeEditor
-                                    code={propertiesFileData.text}
-                                    fileName={propertiesFileData.name}
-                                    measurements={{
-                                        width: 800,
-                                        height:
-                                            300 *
-                                            (1 /
-                                                (propertiesFileData == null
-                                                    ? 1
-                                                    : 2)),
-                                    }}
-                                />
+                                <div className="config-file-editors">
+                                    {propertiesFileData.map(conf => (
+                                        <CodeEditor
+                                            code={conf.text}
+                                            fileName={conf.name}
+                                            measurements={{
+                                                width: 800 / propertiesFileData.length,
+                                                height: 300 * 0.5,
+                                            }}
+                                        />))}
+                                </div>
                             )}
                         </div>
                     </div>
@@ -261,21 +260,19 @@ function LabelingScreen() {
 
                             <div className="buttons">
                                 <button
-                                    className={`btn btn-correct ${
-                                        ruleLabel === "correct"
-                                            ? "btn-selected"
-                                            : ""
-                                    }`}
+                                    className={`btn btn-correct ${ruleLabel === "correct"
+                                        ? "btn-selected"
+                                        : ""
+                                        }`}
                                     onClick={() => handleLabeling("correct")}
                                 >
                                     CONFIRM RULE
                                 </button>
                                 <button
-                                    className={`btn btn-incorrect ${
-                                        ruleLabel === "not_a_rule"
-                                            ? "btn-selected"
-                                            : ""
-                                    }`}
+                                    className={`btn btn-incorrect ${ruleLabel === "not_a_rule"
+                                        ? "btn-selected"
+                                        : ""
+                                        }`}
                                     onClick={() => handleLabeling("not_a_rule")}
                                 >
                                     NOT A RULE

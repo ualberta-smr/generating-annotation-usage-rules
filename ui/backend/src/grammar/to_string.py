@@ -1,5 +1,6 @@
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 from .model import *
+import inspect
 
 ANTECEDENT_SIGN_START = """<span class="antecedent" title="Antecedent">"""
 ANTECEDENT_SIGN_END = "</span>"
@@ -87,8 +88,7 @@ def handleAnnotations(annotations: List[Annotation], ch="") -> str:
         return addSigns(a, result)
     return f"\n{ch}".join(map(annotation, annotations))
 
-
-def javaClass(clazz: JavaClass):
+def javaClass(clazz: JavaClass) -> str:
     return TEMPLATE\
         .replace("<ClassAnnotations>", handleAnnotations(clazz.annotations))\
         .replace("<FieldDeclaration>", field(clazz.field))\
@@ -96,6 +96,16 @@ def javaClass(clazz: JavaClass):
         .replace("<ExtendsTemplate>", extends(clazz.extendedClass))\
         .replace("<ImplementsTemplate>", implements(clazz.implementedInterfaces))
 
+def beanDeclaration(bd: BeanDeclaration) -> Tuple[str, str]:
+    if bd is None:
+        return None
+
+    lines = inspect.cleandoc("""
+    &lt;beans&gt;
+      &lt;bean id="..." class="Foo" /&gt;
+    &lt;/beans&gt;
+    """).lstrip()
+    return bd.name, lines
 
 def configFiles(cf: ConfigurationFile) -> Tuple[str, str]:
     if cf is None:
@@ -103,3 +113,12 @@ def configFiles(cf: ConfigurationFile) -> Tuple[str, str]:
     lines = "\n".join(
         map(lambda t: f"{t[0]}={t[1]}", map(lambda x: (x.name, shortenTypeName(x.type)), cf.properties)))
     return cf.name, lines
+
+def configurationFiles(clazz: JavaClass) -> List[Dict[str, str]]:
+    cf = configFiles(clazz.configurationFile)
+    bd = beanDeclaration(clazz.declaredInBeans)
+    
+    return list(map(lambda x: {
+        "filename": x[0],
+        "code": x[1]
+    }, filter(lambda x: x is not None, [cf, bd])))

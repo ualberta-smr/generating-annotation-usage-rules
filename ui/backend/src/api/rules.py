@@ -33,7 +33,7 @@ class RuleOperationsHandler:
                 code, config = G.convert(rule_string)
                 r.data["grammar"] = {
                     "code": code,
-                    "configuration": get_config(config)
+                    "configuration": config
                 }
                 response.status_code = 200
                 return r
