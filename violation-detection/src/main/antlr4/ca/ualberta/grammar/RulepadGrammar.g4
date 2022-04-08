@@ -204,6 +204,7 @@ implementationCondition
 
 FUNCTION
     : 'function '
+    | 'method '
     ;
 
 functions
@@ -222,7 +223,7 @@ functionExpression
     : LPAREN functionExpression RPAREN
     | left=functionExpression op=binary right=functionExpression
     | ( annotations | specifiers | visibilities | types | names | functionParameters | returnValues
-        | declarationStatements | expressionStatements | comments)
+        | expressionStatements | comments)
     | functionExpression SPACE
     ;
 

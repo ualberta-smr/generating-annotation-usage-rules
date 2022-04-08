@@ -332,14 +332,15 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
                 type_, name_ = elements[0], None
             prop.name = name_
             prop.type = self.initObj(Type(type_))
-        else:
-            self.__stack.append({
-                'comingFrom': 'property',
-                'node': prop
-            })
+        
         prev = self.__stack[-1]
         if prev['comingFrom'] == 'config-file':
             prev['node'].properties.append(prop)
+
+        self.__stack.append({
+            'comingFrom': 'property',
+            'node': prop
+        })
 
     def exitConfigurationProperties(self, ctx: RulepadGrammarParser.ConfigurationPropertiesContext):
         self.__stack.pop()
