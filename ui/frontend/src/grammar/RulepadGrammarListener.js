@@ -491,5 +491,14 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 	}
 
 
+	// Enter a parse tree produced by RulepadGrammarParser#beans.
+	enterBeans(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#beans.
+	exitBeans(ctx) {
+	}
+
+
 
 }

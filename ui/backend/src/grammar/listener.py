@@ -304,7 +304,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
 
     # Enter a parse tree produced by RulepadGrammarParser#configurationFiles.
     def enterConfigurationFiles(self, ctx: RulepadGrammarParser.ConfigurationFilesContext):
-        configFile = self.initObj(ConfigurationFile("config.properties", []))
+        configFile = self.initObj(ConfigurationFile("microprofile-config.properties", []))
 
         prev = self.__stack[-1]
         if prev['comingFrom'] == 'class':
@@ -342,8 +342,19 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             'node': prop
         })
 
+
     def exitConfigurationProperties(self, ctx: RulepadGrammarParser.ConfigurationPropertiesContext):
         self.__stack.pop()
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#beans.
+    def enterBeans(self, ctx:RulepadGrammarParser.BeansContext):
+        beanDecl = self.initObj(BeanDeclaration("beans.xml", True))
+
+        prev = self.__stack[-1]
+        if prev['comingFrom'] == 'class':
+            prev['node'].declaredInBeans = beanDecl
+
 
     def initObj(self, obj):
         obj.is_antecedent = self.__is_antecedent

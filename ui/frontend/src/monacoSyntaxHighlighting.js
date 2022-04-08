@@ -24,6 +24,7 @@ export default class ShortRulepad {
                     [/implementation/, "srp-keyword"],
                     [/property/, "srp-keyword"],
                     [/configuration file/, "srp-keyword"],
+                    [/bean declaration/, "srp-keyword"],
 
                     [/must have/, "srp-must-have"],
                     [/with/, "srp-with"],

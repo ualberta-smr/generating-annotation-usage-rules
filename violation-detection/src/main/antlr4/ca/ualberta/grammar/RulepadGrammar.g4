@@ -405,7 +405,18 @@ classCondition
 classExpression
     : LPAREN classExpression RPAREN
     | left=classExpression op=binary right=classExpression
-    | ( annotations | extensions | implementations | functions | constructors | declarationStatements | configurationFiles )
+    | ( annotations | extensions | implementations | functions | constructors | declarationStatements | configurationFiles | beans )
     | classExpression SPACE
     ;
 
+/*
+    bean declaration
+ */
+
+ BEAN_DECL
+    : 'bean declaration '
+    ;
+
+beans
+    : BEAN_DECL
+    ;

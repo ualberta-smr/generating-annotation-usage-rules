@@ -74,7 +74,7 @@ def grammarToCode(response: Response, grammar: Optional[str] = ""):
         response.status_code = 200
         return {
             "code": code,
-            "configuration": get_config(config)
+            "configuration": config
         }
     except Exception as e:
         traceback.print_exc()

@@ -29,6 +29,10 @@ $consequentColorLight: #0fc80f;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+
+    .config-file-editors {
+        display: flex;
+    }
 }
 
 .instructions {
@@ -197,6 +201,11 @@ $consequentColorLight: #0fc80f;
             box-sizing: border-box;
         }
     }
+}
+
+.bean_declaration {
+    font-style: italic !important;
+    opacity: 0.7;
 }
 
 .disabledBtn {
