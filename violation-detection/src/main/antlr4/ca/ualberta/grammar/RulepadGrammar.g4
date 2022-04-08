@@ -6,12 +6,9 @@ inputSentence
 
 mustClause
     : functions must have functionExpression
-    | abstractFunctions must have abstractFunctionExpression
     | constructors must have constructorExpression
     | classes must have classExpression
-    | parameters must have parameterExpression
     | declarationStatements must have declarationStatementExpression
-    | subclasses must have subclassExpression
     ;
 
 /*
@@ -208,11 +205,7 @@ FUNCTION
     ;
 
 functions
-    : FUNCTION functionCondition? functionOf?
-    ;
-
-functionOf
-    : of classes
+    : FUNCTION functionCondition
     ;
 
 functionCondition
@@ -222,38 +215,9 @@ functionCondition
 functionExpression
     : LPAREN functionExpression RPAREN
     | left=functionExpression op=binary right=functionExpression
-    | ( annotations | specifiers | visibilities | types | names | functionParameters | returnValues
-        | expressionStatements | comments)
+    | ( annotations | types | functionParameters )
     | functionExpression SPACE
     ;
-
-/*
-    abstractFunctions
-*/
-
-AbstractFunctions
-    : 'abstract function '
-    ;
-
-abstractFunctions
-    : AbstractFunctions abstractFunctionCondition? abstractFunctionOf?
-    ;
-
-abstractFunctionOf
-    : of classes
-    ;
-
-abstractFunctionCondition
-    : withWord abstractFunctionExpression
-    ;
-
-abstractFunctionExpression
-    : LPAREN abstractFunctionExpression RPAREN
-    | left=abstractFunctionExpression op=binary right=abstractFunctionExpression
-    | ( annotations | specifiers | visibilities | types | names | parameters )
-    | abstractFunctionExpression SPACE
-    ;
-
 
 /*
     constructors
@@ -264,7 +228,7 @@ CONSTRUCTOR
     ;
 
 constructors
-    : CONSTRUCTOR constructorCondition? constructorOf?
+    : CONSTRUCTOR constructorCondition
     ;
 
 constructorOf
@@ -278,8 +242,7 @@ constructorCondition
 constructorExpression
     : LPAREN constructorExpression RPAREN
     | left=constructorExpression op=binary right=constructorExpression
-    | ( annotations | specifiers | visibilities | parameters | returnValues | declarationStatements
-        | expressionStatements  | comments )
+    | ( annotations | functionParameters )
     | constructorExpression SPACE
     ;
 
@@ -352,56 +315,6 @@ typeCondition
 
 
 /*
-    specifiers only static
-*/
-
-SPECIFIER
-    :  'specifier '
-    ;
-
-specifiers
-    : SPECIFIER specifierCondition?
-    ;
-
-specifierCondition
-    : words SPACE
-    ;
-
-/*
-    visibility (also specifier) public/protected/private
-*/
-
-VISIBILITY
-    :  'visibility '
-    ;
-
-visibilities
-    : VISIBILITY visibilityCondition?
-    ;
-
-visibilityCondition
-    : words SPACE
-    ;
-
-
-/*
-    return values
-*/
-
-ReturnValue
-    :  'return value '
-    ;
-
-returnValues
-    : ReturnValue returnValueCondition?
-    ;
-
-returnValueCondition
-    : combinatorialWords SPACE
-    ;
-
-
-/*
     declarationStatements
 */
 
@@ -411,11 +324,7 @@ DeclarationStatement
     ;
 
 declarationStatements
-    : DeclarationStatement declarationStatementCondition? declarationStatementOf?
-    ;
-
-declarationStatementOf
-    : of (classes | functions | constructors)
+    : DeclarationStatement declarationStatementCondition
     ;
 
 declarationStatementCondition
@@ -425,7 +334,7 @@ declarationStatementCondition
 declarationStatementExpression
     : LPAREN declarationStatementExpression RPAREN
     | left=declarationStatementExpression op=binary right=declarationStatementExpression
-    | ( annotations | specifiers | visibilities | types | names | initialValues | comments)
+    | ( annotations | types )
     | declarationStatementExpression SPACE
     ;
 
@@ -478,70 +387,6 @@ configurationPropertyExpression
 
 
 /*
-    expressions
-*/
-
-ExpressionStatement
-    :  'expression statement '
-    ;
-
-expressionStatements
-    : ExpressionStatement expressionStatementCondition? expressionStatementOf?
-    ;
-
-expressionStatementOf
-    : of (functions | constructors | constructors)
-    ;
-
-expressionStatementCondition
-    : withWord expressionStatementExpression
-    ;
-
-expressionStatementExpression
-    : LPAREN expressionStatementExpression RPAREN
-    | left=expressionStatementExpression op=binary right=expressionStatementExpression
-    | (comments | value)
-    | expressionStatementExpression SPACE
-    ;
-
-/*
-    values
-*/
-
-VALUE
-    :  'value '
-    ;
-
-value
-    : VALUE valueCondition?
-    ;
-
-valueCondition
-    : combinatorialWords SPACE
-    ;
-
-/*
-    init values
-*/
-
-InitialValue
-    :  'initial value '
-    ;
-
-initialValues
-    : InitialValue initialValueCondition? initialValueOf?
-    ;
-
-initialValueOf
-    : of declarationStatements
-    ;
-
-initialValueCondition
-    : combinatorialWords SPACE
-    ;
-
-
-/*
     classes
 */
 
@@ -560,36 +405,7 @@ classCondition
 classExpression
     : LPAREN classExpression RPAREN
     | left=classExpression op=binary right=classExpression
-    | ( annotations | specifiers | visibilities | names | extensions | implementations | functions
-            | abstractFunctions | constructors | declarationStatements | returnValues  | comments | subclasses | configurationFiles)
+    | ( annotations | extensions | implementations | functions | constructors | declarationStatements | configurationFiles )
     | classExpression SPACE
     ;
 
-
-/*
-    subclasses
-*/
-
-SUBCLASSES
-    : 'subclass '
-    ;
-
-subclasses
-    : SUBCLASSES subclassCondition? subclassOf?
-    ;
-
-subclassOf
-    : of classes
-    ;
-
-subclassCondition
-    : withWord subclassExpression
-    ;
-
-subclassExpression
-    : LPAREN subclassExpression RPAREN
-    | left=subclassExpression op=binary right=subclassExpression
-    | ( annotations | specifiers | visibilities | names | extensions | implementations | functions | subclasses |
-            | abstractFunctions | constructors | declarationStatements | returnValues  | comments )
-    | subclassExpression SPACE
-    ;

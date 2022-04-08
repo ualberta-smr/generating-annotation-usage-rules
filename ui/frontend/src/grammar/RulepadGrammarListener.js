@@ -248,15 +248,6 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 	}
 
 
-	// Enter a parse tree produced by RulepadGrammarParser#functionOf.
-	enterFunctionOf(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#functionOf.
-	exitFunctionOf(ctx) {
-	}
-
-
 	// Enter a parse tree produced by RulepadGrammarParser#functionCondition.
 	enterFunctionCondition(ctx) {
 	}
@@ -272,42 +263,6 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 
 	// Exit a parse tree produced by RulepadGrammarParser#functionExpression.
 	exitFunctionExpression(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#abstractFunctions.
-	enterAbstractFunctions(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#abstractFunctions.
-	exitAbstractFunctions(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#abstractFunctionOf.
-	enterAbstractFunctionOf(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#abstractFunctionOf.
-	exitAbstractFunctionOf(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#abstractFunctionCondition.
-	enterAbstractFunctionCondition(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#abstractFunctionCondition.
-	exitAbstractFunctionCondition(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#abstractFunctionExpression.
-	enterAbstractFunctionExpression(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#abstractFunctionExpression.
-	exitAbstractFunctionExpression(ctx) {
 	}
 
 
@@ -428,75 +383,12 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 	}
 
 
-	// Enter a parse tree produced by RulepadGrammarParser#specifiers.
-	enterSpecifiers(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#specifiers.
-	exitSpecifiers(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#specifierCondition.
-	enterSpecifierCondition(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#specifierCondition.
-	exitSpecifierCondition(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#visibilities.
-	enterVisibilities(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#visibilities.
-	exitVisibilities(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#visibilityCondition.
-	enterVisibilityCondition(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#visibilityCondition.
-	exitVisibilityCondition(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#returnValues.
-	enterReturnValues(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#returnValues.
-	exitReturnValues(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#returnValueCondition.
-	enterReturnValueCondition(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#returnValueCondition.
-	exitReturnValueCondition(ctx) {
-	}
-
-
 	// Enter a parse tree produced by RulepadGrammarParser#declarationStatements.
 	enterDeclarationStatements(ctx) {
 	}
 
 	// Exit a parse tree produced by RulepadGrammarParser#declarationStatements.
 	exitDeclarationStatements(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#declarationStatementOf.
-	enterDeclarationStatementOf(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#declarationStatementOf.
-	exitDeclarationStatementOf(ctx) {
 	}
 
 
@@ -572,87 +464,6 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 	}
 
 
-	// Enter a parse tree produced by RulepadGrammarParser#expressionStatements.
-	enterExpressionStatements(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#expressionStatements.
-	exitExpressionStatements(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#expressionStatementOf.
-	enterExpressionStatementOf(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#expressionStatementOf.
-	exitExpressionStatementOf(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#expressionStatementCondition.
-	enterExpressionStatementCondition(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#expressionStatementCondition.
-	exitExpressionStatementCondition(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#expressionStatementExpression.
-	enterExpressionStatementExpression(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#expressionStatementExpression.
-	exitExpressionStatementExpression(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#value.
-	enterValue(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#value.
-	exitValue(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#valueCondition.
-	enterValueCondition(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#valueCondition.
-	exitValueCondition(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#initialValues.
-	enterInitialValues(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#initialValues.
-	exitInitialValues(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#initialValueOf.
-	enterInitialValueOf(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#initialValueOf.
-	exitInitialValueOf(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#initialValueCondition.
-	enterInitialValueCondition(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#initialValueCondition.
-	exitInitialValueCondition(ctx) {
-	}
-
-
 	// Enter a parse tree produced by RulepadGrammarParser#classes.
 	enterClasses(ctx) {
 	}
@@ -677,42 +488,6 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 
 	// Exit a parse tree produced by RulepadGrammarParser#classExpression.
 	exitClassExpression(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#subclasses.
-	enterSubclasses(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#subclasses.
-	exitSubclasses(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#subclassOf.
-	enterSubclassOf(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#subclassOf.
-	exitSubclassOf(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#subclassCondition.
-	enterSubclassCondition(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#subclassCondition.
-	exitSubclassCondition(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#subclassExpression.
-	enterSubclassExpression(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#subclassExpression.
-	exitSubclassExpression(ctx) {
 	}
 
 
