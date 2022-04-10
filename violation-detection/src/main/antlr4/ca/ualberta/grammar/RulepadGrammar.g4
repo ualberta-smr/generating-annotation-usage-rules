@@ -123,6 +123,22 @@ nameCondition
     : words SPACE
     ;
 
+/*
+    values
+*/
+
+VALUE
+    : 'value '
+    ;
+
+values
+    : VALUE valueCondition
+    ;
+
+valueCondition
+    : words SPACE
+    ;
+
 
 /*
     annotations
@@ -255,18 +271,21 @@ PARAMETER
     ;
 
 parameters
-    : PARAMETER parameterCondition?
+    : PARAMETER parameterCondition
     ;
 
 parameterCondition
-    : withWord parameterExpression
-    | combinatorialWords SPACE
+    : combinatorialWords SPACE parameterConditionTransition?
+    | parameterConditionTransition
     ;
+
+parameterConditionTransition
+    : withWord parameterExpression;
 
 parameterExpression
     : LPAREN parameterExpression RPAREN
     | left=parameterExpression op=binary right=parameterExpression
-    | ( types | names )
+    | ( types | names | values )
     | parameterExpression SPACE
     ;
 /*
@@ -374,14 +393,18 @@ configurationProperties
     ;
 
 configurationPropertyCondition
+    : combinatorialWords SPACE configurationPropertyConditionTransition?
+    | configurationPropertyConditionTransition
+    ;
+
+configurationPropertyConditionTransition
     : withWord configurationPropertyExpression
-    | combinatorialWords SPACE
     ;
 
 configurationPropertyExpression
     : LPAREN configurationPropertyExpression RPAREN
     | left=configurationPropertyExpression op=binary right=configurationPropertyExpression
-    | ( types | names )
+    | ( types | names | values )
     | configurationPropertyExpression SPACE
     ;
 

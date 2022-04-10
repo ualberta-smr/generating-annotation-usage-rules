@@ -20,6 +20,7 @@ export default class ShortRulepad {
                     [/parameter/, "srp-keyword"],
                     [/type/, "srp-keyword"],
                     [/name/, "srp-keyword"],
+                    [/value/, "srp-keyword"],
                     [/extension/, "srp-keyword"],
                     [/implementation/, "srp-keyword"],
                     [/property/, "srp-keyword"],
@@ -74,10 +75,47 @@ export default class ShortRulepad {
         })
     }
 
+    __getAllSuggestions(range) {
+        return [
+            {
+                label: 'conf',
+                kind: monaco.languages.CompletionItemKind.Function,
+                documentation: 'configuration property autocomplete',
+                insertText: 'configuration file with property "${1}"',
+                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                range: range
+            },
+            {
+                label: 'ann',
+                kind: monaco.languages.CompletionItemKind.Function,
+                documentation: 'annotation',
+                insertText: 'annotation "${1}"',
+                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                range: range
+            }
+        ]
+    }
+
+    provideCompletionItems (model, position) {
+        const word = model.getWordUntilPosition(position);
+
+        const range = {
+			startLineNumber: position.lineNumber,
+			endLineNumber: position.lineNumber,
+			startColumn: word.startColumn,
+			endColumn: word.endColumn
+		}
+
+        return {
+            suggestions: this.__getAllSuggestions(range)
+        }
+    }
+
     register() {
         monaco.languages.register({ id: this.name });
         monaco.languages.setMonarchTokensProvider(this.name, this.getTokenProvider());
         monaco.languages.registerDocumentFormattingEditProvider(this.name, this)
+        monaco.languages.registerCompletionItemProvider(this.name, this)
         // Define a new theme that contains only rules that match this language
         monaco.editor.defineTheme(this.themeName, this.getThemeDefinition());
     }

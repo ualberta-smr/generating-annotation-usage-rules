@@ -1,4 +1,4 @@
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Union
 from .model import *
 import inspect
 
@@ -49,7 +49,8 @@ def functionParameters(function: Method):
     def functionParameter(p: Tuple[int, Param]) -> str:
         # @A @B @C String value
         param = p[1]
-        anno_str = " ".join(handleAnnotations(param.annotations).splitlines()) + " " if param.annotations else ""
+        anno_str = " ".join(handleAnnotations(
+            param.annotations).splitlines()) + " " if param.annotations else ""
         type_name = shortenTypeName(param.type)
         name = param.name if param.name else f"p{p[0]}"
         return addSigns(param, f"{anno_str}{type_name} {name}")
@@ -78,15 +79,31 @@ def implements(interfaces: List[Type]):
     return "" if len(interfaces) == 0 else "implements " + ", ".join(map(interface, interfaces))
 
 
+def paramToString(p: Union[ConfigurationProperty, AnnotationParam]) -> str:
+    name_ = "?"
+    if name_:
+        name_ = p.name
+    if p.value is None:
+        if p.type is None:
+            value_ = "?"
+        else:
+            value_ = shortenTypeName(p.type)
+    else:
+        value_ = p.value.strip()
+    return f"{name_}={value_}"
+
+
+#f"{'='.join(filter(lambda x: x is not None, [p.name, shortenTypeName(p.type)]))}"
 def handleAnnotations(annotations: List[Annotation], ch="") -> str:
     def annotation(a: Annotation) -> str:
         result = f"@{shortenTypeName(a.type)}"
         if a.parameters != []:
             params = ",".join(map(lambda p: addSigns(
-                p, f"{'='.join(filter(lambda x: x is not None, [p.name, shortenTypeName(p.type)]))}"), a.parameters))
+                p, paramToString(p)), a.parameters))
             result = f"{result}({params})"
         return addSigns(a, result)
     return f"\n{ch}".join(map(annotation, annotations))
+
 
 def javaClass(clazz: JavaClass) -> str:
     return TEMPLATE\
@@ -95,6 +112,7 @@ def javaClass(clazz: JavaClass) -> str:
         .replace("<MethodDeclaration>", function(clazz.method))\
         .replace("<ExtendsTemplate>", extends(clazz.extendedClass))\
         .replace("<ImplementsTemplate>", implements(clazz.implementedInterfaces))
+
 
 def beanDeclaration(bd: BeanDeclaration) -> Tuple[str, str]:
     if bd is None:
@@ -107,17 +125,20 @@ def beanDeclaration(bd: BeanDeclaration) -> Tuple[str, str]:
     """).lstrip()
     return bd.name, lines
 
+
 def configFiles(cf: ConfigurationFile) -> Tuple[str, str]:
     if cf is None:
         return None
+
     lines = "\n".join(
-        map(lambda t: f"{t[0]}={t[1]}", map(lambda x: (x.name, shortenTypeName(x.type)), cf.properties)))
+        map(paramToString, cf.properties))
     return cf.name, lines
+
 
 def configurationFiles(clazz: JavaClass) -> List[Dict[str, str]]:
     cf = configFiles(clazz.configurationFile)
     bd = beanDeclaration(clazz.declaredInBeans)
-    
+
     return list(map(lambda x: {
         "filename": x[0],
         "code": x[1]

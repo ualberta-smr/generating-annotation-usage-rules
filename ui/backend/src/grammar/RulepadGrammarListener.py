@@ -170,6 +170,24 @@ class RulepadGrammarListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by RulepadGrammarParser#values.
+    def enterValues(self, ctx:RulepadGrammarParser.ValuesContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#values.
+    def exitValues(self, ctx:RulepadGrammarParser.ValuesContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#valueCondition.
+    def enterValueCondition(self, ctx:RulepadGrammarParser.ValueConditionContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#valueCondition.
+    def exitValueCondition(self, ctx:RulepadGrammarParser.ValueConditionContext):
+        pass
+
+
     # Enter a parse tree produced by RulepadGrammarParser#annotations.
     def enterAnnotations(self, ctx:RulepadGrammarParser.AnnotationsContext):
         pass
@@ -323,6 +341,15 @@ class RulepadGrammarListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by RulepadGrammarParser#parameterConditionTransition.
+    def enterParameterConditionTransition(self, ctx:RulepadGrammarParser.ParameterConditionTransitionContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#parameterConditionTransition.
+    def exitParameterConditionTransition(self, ctx:RulepadGrammarParser.ParameterConditionTransitionContext):
+        pass
+
+
     # Enter a parse tree produced by RulepadGrammarParser#parameterExpression.
     def enterParameterExpression(self, ctx:RulepadGrammarParser.ParameterExpressionContext):
         pass
@@ -455,6 +482,15 @@ class RulepadGrammarListener(ParseTreeListener):
 
     # Exit a parse tree produced by RulepadGrammarParser#configurationPropertyCondition.
     def exitConfigurationPropertyCondition(self, ctx:RulepadGrammarParser.ConfigurationPropertyConditionContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#configurationPropertyConditionTransition.
+    def enterConfigurationPropertyConditionTransition(self, ctx:RulepadGrammarParser.ConfigurationPropertyConditionTransitionContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#configurationPropertyConditionTransition.
+    def exitConfigurationPropertyConditionTransition(self, ctx:RulepadGrammarParser.ConfigurationPropertyConditionTransitionContext):
         pass
 
 

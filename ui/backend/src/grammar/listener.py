@@ -196,9 +196,9 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             else:
                 type_, name_ = elements[0], None
             type_ = self.initObj(Type(type_))
-            param = self.initObj(Param(type_, name_, []))
+            param = self.initObj(AnnotationParam(type_, name_, None))
         else:
-            param = self.initObj(Param(None, None, []))
+            param = self.initObj(AnnotationParam(None, None, None))
         prev = self.__stack[-1]
         if prev['comingFrom'] in ['annotation']:
             prev['node'].parameters.append(param)
@@ -302,6 +302,15 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
         elif prev['comingFrom'] == 'property':
             prev['node'].name = name
 
+    # Enter a parse tree produced by RulepadGrammarParser#values.
+    def enterValues(self, ctx:RulepadGrammarParser.ValuesContext):
+        value = ctx.valueCondition().words().getText().replace("\"", "")
+        prev = self.__stack[-1]
+        if prev['comingFrom'] == 'parameter':
+            prev['node'].value = value
+        elif prev['comingFrom'] == 'property':
+            prev['node'].value = value
+
     # Enter a parse tree produced by RulepadGrammarParser#configurationFiles.
     def enterConfigurationFiles(self, ctx: RulepadGrammarParser.ConfigurationFilesContext):
         configFile = self.initObj(ConfigurationFile("microprofile-config.properties", []))
@@ -321,7 +330,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
 
     # Enter a parse tree produced by RulepadGrammarParser#configurationProperties.
     def enterConfigurationProperties(self, ctx: RulepadGrammarParser.ConfigurationPropertiesContext):
-        prop = self.initObj(ConfigurationProperty(None, None))
+        prop = self.initObj(ConfigurationProperty(None, None, None))
 
         text = ctx.configurationPropertyCondition().combinatorialWords()
         if text:

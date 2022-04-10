@@ -13,6 +13,7 @@ class Type(AntecedentOrConsequent):
 class ConfigurationProperty(AntecedentOrConsequent):
     name: str
     type: Type
+    value: str
 
 @dataclass
 class ConfigurationFile(AntecedentOrConsequent):
@@ -31,9 +32,15 @@ class Param(AntecedentOrConsequent):
     annotations: List[Annotation] = field(default_factory=[])
 
 @dataclass
+class AnnotationParam(AntecedentOrConsequent):
+    type: Type
+    name: str
+    value: str
+
+@dataclass
 class Annotation(AntecedentOrConsequent):
     type: Type
-    parameters: List[Param] = field(default_factory=[])
+    parameters: List[AnnotationParam] = field(default_factory=[])
 
 @dataclass
 class Field(AntecedentOrConsequent):

@@ -230,7 +230,7 @@ def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Fiel
         elif "definedIn" in str_operation and str_related.startswith("ConfigFile"):
             has_config = True
             _name, _type = str_target.split("_")[1].split(":")
-            cp = ConfigurationProperty(_name, Type(_type))
+            cp = ConfigurationProperty(_name, Type(_type), None)
             configFile.properties.append(cp)
             configFile.name = str_related.split("_")[1]
         elif "annotatedWith" in str_operation and str_target.startswith("Param"):

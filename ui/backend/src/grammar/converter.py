@@ -40,6 +40,10 @@ def check(input):
     print(json.dumps(j, default=lambda x: x.__dict__, indent=4))
     return None
 
+check(
+    """class with annotation "A" must have configuration file with property with name "demo" and value "hello" """
+)
+
 # check(
 #     """function with annotation "a.b.c.[A|B|C]" must have annotation "a.b.c.D" """
 # )
