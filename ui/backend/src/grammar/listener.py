@@ -194,7 +194,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             if len(elements) >= 2:
                 type_, name_ = elements[0], elements[1]
             else:
-                type_, name_ = elements[0], None
+                type_, name_ = None, elements[0] 
             type_ = self.initObj(Type(type_))
             param = self.initObj(AnnotationParam(type_, name_, None))
         else:
@@ -338,7 +338,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             if len(elements) >= 2:
                 type_, name_ = elements[0], elements[1]
             else:
-                type_, name_ = elements[0], None
+                type_, name_ = None, elements[0]
             prop.name = name_
             prop.type = self.initObj(Type(type_))
         
