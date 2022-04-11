@@ -4,21 +4,12 @@ from fastapi import Response
 import traceback
 from pydantic import BaseModel
 from typing import Optional
-import grammar as G
+import grammar as Grammar
 
 
 class ConfirmRuleDTO(BaseModel):
     ruleString: str
     username:str
-
-
-def get_config(config):
-    if config:
-        return {
-            "filename": config[0],
-            "code": config[1]
-        }
-    return None
 
 
 class RuleOperationsHandler:
@@ -30,7 +21,7 @@ class RuleOperationsHandler:
                 db, rule_id, user_id) if next else RulePackageNavigation.getPrev(db, rule_id, user_id)
             if r and r.data:
                 rule_string = r.data["ruleString"]
-                code, config = G.convert(rule_string)
+                code, config = Grammar.rulepadToJavaCode(rule_string)
                 r.data["grammar"] = {
                     "code": code,
                     "configuration": config

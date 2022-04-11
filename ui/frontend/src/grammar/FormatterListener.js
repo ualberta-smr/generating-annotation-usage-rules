@@ -68,6 +68,11 @@ export default class FormatterListener extends RulepadGrammarListener {
         this.finalString += this.getPrefix() + ctx.getText()
 	}
 
+    // Enter a parse tree produced by RulepadGrammarParser#values.
+	enterValues(ctx) {
+        this.finalString += this.getPrefix() + ctx.getText()
+	}
+
 
     // Enter a parse tree produced by RulepadGrammarParser#annotations.
     enterAnnotations(ctx) {
@@ -152,20 +157,18 @@ export default class FormatterListener extends RulepadGrammarListener {
     // Enter a parse tree produced by RulepadGrammarParser#parameterCondition.
     enterParameterCondition(ctx) {
         if (ctx.combinatorialWords() !== null) {
-            this.finalString += ctx.combinatorialWords().getText();
-        } else {
-            this.finalString += ctx.withWord().getText() + "\n";
-            this.depth++;
+            this.finalString += ctx.combinatorialWords().getText() + " ";
         }
     }
 
-    // Exit a parse tree produced by RulepadGrammarParser#parameterCondition.
-    exitParameterCondition(ctx) {
-        if (ctx.combinatorialWords() == null) {
-            this.depth--;
-        }
+    enterParameterConditionTransition(ctx) {
+        this.finalString += ctx.withWord().getText() + "\n";
+        this.depth++;
     }
 
+    exitParameterConditionTransition(ctx) {
+        this.depth--;
+    }
 
     // Enter a parse tree produced by RulepadGrammarParser#parameterExpression.
     enterParameterExpression(ctx) {
@@ -289,17 +292,16 @@ export default class FormatterListener extends RulepadGrammarListener {
     enterConfigurationPropertyCondition(ctx) {
         if (ctx.combinatorialWords() != null) {
             this.finalString += ctx.combinatorialWords().getText() + " ";
-        } else {
-            this.finalString += ctx.withWord().getText() + "\n";
-            this.depth++;
         }
     }
 
-    // Exit a parse tree produced by RulepadGrammarParser#configurationPropertyCondition.
-    exitConfigurationPropertyCondition(ctx) {
-        if (ctx.combinatorialWords() == null) {
-            this.depth--;
-        }
+    enterConfigurationPropertyConditionTransition(ctx) {
+        this.finalString += ctx.withWord().getText() + "\n";
+        this.depth++;
+    }
+
+    exitConfigurationPropertyConditionTransition(ctx) {
+        this.depth--;   
     }
 
 

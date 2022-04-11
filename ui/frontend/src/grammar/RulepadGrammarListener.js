@@ -167,6 +167,24 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 	}
 
 
+	// Enter a parse tree produced by RulepadGrammarParser#values.
+	enterValues(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#values.
+	exitValues(ctx) {
+	}
+
+
+	// Enter a parse tree produced by RulepadGrammarParser#valueCondition.
+	enterValueCondition(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#valueCondition.
+	exitValueCondition(ctx) {
+	}
+
+
 	// Enter a parse tree produced by RulepadGrammarParser#annotations.
 	enterAnnotations(ctx) {
 	}
@@ -320,6 +338,15 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 	}
 
 
+	// Enter a parse tree produced by RulepadGrammarParser#parameterConditionTransition.
+	enterParameterConditionTransition(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#parameterConditionTransition.
+	exitParameterConditionTransition(ctx) {
+	}
+
+
 	// Enter a parse tree produced by RulepadGrammarParser#parameterExpression.
 	enterParameterExpression(ctx) {
 	}
@@ -452,6 +479,15 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 
 	// Exit a parse tree produced by RulepadGrammarParser#configurationPropertyCondition.
 	exitConfigurationPropertyCondition(ctx) {
+	}
+
+
+	// Enter a parse tree produced by RulepadGrammarParser#configurationPropertyConditionTransition.
+	enterConfigurationPropertyConditionTransition(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#configurationPropertyConditionTransition.
+	exitConfigurationPropertyConditionTransition(ctx) {
 	}
 
 
