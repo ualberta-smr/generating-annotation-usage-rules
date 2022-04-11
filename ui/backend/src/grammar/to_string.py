@@ -9,7 +9,7 @@ CONSEQUENT_SIGN_END = "</span>"
 
 TEMPLATE = '''
 <ClassAnnotations>
-class Foo <ExtendsTemplate> <ImplementsTemplate> {
+class Foo <ExtendsTemplate><ImplementsTemplate> {
 <FieldDeclaration>
 <MethodDeclaration>
 }'''
@@ -20,7 +20,10 @@ def shortenTypeName(type: Type) -> str:
         return None
     pieces = type.name.split(".")
     if len(pieces) > 1:
-        simpleName = pieces[-1]
+        # assumes that the package names will be all lowercase
+        # a.b.c.A => A
+        # a.b.c.D.A => D.A
+        simpleName = ".".join(filter(lambda x: x[0].isupper(), pieces))
         return simpleName
     else:
         return type.name
@@ -93,7 +96,6 @@ def paramToString(p: Union[ConfigurationProperty, AnnotationParam]) -> str:
     return f"{name_}={value_}"
 
 
-#f"{'='.join(filter(lambda x: x is not None, [p.name, shortenTypeName(p.type)]))}"
 def handleAnnotations(annotations: List[Annotation], ch="") -> str:
     def annotation(a: Annotation) -> str:
         result = f"@{shortenTypeName(a.type)}"

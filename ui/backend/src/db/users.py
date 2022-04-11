@@ -5,6 +5,7 @@ from .models import User
 from sqlalchemy.orm import Session
 
 
+# username => user_id
 USER_MAPPING = {
     "mansur": 1,
     "ajay": 2,
@@ -13,12 +14,13 @@ USER_MAPPING = {
     "user3": 5,
 }
 
+# user_id => package_info
 USER_PACKAGE_MAPPING = {
     1: {"file": "./data/users/data_mansur.json", "package_id": 1},
-    2: {"file": "./data/users/data_ajay.json", "package_id": 2},
+    2: {"file": "./data/target_set.json", "package_id": 2},
     3: {"file": "./data/users/data_user1.json", "package_id": 3},
     4: {"file": "./data/users/data_user2.json", "package_id": 4},
-    5: {"file": "./data/users/data_user3.json", "package_id": 5}
+    5: {"file": "./data/target_set.json", "package_id": 5}
 }
 
 class UserOperationsHandler:

@@ -1,20 +1,12 @@
 from antlr4 import *
 
-if __name__ is not None and "." in __name__:
-    from .RulepadGrammarLexer import RulepadGrammarLexer
-    from .RulepadGrammarParser import RulepadGrammarParser
-    from .RulepadGrammarListener import *
-    from .listener import *
-    from .to_string import *
-else:
-    from RulepadGrammarLexer import RulepadGrammarLexer
-    from RulepadGrammarParser import RulepadGrammarParser
-    from RulepadGrammarListener import *
-    from listener import *
-    from to_string import *
+from .RulepadGrammarLexer import RulepadGrammarLexer
+from .RulepadGrammarParser import RulepadGrammarParser
+from .RulepadGrammarListener import *
+from .listener import *
+from .to_string import *
 
-
-def convert(input):
+def rulepadToJavaCode(input):
     lexer = RulepadGrammarLexer(InputStream(input))
     parser = RulepadGrammarParser(CommonTokenStream(lexer))
     parser.setTrace(not True)
@@ -40,9 +32,9 @@ def check(input):
     print(json.dumps(j, default=lambda x: x.__dict__, indent=4))
     return None
 
-check(
-    """class with annotation "A" must have configuration file with property with name "demo" and value "hello" """
-)
+# check(
+#     """class with annotation "A" must have configuration file with property with name "demo" and value "hello" """
+# )
 
 # check(
 #     """function with annotation "a.b.c.[A|B|C]" must have annotation "a.b.c.D" """

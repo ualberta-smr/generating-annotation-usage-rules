@@ -6,9 +6,7 @@ import rulepadFormat as rf
 import uuid
 
 from .models import *
-from .constants import RuleLabels
 from .users import UserOperationsHandler
-
 
 @dataclass
 class RuleDTO:
@@ -199,3 +197,18 @@ class RulePackageOperations:
         return {
             "rules": rules
         }
+
+class RuleLabels:
+    CORRECT = "correct"
+    INCORRECT = "not_a_rule"
+    UNLABELED = "unlabeled"
+
+    def label_is_supported(label: str) -> bool:
+        return label in {RuleLabels.CORRECT, RuleLabels.INCORRECT}
+
+    def assert_label_is_supported(label: str) -> bool:
+        assert label in {RuleLabels.CORRECT, RuleLabels.INCORRECT}, \
+            f"Label '{label}' is not supported, it needs to be one of ['correct', 'not_a_rule']"
+    
+    def get_all() -> List[str]:
+        return [RuleLabels.CORRECT, RuleLabels.INCORRECT, RuleLabels.UNLABELED]

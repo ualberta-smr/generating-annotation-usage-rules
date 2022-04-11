@@ -195,10 +195,11 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
                 type_, name_ = elements[0], elements[1]
             else:
                 type_, name_ = None, elements[0] 
-            type_ = self.initObj(Type(type_))
-            param = self.initObj(AnnotationParam(type_, name_, None))
+            type_ = self.initObj(Type(type_)) if type_ else None
+            param = AnnotationParam(type_, name_, None)
         else:
-            param = self.initObj(AnnotationParam(None, None, None))
+            param = AnnotationParam(None, None, None)
+        param = self.initObj(param)
         prev = self.__stack[-1]
         if prev['comingFrom'] in ['annotation']:
             prev['node'].parameters.append(param)

@@ -2,6 +2,8 @@ from typing import Dict, Union
 from grammar.model import *
 from dataclasses import dataclass
 
+def removeNones(iter):
+    return filter(lambda x: x is not None, iter)
 
 @dataclass
 class JsonRule:
@@ -17,7 +19,7 @@ def typeToRulePad(t: Type) -> str:
 def paramToRulePad(p: Union[Param, ConfigurationProperty]) -> str:
     keyword = "parameter" if isinstance(p, Param) else "property"
     name = f"{p.name}" if p.name else ""
-    form = " ".join([p.type.name, name]).strip()
+    form = " ".join(removeNones([p.type.name if p.type else None, name])).strip()
 
     withAnnotation = ""
     if isinstance(p, Param) and p.annotations:
@@ -67,8 +69,7 @@ def methodToRulePad(f: Method) -> str:
         param_str = (" and ".join(map(paramToRulePad, f.parameters)))
         if len(f.parameters) > 1:
             param_str = "(" + param_str + " )"
-    abc = list(filter(lambda x: x is not None, [
-               type_str, param_str, anno_str]))
+    abc = list(removeNones([type_str, param_str, anno_str]))
     if len(abc) >= 2:
         tmp = " and ".join(abc)
         return f"(method with ({tmp} ) )"
@@ -97,8 +98,10 @@ def classToRulePad(clazz: JavaClass) -> str:
         extends = f"extension of \"{clazz.extendedClass.name}\""
     # implementation
     if clazz.implementedInterfaces:
-        implements = "(" + (" and ".join(map(
-            lambda x: f"implementation of \"{x.name}\"", clazz.implementedInterfaces))) + " )"
+        implements = " and ".join(map(lambda x: f"implementation of \"{x.name}\"", 
+                                            clazz.implementedInterfaces))
+        if len(clazz.implementedInterfaces) > 1:
+            implements = f"({implements} )"
     # field
     if clazz.field:
         field = fieldToRulePad(clazz.field)
@@ -113,8 +116,7 @@ def classToRulePad(clazz: JavaClass) -> str:
         anno = " and ".join(map(annotationToRulePad, clazz.annotations))
         if len(clazz.annotations) > 1:
             anno = "(" + anno + " )"
-    abc = list(filter(lambda x: x is not None, [
-               extends, implements, field, method, cf, anno]))
+    abc = list(removeNones([extends, implements, field, method, cf, anno]))
     if len(abc) >= 2:
         tmp = " and ".join(abc)
         return f"class with {tmp}"
@@ -137,8 +139,9 @@ def toRulePad(element: Union[JavaClass, Field, Method, ConfigurationFile]):
             return func(element)
 
 def removeParenthesis(st):
-    if st[0] == "(" and st[-1] == ")":
-        return st[1:-1]
+    tmp = st.strip()
+    if tmp[0] == "(" and tmp[-1] == ")":
+        return tmp[1:-1]
     return st
 
 def toShortRulePad(jsonRule: JsonRule) -> str:
@@ -200,9 +203,10 @@ def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Fiel
             elif "extends" in str_operation or "implements" in str_operation:
                 class_name = str_related.split("_")[1]
                 t = Type(class_name)
-                clazz.extendedClass = t
-                # TODO: probably need to do the implements in a different way
-                # clazz.implementedInterfaces.append(t)
+                if "extends" in str_operation:
+                    clazz.extendedClass = t
+                else:
+                    clazz.implementedInterfaces.append(t)
         elif str_target in ["Field", "FieldTypeDecl"]:
             has_field = True
             if "annotatedWith" in str_operation:
@@ -224,9 +228,10 @@ def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Fiel
             annotation_type = str_target.strip().split("_")[1]
             if annotation_type not in all_annotation_params:
                 all_annotation_params[annotation_type] = []
-            _name, _type = str_related.split("_")[1].split(":")
+            _name, _typeStr = str_related.split("_")[1].split(":")
+            _type = Type(_typeStr.strip()) if _typeStr.strip() else None 
             all_annotation_params[annotation_type].append(
-                Param(Type(_type), _name, []))
+                Param(_type, _name, []))
         elif "definedIn" in str_operation and str_related.startswith("ConfigFile"):
             has_config = True
             _name, _type = str_target.split("_")[1].split(":")

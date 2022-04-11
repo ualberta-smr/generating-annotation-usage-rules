@@ -5,7 +5,7 @@ import traceback
 from sqlalchemy.orm.session import Session
 from api import RuleOperationsHandler, ConfirmRuleDTO
 
-import grammar as G
+import grammar as Grammar
 
 from db import SessionLocal, models, schemas, createAndInitializeDb, RulePackageOperations, UserOperationsHandler
 
@@ -42,15 +42,6 @@ def get_db():
         db.close()
 
 
-def get_config(config):
-    if config:
-        return {
-            "filename": config[0],
-            "code": config[1]
-        }
-    return None
-
-
 @app.get("/getAll", response_model=List[schemas.CandidateRule])
 def getAll(db: Session = Depends(get_db)):
     return db.query(models.CandidateRule).all()
@@ -70,7 +61,7 @@ def grammarToCode(response: Response, grammar: Optional[str] = ""):
 
         grammar = grammar.strip() + " "
         print(f"Requested: [{grammar}]")
-        code, config = G.convert(grammar)
+        code, config = Grammar.rulepadToJavaCode(grammar)
         response.status_code = 200
         return {
             "code": code,
