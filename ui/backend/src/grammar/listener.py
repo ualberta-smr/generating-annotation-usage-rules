@@ -100,10 +100,10 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
         elif type_ == 'function':
             node_.annotations = mergeDuplicateAnnotations(node_.annotations)
             node_.parameters = mergeDuplicateParameters(node_.parameters)
-            return JavaClass([], None, [], None, node_, None)
+            return JavaClass([], None, [], None, node_, None, None)
         elif type_ == 'field':
             node_.annotations = mergeDuplicateAnnotations(node_.annotations)
-            return JavaClass([], None, [], node_, None, None)
+            return JavaClass([], None, [], node_, None, None, None)
         else:
             return None
 
@@ -193,8 +193,10 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             elements = words.getText().replace("\"", "").split()
             if len(elements) >= 2:
                 type_, name_ = elements[0], elements[1]
-            else:
+            elif len(elements) == 1:
                 type_, name_ = None, elements[0] 
+            else:
+                type_, name_ = None, None 
             type_ = self.initObj(Type(type_)) if type_ else None
             param = AnnotationParam(type_, name_, None)
         else:
@@ -218,8 +220,10 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             elements = words.getText().replace("\"", "").split()
             if len(elements) >= 2:
                 type_, name_ = elements[0], elements[1]
-            else:
+            elif len(elements) == 1:
                 type_, name_ = elements[0], None
+            else:
+                type_, name_ = '?', None
             type_ = self.initObj(Type(type_))
             param = self.initObj(Param(type_, name_, []))
         else:
@@ -244,7 +248,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
                 classMethod = prev['node'].method
                 if classMethod is None:
                     method = self.initObj(
-                        Method(Type("void"), [], []))
+                        Method(Type("void"), [], [], None))
                 else:
                     method = classMethod
                 prev['node'].method = method
@@ -252,7 +256,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             if self.__is_antecedent:
                 # if the rule starts with 'function'
                 self.__initial = {
-                    'node': self.initObj(Method(Type("void"), [], [])),
+                    'node': self.initObj(Method(Type("void"), [], [], None)),
                     'type': 'function'
                 }
             method = self.__initial['node']
@@ -273,14 +277,14 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             if prev['comingFrom'] == 'class':
                 classField = prev['node'].field
                 if classField is None:
-                    field = self.initObj(Field(Type("Object"), []))
+                    field = self.initObj(Field(Type("Object"), [], None))
                 else:
                     field = classField
                 prev['node'].field = field
         else:
             if self.__is_antecedent:
                 self.__initial = {
-                    'node': self.initObj(Field(Type("Object"), [])),
+                    'node': self.initObj(Field(Type("Object"), [], None)),
                     'type': 'field'
                 }
             field = self.__initial['node']
@@ -317,7 +321,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
         configFile = self.initObj(ConfigurationFile("microprofile-config.properties", []))
 
         prev = self.__stack[-1]
-        if prev['comingFrom'] == 'class':
+        if prev['comingFrom'] in ['class', 'field', 'function']:
             prev['node'].configurationFile = configFile
 
         self.__stack.append({
@@ -338,8 +342,10 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             elements = text.getText().replace("\"", "").split()
             if len(elements) >= 2:
                 type_, name_ = elements[0], elements[1]
-            else:
+            elif len(elements) == 1:
                 type_, name_ = None, elements[0]
+            else:
+                type_, name_ = None, None
             prop.name = name_
             prop.type = self.initObj(Type(type_))
         

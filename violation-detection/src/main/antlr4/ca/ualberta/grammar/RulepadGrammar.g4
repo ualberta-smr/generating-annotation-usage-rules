@@ -231,7 +231,7 @@ functionCondition
 functionExpression
     : LPAREN functionExpression RPAREN
     | left=functionExpression op=binary right=functionExpression
-    | ( annotations | types | functionParameters )
+    | ( annotations | types | functionParameters | configurationFiles )
     | functionExpression SPACE
     ;
 
@@ -353,7 +353,7 @@ declarationStatementCondition
 declarationStatementExpression
     : LPAREN declarationStatementExpression RPAREN
     | left=declarationStatementExpression op=binary right=declarationStatementExpression
-    | ( annotations | types )
+    | ( annotations | types | configurationFiles )
     | declarationStatementExpression SPACE
     ;
 

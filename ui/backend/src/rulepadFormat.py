@@ -2,8 +2,10 @@ from typing import Dict, Union
 from grammar.model import *
 from dataclasses import dataclass
 
+
 def removeNones(iter):
     return filter(lambda x: x is not None, iter)
+
 
 @dataclass
 class JsonRule:
@@ -19,7 +21,8 @@ def typeToRulePad(t: Type) -> str:
 def paramToRulePad(p: Union[Param, AnnotationParam, ConfigurationProperty]) -> str:
     keyword = "parameter" if isinstance(p, Param) else "property"
     name = f"{p.name}" if p.name else ""
-    form = " ".join(removeNones([p.type.name if p.type else None, name])).strip()
+    form = " ".join(removeNones(
+        [p.type.name if p.type else None, name])).strip()
 
     withAnnotation = ""
     if isinstance(p, Param) and p.annotations:
@@ -37,7 +40,7 @@ def annotationToRulePad(a: Annotation):
     if a.parameters:
         param_str = " and ".join(map(paramToRulePad, a.parameters))
         # if len(a.parameters) > 1:
-            # param_str = "(" + param_str + " )"
+        # param_str = "(" + param_str + " )"
         res = res + " with " + param_str
     return res
 
@@ -89,8 +92,8 @@ def classToRulePad(clazz: JavaClass) -> str:
         extends = f"extension of \"{clazz.extendedClass.name}\""
     # implementation
     if clazz.implementedInterfaces:
-        implements = " and ".join(map(lambda x: f"implementation of \"{x.name}\"", 
-                                            clazz.implementedInterfaces))
+        implements = " and ".join(map(lambda x: f"implementation of \"{x.name}\"",
+                                      clazz.implementedInterfaces))
         if len(clazz.implementedInterfaces) > 1:
             implements = f"({implements} )"
     # field
@@ -107,7 +110,8 @@ def classToRulePad(clazz: JavaClass) -> str:
         anno = " and ".join(map(annotationToRulePad, clazz.annotations))
         if len(clazz.annotations) > 1:
             anno = "(" + anno + " )"
-    class_pieces = list(removeNones([extends, implements, field, method, cf, anno]))
+    class_pieces = list(removeNones(
+        [extends, implements, field, method, cf, anno]))
     if len(class_pieces) >= 2:
         tmp = " and ".join(class_pieces)
         return f"class with {tmp}"
@@ -129,11 +133,13 @@ def toRulePad(element: Union[JavaClass, Field, Method, ConfigurationFile]):
         if isinstance(element, type):
             return func(element)
 
+
 def removeParenthesis(st):
     tmp = st.strip()
     if tmp[0] == "(" and tmp[-1] == ")":
         return tmp[1:-1]
     return st
+
 
 def toShortRulePad(jsonRule: JsonRule) -> str:
     ant = toJavaConstruct(jsonRule.antecedent, None)
@@ -150,17 +156,22 @@ def toShortRulePad(jsonRule: JsonRule) -> str:
         ant_str = f"class with {ant_str}"
         con_str = con_str[con_str.index("with")+4+1:]
     elif type(ant) in dependent_types and type(con) in dependent_types:
-        ant_str = f"class with {ant_str}"
+        if isinstance(ant, Field) and isinstance(con, ConfigurationFile) or \
+                isinstance(ant, Method) and isinstance(con, ConfigurationFile):
+            pass
+        else:
+            ant_str = f"class with {ant_str}"
     result = f"{ant_str} must have {con_str} "
     return result
 
 
 def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Field, Method]) -> Union[JavaClass, Field, Method, ConfigurationFile]:
-    field = Field(None, annotations=[])
-    method = Method(None, parameters=[], annotations=[])
+    field = Field(type=None, annotations=[], configurationFile=None)
+    method = Method(returnType=None, parameters=[],
+                    annotations=[], configurationFile=None)
     clazz = JavaClass(
         annotations=[], extendedClass=None, implementedInterfaces=[], field=None,
-        method=None, configurationFile=None
+        method=None, configurationFile=None, declaredInBeans=None
     )
     configFile = ConfigurationFile(None, [])
 
@@ -220,7 +231,7 @@ def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Fiel
             if annotation_type not in all_annotation_params:
                 all_annotation_params[annotation_type] = []
             _name, _typeStr = str_related.split("_")[1].split(":")
-            _type = Type(_typeStr.strip()) if _typeStr.strip() else None 
+            _type = Type(_typeStr.strip()) if _typeStr.strip() else None
             all_annotation_params[annotation_type].append(
                 Param(_type, _name, []))
         elif "definedIn" in str_operation and str_related.startswith("ConfigFile"):
@@ -236,8 +247,8 @@ def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Fiel
             if param_type not in method_parameter_annotations:
                 method_parameter_annotations[param_type] = []
             method_parameter_annotations[param_type].append(annotation_type)
-                
-    ### Handling Dangling Annotations
+
+    # Handling Dangling Annotations
     danglingAnnotations: List[Annotation] = []
 
     for annotation_str, params in all_annotation_params.items():
@@ -259,19 +270,20 @@ def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Fiel
             has_field = True
             field.annotations.append(da)
 
-    ### Handling method parameter annotations
+    # Handling method parameter annotations
     danglingParametersWithAnnotations = []
     for param_type, __annotations in method_parameter_annotations.items():
         if param_type in method_parameters:
             method_parameters[param_type].annotations.extend(__annotations)
         else:
-            danglingParametersWithAnnotations.append(Param(Type(param_type), None, __annotations))
+            danglingParametersWithAnnotations.append(
+                Param(Type(param_type), None, __annotations))
 
     if danglingParametersWithAnnotations and has_method:
         method.parameters.append(danglingParametersWithAnnotations)
 
     # determine what to return based on the input
-    if has_class or (len(list(filter(lambda x: x, [has_config, has_field, has_method]))) >= 2):
+    if has_class or (has_field and has_method):
         # when class is present or more than 2 elements which need to be in a class are present
         if has_method:
             clazz.method = method
@@ -282,9 +294,13 @@ def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Fiel
         return clazz
     elif has_method:
         # when only a method is available
+        if has_config:
+            clazz.configurationFile = configFile
         return method
     elif has_field:
         # when only a field is available
+        if has_config:
+            clazz.configurationFile = configFile
         return field
     elif has_config:
         # when only a configuration file is available

@@ -46,12 +46,14 @@ class Annotation(AntecedentOrConsequent):
 class Field(AntecedentOrConsequent):
     type: Type = field(default=Type("Object"))
     annotations: List[Annotation] = field(default_factory=[])
+    configurationFile: ConfigurationFile = None
 
 @dataclass
 class Method(AntecedentOrConsequent):
     returnType: Type
     parameters: List[Param] = field(default_factory=[])
     annotations: List[Annotation] = field(default_factory=[])
+    configurationFile: ConfigurationFile = None
 
 @dataclass
 class JavaClass(AntecedentOrConsequent):

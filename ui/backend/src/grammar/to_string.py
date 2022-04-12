@@ -1,4 +1,4 @@
-from typing import List, Tuple, Dict, Union
+from typing import List, Optional, Tuple, Dict, Union
 from .model import *
 import inspect
 
@@ -10,8 +10,7 @@ CONSEQUENT_SIGN_END = "</span>"
 TEMPLATE = '''
 <ClassAnnotations>
 class Foo <ExtendsTemplate><ImplementsTemplate> {
-<FieldDeclaration>
-<MethodDeclaration>
+<FieldDeclaration><MethodDeclaration>
 }'''
 
 
@@ -40,7 +39,7 @@ def addSigns(obj: AntecedentOrConsequent, string) -> str:
 def field(field: Field):
     if field is None:
         return ""
-    t = "\t<FieldAnnotations>\n\tprivate <ReturnType> field;"
+    t = "\n\t<FieldAnnotations>\n\tprivate <ReturnType> field;"
     annos = handleAnnotations(field.annotations, ch="\t").strip()
     return t.replace("<FieldAnnotations>", annos).replace("<ReturnType>", addSigns(field.type, shortenTypeName(field.type)))
 
@@ -87,7 +86,7 @@ def paramToString(p: Union[ConfigurationProperty, AnnotationParam]) -> str:
     if name_:
         name_ = p.name
     if p.value is None:
-        if p.type is None:
+        if p.type is None or p.type.name is None:
             value_ = "?"
         else:
             value_ = shortenTypeName(p.type)
@@ -137,11 +136,31 @@ def configFiles(cf: ConfigurationFile) -> Tuple[str, str]:
     return cf.name, lines
 
 
-def configurationFiles(clazz: JavaClass) -> List[Dict[str, str]]:
-    cf = configFiles(clazz.configurationFile)
-    bd = beanDeclaration(clazz.declaredInBeans)
+def configurationFiles(obj: JavaClass) -> List[Dict[str, str]]:
+    obj = __extractConfigurationObj(obj)
+    if type(obj) is JavaClass:
+        cf = configFiles(obj.configurationFile)
+        bd = beanDeclaration(obj.declaredInBeans)
+        configs = [cf, bd]
+    elif type(obj) in [Method, Field]:
+        cf = configFiles(obj.configurationFile)
+        configs = [cf]
+    else:
+        configs = []
 
     return list(map(lambda x: {
         "filename": x[0],
         "code": x[1]
-    }, filter(lambda x: x is not None, [cf, bd])))
+    }, filter(lambda x: x is not None, configs)))
+
+def __extractConfigurationObj(obj: JavaClass) -> Optional[Union[JavaClass, Method, Field]]:
+    """
+        returns the object that has a config file
+    """
+    if obj.configurationFile:
+        return obj
+    elif obj.field and obj.field.configurationFile:
+        return obj.field
+    elif obj.method and obj.method.configurationFile:
+        return obj.method
+    return None
