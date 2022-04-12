@@ -177,7 +177,7 @@ function LabelingScreen() {
 
     const renderUI = () => {
         return (
-            <div className="app">
+            <div className="app-labeling">
                 <div className="instructions">
                     <h2>{ruleMetaData.name}: Candidate Rule {ruleMetaData.id}/{ruleMetaData.size} ({username})</h2>
                     <p>

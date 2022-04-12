@@ -16,7 +16,7 @@ def typeToRulePad(t: Type) -> str:
     return f"type \"{t.name}\""
 
 
-def paramToRulePad(p: Union[Param, ConfigurationProperty]) -> str:
+def paramToRulePad(p: Union[Param, AnnotationParam, ConfigurationProperty]) -> str:
     keyword = "parameter" if isinstance(p, Param) else "property"
     name = f"{p.name}" if p.name else ""
     form = " ".join(removeNones([p.type.name if p.type else None, name])).strip()
@@ -36,8 +36,8 @@ def annotationToRulePad(a: Annotation):
     res = f"annotation \"{a.type.name}\""
     if a.parameters:
         param_str = " and ".join(map(paramToRulePad, a.parameters))
-        if len(a.parameters) > 1:
-            param_str = "(" + param_str + " )"
+        # if len(a.parameters) > 1:
+            # param_str = "(" + param_str + " )"
         res = res + " with " + param_str
     return res
 
@@ -50,11 +50,8 @@ def fieldToRulePad(f: Field) -> str:
             anno_str = "(" + anno_str + " )"
     if f.type:
         type_str = typeToRulePad(f.type)
-    if anno_str and type_str:
-        return f"(field with ({type_str} and {anno_str} ) )"
-    elif anno_str:
-        return f"(field with {anno_str} )"
-    return f"(field with {type_str} )"
+    field_pieces = " and ".join(removeNones([anno_str, type_str]))
+    return f"(field with {field_pieces} )"
 
 
 def methodToRulePad(f: Method) -> str:
@@ -69,15 +66,9 @@ def methodToRulePad(f: Method) -> str:
         param_str = (" and ".join(map(paramToRulePad, f.parameters)))
         if len(f.parameters) > 1:
             param_str = "(" + param_str + " )"
-    abc = list(removeNones([type_str, param_str, anno_str]))
-    if len(abc) >= 2:
-        tmp = " and ".join(abc)
-        return f"(method with ({tmp} ) )"
-    elif anno_str:
-        return f"(method with {anno_str} )"
-    elif type_str:
-        return f"(method with {type_str} )"
-    return f"(method with {param_str} )"
+    method_pieces = list(removeNones([anno_str, type_str, param_str]))
+    tmp = " and ".join(method_pieces)
+    return f"(method with {tmp} )"
 
 
 def configToRulePad(cf: ConfigurationFile) -> str:
@@ -116,12 +107,12 @@ def classToRulePad(clazz: JavaClass) -> str:
         anno = " and ".join(map(annotationToRulePad, clazz.annotations))
         if len(clazz.annotations) > 1:
             anno = "(" + anno + " )"
-    abc = list(removeNones([extends, implements, field, method, cf, anno]))
-    if len(abc) >= 2:
-        tmp = " and ".join(abc)
+    class_pieces = list(removeNones([extends, implements, field, method, cf, anno]))
+    if len(class_pieces) >= 2:
+        tmp = " and ".join(class_pieces)
         return f"class with {tmp}"
     else:
-        for v in abc:
+        for v in class_pieces:
             if v is not None:
                 return f"class with {v}"
 

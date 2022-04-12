@@ -45,7 +45,7 @@ function LoginScreen() {
     }
 
     return (
-        <div className="app">
+        <div className="app-login">
             <div className="heading">
                 <h1>Rule Authoring Tool</h1>
             </div>

@@ -21,8 +21,8 @@ export default class ShortRulepad {
                     [/type/, "srp-keyword"],
                     [/name/, "srp-keyword"],
                     [/value/, "srp-keyword"],
-                    [/extension/, "srp-keyword"],
-                    [/implementation/, "srp-keyword"],
+                    [/extension of/, "srp-keyword"],
+                    [/implementation of/, "srp-keyword"],
                     [/property/, "srp-keyword"],
                     [/configuration file/, "srp-keyword"],
                     [/bean declaration/, "srp-keyword"],
@@ -59,7 +59,7 @@ export default class ShortRulepad {
 
         model.pushEditOperations(
             [],
-            [{range: model.getFullModelRange(), text: prettified}],
+            [{ range: model.getFullModelRange(), text: prettified }],
             () => null
         );
 
@@ -76,35 +76,48 @@ export default class ShortRulepad {
     }
 
     __getAllSuggestions(range) {
-        return [
-            {
-                label: 'conf',
+        const newSuggestion = (obj) => {
+            return {
                 kind: monaco.languages.CompletionItemKind.Function,
+                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                range: range,
+                ...obj
+            }
+        };
+
+        return [
+            newSuggestion({
+                label: 'conf',
                 documentation: 'configuration property autocomplete',
                 insertText: 'configuration file with property "${1}"',
-                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-                range: range
-            },
-            {
+            }),
+            newSuggestion({
                 label: 'ann',
-                kind: monaco.languages.CompletionItemKind.Function,
                 documentation: 'annotation',
                 insertText: 'annotation "${1}"',
-                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-                range: range
-            }
+            }),
+            newSuggestion({
+                label: 'impl',
+                documentation: 'implementation',
+                insertText: 'implementation of "${1}"',
+            }),
+            newSuggestion({
+                label: 'ext',
+                documentation: 'extension',
+                insertText: 'extension of "${1}"',
+            })
         ]
     }
 
-    provideCompletionItems (model, position) {
+    provideCompletionItems(model, position) {
         const word = model.getWordUntilPosition(position);
 
         const range = {
-			startLineNumber: position.lineNumber,
-			endLineNumber: position.lineNumber,
-			startColumn: word.startColumn,
-			endColumn: word.endColumn
-		}
+            startLineNumber: position.lineNumber,
+            endLineNumber: position.lineNumber,
+            startColumn: word.startColumn,
+            endColumn: word.endColumn
+        }
 
         return {
             suggestions: this.__getAllSuggestions(range)

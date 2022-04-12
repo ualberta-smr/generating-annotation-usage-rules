@@ -21,7 +21,7 @@ def rulepadToJavaCode(input):
 def check(input):
     lexer = RulepadGrammarLexer(InputStream(input))
     parser = RulepadGrammarParser(CommonTokenStream(lexer))
-    # parser.setTrace(True)
+    parser.setTrace(True)
     tree = parser.inputSentence()
 
     listener = ConcreteRulepadGrammarListener()
@@ -32,9 +32,9 @@ def check(input):
     print(json.dumps(j, default=lambda x: x.__dict__, indent=4))
     return None
 
-# check(
-#     """class with annotation "A" must have configuration file with property with name "demo" and value "hello" """
-# )
+check(
+    """field with (type "java.lang.String" and (annotation "org.eclipse.microprofile.config.inject.ConfigProperty" with parameter "java.lang.String defaultValue" with value "[name]" and annotation "javax.inject.Inject"  ) ) must have annotation "org.eclipse.microprofile.config.inject.ConfigProperty" with parameter "java.lang.String name" """
+)
 
 # check(
 #     """function with annotation "a.b.c.[A|B|C]" must have annotation "a.b.c.D" """

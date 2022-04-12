@@ -6,50 +6,51 @@ $consequentColor: green;
 $antecedentColorLight: #ffd580;
 $consequentColorLight: #0fc80f;
 
-.app {
+.app-login {
     background-color: $backgroundColor;
     display: grid;
     grid-template-rows: 60% 40%;
-}
 
-.heading {
-    height: 60vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    h1 {
-        font-size: 5em;
-        color: white;
-    }
-}
-
-.login-section {
-    height: 40vh;
-
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-
-    .username {
-        width: 20vw;
-        height: 5vh;
-        font-size: 2rem;
-        text-align: center;
-        font-style: italic;
-
-        &:focus {
-            outline: none;
+    .heading {
+        height: 60vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    
+        h1 {
+            font-size: 5em;
+            color: white;
         }
     }
-
-    .error-marker {
-        outline: 2px solid red;
-
-        &:focus {
+    
+    .login-section {
+        height: 40vh;
+    
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    
+        .username {
+            width: 20vw;
+            height: 5vh;
+            font-size: 2rem;
+            text-align: center;
+            font-style: italic;
+    
+            &:focus {
+                outline: none;
+            }
+        }
+    
+        .error-marker {
             outline: 2px solid red;
+    
+            &:focus {
+                outline: 2px solid red;
+            }
         }
     }
+
 }
 
 /* SNACKBAR REFERENCE: https://www.w3schools.com/howto/howto_js_snackbar.asp */

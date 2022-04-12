@@ -6,7 +6,7 @@ $consequentColor: green;
 $antecedentColorLight: #FFD580;
 $consequentColorLight: #0fc80f;
 
-.app {
+.app-labeling {
     background-color: $backgroundColor;
     display: grid;
     grid-template-rows: 10% 65% 25%;
@@ -66,10 +66,7 @@ $consequentColorLight: #0fc80f;
 }
 
 .examples-and-controls-row {
-    // display: grid;
-    // grid-template-columns: 50% 50%;
     height: 25vh;
-    // place-items: center;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -201,11 +198,6 @@ $consequentColorLight: #0fc80f;
             box-sizing: border-box;
         }
     }
-}
-
-.bean_declaration {
-    font-style: italic !important;
-    opacity: 0.7;
 }
 
 .disabledBtn {
