@@ -105,6 +105,11 @@ export default class ShortRulepad {
                 label: 'ext',
                 documentation: 'extension',
                 insertText: 'extension of "${1}"',
+            }),
+            newSuggestion({
+                label: 'bean',
+                documentation: 'bean declaration ${1}',
+                insertText: 'bean declaration',
             })
         ]
     }

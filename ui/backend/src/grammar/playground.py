@@ -4,19 +4,8 @@ from .RulepadGrammarLexer import RulepadGrammarLexer
 from .RulepadGrammarParser import RulepadGrammarParser
 from .RulepadGrammarListener import *
 from .listener import *
-from .to_string import *
+from .toString import *
 
-def rulepadToJavaCode(input):
-    lexer = RulepadGrammarLexer(InputStream(input))
-    parser = RulepadGrammarParser(CommonTokenStream(lexer))
-    parser.setTrace(not True)
-    tree = parser.inputSentence()
-
-    listener = ConcreteRulepadGrammarListener()
-    walker = ParseTreeWalker()
-    walker.walk(listener, tree)
-    j = listener.getJavaClass()
-    return javaClass(j).strip(), configurationFiles(j)
 
 def check(input):
     lexer = RulepadGrammarLexer(InputStream(input))
@@ -32,9 +21,9 @@ def check(input):
     print(json.dumps(j, default=lambda x: x.__dict__, indent=4))
     return None
 
-check(
-    """field with (type "java.lang.String" and (annotation "org.eclipse.microprofile.config.inject.ConfigProperty" with parameter "java.lang.String defaultValue" with value "[name]" and annotation "javax.inject.Inject"  ) ) must have annotation "org.eclipse.microprofile.config.inject.ConfigProperty" with parameter "java.lang.String name" """
-)
+# check(
+#     """field with (type "java.lang.String" and (annotation "org.eclipse.microprofile.config.inject.ConfigProperty" with parameter "java.lang.String defaultValue" with value "[name]" and annotation "javax.inject.Inject"  ) ) must have annotation "org.eclipse.microprofile.config.inject.ConfigProperty" with parameter "java.lang.String name" """
+# )
 
 # check(
 #     """function with annotation "a.b.c.[A|B|C]" must have annotation "a.b.c.D" """
@@ -107,5 +96,4 @@ check(
 # a = """class with function with annotation "Fallback" must have function with annotation "Fallback" with parameter with (name "fallbackMethod" and type "String" ) """
 
 # print(convert(a))
-
 

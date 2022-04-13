@@ -1,13 +1,13 @@
-How to run
+# Rule Validation Tool Backend
 
-```
-python -m pipenv shell
-python backend.py
-``` 
+This folder contains the backend. Backend is responsible for the following things:
+- Converting RulePad string into Java code
+- Persisting the confirmed changes related to rule validation to the database
+- Logging the users in
+- Providing rules to validate for each user
 
-If you want to run the `grammar/converter.py` file:
-
-```
-# from src folder
-python -m grammar.converter
-```
+## Technology used
+- Python/FastAPI for the backend
+- Antlr4 for parsing RulePad grammar
+- sqlalchemy for SQL and ORM purposes
+- MySQL for the database

@@ -136,18 +136,15 @@ def configFiles(cf: ConfigurationFile) -> Tuple[str, str]:
     return cf.name, lines
 
 
-def configurationFiles(obj: JavaClass) -> List[Dict[str, str]]:
-    obj = __extractConfigurationObj(obj)
-    if type(obj) is JavaClass:
-        cf = configFiles(obj.configurationFile)
-        bd = beanDeclaration(obj.declaredInBeans)
+def configurationFiles(jc: JavaClass) -> List[Dict[str, str]]:
+    configuredObj = __extractConfigurationObj(jc)
+    bd = beanDeclaration(jc.declaredInBeans)
+    if configuredObj:
+        cf = configFiles(configuredObj.configurationFile)
         configs = [cf, bd]
-    elif type(obj) in [Method, Field]:
-        cf = configFiles(obj.configurationFile)
-        configs = [cf]
     else:
-        configs = []
-
+        configs = [bd]
+    
     return list(map(lambda x: {
         "filename": x[0],
         "code": x[1]

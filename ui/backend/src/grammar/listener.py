@@ -77,6 +77,10 @@ def mergeDuplicateAnnotations(oldAnnotations: List[Annotation]):
     return newAnnotations
 
 class ConcreteRulepadGrammarListener(RulepadGrammarListener):
+    """
+        The purpose of this class is to construct a JavaClass object that contains
+        all the elements and the fact that if they are antecedent or consequent 
+    """
     def __init__(self) -> None:
         super().__init__()
         self.__stack = []
@@ -302,18 +306,14 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
     def enterNames(self, ctx: RulepadGrammarParser.NamesContext):
         name = ctx.nameCondition().words().getText().replace("\"", "")
         prev = self.__stack[-1]
-        if prev['comingFrom'] == 'parameter':
-            prev['node'].name = name
-        elif prev['comingFrom'] == 'property':
+        if prev['comingFrom'] in ['parameter', 'property']:
             prev['node'].name = name
 
     # Enter a parse tree produced by RulepadGrammarParser#values.
     def enterValues(self, ctx:RulepadGrammarParser.ValuesContext):
         value = ctx.valueCondition().words().getText().replace("\"", "")
         prev = self.__stack[-1]
-        if prev['comingFrom'] == 'parameter':
-            prev['node'].value = value
-        elif prev['comingFrom'] == 'property':
+        if prev['comingFrom'] in ['parameter', 'property']:
             prev['node'].value = value
 
     # Enter a parse tree produced by RulepadGrammarParser#configurationFiles.
