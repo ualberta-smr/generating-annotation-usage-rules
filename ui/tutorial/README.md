@@ -1,8 +1,48 @@
 # Tutorial
 
+During the experiment, you will be using the Rule Validation Tool where the candidate rules will be provided. The candidate rules are going to be in Rulepad DSL. Please use recent versions of either Google Chrome or Mozilla Firefox browsers.
+
+## Rule Validation Tool
+
+This is how the tool overall looks like: 
+
+<p align="center">
+  <img src="./assets/overall_view.png" width="90%" />
+</p>
+
+Candidate rules are presented using the Rule Authoring Editor (on the left) in Rulepad format.
+
+You can edit the presented rule.
+
+<p align="center"><img src="./assets/editing_rule.gif" width="90%" /></p>
+
+You can format the presented rule to make it more readable
+
+<p align="center"><img src="./assets/formatting.gif" width="90%" /></p>
+
+You can confirm the rule.
+
+<p align="center"><img src="./assets/accepting_as_is.gif" width="90%" /></p>
+
+You can reject the rule
+
+<p align="center"><img src="./assets/reject.gif" width="90%" /></p>
+
+By clicking on the picked label again you can un-label.
+
+<p align="center"><img src="./assets/unconfirm.gif" width="90%" /></p>
+
+Note. **The changes will only be saved if the rule is confirmed**. In any other case, the change will not be saved. For example, moving on to another candidate rule will get rid of any unsaved changes without any warning. 
+
+The code section shows the Java equivalent of the presented rule. IF (antecedent) and THEN (consequent) parts are shown in distinct colors. 
+
+<p align="center">
+  <img src="./assets/code_preview.png" width="90%" />
+</p>
+
 ## Rulepad
 
-Rulepad DSL resembles English language. It has a IF-THEN structure. 
+Rulepad DSL (domain specific language) resembles English language. It has a IF-THEN structure. 
 
 Here are some Rulepad example statements alongside with their Java code equivalents:
 
@@ -74,7 +114,7 @@ Names only have 1 property and that's the name string. For example, something wi
 
 #### value
 
-Values only have 1 property and that's the value string. For example, something with the value of _enabled_ should be written as `value "enabled"`. By default value string matches the literal value. So, `value "enabled"` is equal to `@Dummy(param="enabled")`.
+Values only have 1 property and that's the value string. For example, something with the value of _enabled_ should be written as `value "enabled"`. By default value string matches the literal value. So, `value "enabled"` is equal to `@Dummy(param="enabled")`. See [this section](#special-use-case-combining-annotation-parameter-values-and-configuration-properties) to learn about dynamic value placeholders and their only usecase.
 
 #### field
 
@@ -141,6 +181,24 @@ There're shortcuts available for configuration properties. These are the followi
 - Instead of `property with name "maxInterval"`, we can say `property "maxInterval"`
     - So, if we want to say `property with name "fallback" and value "enabled"`, it can be simplified to `property "fallback" with value "enabled"`
 - Instead of `property with type "long" and name "maxInterval"`, we can say `property "long maxInterval"`
+
+
+#### Special use case: combining annotation parameter values and configuration properties
+
+```java
+@ConfigProperty(name="maxInterval")
+int maxInterval;
+```
+
+In order for the code above to work properly, `maxInterval` needs to be available in the config source. We cannot just say `...configuration file with property "maxInterval"` because the value of the _name_ parameter is dynamic, it can be something else as well. So, we need to refer to the dynamic value somehow. That's where the _value placeholders_ come in. 
+
+We can grab the _maxInterval_ value by saying `...parameter "name" with value "[nameValue]"` and use it in the configuration property declaration. So, the complete rule will be:
+
+```
+field with annotation "ConfigProperty" with parameter "name" with value "[nameValue]" 
+must have
+configuration file with property "[nameValue]"
+```
 
 
 #### Aggregates and Parenthesis
