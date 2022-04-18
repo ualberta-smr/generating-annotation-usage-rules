@@ -4,7 +4,6 @@ import ca.ualberta.grammar.RulepadGrammarListener;
 import ca.ualberta.grammar.RulepadGrammarParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class AbstractRulePadGrammarListener implements RulepadGrammarListener {
@@ -189,6 +188,16 @@ public class AbstractRulePadGrammarListener implements RulepadGrammarListener {
     }
 
     @Override
+    public void enterValues(RulepadGrammarParser.ValuesContext ctx) {
+
+    }
+
+    @Override
+    public void exitValues(RulepadGrammarParser.ValuesContext ctx) {
+
+    }
+
+    @Override
     public void enterAnnotations(RulepadGrammarParser.AnnotationsContext ctx) {
 
     }
@@ -279,16 +288,6 @@ public class AbstractRulePadGrammarListener implements RulepadGrammarListener {
     }
 
     @Override
-    public void enterFunctionOf(RulepadGrammarParser.FunctionOfContext ctx) {
-
-    }
-
-    @Override
-    public void exitFunctionOf(RulepadGrammarParser.FunctionOfContext ctx) {
-
-    }
-
-    @Override
     public void enterFunctionCondition(RulepadGrammarParser.FunctionConditionContext ctx) {
 
     }
@@ -305,46 +304,6 @@ public class AbstractRulePadGrammarListener implements RulepadGrammarListener {
 
     @Override
     public void exitFunctionExpression(RulepadGrammarParser.FunctionExpressionContext ctx) {
-
-    }
-
-    @Override
-    public void enterAbstractFunctions(RulepadGrammarParser.AbstractFunctionsContext ctx) {
-
-    }
-
-    @Override
-    public void exitAbstractFunctions(RulepadGrammarParser.AbstractFunctionsContext ctx) {
-
-    }
-
-    @Override
-    public void enterAbstractFunctionOf(RulepadGrammarParser.AbstractFunctionOfContext ctx) {
-
-    }
-
-    @Override
-    public void exitAbstractFunctionOf(RulepadGrammarParser.AbstractFunctionOfContext ctx) {
-
-    }
-
-    @Override
-    public void enterAbstractFunctionCondition(RulepadGrammarParser.AbstractFunctionConditionContext ctx) {
-
-    }
-
-    @Override
-    public void exitAbstractFunctionCondition(RulepadGrammarParser.AbstractFunctionConditionContext ctx) {
-
-    }
-
-    @Override
-    public void enterAbstractFunctionExpression(RulepadGrammarParser.AbstractFunctionExpressionContext ctx) {
-
-    }
-
-    @Override
-    public void exitAbstractFunctionExpression(RulepadGrammarParser.AbstractFunctionExpressionContext ctx) {
 
     }
 
@@ -405,6 +364,16 @@ public class AbstractRulePadGrammarListener implements RulepadGrammarListener {
 
     @Override
     public void exitParameterCondition(RulepadGrammarParser.ParameterConditionContext ctx) {
+
+    }
+
+    @Override
+    public void enterParameterConditionTransition(RulepadGrammarParser.ParameterConditionTransitionContext ctx) {
+
+    }
+
+    @Override
+    public void exitParameterConditionTransition(RulepadGrammarParser.ParameterConditionTransitionContext ctx) {
 
     }
 
@@ -479,82 +448,12 @@ public class AbstractRulePadGrammarListener implements RulepadGrammarListener {
     }
 
     @Override
-    public void enterSpecifiers(RulepadGrammarParser.SpecifiersContext ctx) {
-
-    }
-
-    @Override
-    public void exitSpecifiers(RulepadGrammarParser.SpecifiersContext ctx) {
-
-    }
-
-    @Override
-    public void enterSpecifierCondition(RulepadGrammarParser.SpecifierConditionContext ctx) {
-
-    }
-
-    @Override
-    public void exitSpecifierCondition(RulepadGrammarParser.SpecifierConditionContext ctx) {
-
-    }
-
-    @Override
-    public void enterVisibilities(RulepadGrammarParser.VisibilitiesContext ctx) {
-
-    }
-
-    @Override
-    public void exitVisibilities(RulepadGrammarParser.VisibilitiesContext ctx) {
-
-    }
-
-    @Override
-    public void enterVisibilityCondition(RulepadGrammarParser.VisibilityConditionContext ctx) {
-
-    }
-
-    @Override
-    public void exitVisibilityCondition(RulepadGrammarParser.VisibilityConditionContext ctx) {
-
-    }
-
-    @Override
-    public void enterReturnValues(RulepadGrammarParser.ReturnValuesContext ctx) {
-
-    }
-
-    @Override
-    public void exitReturnValues(RulepadGrammarParser.ReturnValuesContext ctx) {
-
-    }
-
-    @Override
-    public void enterReturnValueCondition(RulepadGrammarParser.ReturnValueConditionContext ctx) {
-
-    }
-
-    @Override
-    public void exitReturnValueCondition(RulepadGrammarParser.ReturnValueConditionContext ctx) {
-
-    }
-
-    @Override
     public void enterDeclarationStatements(RulepadGrammarParser.DeclarationStatementsContext ctx) {
 
     }
 
     @Override
     public void exitDeclarationStatements(RulepadGrammarParser.DeclarationStatementsContext ctx) {
-
-    }
-
-    @Override
-    public void enterDeclarationStatementOf(RulepadGrammarParser.DeclarationStatementOfContext ctx) {
-
-    }
-
-    @Override
-    public void exitDeclarationStatementOf(RulepadGrammarParser.DeclarationStatementOfContext ctx) {
 
     }
 
@@ -629,6 +528,16 @@ public class AbstractRulePadGrammarListener implements RulepadGrammarListener {
     }
 
     @Override
+    public void enterConfigurationPropertyConditionTransition(RulepadGrammarParser.ConfigurationPropertyConditionTransitionContext ctx) {
+
+    }
+
+    @Override
+    public void exitConfigurationPropertyConditionTransition(RulepadGrammarParser.ConfigurationPropertyConditionTransitionContext ctx) {
+
+    }
+
+    @Override
     public void enterConfigurationPropertyExpression(RulepadGrammarParser.ConfigurationPropertyExpressionContext ctx) {
 
     }
@@ -639,92 +548,12 @@ public class AbstractRulePadGrammarListener implements RulepadGrammarListener {
     }
 
     @Override
-    public void enterExpressionStatements(RulepadGrammarParser.ExpressionStatementsContext ctx) {
-
-    }
-
-    @Override
-    public void exitExpressionStatements(RulepadGrammarParser.ExpressionStatementsContext ctx) {
-
-    }
-
-    @Override
-    public void enterExpressionStatementOf(RulepadGrammarParser.ExpressionStatementOfContext ctx) {
-
-    }
-
-    @Override
-    public void exitExpressionStatementOf(RulepadGrammarParser.ExpressionStatementOfContext ctx) {
-
-    }
-
-    @Override
-    public void enterExpressionStatementCondition(RulepadGrammarParser.ExpressionStatementConditionContext ctx) {
-
-    }
-
-    @Override
-    public void exitExpressionStatementCondition(RulepadGrammarParser.ExpressionStatementConditionContext ctx) {
-
-    }
-
-    @Override
-    public void enterExpressionStatementExpression(RulepadGrammarParser.ExpressionStatementExpressionContext ctx) {
-
-    }
-
-    @Override
-    public void exitExpressionStatementExpression(RulepadGrammarParser.ExpressionStatementExpressionContext ctx) {
-
-    }
-
-    @Override
-    public void enterValue(RulepadGrammarParser.ValueContext ctx) {
-
-    }
-
-    @Override
-    public void exitValue(RulepadGrammarParser.ValueContext ctx) {
-
-    }
-
-    @Override
     public void enterValueCondition(RulepadGrammarParser.ValueConditionContext ctx) {
 
     }
 
     @Override
     public void exitValueCondition(RulepadGrammarParser.ValueConditionContext ctx) {
-
-    }
-
-    @Override
-    public void enterInitialValues(RulepadGrammarParser.InitialValuesContext ctx) {
-
-    }
-
-    @Override
-    public void exitInitialValues(RulepadGrammarParser.InitialValuesContext ctx) {
-
-    }
-
-    @Override
-    public void enterInitialValueOf(RulepadGrammarParser.InitialValueOfContext ctx) {
-
-    }
-
-    @Override
-    public void exitInitialValueOf(RulepadGrammarParser.InitialValueOfContext ctx) {
-
-    }
-
-    @Override
-    public void enterInitialValueCondition(RulepadGrammarParser.InitialValueConditionContext ctx) {
-
-    }
-
-    @Override
-    public void exitInitialValueCondition(RulepadGrammarParser.InitialValueConditionContext ctx) {
 
     }
 
@@ -759,42 +588,12 @@ public class AbstractRulePadGrammarListener implements RulepadGrammarListener {
     }
 
     @Override
-    public void enterSubclasses(RulepadGrammarParser.SubclassesContext ctx) {
+    public void enterBeans(RulepadGrammarParser.BeansContext ctx) {
 
     }
 
     @Override
-    public void exitSubclasses(RulepadGrammarParser.SubclassesContext ctx) {
-
-    }
-
-    @Override
-    public void enterSubclassOf(RulepadGrammarParser.SubclassOfContext ctx) {
-
-    }
-
-    @Override
-    public void exitSubclassOf(RulepadGrammarParser.SubclassOfContext ctx) {
-
-    }
-
-    @Override
-    public void enterSubclassCondition(RulepadGrammarParser.SubclassConditionContext ctx) {
-
-    }
-
-    @Override
-    public void exitSubclassCondition(RulepadGrammarParser.SubclassConditionContext ctx) {
-
-    }
-
-    @Override
-    public void enterSubclassExpression(RulepadGrammarParser.SubclassExpressionContext ctx) {
-
-    }
-
-    @Override
-    public void exitSubclassExpression(RulepadGrammarParser.SubclassExpressionContext ctx) {
+    public void exitBeans(RulepadGrammarParser.BeansContext ctx) {
 
     }
 
