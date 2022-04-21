@@ -1,6 +1,6 @@
 # Tutorial
 
-During the experiment, you will be using the Rule Validation Tool where the candidate rules will be provided. The candidate rules are going to be in Rulepad DSL. Please use recent versions of either Google Chrome or Mozilla Firefox browsers.
+During the experiment, you will be using the Rule Validation Tool where MicroProfile candidate usage rules will be provided. Your goal is to determine if these candidate rules are correct rules that must be respected for the MicroProfile annotation to work correctly. The candidate rules are going to be provided in a Domain Specific Language (DSL) called [Rulepad](https://github.com/devuxd/active-doc-client). We provide more information below. Please use recent versions of either Google Chrome or Mozilla Firefox browsers.
 
 ## Rule Validation Tool
 
@@ -10,29 +10,33 @@ This is how the tool overall looks like:
   <img src="./assets/overall_view.png" width="90%" />
 </p>
 
-Candidate rules are presented using the Rule Authoring Editor (on the left) in Rulepad format.
+Candidate rules are presented using the Rule Authoring Editor (on the left) in Rulepad format. There are 5 actions you can do with the Rule Validation Tool.
 
-You can edit the presented rule.
+1. You can edit the presented rule using the Rule Authoring Editor. Note that the changes you make are reflected in the Code section on the left. The code snippet helps you see what the rule you are working on would look like as code. More information on its format is provided below.
 
-<p align="center"><img src="./assets/editing_rule.gif" width="90%" /></p>
+<p align="center"><img src="./assets/editing_rule.gif" width="70%" /></p>
 
-You can format the presented rule to make it more readable
+2. You can format the presented rule to make it more readable
 
-<p align="center"><img src="./assets/formatting.gif" width="90%" /></p>
+<p align="center"><img src="./assets/formatting.gif" width="70%" /></p>
 
-You can confirm the rule.
+3. You can confirm the rule.
 
-<p align="center"><img src="./assets/accepting_as_is.gif" width="90%" /></p>
+<p align="center"><img src="./assets/accepting_as_is.gif" width="70%" /></p>
 
-You can reject the rule
+4. You can reject the rule
 
-<p align="center"><img src="./assets/reject.gif" width="90%" /></p>
+<p align="center"><img src="./assets/reject.gif" width="70%" /></p>
 
-By clicking on the picked label again you can un-label.
+5. By clicking on the picked label again you can un-label.
 
-<p align="center"><img src="./assets/unconfirm.gif" width="90%" /></p>
+<p align="center"><img src="./assets/unconfirm.gif" width="70%" /></p>
 
-Note. **The changes will only be saved if the rule is confirmed**. In any other case, the change will not be saved. For example, moving on to another candidate rule will get rid of any unsaved changes without any warning. 
+## Note. 
+
+**The changes will only be saved if the rule is confirmed using "CONFIRM RULE" button**. In any other case, the changes will not be saved. For example, the in the following cases the changes will be lost:
+- Moving on to another candidate rule will get rid of any unsaved changes without any warning. 
+- The changes made to an already confirmed rule will be lost if those changes are not saved again using "CONFIRM RULE" button.
 
 The code section shows the Java equivalent of the presented rule. IF (antecedent) and THEN (consequent) parts are shown in distinct colors. 
 
@@ -46,32 +50,71 @@ Rulepad DSL (domain specific language) resembles English language. It has a IF-T
 
 Here are some Rulepad example statements alongside with their Java code equivalents:
 
-```java
-// class with annotation "A" must have method with annotation "B"
+<table>
+<tr>
+<th colspan="2">Rulepad Examples</th>
+</tr>
+<tr>
+<th>Rulepad</th>
+<th>Java</th>
+</tr>
+<tr>
+<td>
 
+```
+class with annotation "A" must have method with annotation "B"
+```
+</td>
+<td>
+
+```java
 @A
 @B
 class Foo {}
 ```
+</td>
+</tr>
+
+<tr>
+<td>
+
+```
+field with type "A" must have annotation "B" or annotation "C"
+```
+</td>
+<td>
 
 ```java
-// field with type "A" must have annotation "B" or annotation "C"
-
 class Foo {
     @B // or @C
     A dummyField;
 }
 ```
+</td>
+</tr>
+
+<tr>
+<td>
+
+```
+method with parameter with type "A" must have type "B" and annotation "C"
+```
+</td>
+<td>
 
 ```java
-// method with parameter with type "A" must have type "B" and annotation "C"
-
 class Foo {
 
     @C
-    B dummyMethod(A paramFoo) { /*ignored*/ }
+    B dummyMethod(A paramFoo) {
+       /*ignored*/ 
+    }
 }
 ```
+</td>
+</tr>
+
+</table>
 
 ### Syntax
 
