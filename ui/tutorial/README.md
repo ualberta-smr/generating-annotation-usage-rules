@@ -14,23 +14,23 @@ Candidate rules are presented using the Rule Authoring Editor (on the left) in R
 
 1. You can edit the presented rule using the Rule Authoring Editor. Note that the changes you make are reflected in the Code section on the left. The code snippet helps you see what the rule you are working on would look like as code. More information on its format is provided below.
 
-<p align="center"><img src="./assets/editing_rule.gif" width="70%" /></p>
+<p align="center"><img src="./assets/editing_rule.gif" width="80%" /></p>
 
 2. You can format the presented rule to make it more readable
 
-<p align="center"><img src="./assets/formatting.gif" width="70%" /></p>
+<p align="center"><img src="./assets/formatting.gif" width="80%" /></p>
 
 3. You can confirm the rule.
 
-<p align="center"><img src="./assets/accepting_as_is.gif" width="70%" /></p>
+<p align="center"><img src="./assets/accepting_as_is.gif" width="80%" /></p>
 
 4. You can reject the rule
 
-<p align="center"><img src="./assets/reject.gif" width="70%" /></p>
+<p align="center"><img src="./assets/reject.gif" width="80%" /></p>
 
 5. By clicking on the picked label again you can un-label.
 
-<p align="center"><img src="./assets/unconfirm.gif" width="70%" /></p>
+<p align="center"><img src="./assets/unconfirm.gif" width="80%" /></p>
 
 ## Note. 
 
