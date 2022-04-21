@@ -178,11 +178,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
                 self.initObj(Type(className)))
 
     def enterTypes(self, ctx: RulepadGrammarParser.TypesContext):
-        try:
-            type = ctx.typeCondition().combinatorialWords()
-        except:
-            type = ctx.typeCondition().words()
-
+        type = ctx.typeCondition().combinatorialWords()
         type = self.initObj(Type(type.getText().replace("\"", "")))
 
         prev = self.__stack[-1]
@@ -304,14 +300,14 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
 
     # Enter a parse tree produced by RulepadGrammarParser#names.
     def enterNames(self, ctx: RulepadGrammarParser.NamesContext):
-        name = ctx.nameCondition().words().getText().replace("\"", "")
+        name = ctx.nameCondition().combinatorialWords().getText().replace("\"", "")
         prev = self.__stack[-1]
         if prev['comingFrom'] in ['parameter', 'property']:
             prev['node'].name = name
 
     # Enter a parse tree produced by RulepadGrammarParser#values.
     def enterValues(self, ctx:RulepadGrammarParser.ValuesContext):
-        value = ctx.valueCondition().words().getText().replace("\"", "")
+        value = ctx.valueCondition().combinatorialWords().getText().replace("\"", "")
         prev = self.__stack[-1]
         if prev['comingFrom'] in ['parameter', 'property']:
             prev['node'].value = value

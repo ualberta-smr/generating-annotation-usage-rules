@@ -223,8 +223,6 @@ export default class FormatterListener extends RulepadGrammarListener {
         if (cond != null) {
             if (cond.combinatorialWords() != null) {
                 this.finalString += `${cond.combinatorialWords().getText()} `
-            } else if (cond.words() != null) {
-                this.finalString += `${cond.words().getText()} `
             }
         }
     }

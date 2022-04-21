@@ -23,24 +23,6 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 	}
 
 
-	// Enter a parse tree produced by RulepadGrammarParser#words.
-	enterWords(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#words.
-	exitWords(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#word.
-	enterWord(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#word.
-	exitWord(ctx) {
-	}
-
-
 	// Enter a parse tree produced by RulepadGrammarParser#combinatorialWords.
 	enterCombinatorialWords(ctx) {
 	}
@@ -74,15 +56,6 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 
 	// Exit a parse tree produced by RulepadGrammarParser#emptyLine.
 	exitEmptyLine(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#comments.
-	enterComments(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#comments.
-	exitComments(ctx) {
 	}
 
 

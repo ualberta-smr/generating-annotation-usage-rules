@@ -26,24 +26,6 @@ class RulepadGrammarListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by RulepadGrammarParser#words.
-    def enterWords(self, ctx:RulepadGrammarParser.WordsContext):
-        pass
-
-    # Exit a parse tree produced by RulepadGrammarParser#words.
-    def exitWords(self, ctx:RulepadGrammarParser.WordsContext):
-        pass
-
-
-    # Enter a parse tree produced by RulepadGrammarParser#word.
-    def enterWord(self, ctx:RulepadGrammarParser.WordContext):
-        pass
-
-    # Exit a parse tree produced by RulepadGrammarParser#word.
-    def exitWord(self, ctx:RulepadGrammarParser.WordContext):
-        pass
-
-
     # Enter a parse tree produced by RulepadGrammarParser#combinatorialWords.
     def enterCombinatorialWords(self, ctx:RulepadGrammarParser.CombinatorialWordsContext):
         pass
@@ -77,15 +59,6 @@ class RulepadGrammarListener(ParseTreeListener):
 
     # Exit a parse tree produced by RulepadGrammarParser#emptyLine.
     def exitEmptyLine(self, ctx:RulepadGrammarParser.EmptyLineContext):
-        pass
-
-
-    # Enter a parse tree produced by RulepadGrammarParser#comments.
-    def enterComments(self, ctx:RulepadGrammarParser.CommentsContext):
-        pass
-
-    # Exit a parse tree produced by RulepadGrammarParser#comments.
-    def exitComments(self, ctx:RulepadGrammarParser.CommentsContext):
         pass
 
 
