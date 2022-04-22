@@ -274,7 +274,7 @@ public class GrammarParsingTest {
                 method1, method2
         );
 
-        return new StaticAnalysisRule("function_with_OR_in_consequent", single(antecedent), consequent, "function with type \"C\" must have annotation \"A\" or annotation \"B\" ");
+        return new StaticAnalysisRule("function_with_OR_in_consequent", single(antecedent), consequent, "function with return type \"C\" must have annotation \"A\" or annotation \"B\" ");
     }
 
     private static StaticAnalysisRule getRule_field_with_OR_in_consequent() {
@@ -527,7 +527,7 @@ public class GrammarParsingTest {
     }
 
     private static StaticAnalysisRule getRule_antecedent_function_with_or_plus_consequent_with_or() {
-        String ruleString = "function with type \"B\" or parameter \"C\" or annotation \"D\" must have annotation \"B\" or annotation \"C\" or annotation \"D\" ";
+        String ruleString = "function with return type \"B\" or parameter \"C\" or annotation \"D\" must have annotation \"B\" or annotation \"C\" or annotation \"D\" ";
 
         final Method m1 = new Method();
         m1.returnType(Type.type("B"));

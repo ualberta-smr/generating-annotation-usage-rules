@@ -329,16 +329,23 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
 
     @Override
     public void enterTypes(RulepadGrammarParser.TypesContext ctx) {
-        String typeString;
         val combWords = ctx.typeCondition().combinatorialWords();
-        if (combWords == null) {
-            typeString = ctx.typeCondition().words().getText().replace("\"", "").trim();
-        } else {
-            typeString = combWords.getText().replace("\"", "").trim();
-        }
+        val typeString = combWords.getText().replace("\"", "").trim();
 
-        final Data data = stack.peek();
+        val data = stack.peek();
         if (TYPE_CONTAINING_NODES.contains(data.comingFrom)) {
+            WithType withTypeNode = (WithType) data.node;
+            withTypeNode.type(single(new Type(typeString)));
+        }
+    }
+
+    @Override
+    public void enterReturnTypes(RulepadGrammarParser.ReturnTypesContext ctx) {
+        val combWords = ctx.returnTypeCondition().combinatorialWords();
+        val typeString = combWords.getText().replace("\"", "").trim();
+
+        val data = stack.peek();
+        if (data.comingFrom == NodeType.METHOD) {
             WithType withTypeNode = (WithType) data.node;
             withTypeNode.type(single(new Type(typeString)));
         }
@@ -374,5 +381,5 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
 
     private static final List<NodeType> ANNOTATION_CONTAINING_NODES = listOf(NodeType.CLASS, NodeType.METHOD, NodeType.FIELD, NodeType.METHOD_PARAMETER, NodeType.CONSTRUCTOR);
     // TODO: many more should be considered
-    private static final List<NodeType> TYPE_CONTAINING_NODES = listOf(NodeType.METHOD, NodeType.FIELD, NodeType.METHOD_PARAMETER);
+    private static final List<NodeType> TYPE_CONTAINING_NODES = listOf(NodeType.FIELD, NodeType.METHOD_PARAMETER);
 }
