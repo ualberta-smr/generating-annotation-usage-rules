@@ -257,6 +257,24 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 	}
 
 
+	// Enter a parse tree produced by RulepadGrammarParser#returnTypes.
+	enterReturnTypes(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#returnTypes.
+	exitReturnTypes(ctx) {
+	}
+
+
+	// Enter a parse tree produced by RulepadGrammarParser#returnTypeCondition.
+	enterReturnTypeCondition(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#returnTypeCondition.
+	exitReturnTypeCondition(ctx) {
+	}
+
+
 	// Enter a parse tree produced by RulepadGrammarParser#constructors.
 	enterConstructors(ctx) {
 	}

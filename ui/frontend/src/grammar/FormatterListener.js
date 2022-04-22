@@ -227,6 +227,17 @@ export default class FormatterListener extends RulepadGrammarListener {
         }
     }
 
+    // Enter a parse tree produced by RulepadGrammarParser#returnTypes.
+    enterReturnTypes(ctx) {
+        this.finalString += this.getPrefix() + ctx.RETURN_TYPES().getText()
+        const cond = ctx.returnTypeCondition();
+        if (cond != null) {
+            if (cond.combinatorialWords() != null) {
+                this.finalString += `${cond.combinatorialWords().getText()} `
+            }
+        }
+    }
+
 
     // Enter a parse tree produced by RulepadGrammarParser#declarationStatements.
     enterDeclarationStatements(ctx) {

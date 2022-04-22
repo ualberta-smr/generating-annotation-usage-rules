@@ -260,6 +260,24 @@ class RulepadGrammarListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by RulepadGrammarParser#returnTypes.
+    def enterReturnTypes(self, ctx:RulepadGrammarParser.ReturnTypesContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#returnTypes.
+    def exitReturnTypes(self, ctx:RulepadGrammarParser.ReturnTypesContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#returnTypeCondition.
+    def enterReturnTypeCondition(self, ctx:RulepadGrammarParser.ReturnTypeConditionContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#returnTypeCondition.
+    def exitReturnTypeCondition(self, ctx:RulepadGrammarParser.ReturnTypeConditionContext):
+        pass
+
+
     # Enter a parse tree produced by RulepadGrammarParser#constructors.
     def enterConstructors(self, ctx:RulepadGrammarParser.ConstructorsContext):
         pass

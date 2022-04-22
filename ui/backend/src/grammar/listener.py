@@ -184,7 +184,13 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
         prev = self.__stack[-1]
         if prev['comingFrom'] in ['parameter', 'field', 'property']:
             prev['node'].type = type
-        elif prev['comingFrom'] == 'function':
+
+    def enterReturnTypes(self, ctx: RulepadGrammarParser.ReturnTypesContext):
+        type = ctx.returnTypeCondition().combinatorialWords()
+        type = self.initObj(Type(type.getText().replace("\"", "")))
+
+        prev = self.__stack[-1]
+        if prev['comingFrom'] == 'function':
             prev['node'].returnType = type
 
     def enterParameters(self, ctx: RulepadGrammarParser.ParametersContext):

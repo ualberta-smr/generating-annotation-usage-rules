@@ -212,9 +212,24 @@ functionCondition
 functionExpression
     : LPAREN functionExpression RPAREN
     | left=functionExpression op=binary right=functionExpression
-    | ( annotations | types | functionParameters | configurationFiles )
+    | ( annotations | returnTypes | functionParameters | configurationFiles )
     | functionExpression SPACE
     ;
+
+/*
+    return types
+*/
+
+RETURN_TYPES
+    : 'return type '
+    ;
+
+returnTypes
+    : RETURN_TYPES returnTypeCondition
+    ;
+
+returnTypeCondition
+    : combinatorialWords SPACE;
 
 /*
     constructors

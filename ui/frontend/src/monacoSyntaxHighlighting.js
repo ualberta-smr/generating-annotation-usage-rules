@@ -19,6 +19,7 @@ export default class ShortRulepad {
                     [/method/, "srp-keyword"],
                     [/parameter/, "srp-keyword"],
                     [/type/, "srp-keyword"],
+                    [/return/, "srp-keyword"],
                     [/name/, "srp-keyword"],
                     [/value/, "srp-keyword"],
                     [/extension of/, "srp-keyword"],
@@ -110,6 +111,11 @@ export default class ShortRulepad {
                 label: 'bean',
                 documentation: 'bean declaration ${1}',
                 insertText: 'bean declaration',
+            }),
+            newSuggestion({
+                label: 'ret',
+                documentation: 'return type',
+                insertText: 'return type "${1}"',
             })
         ]
     }
