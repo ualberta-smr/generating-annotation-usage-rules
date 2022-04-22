@@ -34,7 +34,7 @@ Candidate rules are presented using the Rule Authoring Editor (on the left) in R
 
 ## Note. 
 
-**The changes will only be saved if the rule is confirmed using "CONFIRM RULE" button**. In any other case, the changes will not be saved. For example, the in the following cases the changes will be lost:
+**Changes you make to a rule will only be saved if you click the Confirm Rule button**. In any other case, the changes will not be saved. For example, the in the following cases the changes will be lost:
 - Moving on to another candidate rule will get rid of any unsaved changes without any warning. 
 - The changes made to an already confirmed rule will be lost if those changes are not saved again using "CONFIRM RULE" button.
 
@@ -97,7 +97,7 @@ class Foo {
 <td>
 
 ```
-method with parameter with type "A" must have type "B" and annotation "C"
+method with parameter with type "A" must have return type "B" and annotation "C"
 ```
 </td>
 <td>
