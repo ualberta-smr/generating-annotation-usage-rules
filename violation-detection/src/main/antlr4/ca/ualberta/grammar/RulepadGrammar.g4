@@ -19,21 +19,6 @@ SPACE
     ;
 
 
-words
-    : '"' (word '||' | word '&&')* word '"'
-    ;
-
-word
-    :  Alphabet+
-    |  '!' Alphabet+
-    |  '...' Alphabet+
-    |  '!...' Alphabet+
-    |  Alphabet+ '...'
-    |  '!' Alphabet+ '...'
-    |  '...' Alphabet+ '...'
-    |  '!...' Alphabet+ '...'
-    ;
-
 combinatorialWords
     : '"' (Alphabet | symbols | SPACE)+ '"'
     ;
@@ -55,10 +40,6 @@ NL
 
 emptyLine
     : NL
-    ;
-
-comments
-    : '"'(Alphabet | symbols | SPACE)+'"'
     ;
 
 /*
@@ -116,11 +97,11 @@ NAME
     ;
 
 names
-    : NAME nameCondition?
+    : NAME nameCondition
     ;
 
 nameCondition
-    : words SPACE
+    : combinatorialWords SPACE
     ;
 
 /*
@@ -136,7 +117,7 @@ values
     ;
 
 valueCondition
-    : words SPACE
+    : combinatorialWords SPACE
     ;
 
 
@@ -149,7 +130,7 @@ ANNOTATION
     ;
 
 annotations
-    : ANNOTATION annotationCondition?
+    : ANNOTATION annotationCondition
     ;
 
 annotationCondition
@@ -231,9 +212,24 @@ functionCondition
 functionExpression
     : LPAREN functionExpression RPAREN
     | left=functionExpression op=binary right=functionExpression
-    | ( annotations | types | functionParameters | configurationFiles )
+    | ( annotations | returnTypes | functionParameters | configurationFiles )
     | functionExpression SPACE
     ;
+
+/*
+    return types
+*/
+
+RETURN_TYPES
+    : 'return type '
+    ;
+
+returnTypes
+    : RETURN_TYPES returnTypeCondition
+    ;
+
+returnTypeCondition
+    : combinatorialWords SPACE;
 
 /*
     constructors
@@ -324,12 +320,11 @@ TYPES
     ;
 
 types
-    : TYPES typeCondition?
+    : TYPES typeCondition
     ;
 
 typeCondition
     : combinatorialWords SPACE
-    | words SPACE
     ;
 
 
@@ -366,7 +361,7 @@ ConfigurationFile
     ;
 
 configurationFiles
-    : ConfigurationFile configurationFileCondition?
+    : ConfigurationFile configurationFileCondition
     ;
 
 configurationFileCondition
@@ -418,7 +413,7 @@ CLASSES
     ;
 
 classes
-    : CLASSES classCondition?
+    : CLASSES classCondition
     ;
 
 classCondition

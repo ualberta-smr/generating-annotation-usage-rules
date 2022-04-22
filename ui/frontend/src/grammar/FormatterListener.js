@@ -223,8 +223,17 @@ export default class FormatterListener extends RulepadGrammarListener {
         if (cond != null) {
             if (cond.combinatorialWords() != null) {
                 this.finalString += `${cond.combinatorialWords().getText()} `
-            } else if (cond.words() != null) {
-                this.finalString += `${cond.words().getText()} `
+            }
+        }
+    }
+
+    // Enter a parse tree produced by RulepadGrammarParser#returnTypes.
+    enterReturnTypes(ctx) {
+        this.finalString += this.getPrefix() + ctx.RETURN_TYPES().getText()
+        const cond = ctx.returnTypeCondition();
+        if (cond != null) {
+            if (cond.combinatorialWords() != null) {
+                this.finalString += `${cond.combinatorialWords().getText()} `
             }
         }
     }

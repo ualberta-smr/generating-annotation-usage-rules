@@ -39,8 +39,6 @@ def annotationToRulePad(a: Annotation):
     res = f"annotation \"{a.type.name}\""
     if a.parameters:
         param_str = " and ".join(map(paramToRulePad, a.parameters))
-        # if len(a.parameters) > 1:
-        # param_str = "(" + param_str + " )"
         res = res + " with " + param_str
     return res
 
@@ -64,7 +62,7 @@ def methodToRulePad(f: Method) -> str:
         if len(f.annotations) > 1:
             anno_str = "(" + anno_str + " )"
     if f.returnType:
-        type_str = typeToRulePad(f.returnType)
+        type_str = f"return {typeToRulePad(f.returnType)}"
     if f.parameters:
         param_str = (" and ".join(map(paramToRulePad, f.parameters)))
         if len(f.parameters) > 1:

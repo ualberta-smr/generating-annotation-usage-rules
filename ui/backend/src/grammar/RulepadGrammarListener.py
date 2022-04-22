@@ -26,24 +26,6 @@ class RulepadGrammarListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by RulepadGrammarParser#words.
-    def enterWords(self, ctx:RulepadGrammarParser.WordsContext):
-        pass
-
-    # Exit a parse tree produced by RulepadGrammarParser#words.
-    def exitWords(self, ctx:RulepadGrammarParser.WordsContext):
-        pass
-
-
-    # Enter a parse tree produced by RulepadGrammarParser#word.
-    def enterWord(self, ctx:RulepadGrammarParser.WordContext):
-        pass
-
-    # Exit a parse tree produced by RulepadGrammarParser#word.
-    def exitWord(self, ctx:RulepadGrammarParser.WordContext):
-        pass
-
-
     # Enter a parse tree produced by RulepadGrammarParser#combinatorialWords.
     def enterCombinatorialWords(self, ctx:RulepadGrammarParser.CombinatorialWordsContext):
         pass
@@ -77,15 +59,6 @@ class RulepadGrammarListener(ParseTreeListener):
 
     # Exit a parse tree produced by RulepadGrammarParser#emptyLine.
     def exitEmptyLine(self, ctx:RulepadGrammarParser.EmptyLineContext):
-        pass
-
-
-    # Enter a parse tree produced by RulepadGrammarParser#comments.
-    def enterComments(self, ctx:RulepadGrammarParser.CommentsContext):
-        pass
-
-    # Exit a parse tree produced by RulepadGrammarParser#comments.
-    def exitComments(self, ctx:RulepadGrammarParser.CommentsContext):
         pass
 
 
@@ -284,6 +257,24 @@ class RulepadGrammarListener(ParseTreeListener):
 
     # Exit a parse tree produced by RulepadGrammarParser#functionExpression.
     def exitFunctionExpression(self, ctx:RulepadGrammarParser.FunctionExpressionContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#returnTypes.
+    def enterReturnTypes(self, ctx:RulepadGrammarParser.ReturnTypesContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#returnTypes.
+    def exitReturnTypes(self, ctx:RulepadGrammarParser.ReturnTypesContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#returnTypeCondition.
+    def enterReturnTypeCondition(self, ctx:RulepadGrammarParser.ReturnTypeConditionContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#returnTypeCondition.
+    def exitReturnTypeCondition(self, ctx:RulepadGrammarParser.ReturnTypeConditionContext):
         pass
 
 

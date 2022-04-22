@@ -28,26 +28,6 @@ public class AbstractRulePadGrammarListener implements RulepadGrammarListener {
     }
 
     @Override
-    public void enterWords(RulepadGrammarParser.WordsContext ctx) {
-
-    }
-
-    @Override
-    public void exitWords(RulepadGrammarParser.WordsContext ctx) {
-
-    }
-
-    @Override
-    public void enterWord(RulepadGrammarParser.WordContext ctx) {
-
-    }
-
-    @Override
-    public void exitWord(RulepadGrammarParser.WordContext ctx) {
-
-    }
-
-    @Override
     public void enterCombinatorialWords(RulepadGrammarParser.CombinatorialWordsContext ctx) {
 
     }
@@ -84,16 +64,6 @@ public class AbstractRulePadGrammarListener implements RulepadGrammarListener {
 
     @Override
     public void exitEmptyLine(RulepadGrammarParser.EmptyLineContext ctx) {
-
-    }
-
-    @Override
-    public void enterComments(RulepadGrammarParser.CommentsContext ctx) {
-
-    }
-
-    @Override
-    public void exitComments(RulepadGrammarParser.CommentsContext ctx) {
 
     }
 
@@ -304,6 +274,26 @@ public class AbstractRulePadGrammarListener implements RulepadGrammarListener {
 
     @Override
     public void exitFunctionExpression(RulepadGrammarParser.FunctionExpressionContext ctx) {
+
+    }
+
+    @Override
+    public void enterReturnTypes(RulepadGrammarParser.ReturnTypesContext ctx) {
+
+    }
+
+    @Override
+    public void exitReturnTypes(RulepadGrammarParser.ReturnTypesContext ctx) {
+
+    }
+
+    @Override
+    public void enterReturnTypeCondition(RulepadGrammarParser.ReturnTypeConditionContext ctx) {
+
+    }
+
+    @Override
+    public void exitReturnTypeCondition(RulepadGrammarParser.ReturnTypeConditionContext ctx) {
 
     }
 
