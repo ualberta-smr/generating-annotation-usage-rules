@@ -12,7 +12,7 @@ This is how the tool overall looks like:
 
 Candidate rules are presented using the Rule Authoring Editor (on the left) in Rulepad format. There are 5 actions you can do with the Rule Validation Tool.
 
-1. You can edit the presented rule using the Rule Authoring Editor. Note that the changes you make are reflected in the Code section on the left. The code snippet helps you see what the rule you are working on would look like as code. More information on its format is provided below.
+1. You can edit the presented rule using the Rule Authoring Editor. Note that the changes you make are reflected in the Code section on the right. The code snippet helps you see what the rule you are working on would look like as code. More information on its format is provided below.
 
 <p align="center"><img src="./assets/editing_rule.gif" width="80%" /></p>
 
@@ -34,7 +34,7 @@ Candidate rules are presented using the Rule Authoring Editor (on the left) in R
 
 ## Note. 
 
-**Changes you make to a rule will only be saved if you click the Confirm Rule button**. In any other case, the changes will not be saved. For example, the in the following cases the changes will be lost:
+**Changes you make to a rule will only be saved if you click the Confirm Rule button**. In any other case, the changes will not be saved. For example, the changes in the following cases the changes will be lost:
 - Moving on to another candidate rule will get rid of any unsaved changes without any warning. 
 - The changes made to an already confirmed rule will be lost if those changes are not saved again using "CONFIRM RULE" button.
 
