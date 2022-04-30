@@ -170,10 +170,10 @@ Configuration file example is explained [here](#configuration-file-and-configura
 
 #### method
 
-Methods can have 4 properties: `annotation`, `type` (as return type), `parameter` and `configuration file`. Examples:
+Methods can have 4 properties: `annotation`, `return type`, `parameter` and `configuration file`. Examples:
 
 - A method with annotation _GET_ will be `method with annotation "GET"`
-- A method with a return type of _String_ will be `method with type "String"`
+- A method with a return type of _String_ will be `method with return type "String"`
 - A method with _String_ parameter will be `method with parameter "String"` 
 
 Configuration file example is explained [here](#configuration-file-and-configuration-property)
@@ -250,7 +250,7 @@ Properties of program element can be combined as well. We currently have 2 aggre
 
 - `class with annotation "A" must have annotation "B" or annotation "C"`
 - `field with type "A" must have annotation "B" and annotation "C"`
-- `method with type "A" must have annotation "B" or parameter with type "C"`
+- `method with return type "A" must have annotation "B" or parameter with type "C"`
 
 There's a shortcut available for annotations if one wants to specify multiple annotations from the same package with OR operation. Consider the case when you want to say `@javax.ws.rs.GET or @javax.ws.rs.POST or @javax.ws.rs.DELETE or @javax.ws.rs.PUT`. With the usual Rulepad syntax it would be:
 
