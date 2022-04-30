@@ -1,13 +1,13 @@
 import "./LabelingScreen.scss";
 import { useEffect, useState } from "react";
-import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
+import { FaArrowRight, FaArrowLeft, FaQuestionCircle } from "react-icons/fa";
 
 import FieldsetWrapper from "./FieldsetWrapper";
 import RuleAuthoringEditor from "./RuleAuthoringEditor";
 import makeCancellablePromise from "./superPromise";
 import CodeEditor from "./CodeEditor";
 import prettify, { onelineify } from "../grammar/formatter";
-import { BACKEND_URL, LS_USERNAME } from "./constants";
+import { BACKEND_URL, LS_USERNAME, TUTORIAL_URL } from "./constants";
 
 function LabelingScreen() {
     const [username, setUsername] = useState(window.localStorage.getItem(LS_USERNAME));
@@ -175,21 +175,38 @@ function LabelingScreen() {
         );
     };
 
+    const goToTutorialPage = () => {
+        window.open(TUTORIAL_URL, '_blank').focus();
+    }
+
     const renderUI = () => {
         return (
             <div className="app-labeling">
-                <div className="instructions">
-                    <h2>{ruleMetaData.name}: Candidate Rule {ruleMetaData.id}/{ruleMetaData.size} ({username})</h2>
-                    <p>
-                        <strong>Instructions: </strong>
-                        <em>
-                            Edit the candidate rule as needed and then confirm
-                            the rule once done. If the candidate rule is
-                            completely not correct or not useful for authoring a
-                            rule, click <strong>"Not a rule"</strong>
-                        </em>
-                    </p>
+                <div className="instructions-wrapper">
+                    <div className="gap"></div>
+                    <div className="instructions">
+                        <h2>{ruleMetaData.name}: Candidate Rule {ruleMetaData.id}/{ruleMetaData.size} ({username})</h2>
+                        <p>
+                            <strong>Instructions: </strong>
+                            <em>
+                                Edit the candidate rule as needed and then confirm
+                                the rule once done. If the candidate rule is
+                                completely not correct or not useful for authoring a
+                                rule, click <strong>"Not a rule"</strong>
+                            </em>
+                        </p>
+                    </div>
+                    <div className="help-button-wrapper">
+                        <button
+                            onClick={() => goToTutorialPage()}
+                        >
+                            <span>
+                                <FaQuestionCircle />
+                            </span>
+                        </button>
+                    </div>
                 </div>
+
                 <div className="editors-row-wrapper">
                     <div className="editors-row">
                         <div className="rule-authoring-editor-wrapper">
