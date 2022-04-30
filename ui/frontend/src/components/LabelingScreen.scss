@@ -35,10 +35,35 @@ $consequentColorLight: #0fc80f;
     }
 }
 
+.instructions-wrapper {
+    height: 10vh;
+    display: grid;
+    grid-template-columns: 10% 85% 5%;
+
+    .help-button-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        button {
+            font-size: 3em;
+            background: transparent;
+            color: white;
+            outline: none;
+            border: none;
+
+            &:hover { 
+                cursor: pointer;
+            }
+        }
+    }
+}
+
 .instructions {
     height: 10vh;
-    width: 80%;
-    justify-self: center;
+    // width: 80%;
+    // justify-self: center;
     color: white;
     font-size: 18px;
 

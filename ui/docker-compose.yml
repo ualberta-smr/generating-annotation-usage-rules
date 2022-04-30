@@ -19,8 +19,9 @@ services:
       context: frontend/
       args:
         - RVT_BACKEND=${RVT_BACKEND:-http://localhost:5000}
+        - RVT_TUTORIAL=${RVT_TUTORIAL:-http://localhost:8000/README.md}
     ports:
-      - 3000:3000
+      - 80:80
     depends_on:
       - backend
 
@@ -34,6 +35,11 @@ services:
       MYSQL_DATABASE: database
     volumes:
      - mysql-db:/var/lib/mysql
+    
+  tutorial:
+    build: tutorial/
+    ports:
+      - 8000:8000
 
 volumes:
   mysql-db:
