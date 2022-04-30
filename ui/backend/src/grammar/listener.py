@@ -373,6 +373,14 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
         if prev['comingFrom'] == 'class':
             prev['node'].declaredInBeans = beanDecl
 
+    # Enter a parse tree produced by RulepadGrammarParser#beansFile.
+    def enterBeansFile(self, ctx:RulepadGrammarParser.BeansFileContext):
+        beanDecl = self.initObj(BeanDeclaration("beans.xml", False))
+
+        prev = self.__stack[-1]
+        if prev['comingFrom'] == 'class':
+            prev['node'].declaredInBeans = beanDecl
+
 
     def initObj(self, obj):
         obj.is_antecedent = self.__is_antecedent

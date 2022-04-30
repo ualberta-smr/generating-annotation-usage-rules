@@ -23,7 +23,7 @@ class ConfigurationFile(AntecedentOrConsequent):
 @dataclass
 class BeanDeclaration(AntecedentOrConsequent):
     name: str
-    declared: bool = field(default=True)
+    declared: bool = field(default=False)
 
 @dataclass
 class Param(AntecedentOrConsequent):

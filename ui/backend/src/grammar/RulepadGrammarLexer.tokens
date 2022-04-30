@@ -36,6 +36,7 @@ ConfigurationFile=35
 CONFIGURATION_PROPERTIES=36
 CLASSES=37
 BEAN_DECL=38
+BEANS_FILE=39
 '"'=1
 '.'=2
 '='=3
@@ -69,3 +70,4 @@ BEAN_DECL=38
 'property '=36
 'class '=37
 'bean declaration '=38
+'beans file'=39

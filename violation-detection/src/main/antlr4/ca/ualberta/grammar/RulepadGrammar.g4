@@ -423,7 +423,7 @@ classCondition
 classExpression
     : LPAREN classExpression RPAREN
     | left=classExpression op=binary right=classExpression
-    | ( annotations | extensions | implementations | functions | constructors | declarationStatements | configurationFiles | beans )
+    | ( annotations | extensions | implementations | functions | constructors | declarationStatements | configurationFiles | beans | beansFile)
     | classExpression SPACE
     ;
 
@@ -437,4 +437,12 @@ classExpression
 
 beans
     : BEAN_DECL
+    ;
+
+BEANS_FILE
+    : 'beans file'
+    ;
+
+beansFile
+    : BEANS_FILE
     ;

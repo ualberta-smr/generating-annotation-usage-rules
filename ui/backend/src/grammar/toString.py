@@ -119,11 +119,17 @@ def beanDeclaration(bd: BeanDeclaration) -> Tuple[str, str]:
     if bd is None:
         return None
 
+
+    if bd.declared:
+        body = """&lt;bean id="..." class="Foo" /&gt;"""
+    else:
+        body = """&lt;!--empty--&gt;"""
+
     lines = inspect.cleandoc("""
     &lt;beans&gt;
-      &lt;bean id="..." class="Foo" /&gt;
+      BODY
     &lt;/beans&gt;
-    """).lstrip()
+    """).lstrip().replace("BODY", body)
     return bd.name, lines
 
 

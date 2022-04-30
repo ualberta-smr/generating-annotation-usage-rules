@@ -27,6 +27,7 @@ export default class ShortRulepad {
                     [/property/, "srp-keyword"],
                     [/configuration file/, "srp-keyword"],
                     [/bean declaration/, "srp-keyword"],
+                    [/beans file/, "srp-keyword"],
 
                     [/must have/, "srp-must-have"],
                     [/with/, "srp-with"],
@@ -111,6 +112,11 @@ export default class ShortRulepad {
                 label: 'bean',
                 documentation: 'bean declaration ${1}',
                 insertText: 'bean declaration',
+            }),
+            newSuggestion({
+                label: 'beans',
+                documentation: 'beans file ${1}',
+                insertText: 'beans file',
             }),
             newSuggestion({
                 label: 'ret',

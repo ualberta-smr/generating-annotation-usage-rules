@@ -530,5 +530,14 @@ class RulepadGrammarListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by RulepadGrammarParser#beansFile.
+    def enterBeansFile(self, ctx:RulepadGrammarParser.BeansFileContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#beansFile.
+    def exitBeansFile(self, ctx:RulepadGrammarParser.BeansFileContext):
+        pass
+
+
 
 del RulepadGrammarParser

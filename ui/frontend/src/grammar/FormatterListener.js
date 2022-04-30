@@ -357,4 +357,8 @@ export default class FormatterListener extends RulepadGrammarListener {
         this.finalString += this.getPrefix() + ctx.BEAN_DECL().getText();
     }
 
+    enterBeansFile(ctx) {
+        this.finalString += this.getPrefix() + ctx.BEANS_FILE().getText();
+    }
+
 }
