@@ -197,6 +197,7 @@ There're shortcuts available for method parameters. These are the following:
 - extension
 - implementation
 - bean declaration
+- beans file
 - configuration file
 
 Here are some examples:
@@ -206,8 +207,9 @@ Here are some examples:
 - If we want to specify that a class is extending _HealthCheck_ class, it should be described as `class with extension of "HealthCheck"`
 - If we want to specify that a class is implementing _Health_ interface, it should be described as `class with implementation of "HealthCheck"`
 - If we want to specify that a class has been declared as a bean in _beans.xml_, it should be described as `class with bean declaration`
+- If we want to specify that there exists a _beans.xml_ file, it should be described as `class with beans file`
 
-`extension of`, `implementation of` and `bean declaration` are exclusive to classes. `bean declaration` does not have any properties. `extension of` and `implementation of` can only specify what class they are referring to (examples given above).
+`extension of`, `implementation of`, `beans file` and `bean declaration` are exclusive to classes. `beans file` and `bean declaration` does not have any properties. `extension of` and `implementation of` can only specify what class they are referring to (examples given above).
 
 Configuration file example is explained [here](#configuration-file-and-configuration-property)
 
