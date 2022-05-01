@@ -1,3 +1,4 @@
+from logging import Logger
 from db import RuleDTO, RuleLabelingHandler, RulePackageNavigation, RuleLabels, UserOperationsHandler
 from sqlalchemy.orm.session import Session
 from fastapi import Response
@@ -9,23 +10,28 @@ import grammar as Grammar
 
 class ConfirmRuleDTO(BaseModel):
     ruleString: str
-    username:str
+    username: str
 
 
 class RuleOperationsHandler:
 
     @staticmethod
-    def __getRule(db: Session, rule_id: int, user_id: int, response: Response, next=True):
+    def __addCodePreviewData(ruleDto: RuleDTO) -> RuleDTO:
+        ruleString = ruleDto.data["ruleString"]
+        code, config = Grammar.rulepadToJavaCode(ruleString)
+        ruleDto.data["grammar"] = {
+            "code": code,
+            "configuration": config
+        }
+        return ruleDto
+
+    @staticmethod
+    def __getRule(db: Session, ruleId: int, userId: int, response: Response, next=True):
         try:
-            r = RulePackageNavigation.getNext(
-                db, rule_id, user_id) if next else RulePackageNavigation.getPrev(db, rule_id, user_id)
+            r = RulePackageNavigation.getNext(db, ruleId, userId) if next \
+                else RulePackageNavigation.getPrev(db, ruleId, userId)
             if r and r.data:
-                rule_string = r.data["ruleString"]
-                code, config = Grammar.rulepadToJavaCode(rule_string)
-                r.data["grammar"] = {
-                    "code": code,
-                    "configuration": config
-                }
+                RuleOperationsHandler.__addCodePreviewData(r)
                 response.status_code = 200
                 return r
             response.status_code = 404
@@ -37,40 +43,74 @@ class RuleOperationsHandler:
             return RuleDTO(None, False, False, False)
 
     @staticmethod
-    def getFirstRule(user_id: str, response: Response, db: Session):
-        user_id = UserOperationsHandler.getUserId(user_id)
-        return RuleOperationsHandler.__getRule(db, None, user_id, response)
+    def getFirstRule(userId: str, response: Response, db: Session):
+        userId = UserOperationsHandler.getUserId(userId)
+        return RuleOperationsHandler.__getRule(db, None, userId, response)
 
     @staticmethod
-    def getNextRule(rule_id: int, user_id: str, response: Response, db: Session):
-        user_id = UserOperationsHandler.getUserId(user_id)
-        return RuleOperationsHandler.__getRule(db, rule_id, user_id, response)
+    def getNextRule(ruleId: int, userId: str, response: Response, db: Session):
+        userId = UserOperationsHandler.getUserId(userId)
+        return RuleOperationsHandler.__getRule(db, ruleId, userId, response)
 
     @staticmethod
-    def getPrevRule(rule_id: int, user_id: str, response: Response, db: Session):
-        user_id = UserOperationsHandler.getUserId(user_id)
-        return RuleOperationsHandler.__getRule(db, rule_id, user_id, response, next=False)
+    def getPrevRule(ruleId: int, userId: str, response: Response, db: Session):
+        userId = UserOperationsHandler.getUserId(userId)
+        return RuleOperationsHandler.__getRule(db, ruleId, userId, response, next=False)
 
     @staticmethod
-    def labelRule(rule_id: int, label: str, response: Response, ruleDto: Optional[ConfirmRuleDTO], db: Session):
+    def labelRule(ruleId: int, label: str, response: Response, ruleDto: Optional[ConfirmRuleDTO], db: Session):
         try:
-            user_id = UserOperationsHandler.getUserId(ruleDto.username)
-            if RuleLabels.label_is_supported(label):
+            userId = UserOperationsHandler.getUserId(ruleDto.username)
+            if RuleLabels.checkIfLabelIsSupported(label):
                 rulePadString = ruleDto.ruleString if label == RuleLabels.CORRECT else ""
                 RuleLabelingHandler.labelRule(
                     db=db,
-                    id=rule_id,
+                    id=ruleId,
                     rulePadString=rulePadString,
                     label=label,
-                    user_id=user_id
+                    userId=userId
                 )
             elif label == RuleLabels.UNLABELED:
-                RuleLabelingHandler.unlabelRule(db=db, id=rule_id, user_id=user_id)
+                RuleLabelingHandler.unlabelRule(
+                    db=db, id=ruleId, userId=userId)
             else:
                 raise Exception(
-                    f"Rule label string needs to be one of [{RuleLabels.get_all()}]")
-            response.status_code = 204
+                    f"Rule label string needs to be one of [{RuleLabels.getAll()}]")
+            response.status_code = 200
+            return {
+                "totalLabeledRuleCount": RuleLabelingHandler.getLabeledRuleCount(db, userId)
+            }
         except Exception as e:
             traceback.print_exc()
             print(e)
             response.status_code = 400
+
+class GrammarOperationsHandler:
+
+    EMPTY_RESPONSE = {
+        "code": None,
+        "configuration": None
+    }
+
+    @staticmethod
+    def generateJavaPreviewCode(grammar: str, response: Response, logger: Logger):
+        try:
+            if not grammar or grammar.strip() == "":
+                response.status_code = 200
+                return GrammarOperationsHandler.EMPTY_RESPONSE
+            
+            # append the necessary trailing space
+            grammar = grammar.strip() + " "
+            logger.info("Requested: [%s]", grammar)
+
+            code, config = Grammar.rulepadToJavaCode(grammar)
+            response.status_code = 200
+            
+            return {
+                "code": code,
+                "configuration": config
+            }
+        except Exception:
+            logger.exception("Error while generating code preview from the grammar")
+            response.status_code = 400
+            return GrammarOperationsHandler.EMPTY_RESPONSE

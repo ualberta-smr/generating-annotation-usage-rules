@@ -39,7 +39,7 @@ def addSigns(obj: AntecedentOrConsequent, string) -> str:
 def field(field: Field):
     if field is None:
         return ""
-    t = "\n\t<FieldAnnotations>\n\tprivate <ReturnType> field;"
+    t = "\t<FieldAnnotations>\n\tprivate <ReturnType> field;"
     annos = handleAnnotations(field.annotations, ch="\t").strip()
     return t.replace("<FieldAnnotations>", annos).replace("<ReturnType>", addSigns(field.type, shortenTypeName(field.type)))
 
@@ -118,7 +118,6 @@ def javaClass(clazz: JavaClass) -> str:
 def beanDeclaration(bd: BeanDeclaration) -> Tuple[str, str]:
     if bd is None:
         return None
-
 
     if bd.declared:
         body = """&lt;bean id="..." class="Foo" /&gt;"""

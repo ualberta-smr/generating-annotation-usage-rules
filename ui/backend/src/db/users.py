@@ -39,6 +39,7 @@ USER_PACKAGE_MAPPING = {
     11: {"file": "./data/experiment_data/P4.json", "package_id": 11},
 }
 
+
 class UserOperationsHandler:
 
     @staticmethod
@@ -52,11 +53,9 @@ class UserOperationsHandler:
 
     @staticmethod
     def exists(username: str, response: Response) -> bool:
-        if username.strip() in USER_MAPPING:
-            response.status_code = 200
-        else:
-            response.status_code = 404
-    
+        statusCode = 200 if username.strip() in USER_MAPPING else 404
+        response.status_code = statusCode
+
     @staticmethod
     def getUserPackageMapping() -> Dict[int, Dict]:
         return USER_PACKAGE_MAPPING

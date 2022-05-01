@@ -21,7 +21,8 @@ function LabelingScreen() {
     const [ruleMetaData, setRuleMetaData] = useState({
         id: null,
         name: 'Default package name',
-        size: 0
+        size: 0,
+        totalLabeledRuleCount: 0
     });
 
     const [buttonAvailability, setButtonAvailability] = useState({
@@ -60,28 +61,25 @@ function LabelingScreen() {
             })
         }
 
-        if (newRuleLabel === "correct") {
-            if (newRuleLabel === ruleLabel) {
-                newRuleLabel = "unlabeled"
-            } else {
-                // label to correct
-            }
-        } else if (newRuleLabel === "not_a_rule") {
-            if (newRuleLabel === ruleLabel) {
-                newRuleLabel = "unlabeled"
-            } else {
-                // label to not a rule
-            }
+        if (newRuleLabel === ruleLabel) {
+            newRuleLabel = "unlabeled"
         } else if (newRuleLabel === "unlabeled") {
-            return
+            return;
         }
 
         fetch(`${BACKEND_URL}/rules/${ruleMetaData.id}/${newRuleLabel}`, {
             method: "POST", ...requestOptions
         })
             .then((resp) => {
-                if (resp.status === 204) {
+                if (resp.status === 200) {
                     setRuleLabel(newRuleLabel);
+                }
+                return resp.json()
+            })
+            .then((json) => {
+                if (json) {
+                    const { totalLabeledRuleCount } = json
+                    setRuleMetaData({ ...ruleMetaData, totalLabeledRuleCount })
                 }
             })
             .catch((e) => {
@@ -103,9 +101,9 @@ function LabelingScreen() {
 
         const data = json.data;
 
-        const { id, ruleString, grammar, name, size } = data;
+        const { id, ruleString, grammar, name, size, totalLabeledRuleCount } = data;
 
-        setRuleMetaData({ id, name, size });
+        setRuleMetaData({ id, name, size, totalLabeledRuleCount });
         setGrammarText(prettify(ruleString));
         setIsNewRule(!isNewRule);
         processGrammarToCodeResponse(grammar);
@@ -114,14 +112,14 @@ function LabelingScreen() {
     const getNextRule = () => {
         const id_str = ruleMetaData.id == null ? "" : `/${ruleMetaData.id}/next`;
         makeCancellablePromise(
-            `${BACKEND_URL}/rules${id_str}?user_id=${username}`,
+            `${BACKEND_URL}/rules${id_str}?userId=${username}`,
             processRule
         );
     };
 
     const getPrevRule = () => {
         makeCancellablePromise(
-            `${BACKEND_URL}/rules/${ruleMetaData.id}/prev?user_id=${username}`,
+            `${BACKEND_URL}/rules/${ruleMetaData.id}/prev?userId=${username}`,
             processRule
         );
     };
@@ -185,7 +183,7 @@ function LabelingScreen() {
                 <div className="instructions-wrapper">
                     <div className="gap"></div>
                     <div className="instructions">
-                        <h2>{ruleMetaData.name}: Candidate Rule {ruleMetaData.id}/{ruleMetaData.size} ({username})</h2>
+                        <h2>Candidate Rule {ruleMetaData.id}/{ruleMetaData.size} : {ruleMetaData.size - ruleMetaData.totalLabeledRuleCount} rules left to label ({username})</h2>
                         <p>
                             <strong>Instructions: </strong>
                             <em>
