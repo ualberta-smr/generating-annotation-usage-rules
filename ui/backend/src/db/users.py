@@ -1,3 +1,4 @@
+import traceback
 from typing import Dict, List
 
 from fastapi import Response
@@ -10,26 +11,25 @@ USER_MAPPING = {
     # dummy data
     "mansur": 1,
     "ajay": 2,
-    "user1": 3,
+    "demo": 3,
     "user2": 4,
     "user3": 5,
     # experiment subjects
-    "P5": 6,
-    "P1": 7,
-    "P3": 8,
-    "P6": 9,
-    "P2": 10,
-    "P4": 11
+    "ibm_P5": 6,
+    "ibm_P1": 7,
+    "ibm_P3": 8,
+    "ibm_P6": 9,
+    "ibm_P2": 10,
+    "ibm_P4": 11
 }
 
 # user_id => package_info
 USER_PACKAGE_MAPPING = {
     1: {"file": "./data/users/data_mansur.json", "package_id": 1},
     2: {"file": "./data/target_set.json", "package_id": 2},
-    3: {"file": "./data/users/data_user1.json", "package_id": 3},
+    3: {"file": "./data/users/data_mansur.json", "package_id": 3},
     4: {"file": "./data/users/data_user2.json", "package_id": 4},
     5: {"file": "./data/target_set.json", "package_id": 5},
-
 
     6: {"file": "./data/experiment_data/P5.json", "package_id": 6},
     7: {"file": "./data/experiment_data/P1.json", "package_id": 7},
@@ -44,6 +44,8 @@ class UserOperationsHandler:
 
     @staticmethod
     def getUserId(username: str) -> int:
+        if username not in USER_MAPPING:
+            return None
         return USER_MAPPING[username]
 
     @staticmethod
@@ -53,8 +55,13 @@ class UserOperationsHandler:
 
     @staticmethod
     def exists(username: str, response: Response) -> bool:
-        statusCode = 200 if username.strip() in USER_MAPPING else 404
-        response.status_code = statusCode
+        try:
+            statusCode = 200 if username.strip() in USER_MAPPING else 404
+            response.status_code = statusCode
+        except Exception as e:
+            traceback.print_exc()
+            print(e)
+            response.status_code = 404
 
     @staticmethod
     def getUserPackageMapping() -> Dict[int, Dict]:

@@ -30,12 +30,12 @@ app.add_middleware(
 )
 
 
-def getDb():
+def getSession():
     try:
-        db = SessionLocal()
-        yield db
+        sl = SessionLocal()
+        yield sl
     finally:
-        db.close()
+        sl.close()
 
 
 @app.get('/grammarToCode')
@@ -44,26 +44,26 @@ def grammarToCode(response: Response, grammar: Optional[str] = ""):
 
 
 @app.get('/rules')
-def getFirstRule(userId: str, response: Response, db: Session = Depends(getDb)):
+def getFirstRule(userId: str, response: Response, db: Session = Depends(getSession)):
     return RuleOperationsHandler.getFirstRule(userId, response, db)
 
 
 @app.get('/rules/{ruleId}/next')
-def getNextRule(ruleId: int, userId: str, response: Response, db: Session = Depends(getDb)):
+def getNextRule(ruleId: int, userId: str, response: Response, db: Session = Depends(getSession)):
     return RuleOperationsHandler.getNextRule(ruleId, userId, response, db)
 
 
 @app.get('/rules/{ruleId}/prev')
-def getPrevRule(ruleId: int, userId: str, response: Response, db: Session = Depends(getDb)):
+def getPrevRule(ruleId: int, userId: str, response: Response, db: Session = Depends(getSession)):
     return RuleOperationsHandler.getPrevRule(ruleId, userId, response, db)
 
 
 @app.post('/rules/{ruleId}/{label}')
-def labelRule(ruleId: int, label: str, response: Response, ruleDto: Optional[ConfirmRuleDTO] = None, db: Session = Depends(getDb)):
+def labelRule(ruleId: int, label: str, response: Response, ruleDto: Optional[ConfirmRuleDTO] = None, db: Session = Depends(getSession)):
     return RuleOperationsHandler.labelRule(ruleId, label, response, ruleDto, db)
 
 @app.get('/packages/{packageId}/confirmed')
-def getRulesPackage(packageId: int, db: Session = Depends(getDb)):
+def getRulesPackage(packageId: int, db: Session = Depends(getSession)):
     return RulePackageOperations.getConfirmedRulesByPackageId(packageId, db)
 
 @app.get('/users')

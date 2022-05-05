@@ -13,7 +13,7 @@ from .users import UserOperationsHandler
 
 SQL_ALCHEMY_DATABASE_URL = getenv("DB_URL")
 
-engine = create_engine(SQL_ALCHEMY_DATABASE_URL)
+engine = create_engine(SQL_ALCHEMY_DATABASE_URL, pool_recycle=300)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 

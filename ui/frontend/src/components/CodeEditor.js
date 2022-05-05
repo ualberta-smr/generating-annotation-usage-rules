@@ -10,7 +10,7 @@ function CodeEditor(props) {
     const { height, width } = props.measurements;
 
     return (
-        <FieldsetWrapper title={`Code: ${fileName}`}>
+        <FieldsetWrapper title={`Code Preview: ${fileName}`}>
             <pre
                 style={{
                     width,
