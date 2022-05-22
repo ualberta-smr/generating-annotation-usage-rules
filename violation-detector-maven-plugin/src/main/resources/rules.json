@@ -1,24 +1,24 @@
 {
     "rules": [
         {
-            "id": "OutgoingAndScope",
-            "specification": "class with function with annotation \"org.eclipse.microprofile.reactive.messaging.Outgoing\" or annotation \"org.eclipse.microprofile.reactive.messaging.Incoming\" must have annotation \"javax.enterprise.context.ApplicationScoped\" or annotation \"javax.enterprise.context.Dependent\" "
+            "id": "IncomingRule",
+            "specification": "class with function with annotation \"org.eclipse.microprofile.reactive.messaging.Incoming\" must have annotation \"javax.enterprise.context.ApplicationScoped\" or annotation \"javax.enterprise.context.Dependent\" "
         },
         {
-            "id": "RestClientInjectField",
-            "specification": "field with annotation \"org.eclipse.microprofile.rest.client.inject.RestClient\" must have annotation \"javax.inject.Inject\" "
+            "id": "OutgoingRule",
+            "specification": "class with function with annotation \"org.eclipse.microprofile.reactive.messaging.Outgoing\" must have annotation \"javax.enterprise.context.ApplicationScoped\" or annotation \"javax.enterprise.context.Dependent\" "
         },
         {
-            "id": "ClaimInjectField",
+            "id": "ClaimInjectRule",
             "specification": "field with annotation \"org.eclipse.microprofile.jwt.Claim\" must have annotation \"javax.inject.Inject\" "
         },
         {
-            "id": "JsonWebTokenField",
-            "specification": "field with type \"org.eclipse.microprofile.jwt.JsonWebToken\" must have annotation \"javax.inject.Inject\" "
+            "id": "QueryGraphQLAPIRule",
+            "specification": "class with function with annotation \"org.eclipse.microprofile.graphql.Query\" must have annotation \"org.eclipse.microprofile.graphql.GraphQLApi\" "
         },
         {
-            "id": "QueryMutationGraphQLAPI",
-            "specification": "class with function with annotation \"org.eclipse.microprofile.graphql.Query\" or annotation \"org.eclipse.microprofile.graphql.Mutation\" must have annotation \"org.eclipse.microprofile.graphql.GraphQLApi\" "
+            "id": "ConfigPropertyInjectRule",
+            "specification": "field with annotation \"org.eclipse.microprofile.config.inject.ConfigProperty\" must have annotation \"javax.inject.Inject\" "
         }
     ]
 }

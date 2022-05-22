@@ -23,6 +23,10 @@
         {
             "id": "PathParam-Path",
             "specification": "class with function with parameter with annotation \"javax.ws.rs.PathParam\" must have annotation \"javax.ws.rs.Path\" or function with annotation \"javax.ws.rs.Path\" "
+        },
+        {
+            "id": "ConfigPropertyInjectRule",
+            "specification": "field with annotation \"org.eclipse.microprofile.config.inject.ConfigProperty\" must have annotation \"javax.inject.Inject\" "
         }
     ]
 }

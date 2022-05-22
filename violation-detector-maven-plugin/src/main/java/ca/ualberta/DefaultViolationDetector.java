@@ -45,6 +45,7 @@ public class DefaultViolationDetector {
             "/lib/javax.inject-1.jar",
             "/lib/javax.ws.rs-api-2.1.1.jar",
             "/lib/microprofile-fault-tolerance-api-3.0.jar",
+            "/lib/microprofile-config-api-3.0.1.jar",
             "/lib/microprofile-graphql-api-1.1.0.jar",
             "/lib/microprofile-health-api-3.0.jar",
             "/lib/microprofile-jwt-auth-api-1.2.jar",

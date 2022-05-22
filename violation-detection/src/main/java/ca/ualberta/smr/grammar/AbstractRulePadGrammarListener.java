@@ -588,6 +588,16 @@ public class AbstractRulePadGrammarListener implements RulepadGrammarListener {
     }
 
     @Override
+    public void enterBeansFile(RulepadGrammarParser.BeansFileContext ctx) {
+
+    }
+
+    @Override
+    public void exitBeansFile(RulepadGrammarParser.BeansFileContext ctx) {
+
+    }
+
+    @Override
     public void visitTerminal(TerminalNode terminalNode) {
 
     }
