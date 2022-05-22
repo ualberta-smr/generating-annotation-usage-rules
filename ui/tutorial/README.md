@@ -62,7 +62,7 @@ Here are some Rulepad example statements alongside with their Java code equivale
 <td>
 
 ```
-class with annotation "A" must have method with annotation "B"
+class with annotation "A" must have annotation "B"
 ```
 </td>
 <td>
