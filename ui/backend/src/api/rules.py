@@ -65,7 +65,7 @@ class RuleOperationsHandler:
                 raise Exception(f"Username {ruleDto.username} does not exist")
                 
             if RuleLabels.checkIfLabelIsSupported(label):
-                rulePadString = ruleDto.ruleString if label == RuleLabels.CORRECT else ""
+                rulePadString = ruleDto.ruleString if label in [RuleLabels.CORRECT, RuleLabels.BEST_PRACTICE] else ""
                 RuleLabelingHandler.labelRule(
                     db=db,
                     id=ruleId,

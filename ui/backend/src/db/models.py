@@ -30,7 +30,7 @@ class LabeledRule(Base):
     id = Column(String(50), primary_key=True)
     candidate_rule_id = Column(Integer, ForeignKey("candidate_rules.id"))
     rule_description = Column(Text, nullable=False)
-    label = Column(String(10), nullable=False)
+    label = Column(String(15), nullable=False)
     user_id = Column(String(50), ForeignKey("users.id"))
 
     candidate_rule = relationship("CandidateRule")

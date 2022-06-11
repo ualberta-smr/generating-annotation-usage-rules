@@ -41,13 +41,13 @@ function LabelingScreen() {
         });
 
     const handleLabeling = (label) => {
-        let newRuleLabel = ["correct", "not_a_rule"].includes(label)
+        let newRuleLabel = ["correct", "best_practice", "not_a_rule"].includes(label)
             ? label
             : "unlabeled";
 
         /* 
             Basic idea is that if it is 'correct' already and you click the button again,
-            it will be unlabeled...the same for 'not_a_rule' as well
+            it will be unlabeled...the same for 'not_a_rule' and 'best_practice' as well
             and if it is 'unlabeled' for some reason, we do nothing
         */
 
@@ -177,6 +177,19 @@ function LabelingScreen() {
         window.open(TUTORIAL_URL, '_blank').focus();
     }
 
+
+    const showButton = (clazz, name, title) => {
+        return (<button
+            className={`btn btn-${clazz} ${ruleLabel === name
+                ? "btn-selected"
+                : ""
+                }`}
+            onClick={() => handleLabeling(name)}
+        >
+            {title}
+        </button>)
+    }
+
     const renderUI = () => {
         return (
             <div className="app-labeling">
@@ -274,24 +287,9 @@ function LabelingScreen() {
                             </div>
 
                             <div className="buttons">
-                                <button
-                                    className={`btn btn-correct ${ruleLabel === "correct"
-                                        ? "btn-selected"
-                                        : ""
-                                        }`}
-                                    onClick={() => handleLabeling("correct")}
-                                >
-                                    CONFIRM RULE
-                                </button>
-                                <button
-                                    className={`btn btn-incorrect ${ruleLabel === "not_a_rule"
-                                        ? "btn-selected"
-                                        : ""
-                                        }`}
-                                    onClick={() => handleLabeling("not_a_rule")}
-                                >
-                                    NOT A RULE
-                                </button>
+                                {showButton("correct", "correct", "CONFIRM RULE")}
+                                {showButton("best-practice", "best_practice", "BEST PRACTICE")}
+                                {showButton("incorrect", "not_a_rule", "NOT A RULE")}
                             </div>
 
                             <div

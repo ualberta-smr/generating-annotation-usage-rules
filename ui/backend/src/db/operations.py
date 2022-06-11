@@ -150,7 +150,7 @@ class RuleLabelingHandler:
 
     def labelRule(db: Session, id: int, rulePadString: str, label: str, userId: int):
         """
-            Labels the rule with the given id as 'correct' or 'not_a_rule'. 
+            Labels the rule with the given id as 'correct', 'best_practice' or 'not_a_rule'. 
             It also saves the rulePadString (which can be empty)
         """
         RuleLabels.assertThatLabelIsSupported(label)
@@ -195,7 +195,7 @@ class RulePackageOperations:
         confirmedLabeledRules: List[LabeledRule] = db.query(LabeledRule).\
             join(CandidateRule).\
             filter(CandidateRule.package_id == packageId).\
-            filter(LabeledRule.label == RuleLabels.CORRECT).\
+            filter(LabeledRule.label in RuleLabels.CORRECT).\
             all()
 
         confirmedLabeledRules.sort(key=lambda x: x.candidate_rule_id)
@@ -208,15 +208,16 @@ class RulePackageOperations:
 
 class RuleLabels:
     CORRECT = "correct"
+    BEST_PRACTICE = "best_practice"
     INCORRECT = "not_a_rule"
     UNLABELED = "unlabeled"
 
     def checkIfLabelIsSupported(label: str) -> bool:
-        return label in {RuleLabels.CORRECT, RuleLabels.INCORRECT}
+        return label in {RuleLabels.CORRECT, RuleLabels.BEST_PRACTICE, RuleLabels.INCORRECT}
 
     def assertThatLabelIsSupported(label: str) -> bool:
-        assert label in {RuleLabels.CORRECT, RuleLabels.INCORRECT}, \
-            f"Label '{label}' is not supported, it needs to be one of ['correct', 'not_a_rule']"
+        assert label in {RuleLabels.CORRECT, RuleLabels.BEST_PRACTICE, RuleLabels.INCORRECT}, \
+            f"Label '{label}' is not supported, it needs to be one of ['correct', 'best_practice', 'not_a_rule']"
     
     def getAll() -> List[str]:
-        return [RuleLabels.CORRECT, RuleLabels.INCORRECT, RuleLabels.UNLABELED]
+        return [RuleLabels.CORRECT, RuleLabels.BEST_PRACTICE, RuleLabels.INCORRECT, RuleLabels.UNLABELED]
