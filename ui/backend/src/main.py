@@ -66,6 +66,10 @@ def labelRule(ruleId: int, label: str, response: Response, ruleDto: Optional[Con
 def getRulesPackage(packageId: int, db: Session = Depends(getSession)):
     return RulePackageOperations.getConfirmedRulesByPackageId(packageId, db)
 
+@app.get('/packages/confirmed')
+def getRulesPackage(db: Session = Depends(getSession)):
+    return RulePackageOperations.getAllConfirmedRules(db)
+
 @app.get('/users')
 def checkIfUserExists(q: str, response: Response):
     UserOperationsHandler.exists(q, response)

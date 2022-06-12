@@ -28,12 +28,11 @@ class LabeledRule(Base):
     __tablename__ = "labeled_rules"
 
     id = Column(String(50), primary_key=True)
-    candidate_rule_id = Column(Integer, ForeignKey("candidate_rules.id"))
+    candidate_rule_id = Column(Integer, nullable=False)
     rule_description = Column(Text, nullable=False)
     label = Column(String(15), nullable=False)
     user_id = Column(String(50), ForeignKey("users.id"))
 
-    candidate_rule = relationship("CandidateRule")
     user = relationship("User")
 
 

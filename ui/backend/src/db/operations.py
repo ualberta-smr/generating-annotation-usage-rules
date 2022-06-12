@@ -1,6 +1,8 @@
 from dataclasses import dataclass
-from typing import Any, List, Tuple
+from tkinter import Label
+from typing import Any, List, Set, Tuple
 import json
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 import rulepadFormat as rf
 import uuid
@@ -191,19 +193,32 @@ class RuleLabelingHandler:
 
 class RulePackageOperations:
 
+    def getAllConfirmedRules(db: Session):
+        return RulePackageOperations.__getConfirmedRulesByFilter(db,
+            LabeledRule.label.in_([RuleLabels.CORRECT, RuleLabels.BEST_PRACTICE])
+        )
+
     def getConfirmedRulesByPackageId(packageId: int, db: Session):
-        confirmedLabeledRules: List[LabeledRule] = db.query(LabeledRule).\
-            join(CandidateRule).\
-            filter(CandidateRule.package_id == packageId).\
-            filter(LabeledRule.label in RuleLabels.CORRECT).\
-            all()
+        return RulePackageOperations.__getConfirmedRulesByFilter(db,
+            LabeledRule.user_id == packageId,
+            LabeledRule.label.in_([RuleLabels.CORRECT, RuleLabels.BEST_PRACTICE])
+        )
 
-        confirmedLabeledRules.sort(key=lambda x: x.candidate_rule_id)
+    def __getConfirmedRulesByFilter(db: Session, *filters):
+        # get confirmed rules
+        confirmedLabeledRules: List[LabeledRule] = db.query(LabeledRule)\
+            .filter(*filters)\
+            .all()
+        
+        def labeledRuleToObj(r: LabeledRule):
+            return {
+                "id": r.id, 
+                "specification": r.rule_description,
+                "is_best_practice": r.label == RuleLabels.BEST_PRACTICE
+            }
 
-        rules = list(map(lambda r: {
-                     "id": r.id, "specification": r.rule_description}, confirmedLabeledRules))
         return {
-            "rules": rules
+            "rules": list(map(labeledRuleToObj, confirmedLabeledRules))
         }
 
 class RuleLabels:
@@ -216,7 +231,7 @@ class RuleLabels:
         return label in {RuleLabels.CORRECT, RuleLabels.BEST_PRACTICE, RuleLabels.INCORRECT}
 
     def assertThatLabelIsSupported(label: str) -> bool:
-        assert label in {RuleLabels.CORRECT, RuleLabels.BEST_PRACTICE, RuleLabels.INCORRECT}, \
+        assert RuleLabels.checkIfLabelIsSupported(label), \
             f"Label '{label}' is not supported, it needs to be one of ['correct', 'best_practice', 'not_a_rule']"
     
     def getAll() -> List[str]:
