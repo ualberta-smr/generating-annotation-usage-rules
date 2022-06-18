@@ -84,6 +84,18 @@ RPAREN
     : ')'
     ;
 
+ONE_OF
+    : 'one of '
+    ;
+
+NONE_OF
+    : 'none of '
+    ;
+
+NO
+    : 'no '
+    ;
+
 /*
     ------------------
 */
@@ -212,9 +224,22 @@ functionCondition
 functionExpression
     : LPAREN functionExpression RPAREN
     | left=functionExpression op=binary right=functionExpression
-    | ( annotations | returnTypes | functionParameters | configurationFiles )
+    | ( annotations | returnTypes | functionParameters | configurationFiles | functionExpressionNoneOf | functionExpressionOneOf | functionExpressionNo )
     | functionExpression SPACE
     ;
+
+functionExpressionOneOf
+    : ONE_OF LPAREN functionExpressionAggregateContents RPAREN;
+
+functionExpressionNoneOf
+    : NONE_OF LPAREN functionExpressionAggregateContents RPAREN;
+
+functionExpressionNo
+    : NO ( annotations | returnTypes | functionParameters | configurationFiles );
+
+functionExpressionAggregateContents
+    : left=functionExpressionAggregateContents op=or_ right=functionExpressionAggregateContents
+    | ( annotations | returnTypes | functionParameters | configurationFiles );
 
 /*
     return types
@@ -348,9 +373,22 @@ declarationStatementCondition
 declarationStatementExpression
     : LPAREN declarationStatementExpression RPAREN
     | left=declarationStatementExpression op=binary right=declarationStatementExpression
-    | ( annotations | types | configurationFiles )
+    | ( annotations | types | configurationFiles | declarationStatementExpressionOneOf | declarationStatementExpressionNoneOf | declarationStatementExpressionNo )
     | declarationStatementExpression SPACE
     ;
+
+declarationStatementExpressionOneOf
+    : ONE_OF LPAREN declarationStatementExpressionAggregateContents RPAREN;
+
+declarationStatementExpressionNoneOf
+    : NONE_OF LPAREN declarationStatementExpressionAggregateContents RPAREN;
+
+declarationStatementExpressionNo
+    : NO ( annotations | types | configurationFiles );
+
+declarationStatementExpressionAggregateContents
+    : left=declarationStatementExpressionAggregateContents op=or_ right=declarationStatementExpressionAggregateContents
+    | ( annotations | types | configurationFiles );
 
 /*
     configurationFile
@@ -423,9 +461,22 @@ classCondition
 classExpression
     : LPAREN classExpression RPAREN
     | left=classExpression op=binary right=classExpression
-    | ( annotations | extensions | implementations | functions | constructors | declarationStatements | configurationFiles | beans | beansFile)
+    | ( annotations | extensions | implementations | functions | constructors | declarationStatements | configurationFiles | beans | beansFile | classExpressionOneOf | classExpressionNoneOf | classExpressionNo )
     | classExpression SPACE
     ;
+
+classExpressionOneOf
+    : ONE_OF LPAREN classExpressionAggregateContents RPAREN;
+
+classExpressionNoneOf
+    : NONE_OF LPAREN classExpressionAggregateContents RPAREN;
+
+classExpressionNo
+    : NO ( annotations | extensions | implementations | functions | constructors | declarationStatements | configurationFiles | beans | beansFile );
+
+classExpressionAggregateContents
+    : left=classExpressionAggregateContents op=or_ right=classExpressionAggregateContents
+    | ( annotations | extensions | implementations | functions | constructors | declarationStatements | configurationFiles | beans | beansFile );
 
 /*
     bean declaration

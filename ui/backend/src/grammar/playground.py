@@ -21,6 +21,19 @@ def check(input):
     print(json.dumps(j, default=lambda x: x.__dict__, indent=4))
     return None
 
+def justCheck(input):
+    lexer = RulepadGrammarLexer(InputStream(input))
+    parser = RulepadGrammarParser(CommonTokenStream(lexer))
+    # parser.setTrace(True)
+    tree = parser.inputSentence()
+    # print(tree.toStringTree())
+    return None
+
+string = """method with annotation "A" and (none of annotation "B" or annotation "C" or annotation "D" ) must have annotation "E" """
+string = """method with annotation "A" and one of (annotation "B" or annotation "C" or annotation "D" ) must have annotation "E" """
+string = """method with annotation "A" and no annotation "B" must have annotation "E" """
+justCheck(string)
+
 # check(
 #     """field with (type "java.lang.String" and (annotation "org.eclipse.microprofile.config.inject.ConfigProperty" with parameter "java.lang.String defaultValue" with value "[name]" and annotation "javax.inject.Inject"  ) ) must have annotation "org.eclipse.microprofile.config.inject.ConfigProperty" with parameter "java.lang.String name" """
 # )

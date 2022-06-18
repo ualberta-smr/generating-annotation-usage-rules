@@ -257,6 +257,42 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 	}
 
 
+	// Enter a parse tree produced by RulepadGrammarParser#functionExpressionOneOf.
+	enterFunctionExpressionOneOf(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#functionExpressionOneOf.
+	exitFunctionExpressionOneOf(ctx) {
+	}
+
+
+	// Enter a parse tree produced by RulepadGrammarParser#functionExpressionNoneOf.
+	enterFunctionExpressionNoneOf(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#functionExpressionNoneOf.
+	exitFunctionExpressionNoneOf(ctx) {
+	}
+
+
+	// Enter a parse tree produced by RulepadGrammarParser#functionExpressionNo.
+	enterFunctionExpressionNo(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#functionExpressionNo.
+	exitFunctionExpressionNo(ctx) {
+	}
+
+
+	// Enter a parse tree produced by RulepadGrammarParser#functionExpressionAggregateContents.
+	enterFunctionExpressionAggregateContents(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#functionExpressionAggregateContents.
+	exitFunctionExpressionAggregateContents(ctx) {
+	}
+
+
 	// Enter a parse tree produced by RulepadGrammarParser#returnTypes.
 	enterReturnTypes(ctx) {
 	}
@@ -428,6 +464,42 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 	}
 
 
+	// Enter a parse tree produced by RulepadGrammarParser#declarationStatementExpressionOneOf.
+	enterDeclarationStatementExpressionOneOf(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#declarationStatementExpressionOneOf.
+	exitDeclarationStatementExpressionOneOf(ctx) {
+	}
+
+
+	// Enter a parse tree produced by RulepadGrammarParser#declarationStatementExpressionNoneOf.
+	enterDeclarationStatementExpressionNoneOf(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#declarationStatementExpressionNoneOf.
+	exitDeclarationStatementExpressionNoneOf(ctx) {
+	}
+
+
+	// Enter a parse tree produced by RulepadGrammarParser#declarationStatementExpressionNo.
+	enterDeclarationStatementExpressionNo(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#declarationStatementExpressionNo.
+	exitDeclarationStatementExpressionNo(ctx) {
+	}
+
+
+	// Enter a parse tree produced by RulepadGrammarParser#declarationStatementExpressionAggregateContents.
+	enterDeclarationStatementExpressionAggregateContents(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#declarationStatementExpressionAggregateContents.
+	exitDeclarationStatementExpressionAggregateContents(ctx) {
+	}
+
+
 	// Enter a parse tree produced by RulepadGrammarParser#configurationFiles.
 	enterConfigurationFiles(ctx) {
 	}
@@ -515,6 +587,42 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 
 	// Exit a parse tree produced by RulepadGrammarParser#classExpression.
 	exitClassExpression(ctx) {
+	}
+
+
+	// Enter a parse tree produced by RulepadGrammarParser#classExpressionOneOf.
+	enterClassExpressionOneOf(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#classExpressionOneOf.
+	exitClassExpressionOneOf(ctx) {
+	}
+
+
+	// Enter a parse tree produced by RulepadGrammarParser#classExpressionNoneOf.
+	enterClassExpressionNoneOf(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#classExpressionNoneOf.
+	exitClassExpressionNoneOf(ctx) {
+	}
+
+
+	// Enter a parse tree produced by RulepadGrammarParser#classExpressionNo.
+	enterClassExpressionNo(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#classExpressionNo.
+	exitClassExpressionNo(ctx) {
+	}
+
+
+	// Enter a parse tree produced by RulepadGrammarParser#classExpressionAggregateContents.
+	enterClassExpressionAggregateContents(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#classExpressionAggregateContents.
+	exitClassExpressionAggregateContents(ctx) {
 	}
 
 

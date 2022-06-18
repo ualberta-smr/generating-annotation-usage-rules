@@ -260,6 +260,42 @@ class RulepadGrammarListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by RulepadGrammarParser#functionExpressionOneOf.
+    def enterFunctionExpressionOneOf(self, ctx:RulepadGrammarParser.FunctionExpressionOneOfContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#functionExpressionOneOf.
+    def exitFunctionExpressionOneOf(self, ctx:RulepadGrammarParser.FunctionExpressionOneOfContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#functionExpressionNoneOf.
+    def enterFunctionExpressionNoneOf(self, ctx:RulepadGrammarParser.FunctionExpressionNoneOfContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#functionExpressionNoneOf.
+    def exitFunctionExpressionNoneOf(self, ctx:RulepadGrammarParser.FunctionExpressionNoneOfContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#functionExpressionNo.
+    def enterFunctionExpressionNo(self, ctx:RulepadGrammarParser.FunctionExpressionNoContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#functionExpressionNo.
+    def exitFunctionExpressionNo(self, ctx:RulepadGrammarParser.FunctionExpressionNoContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#functionExpressionAggregateContents.
+    def enterFunctionExpressionAggregateContents(self, ctx:RulepadGrammarParser.FunctionExpressionAggregateContentsContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#functionExpressionAggregateContents.
+    def exitFunctionExpressionAggregateContents(self, ctx:RulepadGrammarParser.FunctionExpressionAggregateContentsContext):
+        pass
+
+
     # Enter a parse tree produced by RulepadGrammarParser#returnTypes.
     def enterReturnTypes(self, ctx:RulepadGrammarParser.ReturnTypesContext):
         pass
@@ -431,6 +467,42 @@ class RulepadGrammarListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by RulepadGrammarParser#declarationStatementExpressionOneOf.
+    def enterDeclarationStatementExpressionOneOf(self, ctx:RulepadGrammarParser.DeclarationStatementExpressionOneOfContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#declarationStatementExpressionOneOf.
+    def exitDeclarationStatementExpressionOneOf(self, ctx:RulepadGrammarParser.DeclarationStatementExpressionOneOfContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#declarationStatementExpressionNoneOf.
+    def enterDeclarationStatementExpressionNoneOf(self, ctx:RulepadGrammarParser.DeclarationStatementExpressionNoneOfContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#declarationStatementExpressionNoneOf.
+    def exitDeclarationStatementExpressionNoneOf(self, ctx:RulepadGrammarParser.DeclarationStatementExpressionNoneOfContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#declarationStatementExpressionNo.
+    def enterDeclarationStatementExpressionNo(self, ctx:RulepadGrammarParser.DeclarationStatementExpressionNoContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#declarationStatementExpressionNo.
+    def exitDeclarationStatementExpressionNo(self, ctx:RulepadGrammarParser.DeclarationStatementExpressionNoContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#declarationStatementExpressionAggregateContents.
+    def enterDeclarationStatementExpressionAggregateContents(self, ctx:RulepadGrammarParser.DeclarationStatementExpressionAggregateContentsContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#declarationStatementExpressionAggregateContents.
+    def exitDeclarationStatementExpressionAggregateContents(self, ctx:RulepadGrammarParser.DeclarationStatementExpressionAggregateContentsContext):
+        pass
+
+
     # Enter a parse tree produced by RulepadGrammarParser#configurationFiles.
     def enterConfigurationFiles(self, ctx:RulepadGrammarParser.ConfigurationFilesContext):
         pass
@@ -518,6 +590,42 @@ class RulepadGrammarListener(ParseTreeListener):
 
     # Exit a parse tree produced by RulepadGrammarParser#classExpression.
     def exitClassExpression(self, ctx:RulepadGrammarParser.ClassExpressionContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#classExpressionOneOf.
+    def enterClassExpressionOneOf(self, ctx:RulepadGrammarParser.ClassExpressionOneOfContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#classExpressionOneOf.
+    def exitClassExpressionOneOf(self, ctx:RulepadGrammarParser.ClassExpressionOneOfContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#classExpressionNoneOf.
+    def enterClassExpressionNoneOf(self, ctx:RulepadGrammarParser.ClassExpressionNoneOfContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#classExpressionNoneOf.
+    def exitClassExpressionNoneOf(self, ctx:RulepadGrammarParser.ClassExpressionNoneOfContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#classExpressionNo.
+    def enterClassExpressionNo(self, ctx:RulepadGrammarParser.ClassExpressionNoContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#classExpressionNo.
+    def exitClassExpressionNo(self, ctx:RulepadGrammarParser.ClassExpressionNoContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#classExpressionAggregateContents.
+    def enterClassExpressionAggregateContents(self, ctx:RulepadGrammarParser.ClassExpressionAggregateContentsContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#classExpressionAggregateContents.
+    def exitClassExpressionAggregateContents(self, ctx:RulepadGrammarParser.ClassExpressionAggregateContentsContext):
         pass
 
 
