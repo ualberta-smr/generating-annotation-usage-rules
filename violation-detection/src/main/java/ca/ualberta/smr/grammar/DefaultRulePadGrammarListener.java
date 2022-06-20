@@ -1,5 +1,6 @@
 package ca.ualberta.smr.grammar;
 
+import ca.ualberta.grammar.RulepadGrammarBaseListener;
 import ca.ualberta.grammar.RulepadGrammarParser;
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.javaelements.*;
@@ -26,7 +27,7 @@ enum NodeType {
     CLASS, METHOD, FIELD, METHOD_PARAMETER, ANNOTATION, ANNOTATION_PARAMETER, CONSTRUCTOR, _OR_, _AND_
 }
 
-public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListener {
+public class DefaultRulePadGrammarListener extends RulepadGrammarBaseListener {
 
     private final Stack<Data> stack;
     private Condition<? extends AnalysisItem> antecedent;
@@ -279,7 +280,7 @@ public class DefaultRulePadGrammarListener extends AbstractRulePadGrammarListene
             if (parts.length == 2) {
                 // e.g. `int delayTime`
                 ap.type(single(new Type(parts[0])));
-                ap.name(parts[1]);
+//                ap.name(parts[1]); // FIXME: I commented this one out
             } else if (parts.length == 1) {
                 // e.g. `int`
                 ap.type(single(new Type(parts[0])));

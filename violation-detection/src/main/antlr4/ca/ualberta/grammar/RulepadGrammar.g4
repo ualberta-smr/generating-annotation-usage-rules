@@ -179,7 +179,7 @@ extensions
     ;
 
 extensionCondition
-    : of ( combinatorialWords SPACE | SUPERCLASS)
+    : of combinatorialWords SPACE
     ;
 
 
@@ -200,7 +200,7 @@ implementations
     ;
 
 implementationCondition
-    : of ( combinatorialWords SPACE | INTERFACE )
+    : of combinatorialWords SPACE
     ;
 
 

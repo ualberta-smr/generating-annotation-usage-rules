@@ -16,6 +16,10 @@ public class Type implements ProgramElement {
         return Condition.single(new Type(name));
     }
 
+    public static Condition<Type> of(String name) {
+        return Condition.single(new Type(name));
+    }
+
     public boolean equalsTypeString(String typeString) {
         return typeString.equals(name);
     }
