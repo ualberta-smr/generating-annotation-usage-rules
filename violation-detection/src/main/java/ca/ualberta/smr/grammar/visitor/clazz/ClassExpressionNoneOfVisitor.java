@@ -9,6 +9,7 @@ import ca.ualberta.smr.grammar.visitor.function.FunctionExpressionVisitor;
 import ca.ualberta.smr.newmodel.javaelements.AggregateCondition;
 import ca.ualberta.smr.newmodel.javaelements.AggregateConditionOperation;
 import ca.ualberta.smr.newmodel.javaelements.JavaClass;
+import ca.ualberta.smr.newmodel.javaelements.ProgramElement;
 import lombok.val;
 
 import static ca.ualberta.smr.grammar.visitor.CombinatorialWordsExtractorUtility.*;
@@ -40,13 +41,13 @@ class ClassExpressionNoneOfVisitor extends RulepadGrammarBaseVisitor<AggregateCo
                             methods,
                             extension,
                             implementation
-                    )
+                    ), ProgramElement.ProgramElementType.CLASS
             );
         }
         val op = AggregateConditionOperation.AND;
         val left = this.visitClassExpressionAggregateContents(ctx.left);
         val right = this.visitClassExpressionAggregateContents(ctx.right);
-        return new AggregateCondition(left, right, op);
+        return new AggregateCondition(left, right, op, ProgramElement.ProgramElementType.CLASS);
     }
 
 }

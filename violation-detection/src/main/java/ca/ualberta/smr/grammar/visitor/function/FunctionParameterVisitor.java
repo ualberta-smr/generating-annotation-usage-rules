@@ -7,6 +7,7 @@ import ca.ualberta.smr.grammar.visitor.GeneralUtility;
 import ca.ualberta.smr.grammar.visitor.annotation.AnnotationVisitor;
 import ca.ualberta.smr.newmodel.javaelements.AggregateCondition;
 import ca.ualberta.smr.newmodel.javaelements.MethodParameter;
+import ca.ualberta.smr.newmodel.javaelements.ProgramElement;
 import ca.ualberta.smr.newmodel.javaelements.Type;
 import lombok.val;
 import lombok.var;

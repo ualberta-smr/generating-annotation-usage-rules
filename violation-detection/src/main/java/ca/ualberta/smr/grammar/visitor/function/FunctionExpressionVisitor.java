@@ -6,6 +6,7 @@ import ca.ualberta.smr.grammar.visitor.CombinatorialWordsExtractorUtility;
 import ca.ualberta.smr.grammar.visitor.annotation.AnnotationVisitor;
 import ca.ualberta.smr.newmodel.javaelements.AggregateCondition;
 import ca.ualberta.smr.newmodel.javaelements.Method;
+import ca.ualberta.smr.newmodel.javaelements.ProgramElement;
 import lombok.val;
 
 import static ca.ualberta.smr.grammar.visitor.GeneralUtility.acceptIfAvailable;
@@ -34,7 +35,8 @@ public class FunctionExpressionVisitor extends RulepadGrammarBaseVisitor<Aggrega
                         .filter(a -> !a.isEmpty())
                         .findFirst()
                         .orElseGet(() -> AggregateCondition.single(
-                                new Method(returnType, annotations, parameters)
+                                new Method(returnType, annotations, parameters),
+                                ProgramElement.ProgramElementType.METHOD
                         ));
             }
             return this.visitFunctionExpression(ctx.functionExpression(0));
@@ -42,7 +44,7 @@ public class FunctionExpressionVisitor extends RulepadGrammarBaseVisitor<Aggrega
         val op = getOperation(ctx.op);
         val left = unwrapIfSingle(this.visitFunctionExpression(ctx.left));
         val right = unwrapIfSingle(this.visitFunctionExpression(ctx.right));
-        return new AggregateCondition(left, right, op);
+        return new AggregateCondition(left, right, op, ProgramElement.ProgramElementType.METHOD);
     }
 
 }

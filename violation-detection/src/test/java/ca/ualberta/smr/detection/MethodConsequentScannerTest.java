@@ -1,5 +1,6 @@
 package ca.ualberta.smr.detection;
 
+import ca.ualberta.smr.newmodel.StaticAnalysisRule;
 import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
 import ca.ualberta.smr.newmodel.javaelements.*;
 import com.github.javaparser.JavaParser;
@@ -41,7 +42,7 @@ class MethodConsequentScannerTest {
         ));
 
         val cu = parseResult.getResult().get();
-        val results = MethodConsequentScanner.findViolations(cu.findAll(MethodDeclaration.class), consequent);
+        val results = MethodConsequentScanner.findViolations(cu.findAll(MethodDeclaration.class), new StaticAnalysisRule(null, null, consequent, ""));
 
         assertEquals(2, results.size());
         assertEquals("hi", ((MethodDeclaration) results.stream().findFirst().get().treeElement()).getNameAsString());
@@ -80,7 +81,7 @@ class MethodConsequentScannerTest {
         );
 
         val cu = parseResult.getResult().get();
-        val results = MethodConsequentScanner.findViolations(cu.findAll(MethodDeclaration.class), consequent);
+        val results = MethodConsequentScanner.findViolations(cu.findAll(MethodDeclaration.class), new StaticAnalysisRule(null, null, consequent, ""));
 
         assertEquals(1, results.size());
         assertEquals("hey", ((MethodDeclaration) results.stream().findFirst().get().treeElement()).getNameAsString());
@@ -104,7 +105,7 @@ class MethodConsequentScannerTest {
         val parseResult = new JavaParser().parse(javaCode);
         assumeTrue(parseResult.isSuccessful(), "Parsing should be successful");
 
-        val antecedent = new AggregateCondition(
+        val consequent = new AggregateCondition(
                 new Method(
                         empty(),
                         single(new Annotation(Type.of("Demo"), empty())),
@@ -118,7 +119,7 @@ class MethodConsequentScannerTest {
         );
 
         val cu = parseResult.getResult().get();
-        val results = MethodConsequentScanner.findViolations(cu.findAll(MethodDeclaration.class), antecedent);
+        val results = MethodConsequentScanner.findViolations(cu.findAll(MethodDeclaration.class), new StaticAnalysisRule(null, null, consequent, ""));
 
         assertEquals(1, results.size());
         assertEquals("hey", ((MethodDeclaration) results.stream().findFirst().get().treeElement()).getNameAsString());

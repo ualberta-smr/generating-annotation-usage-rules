@@ -1,5 +1,6 @@
 package ca.ualberta.smr.newmodel.javaelements;
 
+import ca.ualberta.smr.newmodel.StaticAnalysisRule;
 import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
 import ca.ualberta.smr.newmodel.violationreport.ViolationCombinationAnd;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -30,11 +31,11 @@ public final class Field extends ProgramElement implements AnalysisItem {
     }
 
     @Override
-    public ViolationCombination getMissing(Object bd) {
+    public ViolationCombination getMissing(Object bd, StaticAnalysisRule rule) {
         val fd = (FieldDeclaration) bd;
 
-        val missingType = type.getMissing(fd.getElementType().asString());
-        val missingAnnotations = annotations.getMissing(fd.getAnnotations());
+        val missingType = type.getMissing(fd.getElementType().asString(), rule);
+        val missingAnnotations = annotations.getMissing(fd.getAnnotations(), rule);
 
         return new ViolationCombinationAnd(fd, listOf(missingType, missingAnnotations));
     }

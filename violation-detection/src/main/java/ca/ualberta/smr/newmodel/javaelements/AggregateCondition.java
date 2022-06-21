@@ -1,5 +1,6 @@
 package ca.ualberta.smr.newmodel.javaelements;
 
+import ca.ualberta.smr.newmodel.StaticAnalysisRule;
 import ca.ualberta.smr.newmodel.violationreport.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,11 +17,19 @@ public final class AggregateCondition extends ProgramElement {
     private final ProgramElement left;
     private final ProgramElement right;
     private final AggregateConditionOperation operation;
+    private final ProgramElementType type;
+
+    public AggregateCondition(ProgramElement left, ProgramElement right, AggregateConditionOperation operation) {
+        this.left = left;
+        this.right = right;
+        this.operation = operation;
+        this.type = ProgramElementType.OTHER;
+    }
 
     @Override
-    public ViolationCombination getMissing(Object bd) {
-        val missingLeft = left.getMissing(bd);
-        val missingRight = right.getMissing(bd);
+    public ViolationCombination getMissing(Object bd, StaticAnalysisRule rule) {
+        val missingLeft = left.getMissing(bd, rule);
+        val missingRight = right.getMissing(bd, rule);
         switch (operation) {
             case AND:
                 return and(missingLeft, missingRight, bd);
@@ -97,8 +106,12 @@ public final class AggregateCondition extends ProgramElement {
     }
 
     public static AggregateCondition not(ProgramElement pe) {
+        return not(pe, ProgramElementType.OTHER);
+    }
+
+    public static AggregateCondition not(ProgramElement pe, ProgramElementType type) {
         return new AggregateCondition(
-                pe, NoOp.INSTANCE, AggregateConditionOperation.NOT
+                pe, NoOp.INSTANCE, AggregateConditionOperation.NOT, type
         );
     }
 
@@ -108,7 +121,12 @@ public final class AggregateCondition extends ProgramElement {
 
     @SuppressWarnings("unchecked")
     public static <T extends ProgramElement> AggregateCondition single(T element) {
-        return new AggregateCondition(element, element, AggregateConditionOperation.AND);
+        return single(element, ProgramElementType.OTHER);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T extends ProgramElement> AggregateCondition single(T element, ProgramElementType type) {
+        return new AggregateCondition(element, element, AggregateConditionOperation.AND, type);
     }
 
     public static AggregateCondition empty() {
@@ -128,7 +146,7 @@ public final class AggregateCondition extends ProgramElement {
         }
 
         @Override
-        public ViolationCombination getMissing(Object bd) {
+        public ViolationCombination getMissing(Object bd, StaticAnalysisRule rule) {
             return ViolationCombination.EMPTY;
         }
 

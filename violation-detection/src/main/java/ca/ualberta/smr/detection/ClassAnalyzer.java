@@ -1,6 +1,7 @@
 package ca.ualberta.smr.detection;
 
 import ca.ualberta.smr.newmodel.StaticAnalysisRule;
+import ca.ualberta.smr.newmodel.javaelements.ProgramElement;
 import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
 import ca.ualberta.smr.newmodel.javaelements.JavaClass;
 import com.github.javaparser.ast.CompilationUnit;
@@ -17,12 +18,12 @@ public class ClassAnalyzer implements Analyzer {
         val classDeclarations = ClassAntecedentScanner.findClasses(cu, rule.antecedent());
         if (classDeclarations.isEmpty()) return emptyList();
 
-        return ClassConsequentScanner.findViolations(classDeclarations, rule.consequent());
+        return ClassConsequentScanner.findViolations(classDeclarations, rule);
     }
 
     @Override
-    public boolean supports(Class<?> item) {
-        return item.equals(JavaClass.class);
+    public boolean supports(ProgramElement.ProgramElementType type) {
+        return type == ProgramElement.ProgramElementType.CLASS;
     }
 }
 

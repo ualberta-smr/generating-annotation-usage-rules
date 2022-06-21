@@ -1,5 +1,6 @@
 package ca.ualberta.smr.newmodel.javaelements;
 
+import ca.ualberta.smr.newmodel.StaticAnalysisRule;
 import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
 import ca.ualberta.smr.newmodel.violationreport.ViolationInfo;
 import com.github.javaparser.ast.body.Parameter;
@@ -36,7 +37,7 @@ public class MethodParameter extends ProgramElement {
     }
 
     @Override
-    public ViolationCombination getMissing(Object bd) {
+    public ViolationCombination getMissing(Object bd, StaticAnalysisRule rule) {
         if (this.matches(bd)) return ViolationCombination.EMPTY;
         // TODO: maybe position here can be interesting
         return new ViolationInfo(null, this.toString());

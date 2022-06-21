@@ -1,5 +1,6 @@
 package ca.ualberta.smr.newmodel.javaelements;
 
+import ca.ualberta.smr.newmodel.StaticAnalysisRule;
 import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
 import ca.ualberta.smr.newmodel.violationreport.ViolationInfo;
 import com.github.javaparser.ast.NodeList;
@@ -34,7 +35,7 @@ public class Annotation extends ProgramElement {
 
     @Override
     @SuppressWarnings("unchecked")
-    public ViolationCombination getMissing(Object bd) {
+    public ViolationCombination getMissing(Object bd, StaticAnalysisRule rule) {
         val annotationExprs = (NodeList<AnnotationExpr>) bd;
         for (val expr : annotationExprs) {
             if (type.matches(expr.getName().toString())) {

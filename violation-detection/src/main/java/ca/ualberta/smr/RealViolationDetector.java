@@ -42,7 +42,7 @@ public class RealViolationDetector {
 
     private Optional<Analyzer> findAnalyzer(StaticAnalysisRule rule) {
         return analyzers.stream()
-//                .filter(a -> a.supports(rule.antecedent().getType()))
+                .filter(a -> a.supports(rule.antecedent().getType()))
                 .findFirst();
     }
 

@@ -8,6 +8,7 @@ import ca.ualberta.smr.grammar.visitor.field.FieldExpressionVisitor;
 import ca.ualberta.smr.grammar.visitor.function.FunctionExpressionVisitor;
 import ca.ualberta.smr.newmodel.javaelements.AggregateCondition;
 import ca.ualberta.smr.newmodel.javaelements.JavaClass;
+import ca.ualberta.smr.newmodel.javaelements.ProgramElement;
 import lombok.val;
 
 import static ca.ualberta.smr.grammar.visitor.CombinatorialWordsExtractorUtility.*;
@@ -33,7 +34,7 @@ class ClassExpressionNoVisitor extends RulepadGrammarBaseVisitor<AggregateCondit
                         methods,
                         extension,
                         implementation
-                )
+                ), ProgramElement.ProgramElementType.CLASS
         );
     }
 

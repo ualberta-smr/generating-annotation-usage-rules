@@ -1,8 +1,8 @@
 package ca.ualberta.smr.detection;
 
 import ca.ualberta.smr.newmodel.StaticAnalysisRule;
+import ca.ualberta.smr.newmodel.javaelements.ProgramElement;
 import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
-import ca.ualberta.smr.newmodel.javaelements.Method;
 import com.github.javaparser.ast.CompilationUnit;
 import lombok.val;
 
@@ -17,12 +17,12 @@ public class MethodAnalyzer implements Analyzer {
         val methodDeclarations = MethodAntecedentScanner.findMethods(cu, rule.antecedent());
         if (methodDeclarations.isEmpty()) return emptyList();
 
-        return MethodConsequentScanner.findViolations(methodDeclarations, rule.consequent());
+        return MethodConsequentScanner.findViolations(methodDeclarations, rule);
     }
 
     @Override
-    public boolean supports(Class<?> item) {
-        return item.equals(Method.class);
+    public boolean supports(ProgramElement.ProgramElementType type) {
+        return type == ProgramElement.ProgramElementType.METHOD;
     }
 }
 

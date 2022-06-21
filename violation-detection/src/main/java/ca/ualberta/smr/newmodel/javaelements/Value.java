@@ -1,5 +1,6 @@
 package ca.ualberta.smr.newmodel.javaelements;
 
+import ca.ualberta.smr.newmodel.StaticAnalysisRule;
 import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
 import ca.ualberta.smr.newmodel.violationreport.ViolationInfo;
 import lombok.EqualsAndHashCode;
@@ -25,7 +26,7 @@ public class Value extends ProgramElement {
     }
 
     @Override
-    public ViolationCombination getMissing(Object bd) {
+    public ViolationCombination getMissing(Object bd, StaticAnalysisRule rule) {
         if (this.matches(bd)) return ViolationCombination.EMPTY;
         return new ViolationInfo(null, expr);
     }

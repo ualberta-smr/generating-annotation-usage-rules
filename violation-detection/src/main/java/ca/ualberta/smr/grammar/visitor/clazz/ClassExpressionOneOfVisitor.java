@@ -9,6 +9,7 @@ import ca.ualberta.smr.grammar.visitor.function.FunctionExpressionVisitor;
 import ca.ualberta.smr.newmodel.javaelements.AggregateCondition;
 import ca.ualberta.smr.newmodel.javaelements.AggregateConditionOperation;
 import ca.ualberta.smr.newmodel.javaelements.JavaClass;
+import ca.ualberta.smr.newmodel.javaelements.ProgramElement;
 import lombok.val;
 
 import static ca.ualberta.smr.grammar.visitor.CombinatorialWordsExtractorUtility.*;
@@ -40,7 +41,7 @@ class ClassExpressionOneOfVisitor extends RulepadGrammarBaseVisitor<AggregateCon
                             methods,
                             extension,
                             implementation
-                    )
+                    ), ProgramElement.ProgramElementType.CLASS
             );
         }
         // when evaluating XOR, if two processed nodes produce True and True, then stop the evaluation
@@ -48,7 +49,7 @@ class ClassExpressionOneOfVisitor extends RulepadGrammarBaseVisitor<AggregateCon
         val op = AggregateConditionOperation.XOR;
         val left = this.visitClassExpressionAggregateContents(ctx.left);
         val right = this.visitClassExpressionAggregateContents(ctx.right);
-        return new AggregateCondition(left, right, op);
+        return new AggregateCondition(left, right, op, ProgramElement.ProgramElementType.CLASS);
     }
 
 }

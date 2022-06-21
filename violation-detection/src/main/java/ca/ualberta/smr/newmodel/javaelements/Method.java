@@ -1,5 +1,7 @@
 package ca.ualberta.smr.newmodel.javaelements;
 
+import ca.ualberta.smr.detection.MethodAntecedentScanner;
+import ca.ualberta.smr.newmodel.StaticAnalysisRule;
 import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
 import ca.ualberta.smr.newmodel.violationreport.ViolationCombinationAnd;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -27,19 +29,25 @@ public final class Method extends ProgramElement implements AnalysisItem {
 
     @Override
     public boolean matches(Object bd) {
-        val md = (MethodDeclaration) bd;
-        return returnType.matches(md.getTypeAsString())
-                && annotations.matches(md.getAnnotations())
-                && parameters.matches(md.findAll(Parameter.class));
+        if (bd instanceof MethodDeclaration) {
+            val md = (MethodDeclaration) bd;
+            return returnType.matches(md.getTypeAsString())
+                    && annotations.matches(md.getAnnotations())
+                    && parameters.matches(md.findAll(Parameter.class));
+        } else if (bd instanceof Parameter) {
+            return parameters.matches(listOf(((Parameter) bd)));
+        }
+        return false;
     }
 
     @Override
-    public ViolationCombination getMissing(Object bd) {
+    public ViolationCombination getMissing(Object bd, StaticAnalysisRule rule) {
         val md = (MethodDeclaration) bd;
 
-        val missingReturnType = returnType.getMissing(md.getTypeAsString());
-        val missingAnnotations = annotations.getMissing(md.getAnnotations());
-        val missingParameters = parameters.getMissing(md.findAll(Parameter.class));
+        val missingReturnType = returnType.getMissing(md.getTypeAsString(), rule);
+        val missingAnnotations = annotations.getMissing(md.getAnnotations(), rule);
+        // TODO: make sure the params are the same
+        val missingParameters = parameters.getMissing(MethodAntecedentScanner.findMethodParametersFromMethodDeclaration(md, rule.antecedent()), rule);
 
         return new ViolationCombinationAnd(md, listOf(missingReturnType, missingAnnotations, missingParameters));
     }
