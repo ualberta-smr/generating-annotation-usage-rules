@@ -1,13 +1,17 @@
 package ca.ualberta.smr.utils;
 
 import ca.ualberta.smr.model.javaelements.*;
+import ca.ualberta.smr.newmodel.javaelements.AggregateCondition;
 import com.github.javaparser.HasParentNode;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import lombok.val;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.lang.String.format;
 import static java.util.stream.Collectors.*;
 
 public class Utils {
@@ -42,6 +46,13 @@ public class Utils {
                 .map(Optional::get)
                 .map(node -> ((ClassOrInterfaceDeclaration) node))
                 .collect(toSet());
+    }
+
+    public static String describe(String prefix, Map<String, AggregateCondition> keyValues) {
+        return keyValues.entrySet().stream()
+                .filter(entry -> !entry.getValue().isEmpty())
+                .map(entry -> format("%s=[%s]", entry.getKey(), entry.getValue()))
+                .collect(joining(", ", prefix + " {", "}"));
     }
 
 }

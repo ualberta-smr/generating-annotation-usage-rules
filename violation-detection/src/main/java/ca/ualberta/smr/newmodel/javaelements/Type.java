@@ -1,15 +1,23 @@
 package ca.ualberta.smr.newmodel.javaelements;
 
+import ca.ualberta.smr.newmodel.ViolationCombination;
+import ca.ualberta.smr.newmodel.ViolationInfo;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.util.Collection;
+import java.util.Collections;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singleton;
+
 @RequiredArgsConstructor
 @Getter
 @Accessors(fluent = true)
-@EqualsAndHashCode
-public class Type implements ProgramElement {
+@EqualsAndHashCode(callSuper = false)
+public class Type extends ProgramElement {
     private final String name;
 
     public static AggregateCondition of(String name) {
@@ -17,7 +25,19 @@ public class Type implements ProgramElement {
     }
 
     @Override
-    public String toString() {
+    public boolean matches(Object bd) {
+        String typeString = (String) bd;
+        return name.equals(typeString);
+    }
+
+    @Override
+    public ViolationCombination getMissing(Object bd) {
+        if (this.matches(bd)) return ViolationCombination.EMPTY;
+        return new ViolationInfo(null, name);
+    }
+
+    @Override
+    public String description() {
         return name;
     }
 }
