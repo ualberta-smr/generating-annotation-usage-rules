@@ -1,7 +1,7 @@
 package ca.ualberta.smr.newmodel.javaelements;
 
-import ca.ualberta.smr.newmodel.ViolationCombination;
-import ca.ualberta.smr.newmodel.ViolationInfo;
+import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
+import ca.ualberta.smr.newmodel.violationreport.ViolationInfo;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import lombok.EqualsAndHashCode;
@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static ca.ualberta.smr.utils.Utils.describe;
-import static java.util.Collections.*;
 
 @Getter
 @Accessors(fluent = true)

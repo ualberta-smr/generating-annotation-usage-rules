@@ -1,6 +1,6 @@
 package ca.ualberta.smr.newmodel.javaelements;
 
-import ca.ualberta.smr.newmodel.ViolationCombination;
+import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
 
 public abstract class ProgramElement {
     abstract boolean matches(Object bd);

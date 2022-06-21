@@ -1,7 +1,7 @@
 package ca.ualberta.smr.newmodel.javaelements;
 
-import ca.ualberta.smr.newmodel.ViolationCombination;
-import ca.ualberta.smr.newmodel.ViolationInfo;
+import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
+import ca.ualberta.smr.newmodel.violationreport.ViolationInfo;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.MemberValuePair;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;

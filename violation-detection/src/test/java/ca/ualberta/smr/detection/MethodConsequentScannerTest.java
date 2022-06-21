@@ -1,6 +1,6 @@
 package ca.ualberta.smr.detection;
 
-import ca.ualberta.smr.newmodel.ViolationCombination;
+import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
 import ca.ualberta.smr.newmodel.javaelements.*;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.body.MethodDeclaration;

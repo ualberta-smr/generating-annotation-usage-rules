@@ -1,8 +1,7 @@
 package ca.ualberta.smr.newmodel.javaelements;
 
-import ca.ualberta.smr.newmodel.ViolationCombination;
-import ca.ualberta.smr.newmodel.ViolationCombinationAnd;
-import ca.ualberta.smr.newmodel.ViolationInfo;
+import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
+import ca.ualberta.smr.newmodel.violationreport.ViolationCombinationAnd;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,10 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.val;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static ca.ualberta.smr.utils.Utils.*;
 

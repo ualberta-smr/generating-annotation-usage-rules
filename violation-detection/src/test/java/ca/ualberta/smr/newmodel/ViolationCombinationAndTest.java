@@ -1,5 +1,7 @@
 package ca.ualberta.smr.newmodel;
 
+import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
+import ca.ualberta.smr.newmodel.violationreport.ViolationCombinationAnd;
 import org.junit.jupiter.api.Test;
 
 import static ca.ualberta.smr.utils.Utils.listOf;

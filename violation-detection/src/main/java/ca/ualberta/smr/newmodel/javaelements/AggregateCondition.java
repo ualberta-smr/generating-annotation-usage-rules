@@ -1,16 +1,12 @@
 package ca.ualberta.smr.newmodel.javaelements;
 
-import ca.ualberta.smr.newmodel.*;
-import ca.ualberta.smr.utils.Utils;
+import ca.ualberta.smr.newmodel.violationreport.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-import java.util.Collection;
-
 import static ca.ualberta.smr.utils.Utils.listOf;
-import static java.util.Collections.*;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = false)

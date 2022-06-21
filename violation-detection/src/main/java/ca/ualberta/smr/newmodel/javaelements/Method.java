@@ -1,7 +1,7 @@
 package ca.ualberta.smr.newmodel.javaelements;
 
-import ca.ualberta.smr.newmodel.ViolationCombination;
-import ca.ualberta.smr.newmodel.ViolationCombinationAnd;
+import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
+import ca.ualberta.smr.newmodel.violationreport.ViolationCombinationAnd;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import lombok.EqualsAndHashCode;
@@ -12,7 +12,6 @@ import lombok.val;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static ca.ualberta.smr.utils.Utils.describe;
 import static ca.ualberta.smr.utils.Utils.listOf;

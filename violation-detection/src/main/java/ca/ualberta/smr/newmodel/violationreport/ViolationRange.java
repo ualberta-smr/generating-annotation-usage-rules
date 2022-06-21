@@ -1,4 +1,4 @@
-package ca.ualberta.smr.newmodel;
+package ca.ualberta.smr.newmodel.violationreport;
 
 import com.github.javaparser.Range;
 import lombok.RequiredArgsConstructor;

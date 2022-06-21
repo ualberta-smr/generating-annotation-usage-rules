@@ -1,8 +1,7 @@
 package ca.ualberta.smr.detection;
 
 import ca.ualberta.smr.newmodel.StaticAnalysisRule;
-import ca.ualberta.smr.newmodel.ViolationCombination;
-import ca.ualberta.smr.newmodel.ViolationInfo;
+import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
 import com.github.javaparser.ast.CompilationUnit;
 
 import java.util.Collection;

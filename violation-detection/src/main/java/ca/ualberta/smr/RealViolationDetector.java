@@ -2,7 +2,7 @@ package ca.ualberta.smr;
 
 import ca.ualberta.smr.detection.Analyzer;
 import ca.ualberta.smr.newmodel.StaticAnalysisRule;
-import ca.ualberta.smr.newmodel.ViolationCombination;
+import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
 import ca.ualberta.smr.typeresolution.TypeResolver;
 import ca.ualberta.smr.utils.Pair;
 import com.github.javaparser.ast.CompilationUnit;

@@ -1,4 +1,4 @@
-package ca.ualberta.smr.newmodel;
+package ca.ualberta.smr.newmodel.violationreport;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Getter
 @Accessors(fluent = true)
-public class ViolationCombinationXor implements ViolationCombination {
+public class ViolationCombinationOr implements ViolationCombination {
     private final Object treeElement;
     private final Collection<ViolationCombination> violations;
 
@@ -21,7 +21,7 @@ public class ViolationCombinationXor implements ViolationCombination {
             return violations.stream()
                     .map(ViolationCombination::describe)
                     .filter(Objects::nonNull)
-                    .collect(Collectors.joining(" XOR ", "Missing elements: [", "]"));
+                    .collect(Collectors.joining(" OR ", "Missing elements: [", "]"));
         }
         return "";
     }

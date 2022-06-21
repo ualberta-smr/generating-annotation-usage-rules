@@ -1,14 +1,8 @@
-package ca.ualberta.smr.newmodel;
+package ca.ualberta.smr.newmodel.violationreport;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import lombok.var;
-
-import java.util.Collection;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor
 @Getter

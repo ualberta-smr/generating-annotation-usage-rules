@@ -1,7 +1,7 @@
 package ca.ualberta.smr.detection;
 
 import ca.ualberta.smr.newmodel.StaticAnalysisRule;
-import ca.ualberta.smr.newmodel.ViolationCombination;
+import ca.ualberta.smr.newmodel.violationreport.ViolationCombination;
 import ca.ualberta.smr.newmodel.javaelements.Method;
 import com.github.javaparser.ast.CompilationUnit;
 import lombok.val;
