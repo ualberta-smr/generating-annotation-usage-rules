@@ -52,7 +52,7 @@ public class MethodAntecedentFilter {
     static boolean methodHasParameters(MethodDeclaration methodDeclaration, Condition<Method> methodCondition) {
         return methodCondition.test(method ->
                 method.parameters().stream().allMatch(mp ->
-                        methodDeclaration.findAll(Parameter.class).stream().anyMatch(p -> parameterMatches(p, mp))));
+                        methodDeclaration.getParameters().stream().anyMatch(p -> parameterMatches(p, mp))));
     }
 
     /**

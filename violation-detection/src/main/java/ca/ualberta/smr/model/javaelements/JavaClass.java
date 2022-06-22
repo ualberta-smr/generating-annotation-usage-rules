@@ -5,9 +5,11 @@ import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.violationreport.ViolationCombination;
 import ca.ualberta.smr.model.violationreport.ViolationCombinationAnd;
 import ca.ualberta.smr.model.violationreport.ViolationInfo;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -22,13 +24,13 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 @Accessors(fluent = true)
 @EqualsAndHashCode(callSuper = false)
-@ToString
 public final class JavaClass extends ProgramElement implements AnalysisItem {
     private final AggregateCondition annotations;
     private final AggregateCondition field;
     private final AggregateCondition method;
     private final AggregateCondition extendedClass;
     private final AggregateCondition implementedInterfaces;
+    private final AggregateCondition overriddenMethod;
     // TODO: support for configuration files
     // TODO: support for constructors (that actually can be treated like methods)
 
@@ -41,12 +43,14 @@ public final class JavaClass extends ProgramElement implements AnalysisItem {
             boolean methodsMatch = method.isEmpty() || cd.getMethods().stream().anyMatch(method::matches);
             boolean extendMatch = extendedClass.isEmpty() || cd.getExtendedTypes().stream().map(NodeWithSimpleName::getNameAsString).anyMatch(extendedClass::matches);
             boolean implMatch = implementedInterfaces.isEmpty() || cd.getImplementedTypes().stream().map(NodeWithSimpleName::getNameAsString).anyMatch(implementedInterfaces::matches);
+            boolean overriddenMatch = overriddenMethod.matches(cd.getMethods());
 
             return annotationMatches
                     && fieldsMatch
                     && methodsMatch
                     && extendMatch
-                    && implMatch;
+                    && implMatch
+                    && overriddenMatch;
         } else if (bd instanceof MethodDeclaration) {
             val md = (MethodDeclaration) bd;
             return method.matches(md);
@@ -69,9 +73,10 @@ public final class JavaClass extends ProgramElement implements AnalysisItem {
                 cd.getExtendedTypes().stream().map(NodeWithSimpleName::getNameAsString).collect(toList()), cd, rule);
         val missingImplementation = findMissing(implementedInterfaces,
                 cd.getImplementedTypes().stream().map(NodeWithSimpleName::getNameAsString).collect(toList()), cd, rule);
+        val missingOverriddenMethods = overriddenMethod.getMissing(cd.getMethods(), rule);
 
         return new ViolationCombinationAnd(cd, listOf(
-                missingField, missingMethod, missingExtensions, missingImplementation, missingAnnotations
+                missingField, missingMethod, missingExtensions, missingImplementation, missingAnnotations, missingOverriddenMethods
         ));
     }
 
@@ -92,4 +97,54 @@ public final class JavaClass extends ProgramElement implements AnalysisItem {
         keyValues.put("implements", implementedInterfaces);
         return describe("class", keyValues);
     }
+
+    @RequiredArgsConstructor
+    @Getter
+    @Accessors(fluent = true)
+    @EqualsAndHashCode(callSuper = false)
+    public static class OverriddenMethod extends ProgramElement {
+        private final String name;
+        private final List<MethodParameter> parameters;
+
+        @Override
+        @SuppressWarnings("unchecked")
+        boolean matches(Object bd) {
+            val declarations = (List<MethodDeclaration>) bd;
+            return declarations.stream()
+                    .anyMatch(md -> name.equals(md.getNameAsString()) && allParamsMatchInOrder(md.getParameters()));
+        }
+
+        private boolean allParamsMatchInOrder(NodeList<Parameter> otherParameters) {
+            if (this.parameters.size() != otherParameters.size()) return false;
+
+            for (int i = 0; i < this.parameters.size(); i++) {
+                boolean paramAtPosMatches = this.parameters.get(i).type().matches(otherParameters.get(i).getTypeAsString());
+                if (!paramAtPosMatches) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        ViolationCombination getMissing(Object bd, StaticAnalysisRule rule) {
+            val declarations = (List<MethodDeclaration>) bd;
+            for (val md : declarations) {
+                if (name.equals(md.getNameAsString())) {
+                    if (allParamsMatchInOrder(md.getParameters())) {
+                        return ViolationCombination.EMPTY;
+                    }
+                    return new ViolationInfo(bd, String.format("Method '%s' must have all the parameters: [%s]", name, parameters));
+                }
+            }
+            return new ViolationInfo(null, this.toString());
+        }
+
+        @Override
+        String description() {
+            return String.format("method [name = %s, params = %s]", name, parameters);
+        }
+    }
 }
+

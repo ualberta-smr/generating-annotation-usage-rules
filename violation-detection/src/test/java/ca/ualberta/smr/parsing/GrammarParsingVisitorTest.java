@@ -12,12 +12,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import static ca.ualberta.smr.model.javaelements.AggregateCondition.empty;
 import static ca.ualberta.smr.model.javaelements.AggregateCondition.single;
+import static ca.ualberta.smr.model.javaelements.AggregateConditionOperation.AND;
+import static ca.ualberta.smr.parsing.utils.GeneralUtility.listOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
@@ -53,6 +56,9 @@ public class GrammarParsingVisitorTest {
         map.put("antecedent_class_with_or", getRule_antecedent_class_with_or());
         map.put("field_with_or_plus_consequent_with_or", getRule_antecedent_field_with_or_plus_consequent_with_or());
         map.put("antecedent_field_with_and_plus_consequent_with_and", getRule_antecedent_field_with_and_plus_consequent_with_and());
+        map.put("class_method_override_no_params", getRule_class_method_override_no_params());
+        map.put("class_method_override_one_param", getRule_class_method_override_one_param());
+        map.put("class_method_override_many_params", getRule_class_method_override_many_params());
         map.put("mixingAll", getRule_mixingAll());
         // actual rules
         map.put("OutgoingAndScope", getRule_OutgoingAndScope());
@@ -64,6 +70,62 @@ public class GrammarParsingVisitorTest {
 
         return map.values()
                 .stream().map(staticAnalysisRule -> arguments(staticAnalysisRule.name(), staticAnalysisRule));
+    }
+
+    private static StaticAnalysisRule getRule_class_method_override_no_params() {
+        val antecedent = new JavaClass(
+                empty(), empty(), empty(), Type.of("Foo"), empty(), empty()
+        );
+
+        val consequent = new JavaClass(
+                empty(), empty(), empty(), empty(), empty(), single(new JavaClass.OverriddenMethod("foobar", Collections.emptyList()))
+        );
+
+        return new StaticAnalysisRule("class_method_override_no_params",
+                single(antecedent),
+                single(consequent),
+                "class with extension of \"Foo\" must have overridden method \"foobar()\" ");
+    }
+
+    private static StaticAnalysisRule getRule_class_method_override_one_param() {
+        val antecedent = new JavaClass(
+                empty(), empty(), empty(), Type.of("Foo"), empty(), empty()
+        );
+
+        val consequent = new JavaClass(
+                empty(), empty(), empty(), empty(), empty(), single(
+                new JavaClass.OverriddenMethod(
+                        "foobar",
+                        Collections.singletonList(new MethodParameter(
+                                Type.of("String"), empty()
+                        ))))
+        );
+
+        return new StaticAnalysisRule("class_method_override_one_param",
+                single(antecedent),
+                single(consequent),
+                "class with extension of \"Foo\" must have overridden method \"foobar(String)\" ");
+    }
+
+    private static StaticAnalysisRule getRule_class_method_override_many_params() {
+        val antecedent = new JavaClass(
+                empty(), empty(), empty(), Type.of("Foo"), empty(), empty()
+        );
+
+        val consequent = new JavaClass(
+                empty(), empty(), empty(), empty(), empty(), single(new JavaClass.OverriddenMethod("foobar",
+                listOf(
+                        new MethodParameter(Type.of("String"), empty()),
+                        new MethodParameter(Type.of("int"), empty()),
+                        new MethodParameter(Type.of("double"), empty()),
+                        new MethodParameter(Type.of("Custom"), empty())
+                )))
+        );
+
+        return new StaticAnalysisRule("class_method_override_many_params",
+                single(antecedent),
+                single(consequent),
+                "class with extension of \"Foo\" must have overridden method \"foobar(String, int, double, Custom)\" ");
     }
 
 
@@ -115,12 +177,12 @@ public class GrammarParsingVisitorTest {
     private static StaticAnalysisRule getRule_class_simple() {
         val antecedent = new JavaClass(
                 single(new Annotation(Type.of("Demo"), empty())),
-                empty(), empty(), empty(), empty()
+                empty(), empty(), empty(), empty(), empty()
         );
 
         val consequent = new JavaClass(
                 single(new Annotation(Type.of("Hello"), empty())),
-                empty(), empty(), empty(), empty()
+                empty(), empty(), empty(), empty(), empty()
         );
 
         return new StaticAnalysisRule("class_simple",
@@ -138,14 +200,14 @@ public class GrammarParsingVisitorTest {
                         new Method(empty(), single(new Annotation(Type.of("Incoming"), empty())), empty()),
                         AggregateConditionOperation.OR,
                         ProgramElement.ProgramElementType.METHOD
-                ), empty(), empty()
+                ), empty(), empty(), empty()
         );
 
         val j1 = new JavaClass(single(new Annotation(Type.of("ApplicationScoped"), empty())),
-                empty(), empty(), empty(), empty());
+                empty(), empty(), empty(), empty(), empty());
 
         val j2 = new JavaClass(single(new Annotation(Type.of("Dependent"), empty())),
-                empty(), empty(), empty(), empty());
+                empty(), empty(), empty(), empty(), empty());
 
         val consequent = new AggregateCondition(j1, j2, AggregateConditionOperation.OR, ProgramElement.ProgramElementType.CLASS);
 
@@ -178,12 +240,12 @@ public class GrammarParsingVisitorTest {
         val antecedent = new JavaClass(empty(), empty(), single(
                 new Method(empty(), empty(), single(
                         new MethodParameter(empty(), single(new Annotation(Type.of("PathParam"), empty())))))
-        ), empty(), empty());
+        ), empty(), empty(), empty());
 
-        val j1 = new JavaClass(single(new Annotation(Type.of("Path"), empty())), empty(), empty(), empty(), empty());
+        val j1 = new JavaClass(single(new Annotation(Type.of("Path"), empty())), empty(), empty(), empty(), empty(), empty());
         val j2 = new JavaClass(empty(), empty(), single(
                 new Method(empty(), single(new Annotation(Type.of("Path"), empty())), empty())
-        ), empty(), empty());
+        ), empty(), empty(), empty());
 
         val consequent = new AggregateCondition(j1, j2, AggregateConditionOperation.OR, ProgramElement.ProgramElementType.CLASS);
 
@@ -197,9 +259,9 @@ public class GrammarParsingVisitorTest {
 
         val antecedent = new JavaClass(empty(), empty(),
                 new AggregateCondition(m1, m2, AggregateConditionOperation.OR, ProgramElement.ProgramElementType.METHOD),
-                empty(), empty());
+                empty(), empty(), empty());
 
-        val consequent = new JavaClass(single(new Annotation(Type.of("GraphQLApi"), empty())), empty(), empty(), empty(), empty());
+        val consequent = new JavaClass(single(new Annotation(Type.of("GraphQLApi"), empty())), empty(), empty(), empty(), empty(), empty());
 
         return new StaticAnalysisRule("QueryMutationGraphQLAPI", single(antecedent), single(consequent), "class with function with annotation \"Query\" or annotation \"Mutation\" must have annotation \"GraphQLApi\" ");
     }
@@ -243,7 +305,7 @@ public class GrammarParsingVisitorTest {
 
     private static StaticAnalysisRule getRule_class_field_with_OR_in_consequent() {
         val antecedent = new JavaClass(
-                empty(), single(new Field(Type.of("C"), empty())), empty(), empty(), empty()
+                empty(), single(new Field(Type.of("C"), empty())), empty(), empty(), empty(), empty()
         );
 
         val consequent = new JavaClass(empty(),
@@ -252,7 +314,7 @@ public class GrammarParsingVisitorTest {
                         new Field(empty(), single(new Annotation(Type.of("B"), empty()))),
                         AggregateConditionOperation.OR,
                         ProgramElement.ProgramElementType.FIELD
-                ), empty(), empty(), empty());
+                ), empty(), empty(), empty(), empty());
 
         return new StaticAnalysisRule("class_field_with_OR_in_consequent", single(antecedent), single(consequent), "class with field with type \"C\" must have field with annotation \"A\" or annotation \"B\" ");
     }
@@ -317,7 +379,7 @@ public class GrammarParsingVisitorTest {
     private static StaticAnalysisRule getRule_function_with_multiple_ors() {
         val antecedent = new JavaClass(
                 single(new Annotation(Type.of("A"), empty())),
-                empty(), empty(), empty(), empty()
+                empty(), empty(), empty(), empty(), empty()
         );
 
         val method = new AggregateCondition(
@@ -332,7 +394,7 @@ public class GrammarParsingVisitorTest {
                 ProgramElement.ProgramElementType.METHOD
         );
 
-        val consequent = new JavaClass(empty(), empty(), method, empty(), empty());
+        val consequent = new JavaClass(empty(), empty(), method, empty(), empty(), empty());
 
         return new StaticAnalysisRule("function_with_multiple_ors", single(antecedent), single(consequent),
                 "class with annotation \"A\" must have function with annotation \"B\" or annotation \"C\" or annotation \"D\" ");
@@ -341,23 +403,23 @@ public class GrammarParsingVisitorTest {
     private static StaticAnalysisRule getRule_class_with_multiple_ors() {
         val antecedent = new JavaClass(
                 single(new Annotation(Type.of("A"), empty())),
-                empty(), empty(), empty(), empty()
+                empty(), empty(), empty(), empty(), empty()
         );
 
         val consequent = new AggregateCondition(
                 new AggregateCondition(
                         new JavaClass(
                                 single(new Annotation(Type.of("B"), empty())),
-                                empty(), empty(), empty(), empty()),
+                                empty(), empty(), empty(), empty(), empty()),
                         new JavaClass(
                                 single(new Annotation(Type.of("C"), empty())),
-                                empty(), empty(), empty(), empty()
+                                empty(), empty(), empty(), empty(), empty()
                         ), AggregateConditionOperation.OR,
                         ProgramElement.ProgramElementType.CLASS
                 ),
                 new JavaClass(
                         single(new Annotation(Type.of("D"), empty())),
-                        empty(), empty(), empty(), empty()
+                        empty(), empty(), empty(), empty(), empty()
                 ), AggregateConditionOperation.OR,
                 ProgramElement.ProgramElementType.CLASS
         );
@@ -384,7 +446,7 @@ public class GrammarParsingVisitorTest {
     private static StaticAnalysisRule getRule_function_with_multiple_ors_parenthesis() {
         val antecedent = new JavaClass(
                 single(new Annotation(Type.of("A"), empty())),
-                empty(), empty(), empty(), empty()
+                empty(), empty(), empty(), empty(), empty()
         );
 
         val method = new AggregateCondition(
@@ -397,15 +459,16 @@ public class GrammarParsingVisitorTest {
                 AggregateConditionOperation.OR, ProgramElement.ProgramElementType.METHOD
         );
 
-        val consequent = new JavaClass(empty(), empty(), method, empty(), empty());
+        val consequent = new JavaClass(empty(), empty(), method, empty(), empty(), empty());
 
-        return new StaticAnalysisRule("function_with_multiple_ors_parenthesis", single(antecedent), single(consequent), "class with annotation \"A\" must have function with (annotation \"B\" or annotation \"C\" or annotation \"D\" ) ");
+        return new StaticAnalysisRule("function_with_multiple_ors_parenthesis", single(antecedent), single(consequent),
+                "class with annotation \"A\" must have function with (annotation \"B\" or annotation \"C\" or annotation \"D\" ) ");
     }
 
     private static StaticAnalysisRule getRule_field_with_multiple_ors_parenthesis() {
         val antecedent = new JavaClass(
                 single(new Annotation(Type.of("A"), empty())),
-                empty(), empty(), empty(), empty()
+                empty(), empty(), empty(), empty(), empty()
         );
 
         val field = new AggregateCondition(
@@ -418,7 +481,7 @@ public class GrammarParsingVisitorTest {
                 AggregateConditionOperation.OR, ProgramElement.ProgramElementType.FIELD
         );
 
-        val consequent = new JavaClass(empty(), field, empty(), empty(), empty());
+        val consequent = new JavaClass(empty(), field, empty(), empty(), empty(), empty());
 
         return new StaticAnalysisRule("field_with_multiple_ors_parenthesis", single(antecedent), single(consequent),
                 "class with annotation \"A\" must have field with (annotation \"B\" or annotation \"C\" or annotation \"D\" ) ");
@@ -427,22 +490,22 @@ public class GrammarParsingVisitorTest {
     private static StaticAnalysisRule getRule_class_with_multiple_ors_parenthesis() {
         val antecedent = new JavaClass(
                 single(new Annotation(Type.of("A"), empty())),
-                empty(), empty(), empty(), empty()
+                empty(), empty(), empty(), empty(), empty()
         );
 
         val consequent = new AggregateCondition(
                 new AggregateCondition(
                         new JavaClass(
                                 single(new Annotation(Type.of("B"), empty())),
-                                empty(), empty(), empty(), empty()),
+                                empty(), empty(), empty(), empty(), empty()),
                         new JavaClass(
                                 single(new Annotation(Type.of("C"), empty())),
-                                empty(), empty(), empty(), empty()
+                                empty(), empty(), empty(), empty(), empty()
                         ), AggregateConditionOperation.OR, ProgramElement.ProgramElementType.CLASS
                 ),
                 new JavaClass(
                         single(new Annotation(Type.of("D"), empty())),
-                        empty(), empty(), empty(), empty()
+                        empty(), empty(), empty(), empty(), empty()
                 ), AggregateConditionOperation.OR, ProgramElement.ProgramElementType.CLASS
         );
 
@@ -451,7 +514,7 @@ public class GrammarParsingVisitorTest {
     }
 
     private static StaticAnalysisRule getRule_mixingAll() {
-        val antecedent = new JavaClass(single(new Annotation(Type.of("A"), empty())), empty(), empty(), empty(), empty());
+        val antecedent = new JavaClass(single(new Annotation(Type.of("A"), empty())), empty(), empty(), empty(), empty(), empty());
 
         val m1 = new Method(empty(), single(new Annotation(Type.of("B"), empty())), empty());
         val m2 = new Method(empty(), single(new Annotation(Type.of("C"), empty())), empty());
@@ -468,15 +531,15 @@ public class GrammarParsingVisitorTest {
 
         val fields = new AggregateCondition(f1, f2, AggregateConditionOperation.OR, ProgramElement.ProgramElementType.FIELD);
 
-        val j1 = new JavaClass(single(new Annotation(Type.of("M"), empty())), empty(), empty(), empty(), empty());
-        val j2 = new JavaClass(single(new Annotation(Type.of("L"), empty())), empty(), empty(), empty(), empty());
+        val j1 = new JavaClass(single(new Annotation(Type.of("M"), empty())), empty(), empty(), empty(), empty(), empty());
+        val j2 = new JavaClass(single(new Annotation(Type.of("L"), empty())), empty(), empty(), empty(), empty(), empty());
 
         val classes = new AggregateCondition(j1, j2, AggregateConditionOperation.OR, ProgramElement.ProgramElementType.CLASS);
 
         val consequent = new AggregateCondition(
                 new AggregateCondition(
-                        new JavaClass(empty(), empty(), methods, empty(), empty()),
-                        new JavaClass(empty(), fields, empty(), empty(), empty()),
+                        new JavaClass(empty(), empty(), methods, empty(), empty(), empty()),
+                        new JavaClass(empty(), fields, empty(), empty(), empty(), empty()),
                         AggregateConditionOperation.OR, ProgramElement.ProgramElementType.CLASS),
                 classes,
                 AggregateConditionOperation.OR, ProgramElement.ProgramElementType.CLASS
@@ -488,11 +551,11 @@ public class GrammarParsingVisitorTest {
 
     private static StaticAnalysisRule getRule_antecedent_class_with_or() {
 
-        val j1 = new JavaClass(single(new Annotation(Type.of("B"), empty())), empty(), empty(), empty(), empty());
-        val j2 = new JavaClass(single(new Annotation(Type.of("C"), empty())), empty(), empty(), empty(), empty());
-        val j3 = new JavaClass(single(new Annotation(Type.of("D"), empty())), empty(), empty(), empty(), empty());
+        val j1 = new JavaClass(single(new Annotation(Type.of("B"), empty())), empty(), empty(), empty(), empty(), empty());
+        val j2 = new JavaClass(single(new Annotation(Type.of("C"), empty())), empty(), empty(), empty(), empty(), empty());
+        val j3 = new JavaClass(single(new Annotation(Type.of("D"), empty())), empty(), empty(), empty(), empty(), empty());
 
-        val consequent = new JavaClass(single(new Annotation(Type.of("A"), empty())), empty(), empty(), empty(), empty());
+        val consequent = new JavaClass(single(new Annotation(Type.of("A"), empty())), empty(), empty(), empty(), empty(), empty());
 
         val antecedent = new AggregateCondition(
                 new AggregateCondition(j1, j2, AggregateConditionOperation.OR, ProgramElement.ProgramElementType.CLASS),
@@ -578,16 +641,16 @@ public class GrammarParsingVisitorTest {
         val antecedent = new AggregateCondition(
                 new Field(Type.of("B"), empty()),
                 new Field(empty(), single(new Annotation(Type.of("D"), empty()))),
-                AggregateConditionOperation.AND, ProgramElement.ProgramElementType.FIELD
+                AND, ProgramElement.ProgramElementType.FIELD
         );
 
         val consequent = new AggregateCondition(
                 new AggregateCondition(
                         new Field(empty(), single(new Annotation(Type.of("B"), empty()))),
                         new Field(empty(), single(new Annotation(Type.of("C"), empty()))),
-                        AggregateConditionOperation.AND, ProgramElement.ProgramElementType.FIELD),
+                        AND, ProgramElement.ProgramElementType.FIELD),
                 new Field(empty(), single(new Annotation(Type.of("D"), empty()))),
-                AggregateConditionOperation.AND, ProgramElement.ProgramElementType.FIELD);
+                AND, ProgramElement.ProgramElementType.FIELD);
 
         return new StaticAnalysisRule("antecedent_field_with_and_plus_consequent_with_and", antecedent, consequent,
                 "field with type \"B\" and annotation \"D\" must have (annotation \"B\" and annotation \"C\" ) and annotation \"D\" ");

@@ -33,7 +33,7 @@ public final class Method extends ProgramElement implements AnalysisItem {
             val md = (MethodDeclaration) bd;
             return returnType.matches(md.getTypeAsString())
                     && annotations.matches(md.getAnnotations())
-                    && parameters.matches(md.findAll(Parameter.class));
+                    && parameters.matches(md.getParameters());
         } else if (bd instanceof Parameter) {
             return parameters.matches(listOf(((Parameter) bd)));
         }

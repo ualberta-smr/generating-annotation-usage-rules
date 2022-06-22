@@ -133,7 +133,7 @@ public final class AggregateCondition extends ProgramElement {
     }
 
     public static AggregateCondition empty() {
-        return new AggregateCondition(NoOp.INSTANCE, NoOp.INSTANCE, AggregateConditionOperation.EMPTY);
+        return EMPTY_CONDITION;
     }
 
     public boolean isEmpty() {
@@ -158,4 +158,6 @@ public final class AggregateCondition extends ProgramElement {
             return null;
         }
     }
+
+    public static final AggregateCondition EMPTY_CONDITION = new AggregateCondition(NoOp.INSTANCE, NoOp.INSTANCE, AggregateConditionOperation.EMPTY);
 }

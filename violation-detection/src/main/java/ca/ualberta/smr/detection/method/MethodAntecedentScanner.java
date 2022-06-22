@@ -22,7 +22,7 @@ public class MethodAntecedentScanner {
     }
 
     public static Collection<Parameter> findMethodParametersFromMethodDeclaration(MethodDeclaration md, AggregateCondition method) {
-        val parameters = md.findAll(Parameter.class);
+        val parameters = md.getParameters();
 
         val matchingParams = parameters.stream()
                 .filter(method::matches)

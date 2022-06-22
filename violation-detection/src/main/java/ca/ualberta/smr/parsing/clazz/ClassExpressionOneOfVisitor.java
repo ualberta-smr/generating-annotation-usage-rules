@@ -12,6 +12,7 @@ import ca.ualberta.smr.model.javaelements.JavaClass;
 import ca.ualberta.smr.model.javaelements.ProgramElement;
 import lombok.val;
 
+import static ca.ualberta.smr.parsing.clazz.ClassExpressionVisitor.extractOverriddenFunctions;
 import static ca.ualberta.smr.parsing.utils.CombinatorialWordsExtractorUtility.*;
 import static ca.ualberta.smr.parsing.utils.GeneralUtility.acceptIfAvailable;
 
@@ -28,6 +29,7 @@ class ClassExpressionOneOfVisitor extends RulepadGrammarBaseVisitor<AggregateCon
             val annotations = acceptIfAvailable(ctx.annotations(), new AnnotationVisitor());
             val extension = extractExtension(ctx.extensions());
             val implementation = extractImplementations(ctx.implementations());
+            val overriddenMethods = extractOverriddenFunctions(ctx.overriddenFunctions());
             val methods = acceptIfAvailable(ctx.functions(), new FunctionExpressionVisitor());
             val fields = acceptIfAvailable(ctx.declarationStatements(), new FieldExpressionVisitor());
             // TODO: -- constructors
@@ -41,8 +43,9 @@ class ClassExpressionOneOfVisitor extends RulepadGrammarBaseVisitor<AggregateCon
                             fields,
                             methods,
                             extension,
-                            implementation
-                    ), ProgramElement.ProgramElementType.CLASS
+                            implementation,
+                            overriddenMethods
+                    )
             );
         }
         // when evaluating XOR, if two processed nodes produce True and True, then stop the evaluation

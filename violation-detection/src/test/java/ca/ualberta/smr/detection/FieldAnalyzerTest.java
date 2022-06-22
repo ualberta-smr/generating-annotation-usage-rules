@@ -11,6 +11,8 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 
+import static ca.ualberta.smr.detection.AnalyzerUtils.getRule;
+import static ca.ualberta.smr.detection.AnalyzerUtils.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -170,22 +172,6 @@ public class FieldAnalyzerTest {
         assertEquals(1, results.size());
         val r1 = (FieldDeclaration) results.stream().findFirst().get().treeElement();
         assertEquals("fooB", r1.getVariable(0).getNameAsString());
-    }
-
-
-    private static CompilationUnit parse(String... lines) {
-        String javaCode = String.join("\n", lines);
-        val parseResult = new JavaParser().parse(javaCode);
-        assumeTrue(parseResult.isSuccessful() && parseResult.getResult().isPresent(),
-                "Parsing should be successful");
-        return parseResult.getResult().get();
-    }
-
-    private static StaticAnalysisRule getRule(String ruleString) {
-        val rule = new Rule();
-        rule.setId("id");
-        rule.setSpecification(ruleString);
-        return RuleParser.parseRule(rule);
     }
 
 }

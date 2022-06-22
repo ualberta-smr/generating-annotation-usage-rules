@@ -26,7 +26,8 @@ symbols:
 	| '&'
 	| '|'
 	| '['
-	| ']';
+	| ']'
+	| ',';
 
 Alphabet: [a-zA-Z0-9_-];
 end: '.';
@@ -370,6 +371,7 @@ classExpressionNo:
 		| configurationFiles
 		| beans
 		| beansFile
+		| overriddenFunctions
 	);
 
 classExpressionAggregateContents:
@@ -384,9 +386,10 @@ classExpressionAggregateContents:
 		| configurationFiles
 		| beans
 		| beansFile
+		| overriddenFunctions
 	);
 
-OVERRIDDEN_FUNCTION: 'overridden function ';
+OVERRIDDEN_FUNCTION: 'overridden method ';
 
 overriddenFunctions:
 	OVERRIDDEN_FUNCTION combinatorialWords SPACE;
