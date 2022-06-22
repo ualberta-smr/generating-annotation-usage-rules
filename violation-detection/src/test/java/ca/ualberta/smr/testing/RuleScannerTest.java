@@ -1,6 +1,7 @@
 package ca.ualberta.smr.testing;
 
-import ca.ualberta.smr.model.*;
+import ca.ualberta.smr.model.StaticAnalysisRule;
+import ca.ualberta.smr.model.violationreport.ViolationCombination;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -10,12 +11,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static ca.ualberta.smr.utils.Utils.listOf;
-import static org.junit.jupiter.api.Assertions.fail;
+import static ca.ualberta.smr.parsing.utils.GeneralUtility.listOf;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RuleScannerTest {
 
@@ -24,7 +28,7 @@ public class RuleScannerTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void test(File file, Collection<String> expectedRulesToViolate) {
-        final Map<StaticAnalysisRule, Collection<ViolationInfo>> violations = defaultDetector.analyze(file.getAbsolutePath());
+        final Map<StaticAnalysisRule, Collection<ViolationCombination>> violations = defaultDetector.analyze(file.getAbsolutePath());
 
         final Collection<String> actualViolations = violations.entrySet().stream()
                 .filter(e -> !e.getValue().isEmpty())
@@ -32,14 +36,15 @@ public class RuleScannerTest {
                 .map(StaticAnalysisRule::toString)
                 .collect(Collectors.toSet());
 
-        final boolean allTheViolationsAreCorrect = expectedRulesToViolate.containsAll(actualViolations);
+        final boolean allTheViolationsAreCorrect = !actualViolations.isEmpty() && expectedRulesToViolate.containsAll(actualViolations);
 
         if (!allTheViolationsAreCorrect) {
-            for (Map.Entry<StaticAnalysisRule, Collection<ViolationInfo>> entry : violations.entrySet()) {
+            for (Map.Entry<StaticAnalysisRule, Collection<ViolationCombination>> entry : violations.entrySet()) {
                 if (!entry.getValue().isEmpty()) {
                     System.out.println("================================================");
                     System.out.println("For rule: " + entry.getKey().toString());
-                    for (ViolationInfo violationInfo : entry.getValue()) {
+                    for (ViolationCombination violationInfo : entry.getValue()) {
+                        System.out.println(violationInfo.describe());
                         Reporter.report(violationInfo);
                     }
                     System.out.println("================================================");

@@ -1,5 +1,8 @@
 package ca.ualberta.smr.model.javaelements;
 
+import ca.ualberta.smr.model.StaticAnalysisRule;
+import ca.ualberta.smr.model.violationreport.ViolationCombination;
+import ca.ualberta.smr.model.violationreport.ViolationInfo;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -8,26 +11,28 @@ import lombok.experimental.Accessors;
 @RequiredArgsConstructor
 @Getter
 @Accessors(fluent = true)
-@EqualsAndHashCode
-public class Name implements ProgramElement {
+@EqualsAndHashCode(callSuper = false)
+public class Name extends ProgramElement {
     private final String name;
 
-    public static Condition<Name> of(String name) {
-        return Condition.single(new Name(name));
-    }
-
-    public boolean equalsNameString(String name) {
-        return this.name.equals(name);
-    }
-
-    public boolean isEmpty() {
-        return this == EMPTY_NAME;
+    public static AggregateCondition of(String name) {
+        return AggregateCondition.single(new Name(name));
     }
 
     @Override
-    public String toString() {
-        return name;
+    public boolean matches(Object bd) {
+        String nameString = (String) bd;
+        return name.equals(nameString);
     }
 
-    public static final Name EMPTY_NAME = new Name("__NAME__");
+    @Override
+    public ViolationCombination getMissing(Object bd, StaticAnalysisRule rule) {
+        if (this.matches(bd)) return ViolationCombination.EMPTY;
+        return new ViolationInfo(null, name);
+    }
+
+    @Override
+    public String description() {
+        return name;
+    }
 }

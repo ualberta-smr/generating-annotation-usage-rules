@@ -1,7 +1,7 @@
 package ca.ualberta.smr.testing;
 
-import ca.ualberta.smr.model.ViolationInfo;
-import ca.ualberta.smr.model.ViolationRange;
+import ca.ualberta.smr.deprecated.model.ViolationRange;
+import ca.ualberta.smr.model.violationreport.ViolationCombination;
 import com.github.javaparser.Range;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -16,7 +16,7 @@ import static java.util.Optional.empty;
 
 public class Reporter {
 
-    public static void report(ViolationInfo violation) {
+    public static void report(ViolationCombination violation) {
         val message = getMessage(violation);
         val location = getLocation(violation);
 
@@ -25,7 +25,7 @@ public class Reporter {
         location.ifPresent(l -> System.out.printf("\tLocation: %s\n", l));
     }
 
-    private static String getMessage(ViolationInfo violation) {
+    private static String getMessage(ViolationCombination violation) {
         val treeElement = violation.treeElement();
 
         final String name;
@@ -52,7 +52,7 @@ public class Reporter {
             name = treeElement.getClass().toString();
             elementType = "Element";
         }
-        return String.format("%s %s is missing the following element(s): %s", elementType, name, violation.missingElements().toString());
+        return String.format("%s %s is missing the following element(s): %s", elementType, name, violation.describe());
     }
 
     private static String getParentClassName(Node node) {
@@ -61,7 +61,7 @@ public class Reporter {
         return clazz.getFullyQualifiedName().orElseGet(clazz::getNameAsString);
     }
 
-    private static Optional<ViolationRange> getLocation(ViolationInfo violation) {
+    private static Optional<ViolationRange> getLocation(ViolationCombination violation) {
         val treeElement = violation.treeElement();
         if (treeElement instanceof Node) {
             Optional<Range> range = ((Node) treeElement).getRange();

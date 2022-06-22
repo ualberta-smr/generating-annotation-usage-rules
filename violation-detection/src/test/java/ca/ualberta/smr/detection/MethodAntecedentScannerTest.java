@@ -1,12 +1,13 @@
 package ca.ualberta.smr.detection;
 
-import ca.ualberta.smr.newmodel.javaelements.*;
+import ca.ualberta.smr.detection.method.MethodAntecedentScanner;
+import ca.ualberta.smr.model.javaelements.*;
 import com.github.javaparser.JavaParser;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 
-import static ca.ualberta.smr.newmodel.javaelements.AggregateCondition.empty;
-import static ca.ualberta.smr.newmodel.javaelements.AggregateCondition.single;
+import static ca.ualberta.smr.model.javaelements.AggregateCondition.empty;
+import static ca.ualberta.smr.model.javaelements.AggregateCondition.single;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
