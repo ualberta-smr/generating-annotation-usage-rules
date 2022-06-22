@@ -1,7 +1,7 @@
 package ca.ualberta;
 
 import ca.ualberta.smr.model.StaticAnalysisRule;
-import ca.ualberta.smr.rules.RuleParser;
+import ca.ualberta.smr.parsing.rules.RuleParser;
 import lombok.SneakyThrows;
 
 import javax.inject.Named;

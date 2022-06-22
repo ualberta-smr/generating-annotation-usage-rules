@@ -1,8 +1,12 @@
 package ca.ualberta;
 
-import ca.ualberta.smr.ViolationDetector;
-import ca.ualberta.smr.analyzer.*;
+import ca.ualberta.smr.detection.Analyzer;
+import ca.ualberta.smr.detection.ViolationDetector;
+import ca.ualberta.smr.detection.clazz.ClassAnalyzer;
+import ca.ualberta.smr.detection.method.MethodAnalyzer;
+import ca.ualberta.smr.detection.field.FieldAnalyzer;
 import ca.ualberta.smr.model.*;
+import ca.ualberta.smr.model.violationreport.ViolationCombination;
 import ca.ualberta.smr.typeresolution.TypeResolver;
 
 import javax.inject.*;
@@ -11,7 +15,7 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static ca.ualberta.smr.utils.Utils.listOf;
+import static ca.ualberta.smr.parsing.utils.GeneralUtility.listOf;
 
 @Named
 @Singleton
@@ -27,16 +31,16 @@ public class DefaultViolationDetector {
                 .collect(Collectors.toList());
         final TypeResolver typeResolver = new TypeResolver(jarFiles);
         final Collection<StaticAnalysisRule> rules = ruleProvider.getRules();
-        final List<AnalysisRunner> analyzers = listOf(new ClassAnalyzer(), new MethodAnalyzer(), new FieldAnalyzer());
+        final List<Analyzer> analyzers = listOf(new ClassAnalyzer(), new MethodAnalyzer(), new FieldAnalyzer());
 
         this.violationDetector = new ViolationDetector(typeResolver, rules, analyzers);
     }
 
-    public Map<StaticAnalysisRule, Collection<ViolationInfo>> analyze(String filename) {
+    public Map<StaticAnalysisRule, Collection<ViolationCombination>> analyze(String filename) {
         return violationDetector.detectViolations(filename);
     }
 
-    public Map<StaticAnalysisRule, Collection<ViolationInfo>> analyze(File file) {
+    public Map<StaticAnalysisRule, Collection<ViolationCombination>> analyze(File file) {
         return violationDetector.detectViolations(file.getAbsolutePath());
     }
 

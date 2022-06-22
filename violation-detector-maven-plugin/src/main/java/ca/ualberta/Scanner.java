@@ -2,6 +2,7 @@ package ca.ualberta;
 
 import ca.ualberta.report.ViolationReporter;
 import ca.ualberta.smr.model.*;
+import ca.ualberta.smr.model.violationreport.ViolationCombination;
 import lombok.val;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -61,7 +62,7 @@ public class Scanner extends AbstractMojo {
         }
     }
 
-    private void report(Map<StaticAnalysisRule, Collection<ViolationInfo>> allViolations) throws MojoFailureException {
+    private void report(Map<StaticAnalysisRule, Collection<ViolationCombination>> allViolations) throws MojoFailureException {
         if (!allViolations.isEmpty()) {
             // basically if it needs to fail on violation, the log level should be error
             // otherwise warn
