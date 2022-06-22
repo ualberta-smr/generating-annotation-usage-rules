@@ -15,8 +15,7 @@ import lombok.val;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ca.ualberta.smr.parsing.utils.GeneralUtility.describe;
-import static ca.ualberta.smr.parsing.utils.GeneralUtility.listOf;
+import static ca.ualberta.smr.parsing.utils.GeneralUtility.*;
 
 @Getter
 @RequiredArgsConstructor
@@ -42,11 +41,18 @@ public final class Method extends ProgramElement implements AnalysisItem {
             val md = (MethodDeclaration) bd;
             return returnType.matches(md.getTypeAsString())
                     && annotations.matches(md.getAnnotations())
-                    && parameters.matches(md.getParameters());
+                    && parameters.matches(md.getParameters())
+                    && enclosingClassMatches(md);
         } else if (bd instanceof Parameter) {
             return parameters.matches(listOf(((Parameter) bd)));
         }
         return false;
+    }
+
+    private boolean enclosingClassMatches(MethodDeclaration md) {
+        return md.getParentNode()
+                .map(enclosingClass::matches)// if parent exists, check if it matches with the rule
+                .orElseGet(enclosingClass::isEmpty); // if it does not exist, check if the rule is empty
     }
 
     @Override
@@ -57,8 +63,15 @@ public final class Method extends ProgramElement implements AnalysisItem {
         val missingAnnotations = annotations.getMissing(md.getAnnotations(), rule);
         // TODO: make sure the params are the same
         val missingParameters = parameters.getMissing(MethodAntecedentScanner.findMethodParametersFromMethodDeclaration(md, rule.antecedent()), rule);
+        val missingEnclosingClass = getMissingEnclosingClass(md, rule);
 
-        return new ViolationCombinationAnd(md, listOf(missingReturnType, missingAnnotations, missingParameters));
+        return new ViolationCombinationAnd(md, listOf(missingReturnType, missingAnnotations, missingParameters, missingEnclosingClass));
+    }
+
+    private ViolationCombination getMissingEnclosingClass(MethodDeclaration md, StaticAnalysisRule rule) {
+        return md.getParentNode()
+                .map(p -> enclosingClass.getMissing(p, rule))
+                .orElse(ViolationCombination.EMPTY);
     }
 
     @Override

@@ -174,4 +174,48 @@ public class FieldAnalyzerTest {
         assertEquals("fooB", r1.getVariable(0).getNameAsString());
     }
 
+    @Test
+    void test4_withEnclosingClass() {
+        val cu = parse(
+                "class Foo {",
+                "@ConfigProperty private A fooA;",
+                "@ConfigProperty @Inject private B fooB;",
+                "}"
+        );
+
+        val rule = getRule(
+                "field with annotation \"ConfigProperty\" and no enclosing class with annotation \"ConfigProperties\" must have annotation \"Inject\" "
+        );
+
+        val results = new FieldAnalyzer().analyze(cu, rule);
+
+        results.stream().map(ViolationCombination::describe).forEach(System.out::println);
+
+        assertEquals(1, results.size());
+        val r1 = (FieldDeclaration) results.stream().findFirst().get().treeElement();
+        assertEquals("fooA", r1.getVariable(0).getNameAsString());
+    }
+
+    @Test
+    void test4_withEnclosingClass_2() {
+        val cu = parse(
+                "class Foo {",
+                "@ConfigProperty private A fooA;",
+                "@ConfigProperty @Inject private B fooB;",
+                "}"
+        );
+
+        val rule = getRule(
+                "field with annotation \"ConfigProperty\" must have annotation \"Inject\" or enclosing class with annotation \"ConfigProperties\" "
+        );
+
+        val results = new FieldAnalyzer().analyze(cu, rule);
+
+        results.stream().map(ViolationCombination::describe).forEach(System.out::println);
+
+        assertEquals(1, results.size());
+        val r1 = (FieldDeclaration) results.stream().findFirst().get().treeElement();
+        assertEquals("fooA", r1.getVariable(0).getNameAsString());
+    }
+
 }

@@ -14,6 +14,8 @@ import lombok.val;
 import java.util.HashMap;
 import java.util.Map;
 
+import static ca.ualberta.smr.parsing.utils.GeneralUtility.listOf;
+
 @Getter
 @RequiredArgsConstructor
 @Accessors(fluent = true)
@@ -34,7 +36,14 @@ public final class Field extends ProgramElement implements AnalysisItem {
     public boolean matches(Object bd) {
         val fd = (FieldDeclaration) bd;
         return type.matches(fd.getElementType().asString())
-                && annotations.matches(fd.getAnnotations());
+                && annotations.matches(fd.getAnnotations())
+                && enclosingClassMatches(fd);
+    }
+
+    private boolean enclosingClassMatches(FieldDeclaration fd) {
+        return fd.getParentNode()
+                .map(enclosingClass::matches)// if parent exists, check if it matches with the rule
+                .orElseGet(enclosingClass::isEmpty); // if it does not exist, check if the rule is empty
     }
 
     @Override
@@ -43,8 +52,15 @@ public final class Field extends ProgramElement implements AnalysisItem {
 
         val missingType = type.getMissing(fd.getElementType().asString(), rule);
         val missingAnnotations = annotations.getMissing(fd.getAnnotations(), rule);
+        val missingEnclosingClass = getMissingEnclosingClass(fd, rule);
 
-        return new ViolationCombinationAnd(fd, GeneralUtility.listOf(missingType, missingAnnotations));
+        return new ViolationCombinationAnd(fd, listOf(missingType, missingAnnotations, missingEnclosingClass));
+    }
+
+    private ViolationCombination getMissingEnclosingClass(FieldDeclaration fd, StaticAnalysisRule rule) {
+        return fd.getParentNode()
+                .map(p -> enclosingClass.getMissing(p, rule))
+                .orElse(ViolationCombination.EMPTY);
     }
 
     @Override
