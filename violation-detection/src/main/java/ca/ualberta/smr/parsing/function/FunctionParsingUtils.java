@@ -42,9 +42,9 @@ public class FunctionParsingUtils {
         val returnType = extractReturnType(returnTypesContext);
         val annotations = acceptIfAvailable(annotationsContext, new AnnotationVisitor());
         val parameters = acceptIfAvailable(parametersContext, new FunctionParameterVisitor());
-        extractEnclosingClass(enclosingClassContext);
+        val enclosingClass = extractEnclosingClass(enclosingClassContext);
 
-        return new Method(returnType, annotations, parameters);
+        return new Method(returnType, annotations, parameters, enclosingClass);
     }
 
 }
