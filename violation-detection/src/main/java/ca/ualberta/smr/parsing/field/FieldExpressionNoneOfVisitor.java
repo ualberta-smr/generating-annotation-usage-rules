@@ -2,15 +2,12 @@ package ca.ualberta.smr.parsing.field;
 
 import ca.ualberta.grammar.RulepadGrammarBaseVisitor;
 import ca.ualberta.grammar.RulepadGrammarParser;
-import ca.ualberta.smr.parsing.utils.CombinatorialWordsExtractorUtility;
-import ca.ualberta.smr.parsing.annotation.AnnotationVisitor;
 import ca.ualberta.smr.model.javaelements.AggregateCondition;
 import ca.ualberta.smr.model.javaelements.AggregateConditionOperation;
-import ca.ualberta.smr.model.javaelements.Field;
 import ca.ualberta.smr.model.javaelements.ProgramElement;
 import lombok.val;
 
-import static ca.ualberta.smr.parsing.utils.GeneralUtility.acceptIfAvailable;
+import static ca.ualberta.smr.parsing.field.FieldParsingUtils.createFieldFromCtx;
 
 class FieldExpressionNoneOfVisitor extends RulepadGrammarBaseVisitor<AggregateCondition> {
 
@@ -22,9 +19,8 @@ class FieldExpressionNoneOfVisitor extends RulepadGrammarBaseVisitor<AggregateCo
     @Override
     public AggregateCondition visitDeclarationStatementExpressionAggregateContents(RulepadGrammarParser.DeclarationStatementExpressionAggregateContentsContext ctx) {
         if (ctx.op == null) {
-            val types = CombinatorialWordsExtractorUtility.extractType(ctx.types());
-            val annotations = acceptIfAvailable(ctx.annotations(), new AnnotationVisitor());
-            return AggregateCondition.not(new Field(types, annotations));
+            val field = createFieldFromCtx(ctx);
+            return AggregateCondition.not(field);
         }
         val op = AggregateConditionOperation.AND;
         val left = this.visitDeclarationStatementExpressionAggregateContents(ctx.left);

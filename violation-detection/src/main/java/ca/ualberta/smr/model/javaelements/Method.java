@@ -26,6 +26,15 @@ public final class Method extends ProgramElement implements AnalysisItem {
     private final AggregateCondition returnType;
     private final AggregateCondition annotations;
     private final AggregateCondition parameters;
+    private final AggregateCondition enclosingClass;
+
+    // TODO: should be deleted
+    public Method(AggregateCondition returnType, AggregateCondition annotations, AggregateCondition parameters) {
+        this.returnType = returnType;
+        this.annotations = annotations;
+        this.parameters = parameters;
+        this.enclosingClass = AggregateCondition.empty();
+    }
 
     @Override
     public boolean matches(Object bd) {

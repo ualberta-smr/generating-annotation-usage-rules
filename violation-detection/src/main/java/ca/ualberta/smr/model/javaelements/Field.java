@@ -21,6 +21,14 @@ import java.util.Map;
 public final class Field extends ProgramElement implements AnalysisItem {
     private final AggregateCondition type;
     private final AggregateCondition annotations;
+    private final AggregateCondition enclosingClass;
+
+    // TODO: should be deleted
+    public Field(AggregateCondition type, AggregateCondition annotations) {
+        this.type = type;
+        this.annotations = annotations;
+        this.enclosingClass = AggregateCondition.empty();
+    }
 
     @Override
     public boolean matches(Object bd) {

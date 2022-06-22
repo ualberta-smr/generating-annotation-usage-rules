@@ -629,6 +629,15 @@ class RulepadGrammarListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by RulepadGrammarParser#enclosingClass.
+    def enterEnclosingClass(self, ctx:RulepadGrammarParser.EnclosingClassContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#enclosingClass.
+    def exitEnclosingClass(self, ctx:RulepadGrammarParser.EnclosingClassContext):
+        pass
+
+
     # Enter a parse tree produced by RulepadGrammarParser#overriddenFunctions.
     def enterOverriddenFunctions(self, ctx:RulepadGrammarParser.OverriddenFunctionsContext):
         pass

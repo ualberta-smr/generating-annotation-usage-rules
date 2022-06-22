@@ -49,7 +49,7 @@ public class FunctionParameterVisitor extends RulepadGrammarBaseVisitor<Aggregat
         if (ctx.op == null) {
             if (ctx.functionParameterExpression().isEmpty()) {
                 val types = CombinatorialWordsExtractorUtility.extractType(ctx.types());
-                // actually irrelevant, maybe should be replaced with position?
+                // TODO: actually irrelevant, maybe should be replaced with position?
                 val names = CombinatorialWordsExtractorUtility.extractName(ctx.names());
                 val annotations = ctx.annotations().accept(new AnnotationVisitor());
 

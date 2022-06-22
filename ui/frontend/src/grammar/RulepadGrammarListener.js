@@ -626,6 +626,15 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 	}
 
 
+	// Enter a parse tree produced by RulepadGrammarParser#enclosingClass.
+	enterEnclosingClass(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#enclosingClass.
+	exitEnclosingClass(ctx) {
+	}
+
+
 	// Enter a parse tree produced by RulepadGrammarParser#overriddenFunctions.
 	enterOverriddenFunctions(ctx) {
 	}

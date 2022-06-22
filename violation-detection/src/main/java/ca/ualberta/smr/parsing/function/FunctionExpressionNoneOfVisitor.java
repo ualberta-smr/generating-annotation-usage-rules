@@ -10,6 +10,7 @@ import ca.ualberta.smr.model.javaelements.Method;
 import ca.ualberta.smr.model.javaelements.ProgramElement;
 import lombok.val;
 
+import static ca.ualberta.smr.parsing.function.FunctionParsingUtils.createMethodFromCtx;
 import static ca.ualberta.smr.parsing.utils.GeneralUtility.acceptIfAvailable;
 
 class FunctionExpressionNoneOfVisitor extends RulepadGrammarBaseVisitor<AggregateCondition> {
@@ -22,10 +23,8 @@ class FunctionExpressionNoneOfVisitor extends RulepadGrammarBaseVisitor<Aggregat
     @Override
     public AggregateCondition visitFunctionExpressionAggregateContents(RulepadGrammarParser.FunctionExpressionAggregateContentsContext ctx) {
         if (ctx.op == null) {
-            val returnType = CombinatorialWordsExtractorUtility.extractReturnType(ctx.returnTypes());
-            val annotations = acceptIfAvailable(ctx.annotations(), new AnnotationVisitor());
-            val parameters = acceptIfAvailable(ctx.functionParameters(), new FunctionParameterVisitor());
-            return AggregateCondition.not(new Method(returnType, annotations, parameters));
+            val method = createMethodFromCtx(ctx);
+            return AggregateCondition.not(method);
         }
         val op = AggregateConditionOperation.AND;
         val left = this.visitFunctionExpressionAggregateContents(ctx.left);

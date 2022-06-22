@@ -146,6 +146,7 @@ functionExpression:
 		| returnTypes
 		| functionParameters
 		| configurationFiles
+		| enclosingClass
 		| functionExpressionNoneOf
 		| functionExpressionOneOf
 		| functionExpressionNo
@@ -164,6 +165,7 @@ functionExpressionNo:
 		| returnTypes
 		| functionParameters
 		| configurationFiles
+		| enclosingClass
 	);
 
 functionExpressionAggregateContents:
@@ -173,6 +175,7 @@ functionExpressionAggregateContents:
 		| returnTypes
 		| functionParameters
 		| configurationFiles
+		| enclosingClass
 	);
 
 /*
@@ -264,6 +267,7 @@ declarationStatementExpression:
 		annotations
 		| types
 		| configurationFiles
+		| enclosingClass
 		| declarationStatementExpressionOneOf
 		| declarationStatementExpressionNoneOf
 		| declarationStatementExpressionNo
@@ -277,12 +281,17 @@ declarationStatementExpressionNoneOf:
 	NONE_OF LPAREN declarationStatementExpressionAggregateContents RPAREN;
 
 declarationStatementExpressionNo:
-	NO (annotations | types | configurationFiles);
+	NO (
+		annotations
+		| types
+		| configurationFiles
+		| enclosingClass
+	);
 
 declarationStatementExpressionAggregateContents:
 	left = declarationStatementExpressionAggregateContents op = or_ right =
 		declarationStatementExpressionAggregateContents
-	| ( annotations | types | configurationFiles);
+	| (annotations | types | configurationFiles | enclosingClass);
 
 /*
  configurationFile
@@ -388,6 +397,10 @@ classExpressionAggregateContents:
 		| beansFile
 		| overriddenFunctions
 	);
+
+ENCLOSING_CLASS: 'enclosing class ';
+
+enclosingClass: ENCLOSING_CLASS classCondition;
 
 OVERRIDDEN_FUNCTION: 'overridden method ';
 

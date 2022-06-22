@@ -9,6 +9,7 @@ import ca.ualberta.smr.model.javaelements.Method;
 import ca.ualberta.smr.model.javaelements.ProgramElement;
 import lombok.val;
 
+import static ca.ualberta.smr.parsing.function.FunctionParsingUtils.createMethodFromCtx;
 import static ca.ualberta.smr.parsing.utils.GeneralUtility.acceptIfAvailable;
 import static ca.ualberta.smr.parsing.utils.GeneralUtility.getOperation;
 import static ca.ualberta.smr.parsing.utils.GeneralUtility.unwrapIfSingle;
@@ -20,10 +21,7 @@ public class FunctionExpressionVisitor extends RulepadGrammarBaseVisitor<Aggrega
     public AggregateCondition visitFunctionExpression(RulepadGrammarParser.FunctionExpressionContext ctx) {
         if (ctx.op == null) {
             if (ctx.functionExpression().isEmpty()) {
-                // these can be parts of a Method object
-                val returnType = CombinatorialWordsExtractorUtility.extractReturnType(ctx.returnTypes());
-                val annotations = acceptIfAvailable(ctx.annotations(), new AnnotationVisitor());
-                val parameters = acceptIfAvailable(ctx.functionParameters(), new FunctionParameterVisitor());
+                val method = createMethodFromCtx(ctx);
 
                 // these can be Method aggregate condition objects
                 val no = acceptIfAvailable(ctx.functionExpressionNo(), new FunctionExpressionNoVisitor());
@@ -34,10 +32,7 @@ public class FunctionExpressionVisitor extends RulepadGrammarBaseVisitor<Aggrega
                         .stream()
                         .filter(a -> !a.isEmpty())
                         .findFirst()
-                        .orElseGet(() -> AggregateCondition.single(
-                                new Method(returnType, annotations, parameters),
-                                ProgramElement.ProgramElementType.METHOD
-                        ));
+                        .orElseGet(() -> AggregateCondition.single(method));
             }
             return this.visitFunctionExpression(ctx.functionExpression(0));
         }

@@ -10,6 +10,7 @@ import ca.ualberta.smr.model.javaelements.Field;
 import ca.ualberta.smr.model.javaelements.ProgramElement;
 import lombok.val;
 
+import static ca.ualberta.smr.parsing.field.FieldParsingUtils.createFieldFromCtx;
 import static ca.ualberta.smr.parsing.utils.GeneralUtility.acceptIfAvailable;
 
 class FieldExpressionOneOfVisitor extends RulepadGrammarBaseVisitor<AggregateCondition> {
@@ -22,11 +23,8 @@ class FieldExpressionOneOfVisitor extends RulepadGrammarBaseVisitor<AggregateCon
     @Override
     public AggregateCondition visitDeclarationStatementExpressionAggregateContents(RulepadGrammarParser.DeclarationStatementExpressionAggregateContentsContext ctx) {
         if (ctx.op == null) {
-            val types = CombinatorialWordsExtractorUtility.extractType(ctx.types());
-            val annotations = acceptIfAvailable(ctx.annotations(), new AnnotationVisitor());
-            return AggregateCondition.single(
-                    new Field(types, annotations), ProgramElement.ProgramElementType.FIELD
-            );
+            val field = createFieldFromCtx(ctx);
+            return AggregateCondition.single(field);
         }
         // when evaluating XOR, if two processed nodes produce True and True, then stop the evaluation
         // because one of implies only one element from the bunch

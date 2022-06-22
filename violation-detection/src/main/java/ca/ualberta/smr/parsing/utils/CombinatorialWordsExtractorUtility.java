@@ -5,7 +5,10 @@ import ca.ualberta.smr.model.javaelements.AggregateCondition;
 import ca.ualberta.smr.model.javaelements.Name;
 import ca.ualberta.smr.model.javaelements.Type;
 import ca.ualberta.smr.model.javaelements.Value;
+import ca.ualberta.smr.parsing.clazz.ClassExpressionVisitor;
 import lombok.val;
+
+import java.util.Optional;
 
 import static ca.ualberta.smr.parsing.utils.GeneralUtility.getText;
 import static ca.ualberta.smr.model.javaelements.AggregateCondition.empty;
@@ -52,6 +55,14 @@ public class CombinatorialWordsExtractorUtility {
         val combWords = ctx.implementationCondition().combinatorialWords();
         val implementedInterface = getText(combWords);
         return Type.of(implementedInterface);
+    }
+
+    public static AggregateCondition extractEnclosingClass(RulepadGrammarParser.EnclosingClassContext ctx) {
+        return Optional.ofNullable(ctx)
+                .map(RulepadGrammarParser.EnclosingClassContext::classCondition)
+                .map(RulepadGrammarParser.ClassConditionContext::classExpression)
+                .map(expr -> expr.accept(new ClassExpressionVisitor()))
+                .orElseGet(AggregateCondition::empty);
     }
 
 }
