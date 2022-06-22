@@ -5,12 +5,12 @@ import antlr4 from 'antlr4';
 // This class defines a complete listener for a parse tree produced by RulepadGrammarParser.
 export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListener {
 
-	// Enter a parse tree produced by RulepadGrammarParser#inputSentence.
-	enterInputSentence(ctx) {
+	// Enter a parse tree produced by RulepadGrammarParser#start.
+	enterStart(ctx) {
 	}
 
-	// Exit a parse tree produced by RulepadGrammarParser#inputSentence.
-	exitInputSentence(ctx) {
+	// Exit a parse tree produced by RulepadGrammarParser#start.
+	exitStart(ctx) {
 	}
 
 
@@ -347,39 +347,39 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 	}
 
 
-	// Enter a parse tree produced by RulepadGrammarParser#parameters.
-	enterParameters(ctx) {
+	// Enter a parse tree produced by RulepadGrammarParser#annotationParameters.
+	enterAnnotationParameters(ctx) {
 	}
 
-	// Exit a parse tree produced by RulepadGrammarParser#parameters.
-	exitParameters(ctx) {
-	}
-
-
-	// Enter a parse tree produced by RulepadGrammarParser#parameterCondition.
-	enterParameterCondition(ctx) {
-	}
-
-	// Exit a parse tree produced by RulepadGrammarParser#parameterCondition.
-	exitParameterCondition(ctx) {
+	// Exit a parse tree produced by RulepadGrammarParser#annotationParameters.
+	exitAnnotationParameters(ctx) {
 	}
 
 
-	// Enter a parse tree produced by RulepadGrammarParser#parameterConditionTransition.
-	enterParameterConditionTransition(ctx) {
+	// Enter a parse tree produced by RulepadGrammarParser#annotationParameterCondition.
+	enterAnnotationParameterCondition(ctx) {
 	}
 
-	// Exit a parse tree produced by RulepadGrammarParser#parameterConditionTransition.
-	exitParameterConditionTransition(ctx) {
+	// Exit a parse tree produced by RulepadGrammarParser#annotationParameterCondition.
+	exitAnnotationParameterCondition(ctx) {
 	}
 
 
-	// Enter a parse tree produced by RulepadGrammarParser#parameterExpression.
-	enterParameterExpression(ctx) {
+	// Enter a parse tree produced by RulepadGrammarParser#annotationParameterConditionTransition.
+	enterAnnotationParameterConditionTransition(ctx) {
 	}
 
-	// Exit a parse tree produced by RulepadGrammarParser#parameterExpression.
-	exitParameterExpression(ctx) {
+	// Exit a parse tree produced by RulepadGrammarParser#annotationParameterConditionTransition.
+	exitAnnotationParameterConditionTransition(ctx) {
+	}
+
+
+	// Enter a parse tree produced by RulepadGrammarParser#annotationParameterExpression.
+	enterAnnotationParameterExpression(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#annotationParameterExpression.
+	exitAnnotationParameterExpression(ctx) {
 	}
 
 
@@ -623,6 +623,15 @@ export default class RulepadGrammarListener extends antlr4.tree.ParseTreeListene
 
 	// Exit a parse tree produced by RulepadGrammarParser#classExpressionAggregateContents.
 	exitClassExpressionAggregateContents(ctx) {
+	}
+
+
+	// Enter a parse tree produced by RulepadGrammarParser#overriddenFunctions.
+	enterOverriddenFunctions(ctx) {
+	}
+
+	// Exit a parse tree produced by RulepadGrammarParser#overriddenFunctions.
+	exitOverriddenFunctions(ctx) {
 	}
 
 

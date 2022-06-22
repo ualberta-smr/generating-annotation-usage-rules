@@ -77,7 +77,7 @@ public class GrammarParsingVisitorTest {
     private static ParseTree getTree(String input) {
         final RulepadGrammarLexer lexer = new RulepadGrammarLexer(CharStreams.fromString(input));
         final RulepadGrammarParser parser = new RulepadGrammarParser(new CommonTokenStream(lexer));
-        return parser.inputSentence();
+        return parser.start();
     }
 
     private static StaticAnalysisRule getRule_function_simple() {

@@ -270,9 +270,9 @@ public class DefaultRulePadGrammarListener extends RulepadGrammarBaseListener {
      * Specific to annotations at the moment
      */
     @Override
-    public void enterParameters(RulepadGrammarParser.ParametersContext ctx) {
+    public void enterAnnotationParameters(RulepadGrammarParser.AnnotationParametersContext ctx) {
         final AnnotationParameter ap = new AnnotationParameter();
-        val words = ctx.parameterCondition().combinatorialWords();
+        val words = ctx.annotationParameterCondition().combinatorialWords();
         if (words != null) {
             final String[] parts = words.getText().replace("\"", "").trim().split("\\s+");
             // TODO: this may have either 1 or 2 parts
@@ -296,7 +296,7 @@ public class DefaultRulePadGrammarListener extends RulepadGrammarBaseListener {
     }
 
     @Override
-    public void exitParameters(RulepadGrammarParser.ParametersContext ctx) {
+    public void exitAnnotationParameters(RulepadGrammarParser.AnnotationParametersContext ctx) {
         popFromStack();
     }
 

@@ -20,7 +20,7 @@ public class DefaultRulePadGrammarVisitor extends RulepadGrammarBaseVisitor<Stat
 
     @Override
     public StaticAnalysisRule visit(ParseTree tree) {
-        val mustClause = ((RulepadGrammarParser.InputSentenceContext) tree).mustClause();
+        val mustClause = ((RulepadGrammarParser.StartContext) tree).mustClause();
         return this.visitMustClause(mustClause);
     }
 

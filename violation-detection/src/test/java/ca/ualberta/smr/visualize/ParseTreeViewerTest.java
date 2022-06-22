@@ -18,7 +18,7 @@ public class ParseTreeViewerTest {
         final RulepadGrammarLexer lexer = new RulepadGrammarLexer(CharStreams.fromString(input));
         final RulepadGrammarParser parser = new RulepadGrammarParser(new CommonTokenStream(lexer));
 //        parser.setTrace(true);
-        final ParseTree tree = parser.inputSentence();
+        final ParseTree tree = parser.start();
         System.out.println(tree.toStringTree(parser));
         //show AST in GUI
         TreeViewer viewr = new TreeViewer(Arrays.asList(parser.getRuleNames()),tree);

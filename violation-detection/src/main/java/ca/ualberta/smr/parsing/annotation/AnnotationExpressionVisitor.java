@@ -14,7 +14,7 @@ public class AnnotationExpressionVisitor extends RulepadGrammarBaseVisitor<Aggre
     public AggregateCondition visitAnnotationExpression(RulepadGrammarParser.AnnotationExpressionContext ctx) {
         if (ctx.op == null) {
             if (ctx.annotationExpression().isEmpty()) {
-                return ctx.parameters().accept(new AnnotationParameterVisitor());
+                return ctx.annotationParameters().accept(new AnnotationParameterVisitor());
             }
             return this.visitAnnotationExpression(ctx.annotationExpression(0));
         } else {

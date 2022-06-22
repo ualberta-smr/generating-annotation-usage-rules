@@ -8,12 +8,12 @@ else:
 # This class defines a complete listener for a parse tree produced by RulepadGrammarParser.
 class RulepadGrammarListener(ParseTreeListener):
 
-    # Enter a parse tree produced by RulepadGrammarParser#inputSentence.
-    def enterInputSentence(self, ctx:RulepadGrammarParser.InputSentenceContext):
+    # Enter a parse tree produced by RulepadGrammarParser#start.
+    def enterStart(self, ctx:RulepadGrammarParser.StartContext):
         pass
 
-    # Exit a parse tree produced by RulepadGrammarParser#inputSentence.
-    def exitInputSentence(self, ctx:RulepadGrammarParser.InputSentenceContext):
+    # Exit a parse tree produced by RulepadGrammarParser#start.
+    def exitStart(self, ctx:RulepadGrammarParser.StartContext):
         pass
 
 
@@ -350,39 +350,39 @@ class RulepadGrammarListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by RulepadGrammarParser#parameters.
-    def enterParameters(self, ctx:RulepadGrammarParser.ParametersContext):
+    # Enter a parse tree produced by RulepadGrammarParser#annotationParameters.
+    def enterAnnotationParameters(self, ctx:RulepadGrammarParser.AnnotationParametersContext):
         pass
 
-    # Exit a parse tree produced by RulepadGrammarParser#parameters.
-    def exitParameters(self, ctx:RulepadGrammarParser.ParametersContext):
-        pass
-
-
-    # Enter a parse tree produced by RulepadGrammarParser#parameterCondition.
-    def enterParameterCondition(self, ctx:RulepadGrammarParser.ParameterConditionContext):
-        pass
-
-    # Exit a parse tree produced by RulepadGrammarParser#parameterCondition.
-    def exitParameterCondition(self, ctx:RulepadGrammarParser.ParameterConditionContext):
+    # Exit a parse tree produced by RulepadGrammarParser#annotationParameters.
+    def exitAnnotationParameters(self, ctx:RulepadGrammarParser.AnnotationParametersContext):
         pass
 
 
-    # Enter a parse tree produced by RulepadGrammarParser#parameterConditionTransition.
-    def enterParameterConditionTransition(self, ctx:RulepadGrammarParser.ParameterConditionTransitionContext):
+    # Enter a parse tree produced by RulepadGrammarParser#annotationParameterCondition.
+    def enterAnnotationParameterCondition(self, ctx:RulepadGrammarParser.AnnotationParameterConditionContext):
         pass
 
-    # Exit a parse tree produced by RulepadGrammarParser#parameterConditionTransition.
-    def exitParameterConditionTransition(self, ctx:RulepadGrammarParser.ParameterConditionTransitionContext):
+    # Exit a parse tree produced by RulepadGrammarParser#annotationParameterCondition.
+    def exitAnnotationParameterCondition(self, ctx:RulepadGrammarParser.AnnotationParameterConditionContext):
         pass
 
 
-    # Enter a parse tree produced by RulepadGrammarParser#parameterExpression.
-    def enterParameterExpression(self, ctx:RulepadGrammarParser.ParameterExpressionContext):
+    # Enter a parse tree produced by RulepadGrammarParser#annotationParameterConditionTransition.
+    def enterAnnotationParameterConditionTransition(self, ctx:RulepadGrammarParser.AnnotationParameterConditionTransitionContext):
         pass
 
-    # Exit a parse tree produced by RulepadGrammarParser#parameterExpression.
-    def exitParameterExpression(self, ctx:RulepadGrammarParser.ParameterExpressionContext):
+    # Exit a parse tree produced by RulepadGrammarParser#annotationParameterConditionTransition.
+    def exitAnnotationParameterConditionTransition(self, ctx:RulepadGrammarParser.AnnotationParameterConditionTransitionContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#annotationParameterExpression.
+    def enterAnnotationParameterExpression(self, ctx:RulepadGrammarParser.AnnotationParameterExpressionContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#annotationParameterExpression.
+    def exitAnnotationParameterExpression(self, ctx:RulepadGrammarParser.AnnotationParameterExpressionContext):
         pass
 
 
@@ -626,6 +626,15 @@ class RulepadGrammarListener(ParseTreeListener):
 
     # Exit a parse tree produced by RulepadGrammarParser#classExpressionAggregateContents.
     def exitClassExpressionAggregateContents(self, ctx:RulepadGrammarParser.ClassExpressionAggregateContentsContext):
+        pass
+
+
+    # Enter a parse tree produced by RulepadGrammarParser#overriddenFunctions.
+    def enterOverriddenFunctions(self, ctx:RulepadGrammarParser.OverriddenFunctionsContext):
+        pass
+
+    # Exit a parse tree produced by RulepadGrammarParser#overriddenFunctions.
+    def exitOverriddenFunctions(self, ctx:RulepadGrammarParser.OverriddenFunctionsContext):
         pass
 
 

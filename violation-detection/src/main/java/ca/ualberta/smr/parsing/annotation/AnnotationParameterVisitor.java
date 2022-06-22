@@ -14,7 +14,7 @@ import static ca.ualberta.smr.parsing.utils.GeneralUtility.*;
 
 public class AnnotationParameterVisitor extends RulepadGrammarBaseVisitor<AggregateCondition> {
     @Override
-    public AggregateCondition visitParameterCondition(RulepadGrammarParser.ParameterConditionContext ctx) {
+    public AggregateCondition visitAnnotationParameterCondition(RulepadGrammarParser.AnnotationParameterConditionContext ctx) {
         // TODO: need to work on this because type can also be specified in the param combWords
         var defaultType = AggregateCondition.empty();
         var defaultName = AggregateCondition.empty();
@@ -30,9 +30,9 @@ public class AnnotationParameterVisitor extends RulepadGrammarBaseVisitor<Aggreg
             }
         }
 
-        val transitionContext = ctx.parameterConditionTransition();
+        val transitionContext = ctx.annotationParameterConditionTransition();
         if (transitionContext != null) {
-            return this.visitParameterExpression(transitionContext.parameterExpression(), defaultType, defaultName);
+            return this.visitAnnotationParameterExpression(transitionContext.annotationParameterExpression(), defaultType, defaultName);
         }
 
         if (defaultName.isEmpty() && defaultType.isEmpty()) {
@@ -47,11 +47,11 @@ public class AnnotationParameterVisitor extends RulepadGrammarBaseVisitor<Aggreg
         );
     }
 
-    public AggregateCondition visitParameterExpression(RulepadGrammarParser.ParameterExpressionContext ctx,
+    public AggregateCondition visitAnnotationParameterExpression(RulepadGrammarParser.AnnotationParameterExpressionContext ctx,
                                                        AggregateCondition defaultType,
                                                        AggregateCondition defaultName) {
         if (ctx.op == null) {
-            if (ctx.parameterExpression().isEmpty()) {
+            if (ctx.annotationParameterExpression().isEmpty()) {
                 val types = CombinatorialWordsExtractorUtility.extractType(ctx.types());
                 val names = CombinatorialWordsExtractorUtility.extractName(ctx.names());
                 val values = CombinatorialWordsExtractorUtility.extractValue(ctx.values());
@@ -64,11 +64,11 @@ public class AnnotationParameterVisitor extends RulepadGrammarBaseVisitor<Aggreg
                 );
             }
             // it's not a binary context, so we'll only have 1 parameter expression
-            return this.visitParameterExpression(ctx.parameterExpression(0), defaultType, defaultName);
+            return this.visitAnnotationParameterExpression(ctx.annotationParameterExpression(0), defaultType, defaultName);
         } else {
             val op = getOperation(ctx.op);
-            val left = unwrapIfSingle(this.visitParameterExpression(ctx.left, defaultType, defaultName));
-            val right = unwrapIfSingle(this.visitParameterExpression(ctx.right, defaultType, defaultName));
+            val left = unwrapIfSingle(this.visitAnnotationParameterExpression(ctx.left, defaultType, defaultName));
+            val right = unwrapIfSingle(this.visitAnnotationParameterExpression(ctx.right, defaultType, defaultName));
 
             return new AggregateCondition(left, right, op);
         }

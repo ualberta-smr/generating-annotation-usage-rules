@@ -31,7 +31,7 @@ public class RuleParser {
     private static StaticAnalysisRule getStaticAnalysisRule(Rule rule) {
         val lexer = new RulepadGrammarLexer(CharStreams.fromString(rule.getSpecification()));
         val parser = new RulepadGrammarParser(new CommonTokenStream(lexer));
-        val tree = parser.inputSentence();
+        val tree = parser.start();
         val listener = new DefaultRulePadGrammarListener(rule);
 
         new ParseTreeWalker()
