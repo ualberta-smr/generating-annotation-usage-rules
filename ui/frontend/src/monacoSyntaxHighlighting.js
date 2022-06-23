@@ -146,10 +146,10 @@ export default class ShortRulepad {
             endColumn: word.endColumn
         }
 
-        const isSurroundedByQuotes = this.__isCursorBetweenQuotes(model, position)
+        const [isSurroundedByQuotes, wordBetweenQuotes] = this.__isCursorBetweenQuotes(model, position)
 
         if (isSurroundedByQuotes) {
-            const suggestions = lookup(word.word)
+            const suggestions = lookup(word.word, wordBetweenQuotes)
                 .map(result => this.__createNewTextSuggestion(result, range))
 
             return { suggestions }
@@ -166,7 +166,7 @@ export default class ShortRulepad {
         filterText: simpleName,
         sortText: simpleName,
     }, range);
-    
+
 
     __isCursorBetweenQuotes(model, position) { // cursor is zero-based
         const [cursorStart, cursorEnd] = [position.column - 2, position.column - 1];
@@ -185,12 +185,12 @@ export default class ShortRulepad {
             const start = pos[i]
             const end = pos[i + 1]
             if (cursorStart >= start && cursorEnd <= end) {
-                return true;
+                return [true, line.slice(start + 1, end - 1)];
             }
         }
-        return false;
+        return [false, null];
     }
-    
+
     register() {
         monaco.languages.register({ id: this.name });
         monaco.languages.setMonarchTokensProvider(this.name, this.getTokenProvider());

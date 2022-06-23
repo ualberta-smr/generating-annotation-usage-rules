@@ -25,7 +25,7 @@ public class Utils {
                 .filter(File::isFile)
                 .map(Utils::getClassNamesFromJarFile)
                 .flatMap(Collection::stream)
-                .filter(s -> !s.contains("package-info"))
+                .filter(s -> !s.contains("package-info") || !s.contains("module-info"))
                 .collect(toMap(
                         str -> str.substring(str.lastIndexOf(".") + 1).replace("$", ".").toLowerCase(),
                         str -> listOf(str.replace("$", ".")),

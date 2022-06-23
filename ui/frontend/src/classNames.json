@@ -664,7 +664,6 @@
     "namedsubgraph" : [ "jakarta.persistence.NamedSubgraph" ],
     "positive" : [ "jakarta.validation.constraints.Positive" ],
     "alterablecontext" : [ "jakarta.enterprise.context.spi.AlterableContext", "javax.enterprise.context.spi.AlterableContext" ],
-    "module-info" : [ "module-info" ],
     "sebootstrap.configuration" : [ "jakarta.ws.rs.SeBootstrap.Configuration" ],
     "filterchain" : [ "jakarta.servlet.FilterChain" ],
     "servervariable" : [ "org.eclipse.microprofile.openapi.models.servers.ServerVariable", "org.eclipse.microprofile.openapi.annotations.servers.ServerVariable" ],
