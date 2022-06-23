@@ -150,33 +150,33 @@ export default class FormatterListener extends RulepadGrammarListener {
 
 
     // Enter a parse tree produced by RulepadGrammarParser#parameters.
-    enterParameters(ctx) {
+    enterAnnotationParameters(ctx) {
         this.finalString += this.getPrefix() + ctx.PARAMETER().getText()
     }
 
     // Enter a parse tree produced by RulepadGrammarParser#parameterCondition.
-    enterParameterCondition(ctx) {
+    enterAnnotationParameterCondition(ctx) {
         if (ctx.combinatorialWords() !== null) {
             this.finalString += ctx.combinatorialWords().getText() + " ";
         }
     }
 
-    enterParameterConditionTransition(ctx) {
+    enterAnnotationParameterConditionTransition(ctx) {
         this.finalString += ctx.withWord().getText() + "\n";
         this.depth++;
     }
 
-    exitParameterConditionTransition(ctx) {
+    exitAnnotationParameterConditionTransition(ctx) {
         this.depth--;
     }
 
     // Enter a parse tree produced by RulepadGrammarParser#parameterExpression.
-    enterParameterExpression(ctx) {
+    enterAnnotationParameterExpression(ctx) {
         if (this.openParenthesisIfRequired(ctx)) return;
     }
 
     // Exit a parse tree produced by RulepadGrammarParser#parameterExpression.
-    exitParameterExpression(ctx) {
+    exitAnnotationParameterExpression(ctx) {
         if (this.closeParenthesisIfRequired(ctx)) return;
     }
 

@@ -11,7 +11,7 @@ export default function prettify(input) {
         const parser = new RulepadGrammarParser(tokens);
         parser.buildParseTrees = true;
 
-        const tree = parser.inputSentence();
+        const tree = parser.start();
         const formatter = new FormatterListener();
 
         antlr4.tree.ParseTreeWalker.DEFAULT.walk(formatter, tree);

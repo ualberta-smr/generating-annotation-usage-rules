@@ -1,4 +1,5 @@
 import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import lookup from "./classNameDatabase";
 import prettify from "./grammar/formatter";
 
 export default class ShortRulepad {
@@ -77,6 +78,15 @@ export default class ShortRulepad {
         })
     }
 
+    newTextSuggestion(obj, range) {
+        return {
+            kind: monaco.languages.CompletionItemKind.Text,
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            range: range,
+            ...obj
+        }
+    };
+
     __getAllSuggestions(range) {
         const newSuggestion = (obj) => {
             return {
@@ -136,15 +146,55 @@ export default class ShortRulepad {
             endColumn: word.endColumn
         }
 
+        const isSurroundedByQuotes = this.__isCursorBetweenQuotes(model, position)
+
+        if (isSurroundedByQuotes) {
+            const suggestions = lookup(word.word)
+                .map(result => this.__createNewTextSuggestion(result, range))
+
+            return { suggestions }
+        }
+
         return {
             suggestions: this.__getAllSuggestions(range)
         }
     }
 
+    __createNewTextSuggestion = ({ label, simpleName, fullyQualifiedName }, range) => this.newTextSuggestion({
+        label: label,
+        insertText: fullyQualifiedName,
+        filterText: simpleName,
+        sortText: simpleName,
+    }, range);
+    
+
+    __isCursorBetweenQuotes(model, position) { // cursor is zero-based
+        const [cursorStart, cursorEnd] = [position.column - 2, position.column - 1];
+
+        const allText = model.getValue()
+        const line = allText.split("\n")[position.lineNumber - 1]
+
+        const pos = []
+        for (let i = 0; i < line.length; i++) {
+            if (line[i] == "\"") {
+                pos.push(i);
+            }
+        }
+
+        for (let i = 0; i < pos.length; i += 2) {
+            const start = pos[i]
+            const end = pos[i + 1]
+            if (cursorStart >= start && cursorEnd <= end) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     register() {
         monaco.languages.register({ id: this.name });
         monaco.languages.setMonarchTokensProvider(this.name, this.getTokenProvider());
-        monaco.languages.registerDocumentFormattingEditProvider(this.name, this)
+        monaco.languages.registerDocumentFormattingEditProvider(this.name, this);
         monaco.languages.registerCompletionItemProvider(this.name, this)
         // Define a new theme that contains only rules that match this language
         monaco.editor.defineTheme(this.themeName, this.getThemeDefinition());
