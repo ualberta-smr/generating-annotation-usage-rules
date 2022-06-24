@@ -38,9 +38,9 @@ def getSession():
         sl.close()
 
 
-@app.get('/grammarToCode')
-def grammarToCode(response: Response, grammar: Optional[str] = ""):
-    return GrammarOperationsHandler.generateJavaPreviewCode(grammar, response, logger)
+# @app.get('/grammarToCode')
+# def grammarToCode(response: Response, grammar: Optional[str] = ""):
+#     return GrammarOperationsHandler.generateJavaPreviewCode(grammar, response, logger)
 
 
 @app.get('/rules')

@@ -17,15 +17,15 @@ class RuleOperationsHandler:
 
     EMPTY_RULE_DTO = RuleDTO(None, False, False, False)
 
-    @staticmethod
-    def __addCodePreviewData(ruleDto: RuleDTO) -> RuleDTO:
-        ruleString = ruleDto.data["ruleString"]
-        code, config = Grammar.rulepadToJavaCode(ruleString)
-        ruleDto.data["grammar"] = {
-            "code": code,
-            "configuration": config
-        }
-        return ruleDto
+    # @staticmethod
+    # def __addCodePreviewData(ruleDto: RuleDTO) -> RuleDTO:
+    #     ruleString = ruleDto.data["ruleString"]
+    #     code, config = Grammar.rulepadToJavaCode(ruleString)
+    #     ruleDto.data["grammar"] = {
+    #         "code": code,
+    #         "configuration": config
+    #     }
+    #     return ruleDto
 
     @staticmethod
     def __getRule(db: Session, ruleId: int, userId: str, response: Response, next=True):
@@ -34,7 +34,7 @@ class RuleOperationsHandler:
             r = RulePackageNavigation.getNext(db, ruleId, userId) if next \
                 else RulePackageNavigation.getPrev(db, ruleId, userId)
             if r and r.data:
-                RuleOperationsHandler.__addCodePreviewData(r)
+                # RuleOperationsHandler.__addCodePreviewData(r)
                 response.status_code = 200
                 return r
             response.status_code = 404

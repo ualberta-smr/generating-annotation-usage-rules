@@ -52,8 +52,6 @@ function RuleAuthoringEditor(props) {
     };
 
     const editorDidMount = (editor, monaco) => {
-        console.log(editor)
-        console.log(monaco)
         setEditor({ editor, monaco });
     };
 

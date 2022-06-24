@@ -6,7 +6,7 @@ import FieldsetWrapper from "./FieldsetWrapper";
 import RuleAuthoringEditor from "./RuleAuthoringEditor";
 import makeCancellablePromise from "./superPromise";
 import CodeEditor from "./CodeEditor";
-import prettify, { onelineify } from "../grammar/formatter";
+import prettify, { onelineify, visualize } from "../grammar/formatter";
 import { BACKEND_URL, LS_USERNAME, TUTORIAL_URL } from "./constants";
 
 function LabelingScreen() {
@@ -101,12 +101,39 @@ function LabelingScreen() {
 
         const data = json.data;
 
-        const { id, ruleString, grammar, name, size, totalLabeledRuleCount } = data;
+        const { id, ruleString, name, size, totalLabeledRuleCount } = data;
 
         setRuleMetaData({ id, name, size, totalLabeledRuleCount });
         setGrammarText(prettify(ruleString));
+        processCodePreview(ruleString);
+        // setRuleCode(visualize(ruleString).trim());
         setIsNewRule(!isNewRule);
-        processGrammarToCodeResponse(grammar);
+        // processGrammarToCodeResponse(grammar);
+    }
+
+    const processCodePreview = (ruleString) => {
+        const result = visualize(ruleString);
+
+        if (result.status === "failure") return;
+        
+        const [codeText, configuration] = result.data;
+
+        if (codeText) {
+            setRuleCode(codeText.trim());
+        }
+
+        if (configuration.length > 0) {
+            const configFiles = configuration.map(({ filename, code }) => {
+                return {
+                    name: filename,
+                    text: code
+                }
+            });
+            setPropertiesFileData(configFiles);
+        } else {
+            setPropertiesFileData(null);
+        }
+
     }
 
     const getNextRule = () => {
@@ -163,14 +190,19 @@ function LabelingScreen() {
             return null;
         }
 
-        const sentText = onelineify(text);
+        const ruleString = onelineify(text);
 
-        setCancelCurrentRequestHandle(
-            makeCancellablePromise(
-                `${BACKEND_URL}/grammarToCode?grammar=${sentText}`,
-                processGrammarToCodeResponse
-            )
-        );
+        // const codeText = visualize(sentText);
+        // setRuleCode(codeText.trim());
+
+        processCodePreview(ruleString)
+
+        // setCancelCurrentRequestHandle(
+        //     makeCancellablePromise(
+        //         `${BACKEND_URL}/grammarToCode?grammar=${sentText}`,
+        //         processGrammarToCodeResponse
+        //     )
+        // );
     };
 
     const goToTutorialPage = () => {

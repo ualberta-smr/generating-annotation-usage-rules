@@ -11,7 +11,7 @@ def check(input):
     lexer = RulepadGrammarLexer(InputStream(input))
     parser = RulepadGrammarParser(CommonTokenStream(lexer))
     parser.setTrace(True)
-    tree = parser.inputSentence()
+    tree = parser.start()
 
     listener = ConcreteRulepadGrammarListener()
     walker = ParseTreeWalker()
@@ -25,7 +25,7 @@ def justCheck(input):
     lexer = RulepadGrammarLexer(InputStream(input))
     parser = RulepadGrammarParser(CommonTokenStream(lexer))
     # parser.setTrace(True)
-    tree = parser.inputSentence()
+    tree = parser.start()
     # print(tree.toStringTree())
     return None
 

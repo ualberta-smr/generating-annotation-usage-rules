@@ -14,7 +14,7 @@ def rulepadToJavaCode(input) -> Tuple[str, List[Dict[str, str]]]:
     """
     lexer = RulepadGrammarLexer(InputStream(input))
     parser = RulepadGrammarParser(CommonTokenStream(lexer))
-    tree = parser.inputSentence()
+    tree = parser.start()
 
     listener = ConcreteRulepadGrammarListener()
     walker = ParseTreeWalker()

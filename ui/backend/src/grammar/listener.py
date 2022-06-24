@@ -193,8 +193,8 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
         if prev['comingFrom'] == 'function':
             prev['node'].returnType = type
 
-    def enterParameters(self, ctx: RulepadGrammarParser.ParametersContext):
-        words = ctx.parameterCondition().combinatorialWords()
+    def enterAnnotationParameters(self, ctx: RulepadGrammarParser.AnnotationParametersContext):
+        words = ctx.annotationParameterCondition().combinatorialWords()
         if words:
             elements = words.getText().replace("\"", "").split()
             if len(elements) >= 2:
@@ -216,7 +216,7 @@ class ConcreteRulepadGrammarListener(RulepadGrammarListener):
             'node': param
         })
 
-    def exitParameters(self, ctx: RulepadGrammarParser.ParametersContext):
+    def exitAnnotationParameters(self, ctx: RulepadGrammarParser.AnnotationParametersContext):
         self.__stack.pop()
 
     # Enter a parse tree produced by RulepadGrammarParser#functionParameters.

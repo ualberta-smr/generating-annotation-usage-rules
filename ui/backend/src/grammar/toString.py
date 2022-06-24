@@ -83,7 +83,7 @@ def implements(interfaces: List[Type]):
 
 def paramToString(p: Union[ConfigurationProperty, AnnotationParam]) -> str:
     name_ = "?"
-    if name_:
+    if p.name:
         name_ = p.name
     if p.value is None:
         if p.type is None or p.type.name is None:
