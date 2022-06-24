@@ -1,0 +1,1 @@
+from .jsonToRulePad import JsonRule, toShortRulePad

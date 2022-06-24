@@ -1,10 +1,8 @@
 from dataclasses import dataclass
-from tkinter import Label
-from typing import Any, List, Set, Tuple
+from typing import Any, List, Tuple
 import json
-from sqlalchemy import or_
 from sqlalchemy.orm import Session
-import rulepadFormat as rf
+import format as rulePadFormat
 import uuid
 
 from .models import *
@@ -91,7 +89,7 @@ class RulePackageNavigation:
         antecedents: List[str] = json.loads(ruleObj.antecedent)
         consequents: List[str] = json.loads(ruleObj.consequent)
 
-        ruleString = rf.toShortRulePad(rf.JsonRule(
+        ruleString = rulePadFormat.toShortRulePad(rulePadFormat.JsonRule(
             id=id,
             antecedent=antecedents,
             consequent=consequents)

@@ -1,1 +1,1 @@
-from .rules import RuleOperationsHandler, ConfirmRuleDTO, GrammarOperationsHandler
+from .rules import RuleOperationsHandler, ConfirmRuleDTO

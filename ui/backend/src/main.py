@@ -6,7 +6,7 @@ from fastapi import FastAPI, Response, Depends
 from fastapi.logger import logger
 from fastapi.middleware.cors import CORSMiddleware
 
-from api import RuleOperationsHandler, ConfirmRuleDTO, GrammarOperationsHandler
+from api import RuleOperationsHandler, ConfirmRuleDTO
 from db import SessionLocal, createAndInitializeDb, RulePackageOperations, UserOperationsHandler
 
 gunicorn_error_logger = logging.getLogger("gunicorn.error")
@@ -36,11 +36,6 @@ def getSession():
         yield sl
     finally:
         sl.close()
-
-
-# @app.get('/grammarToCode')
-# def grammarToCode(response: Response, grammar: Optional[str] = ""):
-#     return GrammarOperationsHandler.generateJavaPreviewCode(grammar, response, logger)
 
 
 @app.get('/rules')

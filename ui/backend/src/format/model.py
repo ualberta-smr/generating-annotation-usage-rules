@@ -2,61 +2,58 @@ from __future__ import annotations
 from typing import List
 from dataclasses import *
 
-class AntecedentOrConsequent:
-    is_antecedent: bool = None
-
 @dataclass
-class Type(AntecedentOrConsequent):
+class Type:
     name: str
 
 @dataclass
-class ConfigurationProperty(AntecedentOrConsequent):
+class ConfigurationProperty:
     name: str
     type: Type
     value: str
 
 @dataclass
-class ConfigurationFile(AntecedentOrConsequent):
+class ConfigurationFile:
     name: str
     properties: List[ConfigurationProperty] = field(default_factory=[])
 
 @dataclass
-class BeanDeclaration(AntecedentOrConsequent):
+class BeanDeclaration:
     name: str
     declared: bool = field(default=False)
 
 @dataclass
-class Param(AntecedentOrConsequent):
+class Param:
     type: Type
     name: str
     annotations: List[Annotation] = field(default_factory=[])
 
 @dataclass
-class AnnotationParam(AntecedentOrConsequent):
+class AnnotationParam:
     type: Type
     name: str
     value: str
 
 @dataclass
-class Annotation(AntecedentOrConsequent):
+class Annotation:
     type: Type
     parameters: List[AnnotationParam] = field(default_factory=[])
 
 @dataclass
-class Field(AntecedentOrConsequent):
+class Field:
     type: Type = field(default=Type("Object"))
     annotations: List[Annotation] = field(default_factory=[])
     configurationFile: ConfigurationFile = None
 
 @dataclass
-class Method(AntecedentOrConsequent):
+class Method:
     returnType: Type
     parameters: List[Param] = field(default_factory=[])
     annotations: List[Annotation] = field(default_factory=[])
     configurationFile: ConfigurationFile = None
 
 @dataclass
-class JavaClass(AntecedentOrConsequent):
+class JavaClass:
     annotations: List[Annotation] = field(default_factory=[])
     extendedClass: Type = None
     implementedInterfaces: List[Type] = field(default_factory=[])

@@ -1,7 +1,6 @@
 from typing import Dict, Union
-from grammar.model import *
+from format.model import *
 from dataclasses import dataclass
-
 
 def removeNones(iter):
     return filter(lambda x: x is not None, iter)
@@ -137,30 +136,6 @@ def removeParenthesis(st):
     if tmp[0] == "(" and tmp[-1] == ")":
         return tmp[1:-1]
     return st
-
-
-def toShortRulePad(jsonRule: JsonRule) -> str:
-    ant = toJavaConstruct(jsonRule.antecedent, None)
-    con = toJavaConstruct(jsonRule.consequent, ant)
-
-    ant_str = removeParenthesis(toRulePad(ant))
-    con_str = removeParenthesis(toRulePad(con))
-    dependent_types = [Field, Method, ConfigurationFile]
-    if type(ant) == type(con):
-        con_str = con_str[con_str.index("with")+4+1:]
-    elif isinstance(ant, JavaClass) and type(con) in dependent_types:
-        con_str = con_str
-    elif isinstance(con, JavaClass) and type(ant) in dependent_types:
-        ant_str = f"class with {ant_str}"
-        con_str = con_str[con_str.index("with")+4+1:]
-    elif type(ant) in dependent_types and type(con) in dependent_types:
-        if isinstance(ant, Field) and isinstance(con, ConfigurationFile) or \
-                isinstance(ant, Method) and isinstance(con, ConfigurationFile):
-            pass
-        else:
-            ant_str = f"class with {ant_str}"
-    result = f"{ant_str} must have {con_str} "
-    return result
 
 
 def toJavaConstruct(facts: List[str], antecedentConstruct: Union[JavaClass, Field, Method]) -> Union[JavaClass, Field, Method, ConfigurationFile]:
@@ -324,16 +299,25 @@ def findAnnotationParentType(container, annotation_str):
                     return Method
 
 
-# print(toShortRulePad(
-#     JsonRule(
-#         1,
-#         [
-#             "Class --(annotatedWith)--> Annotation_javax.ws.rs.Path",
-#             "Field --(annotatedWith)--> Annotation_org.eclipse.microprofile.config.inject.ConfigProperty"
-#         ],
-#         [
-#             "Param_name:java.lang.String --(definedIn)--> ConfigFile_microprofile-config.properties",
-#             "Annotation_org.eclipse.microprofile.config.inject.ConfigProperty --(hasParam)--> Param_name:java.lang.String",
-#         ],
-#     )
-# ))
+def toShortRulePad(jsonRule: JsonRule) -> str:
+    ant = toJavaConstruct(jsonRule.antecedent, None)
+    con = toJavaConstruct(jsonRule.consequent, ant)
+
+    ant_str = removeParenthesis(toRulePad(ant))
+    con_str = removeParenthesis(toRulePad(con))
+    dependent_types = [Field, Method, ConfigurationFile]
+    if type(ant) == type(con):
+        con_str = con_str[con_str.index("with")+4+1:]
+    elif isinstance(ant, JavaClass) and type(con) in dependent_types:
+        con_str = con_str
+    elif isinstance(con, JavaClass) and type(ant) in dependent_types:
+        ant_str = f"class with {ant_str}"
+        con_str = con_str[con_str.index("with")+4+1:]
+    elif type(ant) in dependent_types and type(con) in dependent_types:
+        if isinstance(ant, Field) and isinstance(con, ConfigurationFile) or \
+                isinstance(ant, Method) and isinstance(con, ConfigurationFile):
+            pass
+        else:
+            ant_str = f"class with {ant_str}"
+    result = f"{ant_str} must have {con_str} "
+    return result
