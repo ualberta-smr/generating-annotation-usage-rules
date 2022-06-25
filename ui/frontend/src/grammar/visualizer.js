@@ -163,7 +163,7 @@ BODY
 function configFiles(cf) {
     if (cf == null) return null
 
-    const lines = cf.properties.map(paramToString).join("\n")
+    const lines = cf.properties.map(p => addSigns(p, paramToString(p))).join("\n")
     return [cf.name, lines]
 }
 
@@ -204,11 +204,25 @@ function javaClassToString(clazz) {
         .replace("<MethodDeclaration>", method(clazz.method))
         .replace("<OverriddenMethodDeclaration>", method(clazz.overriddenMethod, "@Override\n\tpublic "))
         .replace("<ExtendsTemplate>", extendz(clazz.extendedClass))
-        .replace("<ImplementsTemplate>", implementz(clazz.implementedInterfaces))
+        .replace("<ImplementsTemplate>", implementz(clazz.implementedInterfaces)).trim()
 }
 
 function stringifyClass(clazz) {
-    return [javaClassToString(clazz), configurationFiles(clazz)]
+    const lines = javaClassToString(clazz).split(/\r?\n/)
+
+    const newLines = []
+
+    let prevWasEmpty = false;
+
+    for (let line of lines) {
+        const lineIsEmpty = line.trim().length === 0
+        if (!(lineIsEmpty && prevWasEmpty)) {
+            newLines.push(line)
+        }
+        prevWasEmpty = lineIsEmpty;
+    }
+
+    return [newLines.join("\n"), configurationFiles(clazz)]
 }
 
 function resultWrapper(data) {

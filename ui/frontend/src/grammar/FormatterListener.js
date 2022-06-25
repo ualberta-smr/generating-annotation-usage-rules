@@ -35,10 +35,6 @@ export default class FormatterListener extends RulepadGrammarListener {
 
     closeParenthesisIfRequired(ctx) {
         if (ctx.RPAREN() !== null) {
-            // this.finalString += "\n"
-            // this.depth--;
-            // this.finalString += this.getPrefix() + ")"
-            // this.depth++;
             this.finalString += ")"
         }
         return ctx.RPAREN() !== null
@@ -126,7 +122,24 @@ export default class FormatterListener extends RulepadGrammarListener {
 
     // Enter a parse tree produced by RulepadGrammarParser#overriddenFunctions.
     enterOverriddenFunctions(ctx) {
-        this.finalString += this.getPrefix() + ctx.getText();
+        const methodSignature = ctx.combinatorialWords().getText().replaceAll('"', "")
+        // Example: foobar(String, int, double, Custom)
+        // Example: foobar(String)
+        // Example: foobar()
+        const lparenPos = methodSignature.indexOf("(");
+        const rparenPos = methodSignature.lastIndexOf(")");
+        if (lparenPos === -1 || rparenPos === -1) {
+            // error
+        } else {
+            const methodName = methodSignature.slice(0, lparenPos);
+            const parameters = methodSignature
+                                    .slice(lparenPos + 1, rparenPos)
+                                    .split(",")
+                                    .map(e => e.trim())
+                                    .filter(e => e.length > 0)
+                                    .join(", ")
+            this.finalString += this.getPrefix() + ctx.OVERRIDDEN_FUNCTION().getText() + `"${methodName}(${parameters})"`;
+        }
     }
 
     // Enter a parse tree produced by RulepadGrammarParser#functions.
