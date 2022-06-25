@@ -29,11 +29,15 @@ export default class ShortRulepad {
                     [/configuration file/, "srp-keyword"],
                     [/bean declaration/, "srp-keyword"],
                     [/beans file/, "srp-keyword"],
+                    [/none of/, "srp-keyword"],
+                    [/one of/, "srp-keyword"],
+                    [/no/, "srp-keyword"],
+                    [/overridden method/, "srp-keyword"],
 
                     [/must have/, "srp-must-have"],
                     [/with/, "srp-with"],
 
-                    [/"[a-zA-Z0-9\s.\[\]\|]+"/, "srp-string"],
+                    [/"[a-zA-Z0-9\s.\[\]\|\)\(\,]+"/, "srp-string"],
                 ],
             },
         }

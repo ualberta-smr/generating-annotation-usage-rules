@@ -75,8 +75,9 @@ class Field extends AntecedentOrConsequent {
 }
 
 class Method extends AntecedentOrConsequent {
-    constructor(returnType, parameters, annotations, configurationFile) {
+    constructor(returnType, parameters, annotations, configurationFile, name = "foo") {
         super()
+        this.name = name;
         this.returnType = returnType == undefined ? new Type("void") : returnType
         this.parameters = parameters == undefined ? [] : parameters
         this.annotations = annotations == undefined ? [] : annotations
@@ -85,12 +86,13 @@ class Method extends AntecedentOrConsequent {
 }
 
 class JavaClass extends AntecedentOrConsequent {
-    constructor(annotations, extendedClass, implementedInterfaces, field, method, configurationFile, declaredInBeans) {
+    constructor(annotations, extendedClass, implementedInterfaces, field, method, configurationFile, declaredInBeans, overriddenMethod) {
         super()
         this.extendedClass = extendedClass
-        this.annotations = annotations == undefined ? [] : annotations
-        this.implementedInterfaces = implementedInterfaces == undefined ? [] : implementedInterfaces
+        this.annotations = annotations
+        this.implementedInterfaces = implementedInterfaces
         this.method = method
+        this.overriddenMethod = overriddenMethod
         this.field = field
         this.configurationFile = configurationFile
         this.declaredInBeans = declaredInBeans
@@ -248,10 +250,10 @@ export default class VisualizerListener extends RulepadGrammarListener {
         } else if (type === 'function') {
             node.annotations = this.__mergeDuplicateAnnotations(node.annotations)
             node.parameters = this.__mergeDuplicateParameters(node.parameters)
-            return new JavaClass([], null, [], null, node, null, null)
+            return new JavaClass([], null, [], null, node, null, null, null)
         } else if (type === 'field') {
             node.annotations = this.__mergeDuplicateAnnotations(node.annotations)
-            return new JavaClass([], null, [], node, null, null, null)
+            return new JavaClass([], null, [], node, null, null, null, null)
         }
         return null;
     }
@@ -267,7 +269,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
     enterClasses(ctx) {
         if (this.__stack.length === 0) {
             this.__initial = {
-                'node': new JavaClass([], null, [], null, null, null),
+                'node': new JavaClass([], null, [], null, null, null, null),
                 'type': 'class'
             }
             this.__stack.push({
@@ -428,7 +430,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
             if (this.__is_antecedent) {
                 // if the rule starts with 'function'
                 this.__initial = {
-                    'node': this.initObj(new Method(new Type("void"), [], [], null)),
+                    'node': new Method(new Type("void"), [], [], null),
                     'type': 'function'
                 }
             }
@@ -452,9 +454,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
             if (prev.comingFrom === 'class') {
                 const classField = prev.node.field
                 if (classField == null) {
-                    field = this.initObj(
-                        new Field(new Type("Object"), [], null)
-                    )
+                    field = new Field(new Type("Object"), [], null)
                 } else {
                     field = classField
                 }
@@ -563,6 +563,31 @@ export default class VisualizerListener extends RulepadGrammarListener {
         }
     }
 
+    enterOverriddenFunctions(ctx) {
+        const methodSignature = ctx.combinatorialWords().getText().replaceAll('"', "")
+        // Example: foobar(String, int, double, Custom)
+        // Example: foobar(String)
+        // Example: foobar()
+        const lparenPos = methodSignature.indexOf("(");
+        const rparenPos = methodSignature.lastIndexOf(")");
+        if (lparenPos === -1 || rparenPos === -1) {
+            // error
+        } else {
+            const methodName = methodSignature.slice(0, lparenPos);
+            const parameters = methodSignature
+                                    .slice(lparenPos + 1, rparenPos)
+                                    .split(",")
+                                    .map(e => e.trim())
+                                    .filter(e => e.length > 0)
+                                    .map(p => this.initObj(new MethodParam(this.initObj(new Type(p)), null, [])))
+
+            const prev = this.peekStack()
+            if (prev.comingFrom === 'class') {
+                prev.node.overriddenMethod = this.initObj(new Method(new Type("?"), parameters, [], [], methodName))
+            }
+        }
+    }
+
     initObj(obj) {
         obj.isAntecedent = this.__is_antecedent
         return obj;
@@ -583,7 +608,9 @@ const CONSEQUENT_SIGN_END = "</span>"
 const TEMPLATE = `
 <ClassAnnotations>
 class Foo <ExtendsTemplate><ImplementsTemplate> {
-<FieldDeclaration><MethodDeclaration>
+<FieldDeclaration>
+<MethodDeclaration>
+<OverriddenMethodDeclaration>
 }`
 
 // Type -> str
@@ -638,14 +665,16 @@ function functionParameters(method) {
 }
 
 // Method -> str
-function method(method) {
+function method(method, accessModifiedStr = "public") {
     if (method) {
-        const t = "\t<MethodAnnotations>\n\tpublic <ReturnType> method(<FunctionParameters>) {}"
+        const t = `\t<MethodAnnotations>\n\t${accessModifiedStr} <ReturnType> <MethodName>(<FunctionParameters>) {}`
         const annos = handleAnnotations(method.annotations, "\t").trim()
         const params = functionParameters(method)
-        return t.replace("<MethodAnnotations>", annos)
+        return t
+            .replace("<MethodAnnotations>", annos)
             .replace("<ReturnType>", addSigns(method.returnType, shortenTypeName(method.returnType)))
             .replace("<FunctionParameters>", params)
+            .replace("<MethodName>", addSigns(method, method.name))
     }
     return ""
 }
@@ -763,6 +792,7 @@ function javaClassToString(clazz) {
         .replace("<ClassAnnotations>", handleAnnotations(clazz.annotations))
         .replace("<FieldDeclaration>", field(clazz.field))
         .replace("<MethodDeclaration>", method(clazz.method))
+        .replace("<OverriddenMethodDeclaration>", method(clazz.overriddenMethod, "@Override\n\t"))
         .replace("<ExtendsTemplate>", extendz(clazz.extendedClass))
         .replace("<ImplementsTemplate>", implementz(clazz.implementedInterfaces))
 }

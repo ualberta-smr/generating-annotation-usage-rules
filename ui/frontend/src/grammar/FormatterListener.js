@@ -35,6 +35,10 @@ export default class FormatterListener extends RulepadGrammarListener {
 
     closeParenthesisIfRequired(ctx) {
         if (ctx.RPAREN() !== null) {
+            // this.finalString += "\n"
+            // this.depth--;
+            // this.finalString += this.getPrefix() + ")"
+            // this.depth++;
             this.finalString += ")"
         }
         return ctx.RPAREN() !== null
@@ -117,6 +121,11 @@ export default class FormatterListener extends RulepadGrammarListener {
 
     // Enter a parse tree produced by RulepadGrammarParser#implementations.
     enterImplementations(ctx) {
+        this.finalString += this.getPrefix() + ctx.getText();
+    }
+
+    // Enter a parse tree produced by RulepadGrammarParser#overriddenFunctions.
+    enterOverriddenFunctions(ctx) {
         this.finalString += this.getPrefix() + ctx.getText();
     }
 
@@ -360,5 +369,66 @@ export default class FormatterListener extends RulepadGrammarListener {
     enterBeansFile(ctx) {
         this.finalString += this.getPrefix() + ctx.BEANS_FILE().getText();
     }
+
+    // Aggregates start
+    enterClassExpressionNoneOf(ctx) {
+        this.handleEnterAggregateOf(ctx, ctx => ctx.NONE_OF())
+    }
+
+    exitClassExpressionNoneOf(ctx) {
+        this.handleExitAggregateOf()
+    }
+
+    enterClassExpressionOneOf(ctx) {
+        this.handleEnterAggregateOf(ctx, ctx => ctx.ONE_OF())
+    }
+
+    exitClassExpressionOneOf(ctx) {
+        this.handleExitAggregateOf()
+    }
+
+    enterFunctionExpressionNoneOf(ctx) {
+        this.handleEnterAggregateOf(ctx, ctx => ctx.NONE_OF())
+    }
+
+    exitFunctionExpressionNoneOf(ctx) {
+        this.handleExitAggregateOf()
+    }
+
+    enterFunctionExpressionOneOf(ctx) {
+        this.handleEnterAggregateOf(ctx, ctx => ctx.ONE_OF())
+    }
+
+    exitFunctionExpressionOneOf(ctx) {
+        this.handleExitAggregateOf()
+    }
+
+    enterDeclarationStatementExpressionNoneOf(ctx) {
+        this.handleEnterAggregateOf(ctx, ctx => ctx.NONE_OF())
+    }
+
+    exitDeclarationStatementExpressionNoneOf(ctx) {
+        this.handleExitAggregateOf()
+    }
+
+    enterDeclarationStatementExpressionOneOf(ctx) {
+        this.handleEnterAggregateOf(ctx, ctx => ctx.ONE_OF())
+    }
+
+    exitDeclarationStatementExpressionOneOf(ctx) {
+        this.handleExitAggregateOf()
+    }
+
+    handleEnterAggregateOf(ctx, keywordSelector) {
+        this.finalString += this.getPrefix() + keywordSelector(ctx).getText() + "(";
+        this.finalString += "\n"
+        this.depth++;
+    }
+
+    handleExitAggregateOf() {
+        this.finalString += ")"
+        this.depth--;
+    }
+    // Aggregates end
 
 }
