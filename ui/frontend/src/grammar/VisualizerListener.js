@@ -1,5 +1,6 @@
 import RulepadGrammarListener from "./generated/RulepadGrammarListener";
 import clone from 'just-clone'
+import RulepadGrammarParser from "./generated/RulepadGrammarParser";
 
 class AntecedentOrConsequent {
     constructor() {
@@ -75,7 +76,7 @@ class Field extends AntecedentOrConsequent {
 }
 
 class Method extends AntecedentOrConsequent {
-    constructor(returnType, parameters, annotations, configurationFile, name = "foo") {
+    constructor(returnType, parameters, annotations, configurationFile, name = null) {
         super()
         this.name = name;
         this.returnType = returnType == undefined ? new Type("void") : returnType
@@ -129,6 +130,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
         const allParams = [...a.parameters, ...b.parameters];
         const an = new Annotation(a.type, allParams);
         an.isAntecedent = a.isAntecedent || b.isAntecedent
+        an.negated = a.negated && b.negated
         return an
     }
 
@@ -174,7 +176,6 @@ export default class VisualizerListener extends RulepadGrammarListener {
         for (let [_, params] of oldParams) {
             newParameters.push(params.reduce(this.__mergeParameters))
         }
-        console.log(oldParams, newParameters)
         return newParameters
     }
 
@@ -234,6 +235,10 @@ export default class VisualizerListener extends RulepadGrammarListener {
         return newAnnotations;
     }
 
+    __isNegated(ctx) {
+        return ctx.parentCtx.constructor.name.endsWith("ExpressionNoContext");
+    }
+
     getJavaClass() {
         const type = this.__initial.type
         const node = this.__initial.node
@@ -282,68 +287,89 @@ export default class VisualizerListener extends RulepadGrammarListener {
     exitClasses(ctx) { this.__stack.pop() }
 
     enterAnnotations(ctx) {
+        let negated = this.__isNegated(ctx)
+
         let annotationType = null;
         try {
             annotationType = this.initObj(
                 new Type(ctx.annotationCondition().combinatorialWords().getText().replaceAll('"', ""))
             )
+            annotationType.negated = negated
         } catch (error) { }
 
         const annotation = this.initObj(new Annotation(annotationType, []))
 
         const prev = this.peekStack()
-
         if (['class', 'function', 'field', 'parameter'].includes(prev.comingFrom)) {
             prev.node.annotations.push(annotation)
+            // we    parent->result
+            // T     T -> F
+            // F     F -> F
+            // T     F -> T
+            // F     T -> T
+            // basic idea is that if there are 2 negations, then they cancel each other out
+            annotation.negated = prev.node.negated ^ negated
         }
 
         this.__stack.push({
-            'comingFrom': 'annotation',
-            'node': annotation
+            comingFrom: 'annotation',
+            node: annotation
         })
     }
 
     exitAnnotations(ctx) { this.__stack.pop() }
 
     enterExtensions(ctx) {
+        let negated = this.__isNegated(ctx)
         const prev = this.peekStack()
 
         if (prev.comingFrom === 'class') {
             const extendedClass = ctx.extensionCondition().combinatorialWords().getText().replaceAll('"', "")
             prev.node.extendedClass = this.initObj(new Type(extendedClass))
+            prev.node.extendedClass.negated = prev.node.negated ^ negated;
         }
     }
 
     enterImplementations(ctx) {
+        let negated = this.__isNegated(ctx)
         const prev = this.peekStack()
 
         if (prev.comingFrom === 'class') {
             const implementedInterface = ctx.implementationCondition().combinatorialWords().getText().replaceAll('"', "")
-            prev.node.implementedInterfaces.push(this.initObj(new Type(implementedInterface)))
+            const interfaceClazz = this.initObj(new Type(implementedInterface));
+            interfaceClazz.negated  = prev.node.negated ^ negated
+            prev.node.implementedInterfaces.push(interfaceClazz)
+            
         }
     }
 
     enterTypes(ctx) {
+        let negated = this.__isNegated(ctx)
+
         let type = ctx.typeCondition().combinatorialWords()
         type = this.initObj(new Type(type.getText().replaceAll('"', "")))
 
         const prev = this.peekStack()
         if (['parameter', 'field', 'property'].includes(prev.comingFrom)) {
             prev.node.type = type
+            type.negated = prev.node.negated ^ negated
         }
     }
 
     enterReturnTypes(ctx) {
+        let negated = this.__isNegated(ctx)
         let type = ctx.returnTypeCondition().combinatorialWords()
         type = this.initObj(new Type(type.getText().replaceAll('"', "")))
 
         const prev = this.peekStack()
         if (prev.comingFrom === 'function') {
             prev.node.returnType = type
+            type.negated = prev.node.negated ^ negated
         }
     }
 
     enterAnnotationParameters(ctx) {
+        let negated = this.__isNegated(ctx)
         let words = ctx.annotationParameterCondition().combinatorialWords()
         let param = new AnnotationParam(null, null, null)
         if (words != null || words != undefined) {
@@ -363,10 +389,12 @@ export default class VisualizerListener extends RulepadGrammarListener {
         }
 
         param = this.initObj(param)
+        param.negated = negated;
         const prev = this.peekStack()
 
         if (prev.comingFrom === 'annotation') {
             prev.node.parameters.push(param)
+            param.negated = prev.node.negated ^ negated
         }
 
         this.__stack.push({
@@ -378,6 +406,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
     exitAnnotationParameters(ctx) { this.__stack.pop(); }
 
     enterFunctionParameters(ctx) {
+        let negated = this.__isNegated(ctx)
         const words = ctx.functionParameterCondition().combinatorialWords()
         let param = new MethodParam(null, null, [])
         if (words != null || words != undefined) {
@@ -397,10 +426,12 @@ export default class VisualizerListener extends RulepadGrammarListener {
         }
 
         param = this.initObj(param)
+        param.negated = negated;
         const prev = this.peekStack()
 
         if (prev.comingFrom === 'function') {
             prev.node.parameters.push(param)
+            param.negated = prev.node.negated ^ negated
         }
 
         this.__stack.push({
@@ -412,6 +443,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
     exitFunctionParameters(ctx) { this.__stack.pop(); }
 
     enterFunctions(ctx) {
+        let negated = this.__isNegated(ctx)
         let method = null;
         if (this.__stack.length > 0) {
             const prev = this.peekStack()
@@ -425,6 +457,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
                     method = classMethod
                 }
                 prev.node.method = method
+                method.negated = prev.node.negated ^ negated
             }
         } else {
             if (this.__is_antecedent) {
@@ -438,6 +471,9 @@ export default class VisualizerListener extends RulepadGrammarListener {
         }
 
         if (method != null) {
+            if (method.negated == undefined) {
+                method.negated = negated;
+            }
             this.__stack.push({
                 'comingFrom': 'function',
                 'node': method
@@ -448,6 +484,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
     exitFunctions(ctx) { this.__stack.pop(); }
 
     enterDeclarationStatements(ctx) {
+        let negated = this.__isNegated(ctx)
         let field = null;
         if (this.__stack.length > 0) {
             const prev = this.peekStack()
@@ -459,6 +496,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
                     field = classField
                 }
                 prev.node.field = field
+                field.negated = prev.node.negated ^ negated
             }
         } else {
             if (this.__is_antecedent) {
@@ -472,6 +510,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
         }
 
         if (field != null) {
+            field.negated = negated;
             this.__stack.push({
                 'comingFrom': 'field',
                 'node': field
@@ -498,12 +537,14 @@ export default class VisualizerListener extends RulepadGrammarListener {
     }
 
     enterConfigurationFiles(ctx) {
-        const configFile = this.initObj(new ConfigurationFile("microprofile-config.properties", []))
+        const negated = this.__isNegated(ctx);
 
+        const configFile = this.initObj(new ConfigurationFile("microprofile-config.properties", []))
         const prev = this.peekStack()
 
         if (['class', 'field', 'function'].includes(prev.comingFrom)) {
             prev.node.configurationFile = configFile;
+            configFile.negated = prev.node.negated ^ negated
         }
         this.__stack.push({
             'comingFrom': 'config-file',
@@ -514,7 +555,9 @@ export default class VisualizerListener extends RulepadGrammarListener {
     exitConfigurationFiles(ctx) { this.__stack.pop(); }
 
     enterConfigurationProperties(ctx) {
+        let negated = this.__isNegated(ctx)
         const prop = this.initObj(new ConfigurationProperty(null, null, null))
+        prop.negated =  negated
         const text = ctx.configurationPropertyCondition().combinatorialWords()
 
         if (text != null || text != undefined) {
@@ -530,11 +573,13 @@ export default class VisualizerListener extends RulepadGrammarListener {
             }
             prop.name = name_
             prop.type = this.initObj(new Type(type_))
+            prop.type = negated;
         }
 
         const prev = this.peekStack()
         if (prev.comingFrom === 'config-file') {
             prev.node.properties.push(prop)
+            prop.negated = prev.node.negated ^ negated
         }
 
         this.__stack.push({
@@ -546,24 +591,29 @@ export default class VisualizerListener extends RulepadGrammarListener {
     exitConfigurationProperties(ctx) { this.__stack.pop(); }
 
     enterBeans(ctx) {
+        const negated = this.__isNegated(ctx)
         const beanDecl = this.initObj(new BeanDeclaration("beans.xml", true))
 
         const prev = this.peekStack()
         if (prev.comingFrom === 'class') {
             prev.node.declaredInBeans = beanDecl
+            beanDecl.negated = prev.node.negated ^ negated
         }
     }
 
     enterBeansFile(ctx) {
+        const negated = this.__isNegated(ctx);
         const beanDecl = this.initObj(new BeanDeclaration("beans.xml", false))
 
         const prev = this.peekStack()
         if (prev.comingFrom === 'class') {
             prev.node.declaredInBeans = beanDecl
+            beanDecl.negated = prev.node.negated ^ negated
         }
     }
 
     enterOverriddenFunctions(ctx) {
+        let negated = this.__isNegated(ctx)
         const methodSignature = ctx.combinatorialWords().getText().replaceAll('"', "")
         // Example: foobar(String, int, double, Custom)
         // Example: foobar(String)
@@ -580,17 +630,18 @@ export default class VisualizerListener extends RulepadGrammarListener {
                                     .map(e => e.trim())
                                     .filter(e => e.length > 0)
                                     .map(p => this.initObj(new MethodParam(this.initObj(new Type(p)), null, [])))
+                                    .map(mp => {
+                                        mp.negated = negated; // TODO: I do not like mutations inside maps
+                                        return mp
+                                    })
 
             const prev = this.peekStack()
             if (prev.comingFrom === 'class') {
-                prev.node.overriddenMethod = this.initObj(new Method(new Type("?"), parameters, [], [], methodName))
+                prev.node.overriddenMethod = this.initObj(new Method(new Type("T"), parameters, [], [], methodName))
+                prev.node.overriddenMethod.negated = prev.node.negated ^ negated
             }
         }
     }
-
-    enterClassExpressionNo(ctx) {
-
-    } 
 
     initObj(obj) {
         obj.isAntecedent = this.__is_antecedent

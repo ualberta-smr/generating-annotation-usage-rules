@@ -36,8 +36,13 @@ function addSigns(obj, str) {
     if (obj.isAntecedent == null) {
         return str
     }
+    const negated = obj.negated ? obj.negated : false;
     const [start, end] = obj.isAntecedent ? [ANTECEDENT_SIGN_START, ANTECEDENT_SIGN_END] : [CONSEQUENT_SIGN_START, CONSEQUENT_SIGN_END]
-    return `${start}${str}${end}`
+    const result = `${start}${str}${end}`
+    if (negated) {
+        return `<span class="negated">${result}</span>`
+    } 
+    return result;
 }
 
 // Field -> str
@@ -69,16 +74,16 @@ function functionParameters(method) {
 }
 
 // Method -> str
-function method(method, accessModifiedStr = "public") {
+function method(method, accessModifiedStr = "public ") {
     if (method) {
-        const t = `\t<MethodAnnotations>\n\t${accessModifiedStr} <ReturnType> <MethodName>(<FunctionParameters>) {}`
+        const t = `\t<MethodAnnotations>\n\t${accessModifiedStr}<ReturnType> <MethodName>(<FunctionParameters>) {}`
         const annos = handleAnnotations(method.annotations, "\t").trim()
         const params = functionParameters(method)
         return t
             .replace("<MethodAnnotations>", annos)
             .replace("<ReturnType>", addSigns(method.returnType, shortenTypeName(method.returnType)))
             .replace("<FunctionParameters>", params)
-            .replace("<MethodName>", addSigns(method, method.name))
+            .replace("<MethodName>", method.name == null ? "foo" : addSigns(method, method.name))
     }
     return ""
 }
@@ -126,7 +131,8 @@ function handleAnnotations(annotations, ch = "") {
         let result = `@${shortenTypeName(a.type)}`
         if (a.parameters.length > 0) {
             const params = a.parameters.map(p => addSigns(p, paramToString(p))).join(",")
-            result = `${result}(${params})`
+            // result = `${result}(${params})`
+            return addSigns(a, result+"(") + params + addSigns(a, ")")
         }
         return addSigns(a, result)
     }
@@ -196,7 +202,7 @@ function javaClassToString(clazz) {
         .replace("<ClassAnnotations>", handleAnnotations(clazz.annotations))
         .replace("<FieldDeclaration>", field(clazz.field))
         .replace("<MethodDeclaration>", method(clazz.method))
-        .replace("<OverriddenMethodDeclaration>", method(clazz.overriddenMethod, "@Override\n\t"))
+        .replace("<OverriddenMethodDeclaration>", method(clazz.overriddenMethod, "@Override\n\tpublic "))
         .replace("<ExtendsTemplate>", extendz(clazz.extendedClass))
         .replace("<ImplementsTemplate>", implementz(clazz.implementedInterfaces))
 }

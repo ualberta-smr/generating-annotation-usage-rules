@@ -223,6 +223,13 @@ $consequentColorLight: #0fc80f;
     }
 }
 
+.negated {
+    font-weight: bolder;
+    font-style: italic;
+    color: grey !important;
+    opacity: 0.5;
+}
+
 .disabledBtn {
     pointer-events: none;
 }
