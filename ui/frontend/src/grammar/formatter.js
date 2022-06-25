@@ -1,8 +1,7 @@
 import antlr4 from 'antlr4';
-import RulepadGrammarLexer from './RulepadGrammarLexer'
-import RulepadGrammarParser from './RulepadGrammarParser'
+import RulepadGrammarLexer from './generated/RulepadGrammarLexer'
+import RulepadGrammarParser from './generated/RulepadGrammarParser'
 import FormatterListener from './FormatterListener'
-import VisualizerListener, { stringifyClass } from './VisualizerListener';
 
 export default function prettify(input) {
     try {
@@ -25,25 +24,6 @@ export default function prettify(input) {
 
 }
 
-export function visualize(input) {
-    try {
-        const chars = new antlr4.InputStream(onelineify(input));
-        const lexer = new RulepadGrammarLexer(chars);
-        const tokens = new antlr4.CommonTokenStream(lexer);
-        const parser = new RulepadGrammarParser(tokens);
-        parser.buildParseTrees = true;
-
-        const tree = parser.start();
-        const visualizer = new VisualizerListener();
-        antlr4.tree.ParseTreeWalker.DEFAULT.walk(visualizer, tree);
-        const jc = visualizer.getJavaClass()
-        return resultWrapper(stringifyClass(jc))
-    } catch (error) {
-        console.error(error)
-        return resultWrapper(null)
-    }
-}
-
 export function onelineify(input) {
     return input
         .replaceAll("\n", " ")
@@ -52,17 +32,4 @@ export function onelineify(input) {
         .replaceAll("( ", "(")
         .replaceAll(")", " )")
         .trim() + " "
-}
-
-function resultWrapper(data) {
-    if (data == null) {
-        return {
-            status: "failure",
-            data: null
-        }
-    }
-    return {
-        status: "success",
-        data: data
-    }
 }

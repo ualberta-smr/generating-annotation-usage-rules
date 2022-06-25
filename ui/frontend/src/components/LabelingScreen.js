@@ -6,8 +6,9 @@ import FieldsetWrapper from "./FieldsetWrapper";
 import RuleAuthoringEditor from "./RuleAuthoringEditor";
 import makeCancellablePromise from "./superPromise";
 import CodeEditor from "./CodeEditor";
-import prettify, { onelineify, visualize } from "../grammar/formatter";
+import prettify, { onelineify } from "../grammar/formatter";
 import { BACKEND_URL, LS_USERNAME, TUTORIAL_URL } from "./constants";
+import { visualize } from "../grammar/visualizer";
 
 function LabelingScreen() {
     const [username, setUsername] = useState(window.localStorage.getItem(LS_USERNAME));
@@ -34,11 +35,6 @@ function LabelingScreen() {
 
     const [code, setRuleCode] = useState("");
     const [ruleLabel, setRuleLabel] = useState(null);
-
-    const [previousGrammarToCodeRequest, setCancelCurrentRequestHandle] =
-        useState({
-            cancel: () => { },
-        });
 
     const handleLabeling = (label) => {
         let newRuleLabel = ["correct", "best_practice", "not_a_rule"].includes(label)
@@ -106,9 +102,7 @@ function LabelingScreen() {
         setRuleMetaData({ id, name, size, totalLabeledRuleCount });
         setGrammarText(prettify(ruleString));
         processCodePreview(ruleString);
-        // setRuleCode(visualize(ruleString).trim());
         setIsNewRule(!isNewRule);
-        // processGrammarToCodeResponse(grammar);
     }
 
     const processCodePreview = (ruleString) => {
@@ -156,34 +150,8 @@ function LabelingScreen() {
         setPropertiesFileData(null);
     };
 
-    const processGrammarToCodeResponse = (grammar) => {
-        if (grammar == null) {
-            clearData();
-        } else {
-            const codeText = grammar.code;
-            if (codeText) {
-                setRuleCode(codeText.trim());
-            }
-
-            const configuration = grammar.configuration;
-            if (configuration.length > 0) {
-                const configFiles = configuration.map(({ filename, code }) => {
-                    return {
-                        name: filename,
-                        text: code
-                    }
-                });
-                setPropertiesFileData(configFiles);
-            } else {
-                setPropertiesFileData(null);
-            }
-        }
-    };
-
     const updateRelatedFields = (text) => {
         setGrammarText(text);
-
-        previousGrammarToCodeRequest.cancel();
 
         if (text.trim() === "") {
             clearData();
@@ -191,18 +159,7 @@ function LabelingScreen() {
         }
 
         const ruleString = onelineify(text);
-
-        // const codeText = visualize(sentText);
-        // setRuleCode(codeText.trim());
-
         processCodePreview(ruleString)
-
-        // setCancelCurrentRequestHandle(
-        //     makeCancellablePromise(
-        //         `${BACKEND_URL}/grammarToCode?grammar=${sentText}`,
-        //         processGrammarToCodeResponse
-        //     )
-        // );
     };
 
     const goToTutorialPage = () => {

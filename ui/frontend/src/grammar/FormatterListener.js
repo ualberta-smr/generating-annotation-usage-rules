@@ -1,4 +1,4 @@
-import RulepadGrammarListener from "./RulepadGrammarListener";
+import RulepadGrammarListener from './generated/RulepadGrammarListener'
 
 export default class FormatterListener extends RulepadGrammarListener {
 
@@ -387,6 +387,10 @@ export default class FormatterListener extends RulepadGrammarListener {
         this.handleExitAggregateOf()
     }
 
+    enterClassExpressionNo(ctx) {
+        this.finalString += this.getPrefix() + ctx.NO().getText().trim();
+    }
+
     enterFunctionExpressionNoneOf(ctx) {
         this.handleEnterAggregateOf(ctx, ctx => ctx.NONE_OF())
     }
@@ -403,6 +407,10 @@ export default class FormatterListener extends RulepadGrammarListener {
         this.handleExitAggregateOf()
     }
 
+    enterFunctionExpressionNo(ctx) {
+        this.finalString += this.getPrefix() + ctx.NO().getText().trim();
+    }
+
     enterDeclarationStatementExpressionNoneOf(ctx) {
         this.handleEnterAggregateOf(ctx, ctx => ctx.NONE_OF())
     }
@@ -417,6 +425,10 @@ export default class FormatterListener extends RulepadGrammarListener {
 
     exitDeclarationStatementExpressionOneOf(ctx) {
         this.handleExitAggregateOf()
+    }
+
+    enterDeclarationStatementExpressionNo(ctx) {
+        this.finalString += this.getPrefix() + ctx.NO().getText().trim();
     }
 
     handleEnterAggregateOf(ctx, keywordSelector) {
