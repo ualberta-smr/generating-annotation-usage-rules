@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class ParseTreeViewerTest {
 
     public static void main(String[] args) {
-        String input = "field with type \"B\" or annotation \"D\" must have annotation \"B\" or annotation \"C\" or annotation \"D\" ";
+        String input = "class with annotation \"A\" must have none of (annotation \"B\" or annotation \"C\" ) ";
         final RulepadGrammarLexer lexer = new RulepadGrammarLexer(CharStreams.fromString(input));
         final RulepadGrammarParser parser = new RulepadGrammarParser(new CommonTokenStream(lexer));
 //        parser.setTrace(true);

@@ -236,7 +236,15 @@ export default class VisualizerListener extends RulepadGrammarListener {
     }
 
     __isNegated(ctx) {
-        return ctx.parentCtx.constructor.name.endsWith("ExpressionNoContext");
+        const isNegated = ctx.parentCtx.constructor.name.endsWith("ExpressionNoContext")
+        if (isNegated) return true;
+
+        let temp = ctx
+        while (temp.parentCtx.constructor.name.endsWith("ExpressionAggregateContentsContext") === true) {
+            temp = temp.parentCtx
+        }
+
+        return temp.parentCtx.constructor.name.endsWith("ExpressionNoneOfContext")
     }
 
     getJavaClass() {
