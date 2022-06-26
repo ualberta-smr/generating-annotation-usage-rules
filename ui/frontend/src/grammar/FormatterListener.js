@@ -16,18 +16,21 @@ export default class FormatterListener extends RulepadGrammarListener {
         return this.finalString;
     }
 
-    getPrefix() {
-        let result = "\t".repeat(this.depth)
-        if (this.seenLPAREN) {
-            result = ""
-            this.seenLPAREN = false;
+    getPrefix(ctx = null) {
+        if (ctx == null || !ctx.parentCtx.constructor.name.endsWith("NoContext")) {
+            let result = "\t".repeat(this.depth)
+            if (this.seenLPAREN) {
+                result = ""
+                this.seenLPAREN = false;
+            }
+            return result;    
         }
-        return result;
+        return " ";
     }
 
     openParenthesisIfRequired(ctx) {
         if (ctx.LPAREN() !== null) {
-            this.finalString += this.getPrefix() + "("
+            this.finalString += this.getPrefix(ctx) + "("
             this.seenLPAREN = true; 
         }
         return ctx.LPAREN() !== null;
@@ -48,12 +51,12 @@ export default class FormatterListener extends RulepadGrammarListener {
 
     // Enter a parse tree produced by RulepadGrammarParser#and_.
     enterAnd_(ctx) {
-        this.finalString += `\n${this.getPrefix()}and\n`
+        this.finalString += `\n${this.getPrefix(ctx)}and\n`
     }
 
     // Enter a parse tree produced by RulepadGrammarParser#or_.
     enterOr_(ctx) {
-        this.finalString += `\n${this.getPrefix()}or\n`
+        this.finalString += `\n${this.getPrefix(ctx)}or\n`
     }
 
     // Enter a parse tree produced by RulepadGrammarParser#have.
@@ -65,18 +68,18 @@ export default class FormatterListener extends RulepadGrammarListener {
 
     // Enter a parse tree produced by RulepadGrammarParser#names.
 	enterNames(ctx) {
-        this.finalString += this.getPrefix() + ctx.getText()
+        this.finalString += this.getPrefix(ctx) + ctx.getText()
 	}
 
     // Enter a parse tree produced by RulepadGrammarParser#values.
 	enterValues(ctx) {
-        this.finalString += this.getPrefix() + ctx.getText()
+        this.finalString += this.getPrefix(ctx) + ctx.getText()
 	}
 
 
     // Enter a parse tree produced by RulepadGrammarParser#annotations.
     enterAnnotations(ctx) {
-        this.finalString += this.getPrefix() + ctx.ANNOTATION().getText();
+        this.finalString += this.getPrefix(ctx) + ctx.ANNOTATION().getText();
     }
 
     // Enter a parse tree produced by RulepadGrammarParser#annotationCondition.
@@ -112,12 +115,12 @@ export default class FormatterListener extends RulepadGrammarListener {
 
     // Enter a parse tree produced by RulepadGrammarParser#extensions.
     enterExtensions(ctx) {
-        this.finalString += this.getPrefix() + ctx.getText();
+        this.finalString += this.getPrefix(ctx) + ctx.getText();
     }
 
     // Enter a parse tree produced by RulepadGrammarParser#implementations.
     enterImplementations(ctx) {
-        this.finalString += this.getPrefix() + ctx.getText();
+        this.finalString += this.getPrefix(ctx) + ctx.getText();
     }
 
     // Enter a parse tree produced by RulepadGrammarParser#overriddenFunctions.
@@ -138,13 +141,13 @@ export default class FormatterListener extends RulepadGrammarListener {
                                     .map(e => e.trim())
                                     .filter(e => e.length > 0)
                                     .join(", ")
-            this.finalString += this.getPrefix() + ctx.OVERRIDDEN_FUNCTION().getText() + `"${methodName}(${parameters})"`;
+            this.finalString += this.getPrefix(ctx) + ctx.OVERRIDDEN_FUNCTION().getText() + `"${methodName}(${parameters})"`;
         }
     }
 
     // Enter a parse tree produced by RulepadGrammarParser#functions.
     enterFunctions(ctx) {
-        this.finalString += this.getPrefix() + ctx.FUNCTION().getText()
+        this.finalString += this.getPrefix(ctx) + ctx.FUNCTION().getText()
         this.depth++;
     }
 
@@ -173,7 +176,7 @@ export default class FormatterListener extends RulepadGrammarListener {
 
     // Enter a parse tree produced by RulepadGrammarParser#parameters.
     enterAnnotationParameters(ctx) {
-        this.finalString += this.getPrefix() + ctx.PARAMETER().getText()
+        this.finalString += this.getPrefix(ctx) + ctx.PARAMETER().getText()
     }
 
     // Enter a parse tree produced by RulepadGrammarParser#parameterCondition.
@@ -205,7 +208,7 @@ export default class FormatterListener extends RulepadGrammarListener {
 
     // Enter a parse tree produced by RulepadGrammarParser#functionParameters.
     enterFunctionParameters(ctx) {
-        this.finalString += this.getPrefix() + ctx.PARAMETER().getText()
+        this.finalString += this.getPrefix(ctx) + ctx.PARAMETER().getText()
     }
 
     // Enter a parse tree produced by RulepadGrammarParser#functionParameterCondition.
@@ -240,7 +243,7 @@ export default class FormatterListener extends RulepadGrammarListener {
 
     // Enter a parse tree produced by RulepadGrammarParser#types.
     enterTypes(ctx) {
-        this.finalString += this.getPrefix() + ctx.TYPES().getText()
+        this.finalString += this.getPrefix(ctx) + ctx.TYPES().getText()
         const cond = ctx.typeCondition();
         if (cond != null) {
             if (cond.combinatorialWords() != null) {
@@ -251,7 +254,7 @@ export default class FormatterListener extends RulepadGrammarListener {
 
     // Enter a parse tree produced by RulepadGrammarParser#returnTypes.
     enterReturnTypes(ctx) {
-        this.finalString += this.getPrefix() + ctx.RETURN_TYPES().getText()
+        this.finalString += this.getPrefix(ctx) + ctx.RETURN_TYPES().getText()
         const cond = ctx.returnTypeCondition();
         if (cond != null) {
             if (cond.combinatorialWords() != null) {
@@ -263,7 +266,7 @@ export default class FormatterListener extends RulepadGrammarListener {
 
     // Enter a parse tree produced by RulepadGrammarParser#declarationStatements.
     enterDeclarationStatements(ctx) {
-        const prefix = this.getPrefix()
+        const prefix = this.getPrefix(ctx)
         this.finalString += prefix + ctx.DeclarationStatement().getText()
         this.depth++;
     }
@@ -290,7 +293,7 @@ export default class FormatterListener extends RulepadGrammarListener {
 
     // Enter a parse tree produced by RulepadGrammarParser#configurationFiles.
     enterConfigurationFiles(ctx) {
-        this.finalString += this.getPrefix() + ctx.ConfigurationFile().getText();
+        this.finalString += this.getPrefix(ctx) + ctx.ConfigurationFile().getText();
     }
 
     // Enter a parse tree produced by RulepadGrammarParser#configurationFileCondition.
@@ -316,7 +319,7 @@ export default class FormatterListener extends RulepadGrammarListener {
 
     // Enter a parse tree produced by RulepadGrammarParser#configurationProperties.
     enterConfigurationProperties(ctx) {
-        this.finalString += this.getPrefix() + ctx.CONFIGURATION_PROPERTIES().getText();
+        this.finalString += this.getPrefix(ctx) + ctx.CONFIGURATION_PROPERTIES().getText();
     }
 
     // Enter a parse tree produced by RulepadGrammarParser#configurationPropertyCondition.
@@ -349,7 +352,7 @@ export default class FormatterListener extends RulepadGrammarListener {
 
     // Enter a parse tree produced by RulepadGrammarParser#classes.
     enterClasses(ctx) {
-        this.finalString += this.getPrefix() + ctx.CLASSES().getText();
+        this.finalString += this.getPrefix(ctx) + ctx.CLASSES().getText();
     }
 
 
@@ -376,11 +379,11 @@ export default class FormatterListener extends RulepadGrammarListener {
     }
 
     enterBeans(ctx) {
-        this.finalString += this.getPrefix() + ctx.BEAN_DECL().getText();
+        this.finalString += this.getPrefix(ctx) + ctx.BEAN_DECL().getText();
     }
 
     enterBeansFile(ctx) {
-        this.finalString += this.getPrefix() + ctx.BEANS_FILE().getText();
+        this.finalString += this.getPrefix(ctx) + ctx.BEANS_FILE().getText();
     }
 
     // Aggregates start
@@ -401,7 +404,7 @@ export default class FormatterListener extends RulepadGrammarListener {
     }
 
     enterClassExpressionNo(ctx) {
-        this.finalString += this.getPrefix() + ctx.NO().getText().trim();
+        this.finalString += this.getPrefix(ctx) + ctx.NO().getText().trim();
     }
 
     enterFunctionExpressionNoneOf(ctx) {
@@ -421,7 +424,7 @@ export default class FormatterListener extends RulepadGrammarListener {
     }
 
     enterFunctionExpressionNo(ctx) {
-        this.finalString += this.getPrefix() + ctx.NO().getText().trim();
+        this.finalString += this.getPrefix(ctx) + ctx.NO().getText().trim();
     }
 
     enterDeclarationStatementExpressionNoneOf(ctx) {
@@ -441,11 +444,11 @@ export default class FormatterListener extends RulepadGrammarListener {
     }
 
     enterDeclarationStatementExpressionNo(ctx) {
-        this.finalString += this.getPrefix() + ctx.NO().getText().trim();
+        this.finalString += this.getPrefix(ctx) + ctx.NO().getText().trim();
     }
 
     handleEnterAggregateOf(ctx, keywordSelector) {
-        this.finalString += this.getPrefix() + keywordSelector(ctx).getText() + "(";
+        this.finalString += this.getPrefix(ctx) + keywordSelector(ctx).getText() + "(";
         this.finalString += "\n"
         this.depth++;
     }
@@ -457,7 +460,7 @@ export default class FormatterListener extends RulepadGrammarListener {
     // Aggregates end
 
     enterEnclosingClass(ctx) {
-        this.finalString += this.getPrefix() + ctx.ENCLOSING_CLASS().getText();
+        this.finalString += this.getPrefix(ctx) + ctx.ENCLOSING_CLASS().getText();
     }
 
 }
