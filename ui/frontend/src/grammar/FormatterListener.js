@@ -456,4 +456,8 @@ export default class FormatterListener extends RulepadGrammarListener {
     }
     // Aggregates end
 
+    enterEnclosingClass(ctx) {
+        this.finalString += this.getPrefix() + ctx.ENCLOSING_CLASS().getText();
+    }
+
 }

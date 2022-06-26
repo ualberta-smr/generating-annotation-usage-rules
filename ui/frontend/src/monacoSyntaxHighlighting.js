@@ -33,6 +33,7 @@ export default class ShortRulepad {
                     [/one of/, "srp-keyword"],
                     [/no/, "srp-keyword"],
                     [/overridden method/, "srp-keyword"],
+                    [/enclosing class/, "srp-keyword"],
 
                     [/must have/, "srp-must-have"],
                     [/with/, "srp-with"],
@@ -103,39 +104,49 @@ export default class ShortRulepad {
 
         return [
             newSuggestion({
-                label: 'conf',
+                label: 'configuration property',
                 documentation: 'configuration property autocomplete',
                 insertText: 'configuration file with property "${1}"',
             }),
             newSuggestion({
-                label: 'ann',
+                label: 'annotation',
                 documentation: 'annotation',
                 insertText: 'annotation "${1}"',
             }),
             newSuggestion({
-                label: 'impl',
+                label: 'implementation',
                 documentation: 'implementation',
                 insertText: 'implementation of "${1}"',
             }),
             newSuggestion({
-                label: 'ext',
+                label: 'extension',
                 documentation: 'extension',
                 insertText: 'extension of "${1}"',
             }),
             newSuggestion({
-                label: 'bean',
+                label: 'bean declaration',
                 documentation: 'bean declaration ${1}',
                 insertText: 'bean declaration',
             }),
             newSuggestion({
-                label: 'beans',
+                label: 'beans file',
                 documentation: 'beans file ${1}',
                 insertText: 'beans file',
             }),
             newSuggestion({
-                label: 'ret',
+                label: 'return type',
                 documentation: 'return type',
                 insertText: 'return type "${1}"',
+            }),
+            newSuggestion({
+                label: 'overridden method',
+                documentation: 'overridden method',
+                insertText: 'overridden method "${1}"',
+            }),
+            newSuggestion({
+                label: 'enclosing class',
+                documentation: 'enclosing class',
+                insertText: 'enclosing class with ',
             })
         ]
     }

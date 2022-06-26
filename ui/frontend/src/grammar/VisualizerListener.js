@@ -67,22 +67,24 @@ class Annotation extends AntecedentOrConsequent {
 }
 
 class Field extends AntecedentOrConsequent {
-    constructor(type, annotations, configurationFile) {
+    constructor(type, annotations, configurationFile, enclosingClass) {
         super()
         this.type = type == undefined ? new Type("Object") : type
         this.annotations = annotations == undefined ? [] : annotations
-        this.configurationFile = configurationFile
+        this.configurationFile = configurationFile;
+        this.enclosingClass = enclosingClass;
     }
 }
 
 class Method extends AntecedentOrConsequent {
-    constructor(returnType, parameters, annotations, configurationFile, name = null) {
+    constructor(returnType, parameters, annotations, configurationFile, name, enclosingClass) {
         super()
         this.name = name;
         this.returnType = returnType == undefined ? new Type("void") : returnType
         this.parameters = parameters == undefined ? [] : parameters
         this.annotations = annotations == undefined ? [] : annotations
-        this.configurationFile = configurationFile
+        this.configurationFile = configurationFile;
+        this.enclosingClass = enclosingClass;
     }
 }
 
@@ -142,6 +144,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
             ])
         )
         p.isAntecedent = a.isAntecedent || b.isAntecedent
+        p.negated = a.negated && b.negated
         return p
     }
 
@@ -157,7 +160,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
             const aName = a.name ? a.name : ""
             const bTypeName = b.type ? b.type.name : ""
             const bName = b.name ? b.name : ""
-            
+
             const typeComp = aTypeName.localeCompare(bTypeName)
 
             if (typeComp === 0) {
@@ -169,7 +172,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
         oldParams = this.__groupBy(oldParams, (mp) => {
             const typeName = mp.type ? mp.type.name : ""
             const name = mp.name ? mp.name : ""
-            return typeName+"."+name
+            return typeName + "." + name
         })
 
         const newParameters = []
@@ -222,9 +225,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
         }
 
         oldAnnotations = oldAnnotations.map(unfold).flat()
-        const compare = (a, b) => {
-            return a.type.name.localeCompare(b.type.name)
-        }
+        const compare = (a, b) => a.type.name.localeCompare(b.type.name)
 
         const typeToAnnotationsMap = this.__groupBy(oldAnnotations.sort(compare), ann => ann.type.name)
         const newAnnotations = []
@@ -247,25 +248,79 @@ export default class VisualizerListener extends RulepadGrammarListener {
         return temp.parentCtx.constructor.name.endsWith("ExpressionNoneOfContext")
     }
 
+    __mergeFields(f, g) {
+        if (f == null || g == null) return f || g;
+        const newType = f.type || g.type;
+        const newAnnotations = this.__mergeDuplicateAnnotations([...f.annotations, ...g.annotations])
+        const newConfigFile = f.configurationFile || g.configurationFile
+
+        const newField = new Field(newType, newAnnotations, newConfigFile, null);
+        newField.negated = f.negated && g.negated;
+        return newField;
+    }
+
+    __mergeMethods (m, n) {
+        if (m == null || n == null) return m || n;
+        const newReturnType = m.returnType || m.returnType;
+        const newParameters = this.__mergeDuplicateAnnotations([...m.parameters, ...m.parameters])
+        const newAnnotations = this.__mergeDuplicateAnnotations([...m.annotations, ...m.annotations])
+        const newConfigFile = m.configurationFile || m.configurationFile
+        const newName = m.name || m.name
+
+        const newMethod = new Method(newReturnType, newParameters, newAnnotations, newConfigFile, newName, null);
+        newMethod.negated = m.negated && n.negated
+        return newMethod;
+    }
+
+    // (JavaClass, JavaClass) -> JavaClass
+    __mergeJavaClasses(a, b) {
+        if (a == null || b == null) return a || b;
+
+        const newAnnotations = this.__mergeDuplicateAnnotations([...a.annotations, ...b.annotations])
+        const newExtendedClass = a.extendedClass || b.extendedClass
+        const newImplementedInterfaces = Array.from(this.__groupBy([...a.implementedInterfaces, ...b.implementedInterfaces], type => type.name).values())
+        const newMethod = this.__mergeMethods(a.method, b.method);
+        const newField = this.__mergeFields(a.field, b.field);
+        const newConfigFile = a.configurationFile || b.configurationFile;
+        const newDeclaredInBeans = a.declaredInBeans || b.declaredInBeans;
+        const newOverriddenMethod = a.overriddenMethod || b.overriddenMethod;
+
+        const clazz = new JavaClass(newAnnotations, newExtendedClass, newImplementedInterfaces, newField, newMethod, newConfigFile, newDeclaredInBeans, newOverriddenMethod)
+        clazz.negated = a.negated && b.negated
+        return clazz;
+    }
+
     getJavaClass() {
         const type = this.__initial.type
         const node = this.__initial.node
+        
         if (type === 'class') {
             node.annotations = this.__mergeDuplicateAnnotations(node.annotations)
+            const enclosingClasses = [node]
             if (node.method) {
                 node.method.annotations = this.__mergeDuplicateAnnotations(node.method.annotations)
                 node.method.parameters = this.__mergeDuplicateParameters(node.method.parameters)
+                if (node.method.enclosingClass) { enclosingClasses.push(node.method.enclosingClass) }
             }
             if (node.field) {
                 node.field.annotations = this.__mergeDuplicateAnnotations(node.field.annotations)
+                if (node.field.enclosingClass) { enclosingClasses.push(node.field.enclosingClass) }
             }
-            return node;
+            return enclosingClasses.reduce((a, b) => this.__mergeJavaClasses(a, b));
         } else if (type === 'function') {
             node.annotations = this.__mergeDuplicateAnnotations(node.annotations)
             node.parameters = this.__mergeDuplicateParameters(node.parameters)
+            if (node.enclosingClass) {
+                node.enclosingClass.method = this.__mergeMethods(node, node.enclosingClass.method)
+                return node.enclosingClass;
+            }
             return new JavaClass([], null, [], null, node, null, null, null)
         } else if (type === 'field') {
             node.annotations = this.__mergeDuplicateAnnotations(node.annotations)
+            if (node.enclosingClass) {
+                node.enclosingClass.field = this.__mergeFields(node, node.enclosingClass.field)
+                return node.enclosingClass;
+            }
             return new JavaClass([], null, [], node, null, null, null, null)
         }
         return null;
@@ -279,20 +334,50 @@ export default class VisualizerListener extends RulepadGrammarListener {
         })
     }
 
-    enterClasses(ctx) {
-        if (this.__stack.length === 0) {
-            this.__initial = {
-                'node': new JavaClass([], null, [], null, null, null, null),
-                'type': 'class'
+    enterClassCondition(ctx) {
+        let negated = this.__isNegated(ctx)
+        let clazz = null;
+
+        if (this.__stack.length > 0) {
+            const prev = this.peekStack();
+
+            if (["function", "field"].includes(prev.comingFrom)) {
+                const enclosingClass = prev.node.enclosingClass;
+                if (enclosingClass == null) {
+                    clazz = this.initObj(new JavaClass([], null, [], null, null, null, null));
+                } else {
+                    clazz = enclosingClass;
+                }
+                prev.node.enclosingClass = clazz;
+                clazz.negated = prev.node.negated ^ negated;
+            }
+        } else {
+            if (this.__is_antecedent) {
+                // rule starts with 'class'
+                this.__initial = {
+                    node: new JavaClass([], null, [], null, null, null, null),
+                    type: 'class'
+                }
+            }
+            clazz = this.__initial.node;
+        }
+
+        if (clazz != null) {
+            if (clazz.negated == undefined) {
+                clazz.negated = negated;
             }
             this.__stack.push({
-                'comingFrom': 'class',
-                'node': this.__initial['node']
+                comingFrom: 'class',
+                node: clazz
             })
-        } else { }
+        }
     }
 
-    exitClasses(ctx) { this.__stack.pop() }
+    exitClassCondition(ctx) {
+        if (this.peekStack().comingFrom === 'class') {
+            this.__stack.pop()
+        }
+    }
 
     enterAnnotations(ctx) {
         let negated = this.__isNegated(ctx)
@@ -345,9 +430,9 @@ export default class VisualizerListener extends RulepadGrammarListener {
         if (prev.comingFrom === 'class') {
             const implementedInterface = ctx.implementationCondition().combinatorialWords().getText().replaceAll('"', "")
             const interfaceClazz = this.initObj(new Type(implementedInterface));
-            interfaceClazz.negated  = prev.node.negated ^ negated
+            interfaceClazz.negated = prev.node.negated ^ negated
             prev.node.implementedInterfaces.push(interfaceClazz)
-            
+
         }
     }
 
@@ -459,7 +544,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
                 const classMethod = prev.node.method
                 if (classMethod == null) {
                     method = this.initObj(
-                        new Method(new Type("void"), [], [], null)
+                        new Method(new Type("void"), [], [], null, null, null)
                     )
                 } else {
                     method = classMethod
@@ -471,7 +556,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
             if (this.__is_antecedent) {
                 // if the rule starts with 'function'
                 this.__initial = {
-                    'node': new Method(new Type("void"), [], [], null),
+                    'node': new Method(new Type("void"), [], [], null, null, null),
                     'type': 'function'
                 }
             }
@@ -489,7 +574,11 @@ export default class VisualizerListener extends RulepadGrammarListener {
         }
     }
 
-    exitFunctions(ctx) { this.__stack.pop(); }
+    exitFunctions(ctx) {
+        if (this.peekStack().comingFrom === 'function') {
+            this.__stack.pop()
+        }
+    }
 
     enterDeclarationStatements(ctx) {
         let negated = this.__isNegated(ctx)
@@ -499,7 +588,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
             if (prev.comingFrom === 'class') {
                 const classField = prev.node.field
                 if (classField == null) {
-                    field = new Field(new Type("Object"), [], null)
+                    field = new Field(new Type("Object"), [], null, null)
                 } else {
                     field = classField
                 }
@@ -510,7 +599,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
             if (this.__is_antecedent) {
                 // if the rule starts with 'field'
                 this.__initial = {
-                    'node': this.initObj(new Field(new Type("Object"), [], null)),
+                    'node': this.initObj(new Field(new Type("Object"), [], null, null)),
                     'type': 'field'
                 }
             }
@@ -526,7 +615,11 @@ export default class VisualizerListener extends RulepadGrammarListener {
         }
     }
 
-    exitDeclarationStatements(ctx) { this.__stack.pop(); }
+    exitDeclarationStatements(ctx) {
+        if (this.peekStack().comingFrom === 'field') {
+            this.__stack.pop()
+        }
+    }
 
     enterNames(ctx) {
         const name = ctx.nameCondition().combinatorialWords().getText().replaceAll('"', "")
@@ -565,7 +658,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
     enterConfigurationProperties(ctx) {
         let negated = this.__isNegated(ctx)
         const prop = this.initObj(new ConfigurationProperty(null, null, null))
-        prop.negated =  negated
+        prop.negated = negated
         const text = ctx.configurationPropertyCondition().combinatorialWords()
 
         if (text != null || text != undefined) {
@@ -633,19 +726,19 @@ export default class VisualizerListener extends RulepadGrammarListener {
         } else {
             const methodName = methodSignature.slice(0, lparenPos);
             const parameters = methodSignature
-                                    .slice(lparenPos + 1, rparenPos)
-                                    .split(",")
-                                    .map(e => e.trim())
-                                    .filter(e => e.length > 0)
-                                    .map(p => this.initObj(new MethodParam(this.initObj(new Type(p)), null, [])))
-                                    .map(mp => {
-                                        mp.negated = negated; // TODO: I do not like mutations inside maps
-                                        return mp
-                                    })
+                .slice(lparenPos + 1, rparenPos)
+                .split(",")
+                .map(e => e.trim())
+                .filter(e => e.length > 0)
+                .map(p => this.initObj(new MethodParam(this.initObj(new Type(p)), null, [])))
+                .map(mp => {
+                    mp.negated = negated; // TODO: I do not like mutations inside maps
+                    return mp
+                })
 
             const prev = this.peekStack()
             if (prev.comingFrom === 'class') {
-                prev.node.overriddenMethod = this.initObj(new Method(new Type("T"), parameters, [], [], methodName))
+                prev.node.overriddenMethod = this.initObj(new Method(new Type("T"), parameters, [], [], methodName, null))
                 prev.node.overriddenMethod.negated = prev.node.negated ^ negated
             }
         }
