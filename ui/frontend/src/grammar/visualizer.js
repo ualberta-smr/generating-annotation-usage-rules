@@ -1,4 +1,5 @@
 import antlr4 from 'antlr4';
+import getDocumentationLink from '../documentation';
 import { onelineify } from './formatter';
 import RulepadGrammarLexer from './generated/RulepadGrammarLexer'
 import RulepadGrammarParser from './generated/RulepadGrammarParser'
@@ -17,18 +18,26 @@ class Foo <ExtendsTemplate><ImplementsTemplate> {
 <OverriddenMethodDeclaration>
 }`
 
+function wrapWithDocLink(type, str) {
+    const docLink = getDocumentationLink(type.name);
+    if (docLink) {
+        return `<a class="documentation-link" href="${docLink}" target="_blank">${str}</a>`        
+    }
+    return str;
+}
+
 // Type -> str
 function shortenTypeName(type, defaultVal=null) {
     if (type == null || type.name == null) {
         return defaultVal
     }
-
+    let result = type.name;
     const pieces = type.name.split(".")
     if (pieces.length > 1) {
         // simple name
-        return pieces.filter(p => p[0] === p[0].toUpperCase()).join(".")
+        result = pieces.filter(p => p[0] === p[0].toUpperCase()).join(".")
     }
-    return type.name
+    return wrapWithDocLink(type, result);
 }
 
 // (AntecedentOrConsequent, str) -> str

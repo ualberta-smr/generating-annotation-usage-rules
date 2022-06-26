@@ -20,6 +20,22 @@ public class Utils {
 
     public static void main(String[] args) throws IOException {
         val dir = new File("src/test/data/jarfiles");
+        Files.walk(dir.toPath())
+                .map(Path::toFile)
+                .filter(File::isFile)
+                .map(Utils::getClassNamesFromJarFile)
+                .flatMap(Collection::stream)
+                .filter(s -> !s.contains("package-info") || !s.contains("module-info"))
+                .map(s -> Arrays.stream(s.split("\\.")).limit(s.split("\\.").length - 1).collect(joining(".")))
+                .collect(groupingBy(s -> s))
+                .keySet()
+                .stream()
+                .sorted()
+                .forEach(System.out::println);
+    }
+
+    private static void generateAllClassNamesAndPackages() throws IOException {
+        val dir = new File("src/test/data/jarfiles");
         val result = Files.walk(dir.toPath())
                 .map(Path::toFile)
                 .filter(File::isFile)

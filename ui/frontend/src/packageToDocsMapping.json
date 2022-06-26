@@ -1,0 +1,14 @@
+{
+    "javax": "https://javaee.github.io/javaee-spec/javadocs",
+    "jakarta": "https://jakarta.ee/specifications/platform/9/apidocs",
+    "org.eclipse.microprofile.auth": "https://download.eclipse.org/microprofile/microprofile-jwt-auth-2.0/apidocs",
+    "org.eclipse.microprofile.config": "https://download.eclipse.org/microprofile/microprofile-config-3.0/apidocs",
+    "org.eclipse.microprofile.faulttolerance": "https://download.eclipse.org/microprofile/microprofile-fault-tolerance-4.0/apidocs",
+    "org.eclipse.microprofile.graphql": "https://download.eclipse.org/microprofile/microprofile-graphql-2.0/apidocs",
+    "org.eclipse.microprofile.health": "https://download.eclipse.org/microprofile/microprofile-health-4.0/apidocs",
+    "org.eclipse.microprofile.jwt": "https://download.eclipse.org/microprofile/microprofile-jwt-auth-2.0/apidocs",
+    "org.eclipse.microprofile.metrics": "https://download.eclipse.org/microprofile/microprofile-metrics-4.0/apidocs",
+    "org.eclipse.microprofile.openapi": "https://download.eclipse.org/microprofile/microprofile-open-api-3.0/apidocs",
+    "org.eclipse.microprofile.reactive.messaging": "https://download.eclipse.org/microprofile/microprofile-reactive-messaging-2.0/apidocs",
+    "org.eclipse.microprofile.rest.client": "https://download.eclipse.org/microprofile/microprofile-rest-client-3.0/apidocs"
+}

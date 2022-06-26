@@ -230,6 +230,11 @@ $consequentColorLight: #0fc80f;
     opacity: 0.5;
 }
 
+a.documentation-link {
+    text-decoration: none;
+    color: unset;
+}
+
 .disabledBtn {
     pointer-events: none;
 }
