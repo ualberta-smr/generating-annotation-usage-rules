@@ -109,7 +109,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
         this.__stack = []
         this.__is_antecedent = true
         this.__initial = {
-            'node': null,
+            node: null,
             'type': null
         }
     }
@@ -329,8 +329,15 @@ export default class VisualizerListener extends RulepadGrammarListener {
     enterMust(ctx) {
         this.__is_antecedent = false
         this.__stack.push({
-            'comingFrom': this.__initial['type'],
-            'node': this.__initial['node']
+            comingFrom: this.__initial['type'],
+            node: this.__initial['node']
+        })
+    }
+
+    enterEnclosingClass(ctx) {
+        this.__stack.push({
+           comingFrom: 'enclosingClassExpression',
+           node: this.__isNegated(ctx)
         })
     }
 
@@ -339,6 +346,10 @@ export default class VisualizerListener extends RulepadGrammarListener {
         let clazz = null;
 
         if (this.__stack.length > 0) {
+            if (this.peekStack().comingFrom === 'enclosingClassExpression') {
+                const isEnclosingExpressionNegated = this.__stack.pop().node;
+                negated = negated ^ isEnclosingExpressionNegated;
+            }
             const prev = this.peekStack();
 
             if (["function", "field"].includes(prev.comingFrom)) {
@@ -491,8 +502,8 @@ export default class VisualizerListener extends RulepadGrammarListener {
         }
 
         this.__stack.push({
-            'comingFrom': 'parameter',
-            'node': param
+            comingFrom: 'parameter',
+            node: param
         })
     }
 
@@ -528,8 +539,8 @@ export default class VisualizerListener extends RulepadGrammarListener {
         }
 
         this.__stack.push({
-            'comingFrom': 'parameter',
-            'node': param
+            comingFrom: 'parameter',
+            node: param
         })
     }
 
@@ -556,7 +567,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
             if (this.__is_antecedent) {
                 // if the rule starts with 'function'
                 this.__initial = {
-                    'node': new Method(new Type("void"), [], [], null, null, null),
+                    node: new Method(new Type("void"), [], [], null, null, null),
                     'type': 'function'
                 }
             }
@@ -568,8 +579,8 @@ export default class VisualizerListener extends RulepadGrammarListener {
                 method.negated = negated;
             }
             this.__stack.push({
-                'comingFrom': 'function',
-                'node': method
+                comingFrom: 'function',
+                node: method
             })
         }
     }
@@ -599,7 +610,7 @@ export default class VisualizerListener extends RulepadGrammarListener {
             if (this.__is_antecedent) {
                 // if the rule starts with 'field'
                 this.__initial = {
-                    'node': this.initObj(new Field(new Type("Object"), [], null, null)),
+                    node: this.initObj(new Field(new Type("Object"), [], null, null)),
                     'type': 'field'
                 }
             }
@@ -609,8 +620,8 @@ export default class VisualizerListener extends RulepadGrammarListener {
         if (field != null) {
             field.negated = negated;
             this.__stack.push({
-                'comingFrom': 'field',
-                'node': field
+                comingFrom: 'field',
+                node: field
             })
         }
     }
@@ -648,8 +659,8 @@ export default class VisualizerListener extends RulepadGrammarListener {
             configFile.negated = prev.node.negated ^ negated
         }
         this.__stack.push({
-            'comingFrom': 'config-file',
-            'node': configFile
+            comingFrom: 'config-file',
+            node: configFile
         })
     }
 
@@ -684,8 +695,8 @@ export default class VisualizerListener extends RulepadGrammarListener {
         }
 
         this.__stack.push({
-            'comingFrom': 'property',
-            'node': prop
+            comingFrom: 'property',
+            node: prop
         })
     }
 
