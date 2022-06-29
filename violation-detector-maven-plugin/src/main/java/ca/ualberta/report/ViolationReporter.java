@@ -8,6 +8,6 @@ import java.util.function.Consumer;
 
 public interface ViolationReporter {
 
-    void report(StaticAnalysisRule rule, Collection<ViolationCombination> violation, Consumer<String> logger);
+    void report(StaticAnalysisRule rule, Collection<ViolationCombination> violations, Consumer<String> logger);
 
 }

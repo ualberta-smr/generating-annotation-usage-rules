@@ -66,12 +66,29 @@ public class Scanner extends AbstractMojo {
         if (!allViolations.isEmpty()) {
             // basically if it needs to fail on violation, the log level should be error
             // otherwise warn
-            final Consumer<String> logger = failOnViolation ? getLog()::error : getLog()::warn;
+            val logger = new DetectorLogger(failOnViolation);
             allViolations.forEach((rule, violations) ->
                     reporter.report(rule, violations, logger));
             if (failOnViolation) {
                 long count = allViolations.values().stream().mapToLong(Collection::size).sum();
                 throw new MojoFailureException(String.format("There were %d violations found in the project", count));
+            }
+        }
+    }
+
+    private class DetectorLogger implements Consumer<String> {
+        private final Consumer<String> logger;
+
+        private DetectorLogger(boolean failOnViolation) {
+            this.logger = failOnViolation ? getLog()::error : getLog()::warn;
+        }
+
+
+        @Override
+        public void accept(String input) {
+            val lines = input.split(System.lineSeparator());
+            for (val line : lines) {
+                logger.accept(line);
             }
         }
     }
