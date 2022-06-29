@@ -2,7 +2,7 @@
     "rules": [
         {
             "id": "OutgoingAndScope",
-            "specification": "class with function with annotation \"org.eclipse.microprofile.reactive.messaging.Outgoing\" or annotation \"org.eclipse.microprofile.reactive.messaging.Incoming\" must have annotation \"javax.enterprise.context.ApplicationScoped\" or annotation \"javax.enterprise.context.Dependent\" "
+            "specification": "class with method with annotation \"org.eclipse.microprofile.reactive.messaging.Outgoing\" or annotation \"org.eclipse.microprofile.reactive.messaging.Incoming\" must have annotation \"javax.enterprise.context.ApplicationScoped\" or annotation \"javax.enterprise.context.Dependent\" "
         },
         {
             "id": "RestClientInjectField",
@@ -18,11 +18,15 @@
         },
         {
             "id": "QueryMutationGraphQLAPI",
-            "specification": "class with function with annotation \"org.eclipse.microprofile.graphql.Query\" or annotation \"org.eclipse.microprofile.graphql.Mutation\" must have annotation \"org.eclipse.microprofile.graphql.GraphQLApi\" "
+            "specification": "class with method with annotation \"org.eclipse.microprofile.graphql.Query\" or annotation \"org.eclipse.microprofile.graphql.Mutation\" must have annotation \"org.eclipse.microprofile.graphql.GraphQLApi\" "
         },
         {
             "id": "PathParam-Path",
-            "specification": "class with function with parameter with annotation \"javax.ws.rs.PathParam\" must have annotation \"javax.ws.rs.Path\" or function with annotation \"javax.ws.rs.Path\" "
+            "specification": "class with method with parameter with annotation \"javax.ws.rs.PathParam\" must have annotation \"javax.ws.rs.Path\" or method with annotation \"javax.ws.rs.Path\" "
+        },
+        {
+            "id": "PathParam-Path-New",
+            "specification": "method with parameter with annotation \"javax.ws.rs.PathParam\" must have annotation \"javax.ws.rs.Path\" or enclosing class with annotation \"javax.ws.rs.Path\" "
         },
         {
             "id": "ConfigPropertyInjectRule",

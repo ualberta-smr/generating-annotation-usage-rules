@@ -1,20 +1,15 @@
 package ca.ualberta.smr.detection;
 
 import ca.ualberta.smr.detection.field.FieldAnalyzer;
-import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.violationreport.ViolationCombination;
-import ca.ualberta.smr.parsing.rules.Rule;
-import ca.ualberta.smr.parsing.rules.RuleParser;
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.FieldDeclaration;
+import com.github.javaparser.ast.expr.AnnotationExpr;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 
 import static ca.ualberta.smr.detection.AnalyzerUtils.getRule;
 import static ca.ualberta.smr.detection.AnalyzerUtils.parse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class FieldAnalyzerTest {
 
@@ -124,8 +119,9 @@ public class FieldAnalyzerTest {
         results.stream().map(ViolationCombination::describe).forEach(System.out::println);
 
         assertEquals(1, results.size());
-        val r1 = (FieldDeclaration) results.stream().findFirst().get().treeElement();
-        assertEquals("fooB", r1.getVariable(0).getNameAsString());
+        val r1 = (AnnotationExpr) results.stream().findFirst().get().treeElement();
+        assertEquals("C", r1.getNameAsString());
+        assertEquals("fooB", ((FieldDeclaration) r1.getParentNode().get()).getVariable(0).getNameAsString());
     }
 
     @Test
@@ -147,8 +143,9 @@ public class FieldAnalyzerTest {
         results.stream().map(ViolationCombination::describe).forEach(System.out::println);
 
         assertEquals(1, results.size());
-        val r1 = (FieldDeclaration) results.stream().findFirst().get().treeElement();
-        assertEquals("fooB", r1.getVariable(0).getNameAsString());
+        val r1 = (AnnotationExpr) results.stream().findFirst().get().treeElement();
+        assertEquals("C", r1.getNameAsString());
+        assertEquals("fooB", ((FieldDeclaration) r1.getParentNode().get()).getVariable(0).getNameAsString());
     }
 
     @Test

@@ -16,6 +16,7 @@ import lombok.experimental.Accessors;
 
 import java.util.*;
 
+import static ca.ualberta.smr.model.javaelements.JavaElementUtils.handleViolationCombinationCreation;
 import static ca.ualberta.smr.parsing.utils.GeneralUtility.describe;
 import static ca.ualberta.smr.parsing.utils.GeneralUtility.listOf;
 import static java.util.stream.Collectors.toList;
@@ -75,16 +76,27 @@ public final class JavaClass extends ProgramElement implements AnalysisItem {
                 cd.getImplementedTypes().stream().map(NodeWithSimpleName::getNameAsString).collect(toList()), cd, rule);
         val missingOverriddenMethods = overriddenMethod.getMissing(cd.getMethods(), rule);
 
-        return new ViolationCombinationAnd(cd, listOf(
-                missingField, missingMethod, missingExtensions, missingImplementation, missingAnnotations, missingOverriddenMethods
-        ));
+        val violations = listOf(
+                missingField, missingMethod, missingExtensions,
+                missingImplementation, listOf(missingAnnotations, missingOverriddenMethods)
+        ).stream().flatMap(Collection::stream).collect(toList());
+
+        return handleViolationCombinationCreation(cd, violations);
     }
 
-    private ViolationCombination findMissing(AggregateCondition prop, Collection<?> elements, ClassOrInterfaceDeclaration cd, StaticAnalysisRule rule) {
+    private Collection<ViolationCombination> findMissing(AggregateCondition prop, Collection<?> elements, ClassOrInterfaceDeclaration cd, StaticAnalysisRule rule) {
         if (prop.isEmpty() || elements.stream().map(e -> prop.getMissing(e, rule)).anyMatch(ViolationCombination::isEmpty)) {
-            return ViolationCombination.EMPTY;
+            return listOf(ViolationCombination.EMPTY);
         }
-        return new ViolationInfo(cd, prop.toString());
+
+        return elements.stream()
+                .map(e -> prop.getMissing(e, rule))
+                .filter(v -> !v.isEmpty())
+                .map(v -> {
+                    if (v.treeElement() != null) return v;
+                    return v.shallowCopy(cd);
+                })
+                .collect(toList());
     }
 
     @Override
@@ -135,7 +147,7 @@ public final class JavaClass extends ProgramElement implements AnalysisItem {
                     if (allParamsMatchInOrder(md.getParameters())) {
                         return ViolationCombination.EMPTY;
                     }
-                    return new ViolationInfo(bd, String.format("Method '%s' must have all the parameters: [%s]", name, parameters));
+                    return new ViolationInfo(md, String.format("Method '%s' must have all the parameters: [%s]", name, parameters), true);
                 }
             }
             return new ViolationInfo(null, this.toString());

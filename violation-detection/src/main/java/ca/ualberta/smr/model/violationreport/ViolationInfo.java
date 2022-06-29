@@ -18,9 +18,26 @@ public class ViolationInfo implements ViolationCombination {
      */
     private final String missingElement;
 
+    /**
+     * isCompleteError is set to true whenever the complete error message is already provided in missingElement
+     * therefore no need for another generated error message
+     */
+    private final boolean isCompleteError;
+
+    public ViolationInfo(Object treeElement, String missingElement) {
+        this.treeElement = treeElement;
+        this.missingElement = missingElement;
+        this.isCompleteError = false;
+    }
+
     @Override
     public String describe() {
-        return "{" + missingElement + "}";
+        return missingElement;
+    }
+
+    @Override
+    public ViolationCombination shallowCopy(Object treeElement) {
+        return new ViolationInfo(treeElement, missingElement);
     }
 }
 

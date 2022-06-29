@@ -21,9 +21,14 @@ public class ViolationCombinationOr implements ViolationCombination {
             return violations.stream()
                     .map(ViolationCombination::describe)
                     .filter(Objects::nonNull)
-                    .collect(Collectors.joining(" OR ", "Missing elements: [", "]"));
+                    .collect(Collectors.joining(" OR ", "[", "]"));
         }
         return "";
+    }
+
+    @Override
+    public ViolationCombination shallowCopy(Object treeElement) {
+        return new ViolationCombinationOr(treeElement, violations);
     }
 
     @Override

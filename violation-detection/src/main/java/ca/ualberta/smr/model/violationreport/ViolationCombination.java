@@ -11,6 +11,7 @@ import static java.util.Optional.empty;
 public interface ViolationCombination {
     Object treeElement();
     String describe();
+    ViolationCombination shallowCopy(Object treeElement);
 
     ViolationCombination EMPTY = new ViolationCombination() {
         @Override
@@ -21,6 +22,11 @@ public interface ViolationCombination {
         @Override
         public String describe() {
             return null;
+        }
+
+        @Override
+        public ViolationCombination shallowCopy(Object treeElement) {
+            return this;
         }
     };
     default boolean isEmpty() {

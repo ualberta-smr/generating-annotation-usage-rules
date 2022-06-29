@@ -1,9 +1,7 @@
 package ca.ualberta.smr.model.javaelements;
 
-import ca.ualberta.smr.parsing.utils.GeneralUtility;
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.violationreport.ViolationCombination;
-import ca.ualberta.smr.model.violationreport.ViolationCombinationAnd;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,7 +12,8 @@ import lombok.val;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ca.ualberta.smr.parsing.utils.GeneralUtility.listOf;
+import static ca.ualberta.smr.model.javaelements.JavaElementUtils.handleViolationCombinationCreation;
+import static ca.ualberta.smr.parsing.utils.GeneralUtility.*;
 
 @Getter
 @RequiredArgsConstructor
@@ -54,7 +53,7 @@ public final class Field extends ProgramElement implements AnalysisItem {
         val missingAnnotations = annotations.getMissing(fd.getAnnotations(), rule);
         val missingEnclosingClass = getMissingEnclosingClass(fd, rule);
 
-        return new ViolationCombinationAnd(fd, listOf(missingType, missingAnnotations, missingEnclosingClass));
+        return handleViolationCombinationCreation(fd, listOf(missingType, missingAnnotations, missingEnclosingClass));
     }
 
     private ViolationCombination getMissingEnclosingClass(FieldDeclaration fd, StaticAnalysisRule rule) {
@@ -68,6 +67,6 @@ public final class Field extends ProgramElement implements AnalysisItem {
         Map<String, AggregateCondition> keyValues = new HashMap<>();
         keyValues.put("type", type);
         keyValues.put("annotations", annotations);
-        return GeneralUtility.describe("field", keyValues);
+        return describe("field", keyValues);
     }
 }

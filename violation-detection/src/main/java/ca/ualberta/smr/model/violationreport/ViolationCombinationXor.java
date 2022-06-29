@@ -28,6 +28,11 @@ public class ViolationCombinationXor implements ViolationCombination {
     }
 
     @Override
+    public ViolationCombination shallowCopy(Object treeElement) {
+        return new ViolationCombinationXor(treeElement, violations, violationMessagePrefix);
+    }
+
+    @Override
     public boolean isEmpty() {
         return violations.isEmpty() || violations.stream().allMatch(ViolationCombination::isEmpty);
     }

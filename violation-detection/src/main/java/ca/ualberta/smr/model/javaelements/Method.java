@@ -3,7 +3,6 @@ package ca.ualberta.smr.model.javaelements;
 import ca.ualberta.smr.detection.method.MethodAntecedentScanner;
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.violationreport.ViolationCombination;
-import ca.ualberta.smr.model.violationreport.ViolationCombinationAnd;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import lombok.EqualsAndHashCode;
@@ -15,6 +14,7 @@ import lombok.val;
 import java.util.HashMap;
 import java.util.Map;
 
+import static ca.ualberta.smr.model.javaelements.JavaElementUtils.handleViolationCombinationCreation;
 import static ca.ualberta.smr.parsing.utils.GeneralUtility.*;
 
 @Getter
@@ -61,11 +61,12 @@ public final class Method extends ProgramElement implements AnalysisItem {
 
         val missingReturnType = returnType.getMissing(md.getTypeAsString(), rule);
         val missingAnnotations = annotations.getMissing(md.getAnnotations(), rule);
-        // TODO: make sure the params are the same
         val missingParameters = parameters.getMissing(MethodAntecedentScanner.findMethodParametersFromMethodDeclaration(md, rule.antecedent()), rule);
         val missingEnclosingClass = getMissingEnclosingClass(md, rule);
 
-        return new ViolationCombinationAnd(md, listOf(missingReturnType, missingAnnotations, missingParameters, missingEnclosingClass));
+        val violations = listOf(missingReturnType, missingAnnotations, missingParameters, missingEnclosingClass);
+
+        return handleViolationCombinationCreation(md, violations);
     }
 
     private ViolationCombination getMissingEnclosingClass(MethodDeclaration md, StaticAnalysisRule rule) {

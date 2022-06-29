@@ -60,12 +60,12 @@ public class AnnotationParameter extends ProgramElement {
                 if (name.matches(identifier)) {
                     if (value.matches(valueExpr)) return ViolationCombination.EMPTY;
                     return new ViolationInfo(
-                            expr, "Annotation should have the value: " + value + ", but has " + valueExpr
+                            expr, String.format("Annotation %s should have the value: %s, but has %s", expr.getNameAsString(), value, valueExpr), true
                     );
                 }
             }
         }
-        return new ViolationInfo(bd, String.format("Annotation must have the parameter '%s' with value '%s'", name, value));
+        return new ViolationInfo(bd, String.format("Annotation %s must have the parameter '%s' with value '%s'", expr.getNameAsString(), name, value));
     }
 
     @Override

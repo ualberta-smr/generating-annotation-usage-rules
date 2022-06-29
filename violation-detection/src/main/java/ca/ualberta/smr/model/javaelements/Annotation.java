@@ -47,6 +47,6 @@ public class Annotation extends ProgramElement {
     public String description() {
         val result = "@"+type.description();
         if (parameters.isEmpty()) return result;
-        return result + "(" + parameters + "}";
+        return result + "(" + parameters + ")";
     }
 }

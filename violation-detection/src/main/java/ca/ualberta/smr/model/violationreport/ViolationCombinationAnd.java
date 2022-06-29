@@ -2,6 +2,7 @@ package ca.ualberta.smr.model.violationreport;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.util.Collection;
@@ -21,9 +22,14 @@ public class ViolationCombinationAnd implements ViolationCombination {
             return violations.stream()
                     .map(ViolationCombination::describe)
                     .filter(Objects::nonNull)
-                    .collect(Collectors.joining(" AND ", "Missing elements: [", "]"));
+                    .collect(Collectors.joining(" AND ", "[", "]"));
         }
         return "";
+    }
+
+    @Override
+    public ViolationCombination shallowCopy(Object treeElement) {
+        return new ViolationCombinationAnd(treeElement, violations);
     }
 
     @Override

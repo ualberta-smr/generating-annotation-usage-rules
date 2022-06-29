@@ -44,7 +44,6 @@ public class RuleScannerTest {
                     System.out.println("================================================");
                     System.out.println("For rule: " + entry.getKey().toString());
                     for (ViolationCombination violationInfo : entry.getValue()) {
-                        System.out.println(violationInfo.describe());
                         Reporter.report(violationInfo);
                     }
                     System.out.println("================================================");
@@ -60,11 +59,11 @@ public class RuleScannerTest {
 
     static Stream<Arguments> dataProvider() {
         Map<String, Collection<String>> fileToRuleMap = new HashMap<>();
-        fileToRuleMap.put("TransactionDateChangeResource.java", listOf("PathParam-Path"));
+        fileToRuleMap.put("TransactionDateChangeResource.java", listOf("PathParam-Path", "PathParam-Path-New"));
         fileToRuleMap.put("FoodResource.java", listOf("OutgoingAndScope"));
         fileToRuleMap.put("WebIdPrincipal.java", listOf("JsonWebTokenField"));
         fileToRuleMap.put("WebIdSecurityContext.java", listOf("JsonWebTokenField"));
-        fileToRuleMap.put("InventoryClient.java", listOf("PathParam-Path"));
+        fileToRuleMap.put("InventoryClient.java", listOf("PathParam-Path", "PathParam-Path-New"));
         fileToRuleMap.put("InventoryResource.java", listOf("JsonWebTokenField"));
         fileToRuleMap.put("LoginBean.java", listOf("RestClientInjectField"));
         fileToRuleMap.put("SystemResource.java", listOf("ClaimInjectField"));

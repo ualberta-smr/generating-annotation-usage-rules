@@ -19,4 +19,8 @@ public class ViolationRange {
     public String toString() {
         return String.format("(line %d, col %d) - (line %d, col %d)", lineStart, colStart, lineEnd, colEnd);
     }
+
+    public String printStart() {
+        return String.format("(%d, %d)", lineStart, colStart);
+    }
 }
