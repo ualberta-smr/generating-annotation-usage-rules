@@ -47,14 +47,14 @@ public class CombinatorialWordsExtractorUtility {
         if (ctx == null) return empty();
         val combWords = ctx.extensionCondition().combinatorialWords();
         val extendedClass = getText(combWords);
-        return Type.of(extendedClass);
+        return Type.ClassType.of(extendedClass);
     }
 
     public static AggregateCondition extractImplementations(RulepadGrammarParser.ImplementationsContext ctx) {
         if (ctx == null) return empty();
         val combWords = ctx.implementationCondition().combinatorialWords();
         val implementedInterface = getText(combWords);
-        return Type.of(implementedInterface);
+        return Type.InterfaceType.of(implementedInterface);
     }
 
     public static AggregateCondition extractEnclosingClass(RulepadGrammarParser.EnclosingClassContext ctx) {

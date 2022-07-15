@@ -1,5 +1,6 @@
 package ca.ualberta.report;
 
+import ca.ualberta.FileStaticAnalysisRulePair;
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.violationreport.*;
 import com.github.javaparser.ast.Node;
@@ -25,20 +26,23 @@ import static java.util.stream.Collectors.joining;
 public class ConsoleViolationReporter extends AbstractLogEnabled implements ViolationReporter {
 
     @Override
-    public void report(StaticAnalysisRule rule, Collection<ViolationCombination> violations, Consumer<String> logger) {
+    public void report(StaticAnalysisRule rule, Collection<FileStaticAnalysisRulePair> violations, Consumer<String> logger) {
         logger.accept("------------------------------------------------------------------------");
         logger.accept("For rule: " + rule.name());
         logger.accept("\t" + rule.description());
         logger.accept("\t---");
         int i = 1;
         for (val violation : violations) {
-            logger.accept(getMessage(violation, i++));
+            logger.accept("\tIn: " + violation.path);
+            for (ViolationCombination misuse : violation.misuses) {
+                logger.accept(getMessage(misuse, i++));
+            }
             logger.accept("");
         }
         logger.accept("------------------------------------------------------------------------");
     }
 
-    private static String getMessage(ViolationCombination violation, int order) {
+    private String getMessage(ViolationCombination violation, int order) {
         if (violation instanceof ViolationInfo) {
             val location = violation.getLocation().map(ViolationRange::printStart).orElse("--");
             val message = handleViolationInfo(((ViolationInfo) violation), true);
@@ -75,7 +79,7 @@ public class ConsoleViolationReporter extends AbstractLogEnabled implements Viol
         return String.format("%d. %s %s has following problems: \n%s", order, elementType, name, describe(violation));
     }
 
-    private static String describe(ViolationCombination v) {
+    private String describe(ViolationCombination v) {
         if (v.isEmpty()) return "";
 
         if (v instanceof ViolationCombinationAnd) {
@@ -106,7 +110,7 @@ public class ConsoleViolationReporter extends AbstractLogEnabled implements Viol
         return "";
     }
 
-    private static String handleViolationInfo(ViolationInfo info, boolean fullyResolveClassName) {
+    private String handleViolationInfo(ViolationInfo info, boolean fullyResolveClassName) {
         if (info.isCompleteError()) return info.describe();
 
         val treeElement = info.treeElement();
@@ -141,7 +145,7 @@ public class ConsoleViolationReporter extends AbstractLogEnabled implements Viol
         return String.format("%s %s is missing %s", elementType, name, info.describe());
     }
 
-    private static Stream<String> getString(ViolationCombination v, ViolationCombination vv) {
+    private Stream<String> getString(ViolationCombination v, ViolationCombination vv) {
         val description = describe(vv);
 
         if (vv instanceof ViolationInfo) {
@@ -154,13 +158,13 @@ public class ConsoleViolationReporter extends AbstractLogEnabled implements Viol
         return Arrays.stream(description.split(System.lineSeparator())).map(s -> "\t" + s);
     }
 
-    private static String getParentClassName(Node node) {
+    private String getParentClassName(Node node) {
         val clazz = (ClassOrInterfaceDeclaration) node.getParentNode()
                 .orElseThrow(() -> new RuntimeException("Node does not have a parent class"));
         return clazz.getFullyQualifiedName().orElseGet(clazz::getNameAsString);
     }
 
-    private static String getParentClassName(Node node, boolean fullyResolve) {
+    private String getParentClassName(Node node, boolean fullyResolve) {
         val clazz = (ClassOrInterfaceDeclaration) node.getParentNode()
                 .orElseThrow(() -> new RuntimeException("Node does not have a parent class"));
         if (fullyResolve) return clazz.getFullyQualifiedName().orElseGet(clazz::getNameAsString);

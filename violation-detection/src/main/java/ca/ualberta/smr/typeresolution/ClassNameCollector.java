@@ -12,14 +12,15 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.stream.Stream.concat;
+import static ca.ualberta.smr.parsing.utils.GeneralUtility.concat;
 
 public class ClassNameCollector {
 
     public static Map<String, String> getImports(CompilationUnit cu) {
-        return concat(getAllAnnotations(cu),
-                concat(getMethodReturnTypeImports(cu),
-                        concat(getMethodParameterTypeImports(cu), getFieldTypeImports(cu)))
+        return concat(
+                getAllClassRelatedImports(cu),
+                getAllMethodRelatedImports(cu),
+                getAllFieldRelatedImports(cu)
         ).filter(Objects::nonNull).collect(Collectors.toMap(
                 Import::getSimpleName,
                 Import::getFullyQualifiedName,
@@ -27,11 +28,36 @@ public class ClassNameCollector {
         ));
     }
 
-    private static Stream<Import> getAllAnnotations(CompilationUnit cu) {
-        return concat(concat(
+    private static Stream<Import> getAllClassRelatedImports(CompilationUnit cu) {
+        return concat(
+                getClassAnnotationMappings(cu),
+                getInterfaceImplementationClassExtensions(cu)
+        );
+    }
+
+    private static Stream<Import> getAllMethodRelatedImports(CompilationUnit cu) {
+        return concat(
+                getMethodAnnotationMappings(cu),
+                getMethodParameterTypeImports(cu),
+                getMethodReturnTypeImports(cu)
+        );
+    }
+
+    private static Stream<Import> getAllFieldRelatedImports(CompilationUnit cu) {
+        return concat(
                 getFieldAnnotationMappings(cu),
-                getMethodAnnotationMappings(cu)),
-                getClassAnnotationMappings(cu));
+                getFieldTypeImports(cu)
+        );
+    }
+
+    private static Stream<Import> getInterfaceImplementationClassExtensions(CompilationUnit cu) {
+        return cu.findAll(ClassOrInterfaceDeclaration.class)
+                .stream()
+                .flatMap(c -> concat(
+                        c.getImplementedTypes().stream(),
+                        c.getExtendedTypes().stream()
+                ))
+                .map(ClassNameCollector::getImportFromType);
     }
 
     private static Stream<Import> getFieldAnnotationMappings(CompilationUnit cu) {
@@ -47,8 +73,7 @@ public class ClassNameCollector {
                 .stream()
                 .flatMap(e -> concat(
                         e.getAnnotations().stream(),
-                        e.getParameters().stream()
-                                .flatMap(p -> p.getAnnotations().stream())))
+                        e.getParameters().stream().flatMap(p -> p.getAnnotations().stream())))
                 .map(ClassNameCollector::getAnnotationExprPairFunction);
     }
 

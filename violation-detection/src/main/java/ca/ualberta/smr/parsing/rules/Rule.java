@@ -1,5 +1,6 @@
 package ca.ualberta.smr.parsing.rules;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,4 +19,6 @@ public class Rule {
      */
     private String specification;
 
+    @JsonAlias({"isBestPractice", "is_best_practice"})
+    private boolean isBestPractice;
 }

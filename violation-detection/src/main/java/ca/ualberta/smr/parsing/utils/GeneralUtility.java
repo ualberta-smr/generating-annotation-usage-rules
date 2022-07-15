@@ -11,12 +11,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static ca.ualberta.smr.model.javaelements.AggregateCondition.empty;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 
 public class GeneralUtility {
+
+    @SafeVarargs
+    public static <T> Stream<T> concat(Stream<T>...streams) {
+        return Arrays.stream(streams).reduce(Stream.of(), Stream::concat);
+    }
 
     public static AggregateConditionOperation getOperation(RulepadGrammarParser.BinaryContext ctx) {
         if (ctx.getText().trim().equals("or")) {

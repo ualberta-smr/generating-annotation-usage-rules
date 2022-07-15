@@ -6,7 +6,6 @@ import lombok.SneakyThrows;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
-import java.io.InputStream;
 import java.util.Collection;
 
 @Named
@@ -16,7 +15,7 @@ public class DefaultRuleProvider implements RuleProvider {
     @Override
     @SneakyThrows
     public Collection<StaticAnalysisRule> getRules() {
-        final InputStream rulesStream = DefaultRuleProvider.class.getResourceAsStream("/rules.json");
-        return RuleParser.parseRules(rulesStream);
+        return RuleParser.parseRules(
+                DefaultRuleProvider.class.getResourceAsStream("/evaluation_rules.json"));
     }
 }

@@ -2,6 +2,7 @@ package ca.ualberta.smr.testing;
 
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.violationreport.ViolationCombination;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -24,6 +25,22 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RuleScannerTest {
 
     final DefaultViolationDetector defaultDetector = new DefaultViolationDetector("src/test/data/jarfiles");
+
+    @Test
+    public void test2() {
+        final Map<StaticAnalysisRule, Collection<ViolationCombination>> violations = defaultDetector.analyze(
+                "/home/owary/Programming/Research/Annotation-Violation-Detector/complete-rvt-experiment/target_projects/MohamedGawad/UserActivites-Microservice/src/main/java/bsu/chatbot/useractivites/helper/ReadinessProbe.java"
+        );
+
+        final Collection<String> actualViolations = violations.entrySet().stream()
+                .filter(e -> !e.getValue().isEmpty())
+                .map(Map.Entry::getKey)
+                .map(StaticAnalysisRule::toString)
+                .collect(Collectors.toSet());
+
+        System.out.println(actualViolations.size());
+    }
+
 
     @ParameterizedTest
     @MethodSource("dataProvider")

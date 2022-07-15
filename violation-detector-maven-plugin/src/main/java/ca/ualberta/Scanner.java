@@ -3,6 +3,7 @@ package ca.ualberta;
 import ca.ualberta.report.ViolationReporter;
 import ca.ualberta.smr.model.*;
 import ca.ualberta.smr.model.violationreport.ViolationCombination;
+import lombok.AllArgsConstructor;
 import lombok.val;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -47,14 +48,25 @@ public class Scanner extends AbstractMojo {
     @Override
     public void execute() throws MojoFailureException, MojoExecutionException {
         try {
+            val currentDir = System.getProperty("user.dir");
             val allViolations = FileUtils.getFiles(targetDirectory, includes, excludes).stream()
                     .filter(this::isJavaFile)
-                    .map(this.violationDetector::analyze)
-                    .flatMap(e -> e.entrySet().stream())
-                    .filter(e -> !e.getValue().isEmpty())
-                    .collect(toMap(Map.Entry::getKey, Map.Entry::getValue,
+                    .flatMap(f -> this.violationDetector.analyze(f)
+                            .entrySet()
+                            .stream()
+                            .filter(e -> !e.getValue().isEmpty())
+                            .map(e -> new FileStaticAnalysisRulePair(
+                                    f.getPath().replace(currentDir, ""),
+                                    e.getKey(),
+                                    e.getValue()
+                            )))
+                    .collect(toMap(e -> e.rule, Collections::singletonList,
                             (v1, v2) ->
-                                    concat(v1.stream(), v2.stream()).collect(toSet())));
+                                    concat(
+                                            v1.stream(),
+                                            v2.stream()
+                                    ).collect(toList()))
+                    );
 
             report(allViolations);
         } catch (IOException e) {
@@ -62,7 +74,7 @@ public class Scanner extends AbstractMojo {
         }
     }
 
-    private void report(Map<StaticAnalysisRule, Collection<ViolationCombination>> allViolations) throws MojoFailureException {
+    private void report(Map<StaticAnalysisRule, List<FileStaticAnalysisRulePair>> allViolations) throws MojoFailureException {
         if (!allViolations.isEmpty()) {
             // basically if it needs to fail on violation, the log level should be error
             // otherwise warn
@@ -99,3 +111,4 @@ public class Scanner extends AbstractMojo {
 
     private static final String JAVA_FILES_PATTERN = "**\\/*.java";
 }
+

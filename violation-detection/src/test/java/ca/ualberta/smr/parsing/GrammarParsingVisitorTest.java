@@ -76,7 +76,7 @@ public class GrammarParsingVisitorTest {
 
     private static StaticAnalysisRule getRule_class_method_override_no_params() {
         val antecedent = new JavaClass(
-                empty(), empty(), empty(), Type.of("Foo"), empty(), empty()
+                empty(), empty(), empty(), Type.InterfaceType.of("Foo"), empty(), empty()
         );
 
         val consequent = new JavaClass(
@@ -91,7 +91,7 @@ public class GrammarParsingVisitorTest {
 
     private static StaticAnalysisRule getRule_class_method_override_one_param() {
         val antecedent = new JavaClass(
-                empty(), empty(), empty(), Type.of("Foo"), empty(), empty()
+                empty(), empty(), empty(), Type.InterfaceType.of("Foo"), empty(), empty()
         );
 
         val consequent = new JavaClass(
@@ -111,7 +111,7 @@ public class GrammarParsingVisitorTest {
 
     private static StaticAnalysisRule getRule_class_method_override_many_params() {
         val antecedent = new JavaClass(
-                empty(), empty(), empty(), Type.of("Foo"), empty(), empty()
+                empty(), empty(), empty(), Type.InterfaceType.of("Foo"), empty(), empty()
         );
 
         val consequent = new JavaClass(

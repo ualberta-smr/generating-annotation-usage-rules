@@ -46,18 +46,25 @@ public class DefaultViolationDetector {
 
     private static final Collection<String> JAR_FILES = Arrays.asList(
             "/lib/cdi-api-2.0.jar",
+            "/lib/jakarta.annotation-api-2.1.1.jar",
+            "/lib/jakarta.enterprise.cdi-api-4.0.0.jar",
+            "/lib/jakarta.inject-api-2.0.1.jar",
+            "/lib/jakarta.persistence-api-3.1.0.jar",
+            "/lib/jakarta.servlet-api-6.0.0.jar",
+            "/lib/jakarta.validation-api-3.0.2.jar",
+            "/lib/jakarta.ws.rs-api-3.1.0.jar",
             "/lib/javax.inject-1.jar",
             "/lib/javax.ws.rs-api-2.1.1.jar",
-            "/lib/microprofile-fault-tolerance-api-3.0.jar",
             "/lib/microprofile-config-api-3.0.1.jar",
+            "/lib/microprofile-fault-tolerance-api-3.0.jar",
             "/lib/microprofile-graphql-api-1.1.0.jar",
             "/lib/microprofile-health-api-3.0.jar",
             "/lib/microprofile-jwt-auth-api-1.2.jar",
+            "/lib/microprofile-metrics-api-4.0.jar",
             "/lib/microprofile-openapi-api-2.0.jar",
             "/lib/microprofile-reactive-messaging-api-2.0.jar",
             "/lib/microprofile-rest-client-api-2.0.jar"
     );
-
 
 
 }

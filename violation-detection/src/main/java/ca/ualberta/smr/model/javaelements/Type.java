@@ -35,4 +35,39 @@ public class Type extends ProgramElement {
     public String description() {
         return name;
     }
+
+    public static class InterfaceType extends Type {
+
+        public InterfaceType(String name) {
+            super(name);
+        }
+
+        public static AggregateCondition of(String name) {
+            return AggregateCondition.single(new InterfaceType(name));
+        }
+
+        @Override
+        public ViolationCombination getMissing(Object bd, StaticAnalysisRule rule) {
+            if (this.matches(bd)) return ViolationCombination.EMPTY;
+            return new ViolationInfo(null, String.format("implementation of interface %s", super.name()));
+        }
+    }
+
+    public static class ClassType extends Type {
+
+        public ClassType(String name) {
+            super(name);
+        }
+
+        public static AggregateCondition of(String name) {
+            return AggregateCondition.single(new ClassType(name));
+        }
+
+
+        @Override
+        public ViolationCombination getMissing(Object bd, StaticAnalysisRule rule) {
+            if (this.matches(bd)) return ViolationCombination.EMPTY;
+            return new ViolationInfo(null, String.format("extension of class %s", super.name()));
+        }
+    }
 }
