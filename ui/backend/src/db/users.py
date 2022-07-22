@@ -20,7 +20,8 @@ USER_MAPPING = {
     "ibm_P3": 8,
     "ibm_P6": 9,
     "ibm_P2": 10,
-    "ibm_P4": 11
+    "ibm_P4": 11,
+    "evaluation_user": 12
 }
 
 # user_id => package_info
@@ -37,6 +38,8 @@ USER_PACKAGE_MAPPING = {
     9: {"file": "./data/experiment_data/P6.json", "package_id": 9},
     10: {"file": "./data/experiment_data/P2.json", "package_id": 10},
     11: {"file": "./data/experiment_data/P4.json", "package_id": 11},
+
+    12: {"file": "./data/evaluation/original12.json", "package_id": 12},
 }
 
 

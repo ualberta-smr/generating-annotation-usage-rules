@@ -2,7 +2,7 @@
     "rules": [
         {
             "id": "RestClientInjectRule",
-            "specification": "field with annotation \"org.eclipse.microprofile.rest.client.inject.RestClient\" must have annotation \"javax.inject.Inject\" ",
+            "specification": "field with annotation \"org.eclipse.microprofile.rest.client.inject.RestClient\" must have annotation \"javax.inject.Inject\" or annotation \"jakarta.inject.Inject\" ",
             "is_best_practice": false
         },
         {
@@ -17,7 +17,7 @@
         },
         {
             "id": "ClaimInjectRule",
-            "specification": "field with annotation \"org.eclipse.microprofile.jwt.Claim\" must have annotation \"javax.inject.Inject\" ",
+            "specification": "field with annotation \"org.eclipse.microprofile.jwt.Claim\" must have annotation \"javax.inject.Inject\" or annotation \"jakarta.inject.Inject\" ",
             "is_best_practice": false
         },
         {
@@ -27,7 +27,7 @@
         },
         {
             "id": "MetricRegistryInjectRule",
-            "specification": "field with (annotation \"org.eclipse.microprofile.metrics.annotation.RegistryType\" with parameter \"org.eclipse.microprofile.metrics.MetricRegistry.Type type\" and annotation \"javax.inject.Inject\"  ) must have type \"org.eclipse.microprofile.metrics.MetricRegistry\" ",
+            "specification": "field with annotation \"org.eclipse.microprofile.metrics.annotation.RegistryType\" with parameter \"org.eclipse.microprofile.metrics.MetricRegistry.Type type\" and (annotation \"javax.inject.Inject\" or annotation \"jakarta.inject.Inject\" ) must have type \"org.eclipse.microprofile.metrics.MetricRegistry\" ",
             "is_best_practice": false
         },
         {
@@ -47,7 +47,7 @@
         },
         {
             "id": "RegisterRestClientPathRule",
-            "specification": "class with annotation \"org.eclipse.microprofile.rest.client.inject.RegisterRestClient\" must have (method with annotation \"javax.ws.rs.Path\"  ) or annotation \"javax.ws.rs.Path\" ",
+            "specification": "class with annotation \"org.eclipse.microprofile.rest.client.inject.RegisterRestClient\" must have (method with annotation \"javax.ws.rs.Path\" or annotation \"jakarta.ws.rs.Path\" ) or annotation \"javax.ws.rs.Path\" or annotation \"jakarta.ws.rs.Path\" ",
             "is_best_practice": false
         },
         {
@@ -57,7 +57,7 @@
         },
         {
             "id": "ConfigPropertyInjectRule",
-            "specification": "field with annotation \"org.eclipse.microprofile.config.inject.ConfigProperty\" must have annotation \"javax.inject.Inject\" ",
+            "specification": "field with annotation \"org.eclipse.microprofile.config.inject.ConfigProperty\" must have annotation \"javax.inject.Inject\" or annotation \"jakarta.inject.Inject\" ",
             "is_best_practice": false
         }
     ]
