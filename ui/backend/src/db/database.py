@@ -36,7 +36,7 @@ def __getDataFromSourceMicroProfile(filename: str) -> Iterator[JsonRule]:
 
 def __populate(db: Session):
     # create a user
-    UserOperationsHandler.initializeAllUsers(db)
+    UserOperationsHandler.initializeAllPredefinedUsers(db)
 
     for user_id, package_data in UserOperationsHandler.getUserPackageMapping().items():
         db.add(CandidateRulesPackage(id = package_data["package_id"], name = "MicroProfile Candidate Rules"))

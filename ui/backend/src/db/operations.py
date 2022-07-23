@@ -1,12 +1,15 @@
 from dataclasses import dataclass
+import traceback
 from typing import Any, List, Tuple
 import json
 from sqlalchemy.orm import Session
 import format as rulePadFormat
 import uuid
+from fastapi import Response, UploadFile
 
 from .models import *
 from .users import UserOperationsHandler
+from .database import JsonRule
 
 @dataclass
 class RuleDTO:
@@ -190,6 +193,39 @@ class RuleLabelingHandler:
 
 
 class RulePackageOperations:
+
+    def createNewPackage(username: str, packageName: str, rulesFile: UploadFile, resp: Response, db: Session):
+        try:
+            if rulesFile.content_type != "application/json":
+                raise Exception("Unsupported file type: [%s]" % (rulesFile.content_type))
+            # parse all provided rules into RulePad rules
+            jsonFileContents = json.loads(rulesFile.file.read())
+            rules = map(lambda x: JsonRule(x["id"], x["antecedent"], x["consequent"]), jsonFileContents)
+            # create a user with id X
+            userId = UserOperationsHandler.createNewUser(username, db)
+            # create a package with id X
+            if packageName is None:
+                packageName = "MicroProfile Candidate Rules"
+
+            db.add(CandidateRulesPackage(id = userId, name = packageName))
+            # add all the rules for that user
+            for rule in rules:
+                db.add(CandidateRule(
+                    counter=str(uuid.uuid4()), 
+                    id=rule.id, 
+                    antecedent=rule.get_antecedent(),
+                    consequent=rule.get_consequent(), 
+                    package_id = userId
+                ))
+            db.commit()
+        except Exception as e:
+            if e.args[0] == "User already exists":
+                resp.status_code = 409 # Http Conflict
+            else:
+                resp.status_code = 422
+                traceback.print_exc()
+                print(e)
+
 
     def getAllConfirmedRules(db: Session):
         return RulePackageOperations.__getConfirmedRulesByFilter(db,

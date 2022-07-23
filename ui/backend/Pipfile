@@ -9,6 +9,7 @@ uvicorn = {extras = ["standard"], version = "*"}
 antlr4-python3-runtime = "*"
 flask-sqlalchemy = "*"
 pymysql = "*"
+python-multipart = "*"
 
 [dev-packages]
 

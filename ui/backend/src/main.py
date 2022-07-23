@@ -2,7 +2,7 @@ from typing import Optional
 import logging
 
 from sqlalchemy.orm.session import Session
-from fastapi import FastAPI, Response, Depends
+from fastapi import FastAPI, Response, Depends, UploadFile
 from fastapi.logger import logger
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -52,7 +52,6 @@ def getNextRule(ruleId: int, userId: str, response: Response, db: Session = Depe
 def getPrevRule(ruleId: int, userId: str, response: Response, db: Session = Depends(getSession)):
     return RuleOperationsHandler.getPrevRule(ruleId, userId, response, db)
 
-
 @app.post('/rules/{ruleId}/{label}')
 def labelRule(ruleId: int, label: str, response: Response, ruleDto: Optional[ConfirmRuleDTO] = None, db: Session = Depends(getSession)):
     return RuleOperationsHandler.labelRule(ruleId, label, response, ruleDto, db)
@@ -65,6 +64,10 @@ def getRulesPackage(packageId: int, db: Session = Depends(getSession)):
 def getRulesPackage(db: Session = Depends(getSession)):
     return RulePackageOperations.getAllConfirmedRules(db)
 
+@app.post("/packages")
+def uploadNewRulePackage(username: str, packageName: str, rulesFile: UploadFile, response: Response, db: Session = Depends(getSession)):
+    RulePackageOperations.createNewPackage(username, packageName, rulesFile, response, db)
+
 @app.get('/users')
-def checkIfUserExists(q: str, response: Response):
-    UserOperationsHandler.exists(q, response)
+def checkIfUserExists(q: str, response: Response, db: Session = Depends(getSession)):
+    UserOperationsHandler.exists(q, response, db)

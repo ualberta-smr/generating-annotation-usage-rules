@@ -1,4 +1,3 @@
-from logging import Logger
 from db import RuleDTO, RuleLabelingHandler, RulePackageNavigation, RuleLabels, UserOperationsHandler
 from sqlalchemy.orm.session import Session
 from fastapi import Response
@@ -18,7 +17,7 @@ class RuleOperationsHandler:
     @staticmethod
     def __getRule(db: Session, ruleId: int, userId: str, response: Response, next=True):
         try:
-            userId = UserOperationsHandler.getUserId(userId)
+            userId = UserOperationsHandler.getUserId(userId, db)
             r = RulePackageNavigation.getNext(db, ruleId, userId) if next \
                 else RulePackageNavigation.getPrev(db, ruleId, userId)
             if r and r.data:
@@ -47,7 +46,7 @@ class RuleOperationsHandler:
     @staticmethod
     def labelRule(ruleId: int, label: str, response: Response, ruleDto: Optional[ConfirmRuleDTO], db: Session):
         try:
-            userId = UserOperationsHandler.getUserId(ruleDto.username)
+            userId = UserOperationsHandler.getUserId(ruleDto.username, db)
             if userId is None:
                 raise Exception(f"Username {ruleDto.username} does not exist")
                 
