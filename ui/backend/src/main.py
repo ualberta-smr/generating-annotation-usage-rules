@@ -65,7 +65,7 @@ def getRulesPackage(db: Session = Depends(getSession)):
     return RulePackageOperations.getAllConfirmedRules(db)
 
 @app.post("/packages")
-def uploadNewRulePackage(username: str, packageName: str, rulesFile: UploadFile, response: Response, db: Session = Depends(getSession)):
+def uploadNewRulePackage(username: str, rulesFile: UploadFile, response: Response, packageName: str = None, db: Session = Depends(getSession)):
     RulePackageOperations.createNewPackage(username, packageName, rulesFile, response, db)
 
 @app.get('/users')

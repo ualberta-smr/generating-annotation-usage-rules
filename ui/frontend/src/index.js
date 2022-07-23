@@ -6,6 +6,7 @@ import LabelingScreen from "./components/LabelingScreen";
 import ShortRulepad from "./monacoSyntaxHighlighting";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginScreen from "./components/LoginScreen";
+import NewPackageCreationScreen from "./components/NewPackageCreationScreen";
 
 new ShortRulepad().register()
 
@@ -15,6 +16,7 @@ ReactDOM.render(
             <Routes>
                 <Route path="/" element={<LoginScreen />} />
                 <Route path="/home" element={<LabelingScreen />} />
+                <Route path="/package" element={<NewPackageCreationScreen />} />
             </Routes>
         </BrowserRouter>
     </React.StrictMode>,
