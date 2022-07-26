@@ -232,9 +232,14 @@ class RulePackageOperations:
             LabeledRule.label.in_([RuleLabels.CORRECT, RuleLabels.BEST_PRACTICE])
         )
 
-    def getConfirmedRulesByPackageId(packageId: int, db: Session):
+    def getConfirmedRulesByUsername(username: int, resp: Response,db: Session):
+        userId = UserOperationsHandler.getUserId(username, db)
+        if userId is None:
+            resp.status_code = 404
+            return dict()
+
         return RulePackageOperations.__getConfirmedRulesByFilter(db,
-            LabeledRule.user_id == packageId,
+            LabeledRule.user_id == userId,
             LabeledRule.label.in_([RuleLabels.CORRECT, RuleLabels.BEST_PRACTICE])
         )
 

@@ -56,13 +56,9 @@ def getPrevRule(ruleId: int, userId: str, response: Response, db: Session = Depe
 def labelRule(ruleId: int, label: str, response: Response, ruleDto: Optional[ConfirmRuleDTO] = None, db: Session = Depends(getSession)):
     return RuleOperationsHandler.labelRule(ruleId, label, response, ruleDto, db)
 
-@app.get('/packages/{packageId}/confirmed')
-def getRulesPackage(packageId: int, db: Session = Depends(getSession)):
-    return RulePackageOperations.getConfirmedRulesByPackageId(packageId, db)
-
-@app.get('/packages/confirmed')
-def getRulesPackage(db: Session = Depends(getSession)):
-    return RulePackageOperations.getAllConfirmedRules(db)
+@app.get('/packages/{username}/confirmed')
+def getRulesPackage(username: str, db: Session = Depends(getSession)):
+    return RulePackageOperations.getConfirmedRulesByUsername(username, db)
 
 @app.post("/packages")
 def uploadNewRulePackage(username: str, rulesFile: UploadFile, response: Response, packageName: str = None, db: Session = Depends(getSession)):

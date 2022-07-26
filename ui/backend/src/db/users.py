@@ -15,14 +15,6 @@ USER_MAPPING = {
     "demo": 3,
     "user2": 4,
     "user3": 5,
-    # experiment subjects
-    # "ibm_P5": 6,
-    # "ibm_P1": 7,
-    # "ibm_P3": 8,
-    # "ibm_P6": 9,
-    # "ibm_P2": 10,
-    # "ibm_P4": 11,
-    # "evaluation_user": 12
 }
 
 # user_id => package_info
@@ -32,15 +24,6 @@ USER_PACKAGE_MAPPING = {
     3: {"file": "./data/users/data_mansur.json", "package_id": 3},
     4: {"file": "./data/users/data_user2.json", "package_id": 4},
     5: {"file": "./data/target_set.json", "package_id": 5},
-
-    # 6: {"file": "./data/experiment_data/P5.json", "package_id": 6},
-    # 7: {"file": "./data/experiment_data/P1.json", "package_id": 7},
-    # 8: {"file": "./data/experiment_data/P3.json", "package_id": 8},
-    # 9: {"file": "./data/experiment_data/P6.json", "package_id": 9},
-    # 10: {"file": "./data/experiment_data/P2.json", "package_id": 10},
-    # 11: {"file": "./data/experiment_data/P4.json", "package_id": 11},
-
-    # 12: {"file": "./data/evaluation/original12.json", "package_id": 12},
 }
 
 
