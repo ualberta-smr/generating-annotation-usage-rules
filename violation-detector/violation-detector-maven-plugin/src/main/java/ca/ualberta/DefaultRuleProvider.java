@@ -16,6 +16,6 @@ public class DefaultRuleProvider implements RuleProvider {
     @SneakyThrows
     public Collection<StaticAnalysisRule> getRules() {
         return RuleParser.parseRules(
-                DefaultRuleProvider.class.getResourceAsStream("/evaluation_rules.json"));
+                DefaultRuleProvider.class.getResourceAsStream("/rules.json"));
     }
 }
