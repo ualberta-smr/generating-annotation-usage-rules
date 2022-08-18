@@ -1,6 +1,6 @@
 # Rule Validation Tool
 
-The complete project of the Rule Validation Tool. This tool presents the mined candidate rules to the users and allows them to validate rules.
+The complete project of the Rule Validation Tool (RVT). This tool presents the mined candidate rules to the users and allows them to validate rules.
 
 It consists of 2 pieces:
 - [frontend](./frontend/)
@@ -11,7 +11,7 @@ It consists of 2 pieces:
 To run the project, simply run the start script:
 
 ```shell
-./start.sh
+./start.sh # by default runs on `localhost`
 # or
 ./start.sh IP_ADDRESS_OF_SERVER # if you run it in a server at the address of IP_ADDRESS_OF_SERVER
 ```
@@ -28,7 +28,9 @@ Currently, there are five hard-coded usernames: mansur, ajay, demo, user2, user3
   <img src="../assets/2_rule_validation_page.png" width="90%" />
 </p>
 
-[This](./backend/data/evaluation/original12.json) is an example JSON file we use. To create your own users and a set of rules to validate, you can either hardcode it in the code, or head over to `http://localhost/package` in the browser.
+# Input Candidate Rules
+
+RVT accepts the format that [the rule miner](https://github.com/ualberta-smr/MiningAnnotationUsageRules) uses for producing the candidate rules. RVT simply takes the output file of the mining process and converts each mined rule to the extended RulePad format.  [This](./backend/data/evaluation/original12.json) is an example JSON file we use. To create your own users and a set of rules to validate, you can either hardcode it in the code, or head over to `http://localhost/package` in the browser.
 
 <p align="center">
   <img src="../assets/3_create_new_package_page.png" width="90%" />

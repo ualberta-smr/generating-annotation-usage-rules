@@ -1,0 +1,268 @@
+[
+    {
+      "id": 1221320704,
+      "antecedent": [
+        "Annotation_org.eclipse.microprofile.openapi.annotations.responses.APIResponse --(hasParam)--> Param_responseCode:java.lang.String",
+        "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.openapi.annotations.responses.APIResponse",
+        "Class --(annotatedWith)--> Annotation_javax.ws.rs.Path",
+        "Annotation_org.eclipse.microprofile.openapi.annotations.responses.APIResponse --(hasParam)--> Param_description:java.lang.String",
+        "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.openapi.annotations.Operation"
+      ],
+      "consequent": [
+        "Annotation_javax.ws.rs.Path --(hasParam)--> Param_value:java.lang.String"
+      ],
+      "tags": ["microprofile.openapi"]
+    },
+    {
+      "id": 1289748777,
+      "antecedent": [
+        "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.metrics.annotation.SimplyTimed",
+        "Method --(hasParam)--> Param_java.lang.String"
+      ],
+      "consequent": [
+        "Annotation_org.eclipse.microprofile.metrics.annotation.SimplyTimed --(hasParam)--> Param_name:java.lang.String"
+      ],
+      "tags": ["microprofile.metrics"]
+    },
+    {
+      "id": 1304741815,
+      "antecedent": [
+        "Class --(annotatedWith)--> Annotation_javax.persistence.Entity",
+        "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.graphql.Type",
+        "Annotation_org.eclipse.microprofile.openapi.annotations.media.Schema --(hasParam)--> Param_name:java.lang.String",
+        "Annotation_org.eclipse.microprofile.openapi.annotations.media.Schema --(hasParam)--> Param_title:java.lang.String",
+        "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.openapi.annotations.media.Schema"
+      ],
+      "consequent": [
+        "Annotation_javax.persistence.Entity --(hasParam)--> Param_name:java.lang.String"
+      ],
+      "tags": ["microprofile.graphql", "microprofile.openapi"]
+    },
+    {
+      "id": -920189675,
+      "antecedent": [
+        "Class --(annotatedWith)--> Annotation_javax.ws.rs.ApplicationPath",
+        "Annotation_org.eclipse.microprofile.auth.LoginConfig --(hasParam)--> Param_authMethod:java.lang.String",
+        "Annotation_javax.ws.rs.Path --(hasParam)--> Param_value:java.lang.String",
+        "Class --(annotatedWith)--> Annotation_javax.ws.rs.Path",
+        "Annotation_javax.ws.rs.ApplicationPath --(hasParam)--> Param_value:java.lang.String",
+        "Annotation_org.eclipse.microprofile.auth.LoginConfig --(hasParam)--> Param_realmName:java.lang.String",
+        "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.auth.LoginConfig",
+        "Class --(annotatedWith)--> Annotation_javax.enterprise.context.RequestScoped"
+      ],
+      "consequent": [
+        "Class --(extends)--> Class_javax.ws.rs.core.Application"
+      ],
+      "tags": ["microprofile.jwt"]
+    },
+    {
+      "id": 1364002759,
+      "antecedent": [
+        "Annotation_javax.ws.rs.Path --(hasParam)--> Param_value:java.lang.String",
+        "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.openapi.annotations.responses.APIResponses",
+        "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.openapi.annotations.Operation"
+      ],
+      "consequent": [
+        "Class --(annotatedWith)--> Annotation_javax.ws.rs.Path"
+      ],
+      "tags": ["microprofile.openapi"]
+    },
+    {
+      "id": -491397731,
+      "antecedent": [
+        "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.reactive.messaging.Outgoing"
+      ],
+      "consequent": [
+        "Class --(annotatedWith)--> Annotation_javax.enterprise.context.ApplicationScoped"
+      ],
+      "tags": ["microprofile.reactive"]
+    },
+    {
+      "id": -1207560480,
+      "antecedent": [
+        "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.graphql.Mutation"
+      ],
+      "consequent": [
+        "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.graphql.GraphQLApi"
+      ],
+      "tags": ["microprofile.graphql"]
+    },
+    {
+      "id": 1043234021,
+      "antecedent": [
+        "Annotation_org.eclipse.microprofile.metrics.annotation.Gauge --(hasParam)--> Param_unit:java.lang.String",
+        "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.metrics.annotation.Gauge"
+      ],
+      "consequent": [
+        "Annotation_org.eclipse.microprofile.metrics.annotation.Gauge --(hasParam)--> Param_name:java.lang.String"
+      ],
+      "tags": ["microprofile.metrics"]
+    },
+    {
+      "id": -941711638,
+      "antecedent": [
+        "Field --(annotatedWith)--> Annotation_org.eclipse.microprofile.metrics.annotation.RegistryType",
+        "Annotation_org.eclipse.microprofile.metrics.annotation.RegistryType --(hasParam)--> Param_type:org.eclipse.microprofile.metrics.MetricRegistry.Type",
+        "Field --(annotatedWith)--> Annotation_javax.inject.Inject"
+      ],
+      "consequent": [
+        "Field --(hasType)--> org.eclipse.microprofile.metrics.MetricRegistry"
+      ],
+      "tags": ["microprofile.metrics"]
+    },
+    {
+      "id": -2017401994,
+      "antecedent": [
+        "Class --(annotatedWith)--> Annotation_javax.enterprise.context.ApplicationScoped",
+        "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.health.Health"
+      ],
+      "consequent": [
+        "Class --(implements)--> Interface_org.eclipse.microprofile.health.HealthCheck"
+      ],
+      "tags": ["microprofile.health"]
+    },
+    {
+      "id": -359885871,
+      "antecedent": [
+        "Field --(annotatedWith)--> Annotation_org.eclipse.microprofile.config.inject.ConfigProperty",
+        "Field --(annotatedWith)--> Annotation_javax.inject.Inject"
+      ],
+      "consequent": [
+        "Annotation_org.eclipse.microprofile.config.inject.ConfigProperty --(hasParam)--> Param_name:java.lang.String"
+      ],
+      "tags": ["microprofile.config"]
+    },
+    {
+      "id": 1447599065,
+      "antecedent": [
+        "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.graphql.Query"
+      ],
+      "consequent": [
+        "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.graphql.GraphQLApi"
+      ],
+      "tags": ["microprofile.graphql"]
+    },
+    {
+      "id": -848093747,
+      "antecedent": [
+        "Annotation_org.eclipse.microprofile.openapi.annotations.responses.APIResponse --(hasParam)--> Param_responseCode:java.lang.String",
+        "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.openapi.annotations.responses.APIResponse",
+        "Annotation_javax.ws.rs.Path --(hasParam)--> Param_value:java.lang.String",
+        "Class --(annotatedWith)--> Annotation_javax.ws.rs.Path",
+        "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.openapi.annotations.Operation"
+      ],
+      "consequent": [
+        "Method --(hasReturnType)--> javax.ws.rs.core.Response"
+      ],
+      "tags": ["microprofile.openapi"]
+    },
+    {
+      "id": -375827261,
+      "antecedent": [
+        "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.rest.client.inject.RegisterRestClient",
+        "Annotation_javax.ws.rs.Path --(hasParam)--> Param_value:java.lang.String",
+        "Method --(annotatedWith)--> Annotation_javax.ws.rs.Path"
+      ],
+      "consequent": [
+        "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.rest.client.annotation.RegisterClientHeaders"
+      ],
+      "tags": ["microprofile.rest"]
+    },
+    {
+      "id": 2143825194,
+      "antecedent": [
+        "Class --(annotatedWith)--> Annotation_javax.enterprise.context.ApplicationScoped",
+        "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.health.Readiness"
+      ],
+      "consequent": [
+        "Class --(implements)--> Interface_org.eclipse.microprofile.health.HealthCheck"
+      ],
+      "tags": ["microprofile.health"]
+    },
+    {
+      "id": -1707152331,
+      "antecedent": [
+        "Class --(annotatedWith)--> Annotation_javax.ws.rs.Path",
+        "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition",
+        "Annotation_org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition --(hasParam)--> Param_info:"
+      ],
+      "consequent": [
+        "Annotation_javax.ws.rs.Path --(hasParam)--> Param_value:java.lang.String"
+      ],
+      "tags": ["microprofile.openapi"]
+    },
+    {
+      "id": -2075306354,
+      "antecedent": [
+        "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.health.Liveness"
+      ],
+      "consequent": [
+        "Class --(implements)--> Interface_org.eclipse.microprofile.health.HealthCheck"
+      ],
+      "tags": ["microprofile.health"]
+    },
+    {
+      "id": -358877541,
+      "antecedent": [
+        "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.openapi.annotations.tags.Tag",
+        "Class --(annotatedWith)--> Annotation_javax.ws.rs.Path",
+        "Annotation_org.eclipse.microprofile.openapi.annotations.tags.Tag --(hasParam)--> Param_name:java.lang.String"
+      ],
+      "consequent": [
+        "Annotation_javax.ws.rs.Path --(hasParam)--> Param_value:java.lang.String"
+      ],
+      "tags": ["microprofile.openapi"]
+    },
+    {
+      "id": -655205417,
+      "antecedent": [
+        "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.reactive.messaging.Incoming"
+      ],
+      "consequent": [
+        "Class --(annotatedWith)--> Annotation_javax.enterprise.context.ApplicationScoped"
+      ],
+      "tags": ["microprofile.reactive"]
+    },
+    {
+      "id": -240494216,
+      "antecedent": [
+        "Field --(annotatedWith)--> Annotation_javax.inject.Inject"
+      ],
+      "consequent": [
+        "Field --(annotatedWith)--> Annotation_org.eclipse.microprofile.rest.client.inject.RestClient"
+      ],
+      "tags": ["microprofile.rest"]
+    },
+    {
+      "id": 2015616826,
+      "antecedent": [
+        "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.rest.client.inject.RegisterRestClient",
+        "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.rest.client.annotation.RegisterProvider"
+      ],
+      "consequent": [
+        "Annotation_org.eclipse.microprofile.rest.client.annotation.RegisterProvider --(hasParam)--> Param_value:java.lang.Class"
+      ],
+      "tags": ["microprofile.rest"]
+    },
+    {
+      "id": -821742361,
+      "antecedent": [
+        "Field --(annotatedWith)--> Annotation_javax.inject.Inject"
+      ],
+      "consequent": [
+        "Field --(annotatedWith)--> Annotation_org.eclipse.microprofile.metrics.annotation.Metric"
+      ],
+      "tags": ["microprofile.metrics"]
+    },
+    {
+      "id": 103768631,
+      "antecedent": [
+        "Field --(annotatedWith)--> Annotation_javax.inject.Inject",
+        "Field --(annotatedWith)--> Annotation_org.eclipse.microprofile.jwt.Claim"
+      ],
+      "consequent": [
+        "Class --(annotatedWith)--> Annotation_javax.ws.rs.Path"
+      ],
+      "tags": ["microprofile.jwt"]
+    }
+  ]
