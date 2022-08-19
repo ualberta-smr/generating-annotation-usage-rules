@@ -1,0 +1,92 @@
+[
+    {
+        "id": 1,
+        "antecedent": [
+            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.metrics.annotation.SimplyTimed",
+            "Method --(hasParam)--> Param_java.lang.String"
+        ],
+        "consequent": [
+            "Annotation_org.eclipse.microprofile.metrics.annotation.SimplyTimed --(hasParam)--> Param_name:java.lang.String"
+        ],
+        "tags": [
+            "microprofile.metrics"
+        ]
+    },
+    {
+        "id": 2,
+        "antecedent": [
+            "Annotation_org.eclipse.microprofile.metrics.annotation.Gauge --(hasParam)--> Param_unit:java.lang.String",
+            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.metrics.annotation.Gauge"
+        ],
+        "consequent": [
+            "Annotation_org.eclipse.microprofile.metrics.annotation.Gauge --(hasParam)--> Param_name:java.lang.String"
+        ],
+        "tags": [
+            "microprofile.metrics"
+        ]
+    },
+    {
+        "id": 3,
+        "antecedent": [
+            "Field --(annotatedWith)--> Annotation_org.eclipse.microprofile.metrics.annotation.RegistryType",
+            "Annotation_org.eclipse.microprofile.metrics.annotation.RegistryType --(hasParam)--> Param_type:org.eclipse.microprofile.metrics.MetricRegistry.Type",
+            "Field --(annotatedWith)--> Annotation_javax.inject.Inject"
+        ],
+        "consequent": [
+            "Field --(hasType)--> org.eclipse.microprofile.metrics.MetricRegistry"
+        ],
+        "tags": [
+            "microprofile.metrics"
+        ]
+    },
+    {
+        "id": 4,
+        "antecedent": [
+            "Field --(annotatedWith)--> Annotation_javax.inject.Inject"
+        ],
+        "consequent": [
+            "Field --(annotatedWith)--> Annotation_org.eclipse.microprofile.metrics.annotation.Metric"
+        ],
+        "tags": [
+            "microprofile.metrics"
+        ]
+    },
+    {
+        "id": 5,
+        "antecedent": [
+            "Class --(annotatedWith)--> Annotation_javax.enterprise.context.ApplicationScoped",
+            "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.health.Health"
+        ],
+        "consequent": [
+            "Class --(implements)--> Interface_org.eclipse.microprofile.health.HealthCheck"
+        ],
+        "tags": [
+            "microprofile.health"
+        ]
+    },
+    {
+        "id": 6,
+        "antecedent": [
+            "Class --(annotatedWith)--> Annotation_javax.enterprise.context.ApplicationScoped",
+            "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.health.Readiness"
+        ],
+        "consequent": [
+            "Class --(implements)--> Interface_org.eclipse.microprofile.health.HealthCheck"
+        ],
+        "tags": [
+            "microprofile.health"
+        ]
+    },
+    {
+        "id": 7,
+        "antecedent": [
+            "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.health.Liveness"
+        ],
+        "consequent": [
+            "Class --(implements)--> Interface_org.eclipse.microprofile.health.HealthCheck"
+        ],
+        "tags": [
+            "microprofile.health"
+        ]
+    }
+]

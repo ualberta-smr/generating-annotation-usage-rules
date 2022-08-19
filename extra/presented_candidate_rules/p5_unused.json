@@ -1,0 +1,43 @@
+[
+    {
+        "id": 1,
+        "antecedent": [
+            "Class --(annotatedWith)--> Annotation_javax.persistence.Entity",
+            "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.graphql.Type",
+            "Annotation_org.eclipse.microprofile.openapi.annotations.media.Schema --(hasParam)--> Param_name:java.lang.String",
+            "Annotation_org.eclipse.microprofile.openapi.annotations.media.Schema --(hasParam)--> Param_title:java.lang.String",
+            "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.openapi.annotations.media.Schema"
+        ],
+        "consequent": [
+            "Annotation_javax.persistence.Entity --(hasParam)--> Param_name:java.lang.String"
+        ],
+        "tags": [
+            "microprofile.graphql",
+            "microprofile.openapi"
+        ]
+    },
+    {
+        "id": 2,
+        "antecedent": [
+            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.graphql.Mutation"
+        ],
+        "consequent": [
+            "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.graphql.GraphQLApi"
+        ],
+        "tags": [
+            "microprofile.graphql"
+        ]
+    },
+    {
+        "id": 3,
+        "antecedent": [
+            "Method --(annotatedWith)--> Annotation_org.eclipse.microprofile.graphql.Query"
+        ],
+        "consequent": [
+            "Class --(annotatedWith)--> Annotation_org.eclipse.microprofile.graphql.GraphQLApi"
+        ],
+        "tags": [
+            "microprofile.graphql"
+        ]
+    }
+]
