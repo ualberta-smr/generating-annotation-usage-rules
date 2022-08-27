@@ -50,7 +50,8 @@ The consumer/producer will not be picked by the CDI, therefore the runtime will 
 
 ## Rule 4
 ```
-class with annotation "ApplicationScoped" and annotation "[Startup|Readiness|Liveness]" must have implementation of "HealthCheck"
+class with annotation "ApplicationScoped" and annotation "[Startup|Readiness|Liveness]" 
+must have implementation of "HealthCheck"
 ```
 
 ### Comments
@@ -63,13 +64,15 @@ class with annotation "ApplicationScoped" and annotation "[Startup|Readiness|Liv
 
 ## Rule 5
 ```
-class with method with annotation "Gauge" must have annotation "ApplicationScoped" and method with annotation "Gauge" with parameter "String unit"
+class with method with annotation "Gauge" 
+must have annotation "ApplicationScoped" and method with annotation "Gauge" with parameter "String unit"
 ```
 
 **We can rewrite this rule using the new additions made to the DSL**:
 
 ```
-method with annotation "Gauge" must have annotation "Gauge" with parameter "String unit" and enclosing class with annotation "ApplicationScoped"
+method with annotation "Gauge" 
+must have annotation "Gauge" with parameter "String unit" and enclosing class with annotation "ApplicationScoped"
 ```
 
 ### Comments
@@ -86,14 +89,18 @@ method with annotation "Gauge" must have enclosing class with annotation "Applic
 
 ## Rule 6
 ```
-field with annotation "RegistryType" with parameter "MetricRegistry.Type type" and annotation "Inject" must have type "MetricRegistry"
+field with annotation "RegistryType" with parameter "MetricRegistry.Type type" and annotation "Inject" 
+must have type "MetricRegistry"
 ```
 
 ### Comments
-- This is actually present in the JavaDoc exactly: https://download.eclipse.org/microprofile/microprofile-metrics-4.0/apidocs/
+- This is actually present in the JavaDoc exactly: https://download.eclipse.org/microprofile/microprofile-metrics-4.0/apidocs/org/eclipse/microprofile/metrics/annotation/RegistryType.html
 - This is exactly present in the Spec as well: https://download.eclipse.org/microprofile/microprofile-metrics-4.0/microprofile-metrics-spec-4.0.html#_registrytype (see the next 4 subsections)
 - This rule is also unlikely to be violated. A better rule would be:
-    field with type "MetricRegistry" must have annotation "Inject"
+
+```
+field with type "MetricRegistry" must have annotation "Inject"
+```
 
 ### Consequence of violation
     ...
@@ -115,7 +122,8 @@ Since it won't be injected, it will be "null"
 
 ## Rule 8
 ```
-class with annotation "ApplicationPath" and annotation "LoginConfig" with parameter "String authMethod" must have extension of "Application"
+class with annotation "ApplicationPath" and annotation "LoginConfig" with parameter "String authMethod" 
+must have extension of "Application"
 ```
 
 ### Comments
@@ -125,4 +133,8 @@ class with annotation "ApplicationPath" and annotation "LoginConfig" with parame
 - The rule can be shortened because of the reasons below:
     - `ApplicationPath` annotation can only be applied to a subclass of Application class (https://docs.oracle.com/javaee/7/api/javax/ws/rs/ApplicationPath.html) thus we do not really need it in this rule. It can form a rule of its own.
     - `authMethod` is actually required, so we can omit that as well
-    - Final rule: `class with annotation "LoginConfig" must have extension of "Application"`
+    - Final rule: 
+    
+    ```
+    class with annotation "LoginConfig" must have extension of "Application"
+    ```
