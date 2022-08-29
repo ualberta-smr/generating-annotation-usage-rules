@@ -7,30 +7,38 @@ During the experiment, you will be using the Rule Validation Tool where MicroPro
 This is how the tool overall looks like: 
 
 <p align="center">
-  <img src="./assets/overall_view.png" width="90%" />
+  <img src="./assets/overall.png" width="90%" />
 </p>
 
 Candidate rules are presented using the Rule Authoring Editor (on the left) in Rulepad format. There are 5 actions you can do with the Rule Validation Tool.
 
-1. You can edit the presented rule using the Rule Authoring Editor. Note that the changes you make are reflected in the Code section on the right. The code snippet helps you see what the rule you are working on would look like as code. More information on its format is provided below.
+1. You can edit the presented rule using the Rule Authoring Editor. 
 
-<p align="center"><img src="./assets/editing_rule.gif" width="80%" /></p>
+Note 1: the changes you make are reflected in the Code section on the right. The code snippet helps you see what the rule you are working on would look like as code. More information on its format is provided below.
+
+Note 2: `Ctrl+Space` command provides options for auto completing the class name.
+
+<p align="center"><img src="./assets/editing.gif" width="80%" /></p>
 
 2. You can format the presented rule to make it more readable
 
-<p align="center"><img src="./assets/formatting.gif" width="80%" /></p>
+<p align="center"><img src="./assets/format.gif" width="80%" /></p>
 
-3. You can confirm the rule.
+3. You can confirm the rule. By clicking on the picked label again you can un-label.
 
-<p align="center"><img src="./assets/accepting_as_is.gif" width="80%" /></p>
+<p align="center"><img src="./assets/confirm.gif" width="80%" /></p>
 
 4. You can reject the rule
 
 <p align="center"><img src="./assets/reject.gif" width="80%" /></p>
 
-5. By clicking on the picked label again you can un-label.
+5. You can label the rule as "best practice"
 
-<p align="center"><img src="./assets/unconfirm.gif" width="80%" /></p>
+<p align="center"><img src="./assets/best.gif" width="80%" /></p>
+
+6. You can access the corresponding Javadoc by clicking on a highlighted program element in the Code Preview section.
+
+<p align="center"><img src="./assets/docs.gif" width="80%" /></p>
 
 ## Note. 
 
@@ -168,6 +176,11 @@ Fields can have 3 properties: `annotation`, `type` and `configuration file`. Exa
 
 Configuration file example is explained [here](#configuration-file-and-configuration-property)
 
+Fields can also refer to the enclosing class using the `enclosing class` keyword. Example:
+- `field with annotation "ConfigProperty" must have annotation "Inject" or enclosing class with annotation "ConfigProperties"`
+
+The enclosing class can refer to all the properties available for the [class](#class)
+
 #### method
 
 Methods can have 4 properties: `annotation`, `return type`, `parameter` and `configuration file`. Examples:
@@ -177,6 +190,11 @@ Methods can have 4 properties: `annotation`, `return type`, `parameter` and `con
 - A method with _String_ parameter will be `method with parameter "String"` 
 
 Configuration file example is explained [here](#configuration-file-and-configuration-property)
+
+Methods can also refer to the enclosing class using the `enclosing class` keyword. Example:
+- `method with parameter with annotation "PathParam" must have annotation "Path" or enclosing class with annotation "Path" `
+
+The enclosing class can refer to all the properties available for the [class](#class)
 
 #### method parameter
 
@@ -196,6 +214,7 @@ There're shortcuts available for method parameters. These are the following:
 - method
 - extension
 - implementation
+- overridden method
 - bean declaration
 - beans file
 - configuration file
@@ -206,6 +225,7 @@ Here are some examples:
 - If a class has a method that has been annotated with _GET_, it should be described as `class with method with annotation "GET"`
 - If we want to specify that a class is extending _HealthCheck_ class, it should be described as `class with extension of "HealthCheck"`
 - If we want to specify that a class is implementing _Health_ interface, it should be described as `class with implementation of "HealthCheck"`
+- If we want to specify that a class is overriding a method with the signature `foobar(String baz, int qux)`, it should be described as `class with overridden method "foobar(String, int)"`
 - If we want to specify that a class has been declared as a bean in _beans.xml_, it should be described as `class with bean declaration`
 - If we want to specify that there exists a _beans.xml_ file, it should be described as `class with beans file`
 
@@ -228,7 +248,7 @@ There're shortcuts available for configuration properties. These are the followi
 - Instead of `property with type "long" and name "maxInterval"`, we can say `property "long maxInterval"`
 
 
-#### Special use case: combining annotation parameter values and configuration properties
+<!-- #### Special use case: combining annotation parameter values and configuration properties
 
 ```java
 @ConfigProperty(name="maxInterval")
@@ -243,16 +263,23 @@ We can grab the _maxInterval_ value by saying `...parameter "name" with value "[
 field with annotation "ConfigProperty" with parameter "name" with value "[nameValue]" 
 must have
 configuration file with property "[nameValue]"
-```
-
+``` -->
 
 #### Aggregates and Parenthesis
 
-Properties of program element can be combined as well. We currently have 2 aggregation operation: AND and OR. Examples:
+Properties of a program element can be combined as well. The DSL supports the following logical and aggregation operations:
+- AND - *using the 'and' keyword*
+- OR - *using the 'or' keyword*
+- XOR - *using the 'one of' keyword*
+- NOT - *using the 'no' and 'none of' keywords*
 
-- `class with annotation "A" must have annotation "B" or annotation "C"`
+Examples:
+
 - `field with type "A" must have annotation "B" and annotation "C"`
-- `method with return type "A" must have annotation "B" or parameter with type "C"`
+- `class with annotation "A" must have annotation "B" or annotation "C"`
+- `field with type "A" must have one of (annotation "B" or annotation "C")`
+- `field with type "A" must have none of (annotation "B" or annotation "C")`
+- `field with type "A" must have annotation "B" and no annotation "C"`
 
 There's a shortcut available for annotations if one wants to specify multiple annotations from the same package with OR operation. Consider the case when you want to say `@javax.ws.rs.GET or @javax.ws.rs.POST or @javax.ws.rs.DELETE or @javax.ws.rs.PUT`. With the usual Rulepad syntax it would be:
 

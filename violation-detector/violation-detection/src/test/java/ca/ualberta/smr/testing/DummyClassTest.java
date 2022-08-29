@@ -2,6 +2,8 @@ package ca.ualberta.smr.testing;
 
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.violationreport.ViolationCombination;
+import ca.ualberta.smr.parsing.rules.Rule;
+import ca.ualberta.smr.parsing.rules.RuleParser;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Test;
 
