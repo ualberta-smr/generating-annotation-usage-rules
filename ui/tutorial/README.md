@@ -293,7 +293,21 @@ but we can group them together and write it as:
 annotation "javax.ws.rs.[GET|POST|DELETE|PUT]"
 ```
 
-This shortcut should only be used to specify different annotations from the same package and not with combination of multiple packages (_e.g., avoid doing something like `"a.b.[c.[X|Y]|M|N]"`_) 
+We can do the same thing for defining the mutual exclusivity.
+
+We can also use parenthesis to group things together to avoid ambiguities. Consider the case when you want to have only one of `@javax.ws.rs.GET or @javax.ws.rs.POST or @javax.ws.rs.DELETE or @javax.ws.rs.PUT`. You can specify this the long way as follows:
+
+```
+one of (annotation "javax.ws.rs.GET" or annotation "javax.ws.rs.POST" or annotation "javax.ws.rs.DELETE" or annotation "javax.ws.rs.PUT")
+```
+
+but we can group them together and write it as:
+
+```
+annotation "javax.ws.rs.[GET^POST^DELETE^PUT]"
+```
+
+This shortcut should only be used to specify different annotations from the same package and not with combination of multiple packages (_e.g., avoid doing something like `"a.b.[c.[X|Y]|M|N]"`_).
 
 We can also use parenthesis to group things together to avoid ambiguities.
 

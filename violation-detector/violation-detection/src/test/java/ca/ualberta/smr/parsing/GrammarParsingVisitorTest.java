@@ -19,8 +19,7 @@ import java.util.stream.Stream;
 
 import static ca.ualberta.smr.model.javaelements.AggregateCondition.empty;
 import static ca.ualberta.smr.model.javaelements.AggregateCondition.single;
-import static ca.ualberta.smr.model.javaelements.AggregateConditionOperation.AND;
-import static ca.ualberta.smr.model.javaelements.AggregateConditionOperation.OR;
+import static ca.ualberta.smr.model.javaelements.AggregateConditionOperation.*;
 import static ca.ualberta.smr.parsing.utils.GeneralUtility.listOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
@@ -49,7 +48,8 @@ public class GrammarParsingVisitorTest {
         map.put("class_field_with_OR_in_consequent", getRule_class_field_with_OR_in_consequent());
         map.put("annotation_with_parameter_both_type_and_name", getRule_annotation_with_parameter_both_type_and_name());
         map.put("annotation_with_parameter_name_only", getRule_annotation_with_parameter_name_only());
-        map.put("annotation_with_shortcut", getRule_annotation_with_shortcut());
+        map.put("annotation_with_or_shortcut", getRule_annotation_with_or_shortcut());
+        map.put("annotation_with_xor_shortcut", getRule_annotation_with_xor_shortcut());
         map.put("class_with_multiple_ors", getRule_class_with_multiple_ors());
         map.put("field_with_multiple_ors", getRule_field_with_multiple_ors());
         map.put("field_with_multiple_ors_parenthesis", getRule_field_with_multiple_ors_parenthesis());
@@ -99,7 +99,7 @@ public class GrammarParsingVisitorTest {
                         new Annotation(Type.of("Foo"), empty())
                 ), empty(), empty(), empty(), empty(), empty(), empty()
         );
-        
+
         val consequent = new JavaClass(
                 empty(), empty(), empty(), empty(), empty(), empty(), single(new JavaClass.BeanDeclaration())
         );
@@ -696,7 +696,7 @@ public class GrammarParsingVisitorTest {
                 "field with type \"B\" and annotation \"D\" must have (annotation \"B\" and annotation \"C\" ) and annotation \"D\" ");
     }
 
-    private static StaticAnalysisRule getRule_annotation_with_shortcut() {
+    private static StaticAnalysisRule getRule_annotation_with_or_shortcut() {
         val antecedent = single(
                 new Field(empty(), single(
                         new Annotation(
@@ -711,8 +711,27 @@ public class GrammarParsingVisitorTest {
                 new Field(empty(), single(new Annotation(Type.of("x.y.z.A"), empty())))
         );
 
-        return new StaticAnalysisRule("annotation_with_shortcut", antecedent, consequent,
+        return new StaticAnalysisRule("annotation_with_or_shortcut", antecedent, consequent,
                 "field with annotation \"a.b.c.[X|Y|Z]\" must have annotation \"x.y.z.[A]\" ");
+    }
+
+    private static StaticAnalysisRule getRule_annotation_with_xor_shortcut() {
+        val antecedent = single(
+                new Field(empty(), single(
+                        new Annotation(
+                                new AggregateCondition(new AggregateCondition(
+                                        new Type("a.b.c.X"), new Type("a.b.c.Y"), XOR
+                                ), new Type("a.b.c.Z"), XOR), empty()
+                        )
+                ))
+        );
+
+        val consequent = single(
+                new Field(empty(), single(new Annotation(Type.of("x.y.z.A"), empty())))
+        );
+
+        return new StaticAnalysisRule("annotation_with_xor_shortcut", antecedent, consequent,
+                "field with annotation \"a.b.c.[X^Y^Z]\" must have annotation \"x.y.z.[A]\" ");
     }
 
 }

@@ -194,7 +194,12 @@ export default class VisualizerListener extends RulepadGrammarListener {
                     return [inp]
                 }
                 const newInp = inp.slice(i + 1, closing)
-                return newInp.split("|").map(e => e.trim())
+                // split based on the OR or XOR characters
+                let splittingChar = "|"
+                if (newInp.includes("^")) {
+                    splittingChar = "^"
+                }
+                return newInp.split(splittingChar).map(e => e.trim())
                     .filter(e => e !== "")
                     .map(e => `${prefix}${e}`)
             } else {

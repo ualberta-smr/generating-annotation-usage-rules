@@ -1,4 +1,4 @@
-// Generated from ../violation-detection/src/main/antlr4/ca/ualberta/grammar/RulepadGrammar.g4 by ANTLR 4.9
+// Generated from ../violation-detector/violation-detection/src/main/antlr4/ca/ualberta/grammar/RulepadGrammar.g4 by ANTLR 4.9
 // jshint ignore: start
 import antlr4 from 'antlr4';
 

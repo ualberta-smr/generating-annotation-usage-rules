@@ -38,7 +38,7 @@ export default class ShortRulepad {
                     [/must have/, "srp-must-have"],
                     [/with/, "srp-with"],
 
-                    [/"[a-zA-Z0-9\s.\[\]\|\)\(\,]+"/, "srp-string"],
+                    [/"[a-zA-Z0-9\s.\[\]\|\)\(\,\^]+"/, "srp-string"],
                 ],
             },
         }
