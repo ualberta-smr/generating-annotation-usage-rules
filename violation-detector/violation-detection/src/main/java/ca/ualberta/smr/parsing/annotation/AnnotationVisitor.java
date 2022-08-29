@@ -10,10 +10,13 @@ import lombok.val;
 
 import java.util.Arrays;
 import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
 
+import static ca.ualberta.smr.parsing.annotation.AnnotationParsingUtils.createDisjunctionCondition;
 import static ca.ualberta.smr.parsing.utils.GeneralUtility.getText;
 import static ca.ualberta.smr.model.javaelements.AggregateCondition.*;
 import static ca.ualberta.smr.parsing.utils.GeneralUtility.unwrapIfSingle;
+import static java.util.stream.Collectors.toList;
 
 public class AnnotationVisitor extends RulepadGrammarBaseVisitor<AggregateCondition> {
     @Override
@@ -40,15 +43,11 @@ public class AnnotationVisitor extends RulepadGrammarBaseVisitor<AggregateCondit
                     // a.b.c.[X|Y|Z]
                     val packageName = annotationTypeString.substring(0, lparenPos);
                     val expr = annotationTypeString.substring(lparenPos + 1, rparenPos).trim().split("\\|");
-                    return Arrays.stream(expr)
+
+                    return createDisjunctionCondition(Arrays.stream(expr)
                             .map(String::trim)
                             .map(s -> packageName + s)
-                            .map(Type::of)
-                            .reduce((type1, type2) -> {
-                                val t1 = unwrapIfSingle(type1);
-                                val t2 = unwrapIfSingle(type2);
-                                return new AggregateCondition(t1, t2, AggregateConditionOperation.OR);
-                            }).orElseGet(AggregateCondition::empty);
+                            .collect(toList()));
                 }
                 // error
             }

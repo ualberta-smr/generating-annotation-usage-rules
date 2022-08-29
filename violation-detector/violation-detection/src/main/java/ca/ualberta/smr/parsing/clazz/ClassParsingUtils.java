@@ -28,7 +28,7 @@ public class ClassParsingUtils {
         final RulepadGrammarParser.OverriddenFunctionsContext overriddenFunctionsContext;
         final RulepadGrammarParser.FunctionsContext functionsContext;
         final RulepadGrammarParser.DeclarationStatementsContext declarationStatementsContext;
-
+        final RulepadGrammarParser.BeansContext beansContext;
 
         if (generalContext instanceof RulepadGrammarParser.ClassExpressionContext) {
             val ctx = (RulepadGrammarParser.ClassExpressionContext) generalContext;
@@ -38,6 +38,7 @@ public class ClassParsingUtils {
             overriddenFunctionsContext = ctx.overriddenFunctions();
             functionsContext = ctx.functions();
             declarationStatementsContext = ctx.declarationStatements();
+            beansContext = ctx.beans();
         } else if (generalContext instanceof RulepadGrammarParser.ClassExpressionAggregateContentsContext) {
             val ctx = (RulepadGrammarParser.ClassExpressionAggregateContentsContext) generalContext;
             annotationsContext = ctx.annotations();
@@ -46,6 +47,7 @@ public class ClassParsingUtils {
             overriddenFunctionsContext = ctx.overriddenFunctions();
             functionsContext = ctx.functions();
             declarationStatementsContext = ctx.declarationStatements();
+            beansContext = ctx.beans();
         } else {
             val ctx = (RulepadGrammarParser.ClassExpressionNoContext) generalContext;
             annotationsContext = ctx.annotations();
@@ -54,16 +56,17 @@ public class ClassParsingUtils {
             overriddenFunctionsContext = ctx.overriddenFunctions();
             functionsContext = ctx.functions();
             declarationStatementsContext = ctx.declarationStatements();
+            beansContext = ctx.beans();
         }
 
         val annotations = acceptIfAvailable(annotationsContext, new AnnotationVisitor());
         val extension = extractExtension(extensionsContext);
         val implementation = extractImplementations(implementationsContext);
         val overriddenMethods = extractOverriddenFunctions(overriddenFunctionsContext);
+        val beans = extractBeanDeclaration(beansContext);
         val methods = acceptIfAvailable(functionsContext, new FunctionExpressionVisitor());
         val fields = acceptIfAvailable(declarationStatementsContext, new FieldExpressionVisitor());
         // TODO: -- constructors
-        // TODO:beans
         // TODO:beansFile
         // TODO:config
 
@@ -73,7 +76,8 @@ public class ClassParsingUtils {
                 methods,
                 extension,
                 implementation,
-                overriddenMethods
+                overriddenMethods,
+                beans
         );
     }
 
@@ -104,6 +108,11 @@ public class ClassParsingUtils {
                 .collect(Collectors.toList());
 
         return single(new JavaClass.OverriddenMethod(methodName, params));
+    }
+
+    private static AggregateCondition extractBeanDeclaration(RulepadGrammarParser.BeansContext ctx) {
+        if (ctx == null) return empty();
+        return single(new JavaClass.BeanDeclaration());
     }
 
 }

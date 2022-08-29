@@ -3,7 +3,6 @@ package ca.ualberta.smr.model.javaelements;
 import ca.ualberta.smr.detection.clazz.ClassAntecedentScanner;
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.violationreport.ViolationCombination;
-import ca.ualberta.smr.model.violationreport.ViolationCombinationAnd;
 import ca.ualberta.smr.model.violationreport.ViolationInfo;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -16,7 +15,10 @@ import lombok.experimental.Accessors;
 
 import java.util.*;
 
+import static ca.ualberta.smr.model.javaelements.AggregateCondition.empty;
+import static ca.ualberta.smr.model.javaelements.AggregateCondition.single;
 import static ca.ualberta.smr.model.javaelements.JavaElementUtils.handleViolationCombinationCreation;
+import static ca.ualberta.smr.parsing.annotation.AnnotationParsingUtils.createDisjunctionCondition;
 import static ca.ualberta.smr.parsing.utils.GeneralUtility.describe;
 import static ca.ualberta.smr.parsing.utils.GeneralUtility.listOf;
 import static java.util.stream.Collectors.toList;
@@ -32,6 +34,7 @@ public final class JavaClass extends ProgramElement implements AnalysisItem {
     private final AggregateCondition extendedClass;
     private final AggregateCondition implementedInterfaces;
     private final AggregateCondition overriddenMethod;
+    private final AggregateCondition beanDeclaration;
     // TODO: support for configuration files
     // TODO: support for constructors (that actually can be treated like methods)
 
@@ -45,13 +48,15 @@ public final class JavaClass extends ProgramElement implements AnalysisItem {
             boolean extendMatch = extendedClass.isEmpty() || cd.getExtendedTypes().stream().map(NodeWithSimpleName::getNameAsString).anyMatch(extendedClass::matches);
             boolean implMatch = implementedInterfaces.isEmpty() || cd.getImplementedTypes().stream().map(NodeWithSimpleName::getNameAsString).anyMatch(implementedInterfaces::matches);
             boolean overriddenMatch = overriddenMethod.matches(cd.getMethods());
+            boolean isACDIBean = beanDeclaration.matches(cd);
 
             return annotationMatches
                     && fieldsMatch
                     && methodsMatch
                     && extendMatch
                     && implMatch
-                    && overriddenMatch;
+                    && overriddenMatch
+                    && isACDIBean;
         } else if (bd instanceof MethodDeclaration) {
             val md = (MethodDeclaration) bd;
             return method.matches(md);
@@ -75,10 +80,11 @@ public final class JavaClass extends ProgramElement implements AnalysisItem {
         val missingImplementation = findMissing(implementedInterfaces,
                 cd.getImplementedTypes().stream().map(NodeWithSimpleName::getNameAsString).collect(toList()), cd, rule);
         val missingOverriddenMethods = overriddenMethod.getMissing(cd.getMethods(), rule);
+        val missingCDIBean = beanDeclaration.getMissing(cd, rule);
 
         val violations = listOf(
                 missingField, missingMethod, missingExtensions,
-                missingImplementation, listOf(missingAnnotations, missingOverriddenMethods)
+                missingImplementation, listOf(missingAnnotations, missingOverriddenMethods, missingCDIBean)
         ).stream().flatMap(Collection::stream).collect(toList());
 
         return handleViolationCombinationCreation(cd, violations);
@@ -101,13 +107,14 @@ public final class JavaClass extends ProgramElement implements AnalysisItem {
 
     @Override
     String description() {
-        Map<String, AggregateCondition> keyValues = new HashMap<>();
-        keyValues.put("annotations", annotations);
-        keyValues.put("field", field);
-        keyValues.put("method", method);
-        keyValues.put("extends", extendedClass);
-        keyValues.put("implements", implementedInterfaces);
-        return describe("class", keyValues);
+        Map<String, AggregateCondition> map = new HashMap<>();
+        map.put("annotations", annotations);
+        map.put("field", field);
+        map.put("method", method);
+        map.put("extends", extendedClass);
+        map.put("implements", implementedInterfaces);
+        map.put("isCDIBean", beanDeclaration);
+        return describe("class", map);
     }
 
     @RequiredArgsConstructor
@@ -156,6 +163,81 @@ public final class JavaClass extends ProgramElement implements AnalysisItem {
         @Override
         String description() {
             return String.format("method [name = %s, params = %s]", name, parameters);
+        }
+    }
+
+    /**
+     * Bean declaration denotes that a class is a CDI bean. Please note that, there are multiple ways to declare a bean.
+     * What we are doing here is partial, and only checking for the bean defining annotations. It is also possible to
+     * create beans programmatically, or by mentioning them in the beans.xml file. We currently do not scan for these
+     * options as it requires more sophisticated misuse detection techniques.
+     */
+    @RequiredArgsConstructor
+    @Getter
+    @Accessors(fluent = true)
+    @EqualsAndHashCode(callSuper = false)
+    public static class BeanDeclaration extends ProgramElement {
+
+        /**
+         * Reference: https://jakarta.ee/specifications/cdi/3.0/jakarta-cdi-spec-3.0.html#bean_defining_annotations
+         * <br/>
+         * Since, we currently do not scan the annotation definitions, we will not be able to detect if any custom
+         * annotation is has a @NormalScope or @Stereotype annotation.
+         * <br/>
+         * This is also something to keep in mind (excerpt from the previously mentioned link):
+         * <blockquote>
+         * Note that to ensure compatibility with other JSR-330 implementations, all pseudo-scope annotations
+         * except @Dependent are not bean defining annotations.
+         * However, a stereotype annotation including a pseudo-scope annotation is a bean defining annotation.
+         * </blockquote>
+         */
+        private static final List<String> beanDeclaringAnnotations = listOf(
+                // Jakarta EE annotations
+                "jakarta.enterprise.context.ApplicationScoped",
+                "jakarta.enterprise.context.SessionScoped",
+                "jakarta.enterprise.context.ConversationScoped",
+                "jakarta.enterprise.context.RequestScoped",
+                // normal scoped?
+                "jakarta.enterprise.inject.spi.Interceptor",
+                "jakarta.enterprise.inject.spi.Decorator",
+                "jakarta.enterprise.inject.Stereotype", // or anything that has been annotated with Stereotype
+                "jakarta.enterprise.context.Dependent",
+
+                // Java EE annotations
+                "javax.enterprise.context.ApplicationScoped",
+                "javax.enterprise.context.SessionScoped",
+                "javax.enterprise.context.ConversationScoped",
+                "javax.enterprise.context.RequestScoped",
+                // normal scoped?
+                "javax.enterprise.inject.spi.Interceptor",
+                "javax.enterprise.inject.spi.Decorator",
+                "javax.enterprise.inject.Stereotype", // or anything that has been annotated with Stereotype
+                "javax.enterprise.context.Dependent"
+        );
+
+        // create a condition that is simply the disjunction of all the annotations mentioned above
+        private final AggregateCondition annotations = single(
+                new Annotation(
+                        createDisjunctionCondition(beanDeclaringAnnotations),
+                        empty()
+                )
+        );
+
+        @Override
+        boolean matches(Object bd) {
+            val cd = (ClassOrInterfaceDeclaration) bd;
+            return this.annotations.matches(cd.getAnnotations());
+        }
+
+        @Override
+        ViolationCombination getMissing(Object bd, StaticAnalysisRule rule) {
+            val cd = (ClassOrInterfaceDeclaration) bd;
+            return annotations.getMissing(cd.getAnnotations(), rule);
+        }
+
+        @Override
+        String description() {
+            return "CDI bean";
         }
     }
 }
