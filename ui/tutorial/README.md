@@ -1,6 +1,6 @@
 # Tutorial
 
-During the experiment, you will be using the Rule Validation Tool where MicroProfile candidate usage rules will be provided. Your goal is to determine if these candidate rules are correct rules that must be respected for the MicroProfile annotation to work correctly. The candidate rules are going to be provided in a Domain Specific Language (DSL) called [Rulepad](https://github.com/devuxd/active-doc-client). We provide more information below. Please use recent versions of either Google Chrome or Mozilla Firefox browsers.
+During the experiment, you will be using the Rule Validation Tool where MicroProfile candidate usage rules will be provided. Your goal is to determine if these candidate rules are correct rules that must be respected for the MicroProfile annotation to work correctly. The candidate rules are going to be provided in a Domain Specific Language (DSL) called [RulePad](https://github.com/devuxd/active-doc-client). We provide more information below. Please use recent versions of either Google Chrome or Mozilla Firefox browsers.
 
 ## Rule Validation Tool
 
@@ -10,7 +10,7 @@ This is how the tool overall looks like:
   <img src="./assets/overall.png" width="90%" />
 </p>
 
-Candidate rules are presented using the Rule Authoring Editor (on the left) in Rulepad format. There are 5 actions you can do with the Rule Validation Tool.
+Candidate rules are presented using the Rule Authoring Editor (on the left) in RulePad format. There are 6 actions you can do with the Rule Validation Tool.
 
 1. You can edit the presented rule using the Rule Authoring Editor. 
 
@@ -32,7 +32,7 @@ Note 2: `Ctrl+Space` command provides options for auto completing the class name
 
 <p align="center"><img src="./assets/reject.gif" width="80%" /></p>
 
-5. You can label the rule as "best practice"
+5. You can label the rule as "best practice". Best practice represents an API usage instance that is recommended, but not imposed.
 
 <p align="center"><img src="./assets/best.gif" width="80%" /></p>
 
@@ -42,9 +42,9 @@ Note 2: `Ctrl+Space` command provides options for auto completing the class name
 
 ## Note. 
 
-**Changes you make to a rule will only be saved if you click the Confirm Rule button**. In any other case, the changes will not be saved. For example, the changes in the following cases the changes will be lost:
+**Changes you make to a rule will only be saved if you click the Confirm Rule or Best Practice buttons**. In any other case, the changes will not be saved. For example, the changes in the following cases the changes will be lost:
 - Moving on to another candidate rule will get rid of any unsaved changes without any warning. 
-- The changes made to an already confirmed rule will be lost if those changes are not saved again using "CONFIRM RULE" button.
+- The changes made to an already confirmed rule will be lost if those changes are not saved again using "CONFIRM RULE" or "BEST PRACTICE" buttons.
 
 The code section shows the Java equivalent of the presented rule. IF (antecedent) and THEN (consequent) parts are shown in distinct colors. 
 
@@ -52,18 +52,18 @@ The code section shows the Java equivalent of the presented rule. IF (antecedent
   <img src="./assets/code_preview.png" width="90%" />
 </p>
 
-## Rulepad
+## RulePad
 
-Rulepad DSL (domain specific language) resembles English language. It has a IF-THEN structure. 
+RulePad DSL resembles English language. It has a IF-THEN structure. 
 
-Here are some Rulepad example statements alongside with their Java code equivalents:
+Here are some RulePad example statements alongside with their Java code equivalents:
 
 <table>
 <tr>
-<th colspan="2">Rulepad Examples</th>
+<th colspan="2">RulePad Examples</th>
 </tr>
 <tr>
-<th>Rulepad</th>
+<th>RulePad</th>
 <th>Java</th>
 </tr>
 <tr>
@@ -126,7 +126,7 @@ class Foo {
 
 ### Syntax
 
-In Rulepad, we describe rules about Java program elements. Each program element can have different properties. When we want to specify different properties for a program element, we use `with` keyword (e.g., `field with type "String"`). Statements consist of 2 parts: (1) IF part that is before _must have_ and (2) THEN part which is after _must have_. There is a general structure for all the statements:
+In RulePad, we describe rules about Java program elements. Each program element can have different properties. When we want to specify different properties for a program element, we use `with` keyword (e.g., `field with type "String"`). Statements consist of 2 parts: (1) IF part that is before _must have_ and (2) THEN part which is after _must have_. There is a general structure for all the statements:
 
 ```
 programElement with programElementExpression must have programElementExpression
@@ -134,7 +134,7 @@ programElement with programElementExpression must have programElementExpression
 
 Although there are 13 program elements that we can specify, **the actual statements need to describe either a class, a method or a field**. So, in the structure given above `programElement` can be either `class`, `method` or `field`. 
 
-For each program element, `programElementExpression` represents the properties that can belong to that program element. `programElementExpression` can take an aggregate form, meaning we can use `AND`s and `OR`s to combine multiple properties (see [aggregates](#aggregates-and-parenthesis)) 
+For each program element, `programElementExpression` represents the properties that can belong to that program element. `programElementExpression` can take an aggregate form, meaning we can use `AND`s and `OR`s to combine multiple properties (see [operators](#operators-and-parenthesis)) 
 
 #### annotation
 
@@ -165,7 +165,7 @@ Names only have 1 property and that's the name string. For example, something wi
 
 #### value
 
-Values only have 1 property and that's the value string. For example, something with the value of _enabled_ should be written as `value "enabled"`. By default value string matches the literal value. So, `value "enabled"` is equal to `@Dummy(param="enabled")`. See [this section](#special-use-case-combining-annotation-parameter-values-and-configuration-properties) to learn about dynamic value placeholders and their only usecase.
+Values only have 1 property and that's the value string. For example, something with the value of _enabled_ should be written as `value "enabled"`. By default value string matches the literal value. So, `value "enabled"` is equal to `@Dummy(param="enabled")`. 
 
 #### field
 
@@ -265,7 +265,7 @@ must have
 configuration file with property "[nameValue]"
 ``` -->
 
-#### Aggregates and Parenthesis
+#### Operators and Parenthesis
 
 Properties of a program element can be combined as well. The DSL supports the following logical and aggregation operations:
 - AND - *using the 'and' keyword*
@@ -281,7 +281,7 @@ Examples:
 - `field with type "A" must have none of (annotation "B" or annotation "C")`
 - `field with type "A" must have annotation "B" and no annotation "C"`
 
-There's a shortcut available for annotations if one wants to specify multiple annotations from the same package with OR operation. Consider the case when you want to say `@javax.ws.rs.GET or @javax.ws.rs.POST or @javax.ws.rs.DELETE or @javax.ws.rs.PUT`. With the usual Rulepad syntax it would be:
+There's a shortcut available for annotations if one wants to specify multiple annotations from the same package with OR operation. Consider the case when you want to say `@javax.ws.rs.GET or @javax.ws.rs.POST or @javax.ws.rs.DELETE or @javax.ws.rs.PUT`. With the usual RulePad syntax it would be:
 
 ```
 annotation "javax.ws.rs.GET" or annotation "javax.ws.rs.POST" or annotation "javax.ws.rs.DELETE" or annotation "javax.ws.rs.PUT"
