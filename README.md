@@ -25,13 +25,13 @@ To get started with these tools, please read the README files present in the rel
 
 # User study materials
 
-During the user study, we presented 18 total rules to four API experts. The [presented_candidate_rules](./extra/presented_candidate_rules/) directory shows all the mined candidate rules we presented to the user study participants. Initially, we planned the user study around six people, but ended up only finding four API experts. You can find the unused rulesets in the same directory as well. Rules are tagged by the MicroProfile APIs that the rule is related to. This information was manually added later, so that we could distribute rules based on the expertise of our participants.
+During the user study, we presented 18 total rules to four API experts. The [presented_candidate_rules](./artifacts/presented_candidate_rules/) directory shows all the mined candidate rules we presented to the user study participants. Initially, we planned the user study around six people, but ended up only finding four API experts. You can find the unused rulesets in the same directory as well. Rules are tagged by the MicroProfile APIs that the rule is related to. This information was manually added later, so that we could distribute rules based on the expertise of our participants.
 
-You can find the confirmed rules [here](./extra/confirmed_rules.txt). You can also find the analysis of each confirmed rule [here](./extra/confirmed_rules_analysis.md)
+You can find the confirmed rules [here](./artifacts/confirmed_rules.txt). You can also find the analysis of each confirmed rule [here](./artifacts/confirmed_rules_analysis.md)
 
 # Misuse Detection Experiment
 
-We used the following [12 rules](./extra/misuse_detector_experiment_confirmed_rules_in_rulepad.json). You can also find the original JSON format of those rules [here](./extra/misuse_detector_experiment_confirmed_rules.json). Simply putting the rules into the `src/main/resources` folder of the [Maven plugin](./violation-detector/violation-detector-maven-plugin/src/main/resources/) and building using `mvn clean package` equips the plugin with these rules.
+We used the following [12 rules](./artifacts/misuse_detector_experiment_confirmed_rules_in_rulepad.json). You can also find the original JSON format of those rules [here](./artifacts/misuse_detector_experiment_confirmed_rules.json). Simply putting the rules into the `src/main/resources` folder of the [Maven plugin](./violation-detector/violation-detector-maven-plugin/src/main/resources/) and building using `mvn clean package` equips the plugin with these rules.
 
 # Credit
 All credit related to RulePad goes to [Sahar Mehrpour](https://github.com/SaharMehrpour)
