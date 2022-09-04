@@ -1,5 +1,7 @@
 # Generating Annotation Usage Rules
 
+For the version of the repository that we used for the CASCON 22 paper, please refer to the [following release](https://github.com/ualberta-smr/generating-annotation-usage-rules/releases/tag/v_cascon).
+
 The artifact repo for the paper:
 
 > A Human-in-the-loop Approach to Generate Annotation Usage Rules: A Case Study with MicroProfile. Mansur Gulami, Ajay Kumar Jha, Sarah Nadi, Karim Ali, Yee-Kang Chang, Emily Jiang. CASCONxEVOKE '22.
