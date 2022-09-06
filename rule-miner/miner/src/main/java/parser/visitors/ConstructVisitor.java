@@ -145,7 +145,6 @@ public class ConstructVisitor extends VoidVisitorAdapter<Object> {
         try {
             // See if we can resolve the fully qualified name of some annotation
             annotationNode = new AnnotationNode(annotation.resolve().getQualifiedName());
-            System.out.println("Type resolved successfully");
         } catch (Exception e) {
             // If the symbol resolver does not work, check in our list of imports+
             String qualifiedName = annotation.getNameAsString(); // default value is just the name
@@ -157,7 +156,6 @@ public class ConstructVisitor extends VoidVisitorAdapter<Object> {
                 }
             }
             annotationNode = new AnnotationNode(qualifiedName);
-            System.out.println("Type resolved using heuristics");
         }
 
         // Process annotation parameters

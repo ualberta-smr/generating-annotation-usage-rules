@@ -1,0 +1,29 @@
+{
+    "targetProjectsDir": "/pipeline/mining-sources",
+    "api": {
+        "prefixes": [
+            "org.eclipse.microprofile",
+            "javax",
+            "jakarta"
+        ],
+        "subApi": {
+            "subApiRegex": "Annotation_org\\.eclipse\\.microprofile[\\w,\\.]+",
+            "prefixes": [
+                "org.eclipse.microprofile.config",
+                "org.eclipse.microprofile.faulttolerance",
+                "org.eclipse.microprofile.graphql",
+                "org.eclipse.microprofile.health",
+                "org.eclipse.microprofile.jwt",
+                "org.eclipse.microprofile.metrics",
+                "org.eclipse.microprofile.openapi",
+                "org.eclipse.microprofile.opentracing",
+                "org.eclipse.microprofile.reactive",
+                "org.eclipse.microprofile.rest",
+                "org.eclipse.microprofile.auth"
+            ]
+        }
+    },
+    "libSources": [
+        "/pipeline/lib-sources"
+    ]
+}
