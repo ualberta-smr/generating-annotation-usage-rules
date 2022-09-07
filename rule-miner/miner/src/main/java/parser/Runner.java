@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import util.AggregateData;
 import util.ResultPrinter;
@@ -20,7 +21,7 @@ public class Runner {
 
     public static void main(String[] args) throws IOException {
         // Get the path to all input user projects that use target library
-        Configuration.properties = parseConfiguration(args);
+        parseConfiguration(args);
 
         // Read in all java files
         long startProcessingTime = System.currentTimeMillis();
@@ -356,15 +357,51 @@ public class Runner {
         return 1d / (sa + sb - intersection) * intersection;
     }
 
-    private static ConfigurationProperties parseConfiguration(String[] args) throws IOException {
-        if (args.length == 1) {
-            String configLocation = args[0];
-            String contents = Files.lines(Paths.get(configLocation)).collect(Collectors.joining("\n"));
-            return ConfigurationProperties.readConfigJson(contents);
+    private static void parseConfiguration(String[] args) throws IOException {
+        // --config [configPath]
+        // --targetProjectsDir [path]
+        // --libSources [path]
+
+        if (args.length != 6) {
+            System.err.println("Expected three parameters: ");
+            System.err.println("PROGRAM --config [configPath] --targetProjectsDir [path] --libSources [path]");
+            System.exit(1);
         }
-        System.err.println("Expected exactly one argument <projects-dir>");
-        System.exit(1);
-        return null;
+
+        String targetProjectsDir = null;
+        String libSources = null;
+        String configPath = null;
+        for (int i = 0; i < 6; i += 2) {
+            if (args[i].startsWith("--")) {
+                String option = args[i];
+                switch (option) {
+                    case "--config":
+                        configPath = args[i + 1];
+                        break;
+                    case "--targetProjectsDir":
+                        targetProjectsDir = args[i + 1];
+                        break;
+                    case "--libSources":
+                        libSources = args[i + 1];
+                        break;
+                    default:
+                        throw new RuntimeException("Unexpected option: " + option);
+                }
+            }
+        }
+
+        // all three parameters are required, thus, they all must be non-null
+        if (Stream.of(targetProjectsDir, libSources, configPath).anyMatch(Objects::isNull)) {
+            System.err.println("Expected three parameters: ");
+            System.err.println("PROGRAM --config [configPath] --targetProjectsDir [path] --libSources [path]");
+            System.exit(1);
+        }
+
+        //
+        String contents = Files.lines(Paths.get(configPath)).collect(Collectors.joining("\n"));
+        Configuration.properties = ConfigurationProperties.readConfigJson(contents);
+        Configuration.properties.targetProjectsDir(targetProjectsDir);
+        Configuration.properties.libSources(Collections.singletonList(libSources));
     }
 
     private static void readProjectsFiles() {

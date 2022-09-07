@@ -26,6 +26,14 @@ public class ConfigurationProperties {
         return targetProjectsDir;
     }
 
+    public void targetProjectsDir(String dir) {
+        this.targetProjectsDir = dir;
+    }
+
+    public void libSources(Collection<String> dir) {
+        this.libSources = dir;
+    }
+
     public ApiConfiguration api() {
         return api;
     }

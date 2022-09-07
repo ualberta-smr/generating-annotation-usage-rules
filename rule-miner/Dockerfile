@@ -1,9 +1,15 @@
-FROM openjdk:8-jdk-alpine
+FROM docker
 
 RUN apk update \
     && apk add ca-certificates wget \
     && update-ca-certificates
 
+RUN apk add --no-cache openjdk8
+
+ENV LANG=C.UTF-8 \
+    JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk
+
+ENV PATH=/usr/lib/jvm/java-1.8-openjdk/bin/:${PATH}
 ENV MAVEN_VERSION 3.8.6
 
 RUN apk update \
@@ -12,9 +18,11 @@ RUN apk update \
       py3-psutil \
       python3 \
       yaml-dev \
+      py3-pip \
  && ln -s /usr/bin/python3 /usr/bin/python \
- && ln -s /usr/bin/pip3 /usr/bin/pip \
+#  && ln -s /usr/bin/pip3 /usr/bin/pip \
  && pip install --upgrade pip \
+ && pip install requests randomname \
  \
  && apk add git bash
 
@@ -27,18 +35,20 @@ ENV PATH=${PATH}:/usr/lib/maven/bin
 
 WORKDIR /pipeline
 
+VOLUME [ "/pipeline/mining-sources", "/pipeline/lib-sources" ]
+
+# add all the scripts to the path
 ADD bin/ /pipeline/bin
 RUN chmod -R +x /pipeline/bin
 ENV PATH=/pipeline/bin:${PATH}
 
-ADD rule-miner /pipeline/rule-miner
-ADD ui /pipeline/ui
+# copy the important directories and files
+ADD . /pipeline/rule-miner
+# ADD ui /pipeline/ui
 ADD configuration.json /pipeline/
 
-ENV CONFIG_PATH /pipeline/configuration.json
-
+# build the miner
 RUN mvn clean package -f ./rule-miner/miner/pom.xml
 
-VOLUME [ "/pipeline/mining-sources", "/pipeline/lib-sources" ]
-
+# start from the bash
 CMD ["bash"]

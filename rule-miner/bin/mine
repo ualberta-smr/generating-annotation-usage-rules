@@ -1,0 +1,4 @@
+java -jar rule-miner/miner/target/rule-miner.jar \
+    --config /pipeline/configuration.json \
+    --libSources /pipeline/lib-sources \
+    --targetProjectsDir /pipeline/mining-sources

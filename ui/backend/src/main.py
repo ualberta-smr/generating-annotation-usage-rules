@@ -52,17 +52,22 @@ def getNextRule(ruleId: int, userId: str, response: Response, db: Session = Depe
 def getPrevRule(ruleId: int, userId: str, response: Response, db: Session = Depends(getSession)):
     return RuleOperationsHandler.getPrevRule(ruleId, userId, response, db)
 
+
 @app.post('/rules/{ruleId}/{label}')
 def labelRule(ruleId: int, label: str, response: Response, ruleDto: Optional[ConfirmRuleDTO] = None, db: Session = Depends(getSession)):
     return RuleOperationsHandler.labelRule(ruleId, label, response, ruleDto, db)
 
+
 @app.get('/packages/{username}/confirmed')
-def getRulesPackage(username: str, db: Session = Depends(getSession)):
-    return RulePackageOperations.getConfirmedRulesByUsername(username, db)
+def getRulesPackage(username: str, response: Response, db: Session = Depends(getSession)):
+    return RulePackageOperations.getConfirmedRulesByUsername(username, response, db)
+
 
 @app.post("/packages")
 def uploadNewRulePackage(username: str, rulesFile: UploadFile, response: Response, packageName: str = None, db: Session = Depends(getSession)):
-    RulePackageOperations.createNewPackage(username, packageName, rulesFile, response, db)
+    RulePackageOperations.createNewPackage(
+        username, packageName, rulesFile, response, db)
+
 
 @app.get('/users')
 def checkIfUserExists(q: str, response: Response, db: Session = Depends(getSession)):

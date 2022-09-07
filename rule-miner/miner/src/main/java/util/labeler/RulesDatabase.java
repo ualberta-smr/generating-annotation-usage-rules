@@ -103,7 +103,8 @@ public class RulesDatabase {
             List<LabeledRule> rulesForAVersion = new ArrayList<>();
 
             try (Reader reader = new FileReader(fileName)) {
-                Type rulesListType = new TypeToken<ArrayList<LabeledRule>>(){}.getType();
+                Type rulesListType = new TypeToken<ArrayList<LabeledRule>>() {
+                }.getType();
 
                 rulesForAVersion = gson.fromJson(reader, rulesListType);
                 if (rulesForAVersion == null) {
@@ -149,20 +150,21 @@ public class RulesDatabase {
         }
 
         // Gotta make sure this is called after we process all final rules, s.t. we put new rules into JSON.
-        String fileName = "rules_" + Configuration.version + "_fi.json";
+//        String fileName = "rules_" + Configuration.version + "_fi.json";
+        String fileName = "rules_" + System.currentTimeMillis() + ".json";
 
         // Convert association rules to labeled rules (basically, label them)
         // In case of frequent itemsets, just put all in antecedent and make consequent empty.
         List<LabeledRule> labeledRules = rules.stream()
-            .map(LabeledRule::toLabeledRule)
-            .collect(Collectors.toList());
+                .map(LabeledRule::toLabeledRule)
+                .collect(Collectors.toList());
 
         // Write current version rules to a new JSON file
         try (Writer writer = new FileWriter(fileName)) {
             Gson gson = new GsonBuilder()
-                .disableHtmlEscaping()
-                .setPrettyPrinting()
-                .create();
+                    .disableHtmlEscaping()
+                    .setPrettyPrinting()
+                    .create();
 
             gson.toJson(labeledRules, writer);
         } catch (IOException e) {
@@ -189,8 +191,8 @@ public class RulesDatabase {
         for (Map.Entry<String, List<LabeledRule>> prevRules : rules.entrySet()) {
             // Check if a rule exists for a given version
             Optional<LabeledRule> labeledRule = prevRules.getValue().stream()
-                .filter(rule -> hashcode == rule.id())
-                .findAny();
+                    .filter(rule -> hashcode == rule.id())
+                    .findAny();
 
             if (labeledRule.isPresent()) {
                 return labeledRule.get();

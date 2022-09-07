@@ -1,5 +1,4 @@
 {
-    "targetProjectsDir": "/home/owary/Programming/Research/Annotation-Violation-Detector/complete-detector-experiment/detector-evaluation/target_projects",
     "api": {
         "prefixes": [
             "org.eclipse.microprofile",
@@ -22,8 +21,5 @@
                 "org.eclipse.microprofile.auth"
             ]
         }
-    },
-    "libSources": [
-        "/home/owary/Programming/Research/Annotation-Violation-Detector/project/generating-annotation-usage-rules/violation-detector/violation-detector-maven-plugin/src/main/resources/lib"
-    ]
+    }
 }

@@ -74,7 +74,7 @@ public class AnnotationUsageGraphBuilder {
         String projectName = project.getName().toLowerCase();
 
         // Skip simple projects
-        if (forbiddenProjs.parallelStream().anyMatch(projectName::contains)) {
+        if (forbiddenProjs.stream().anyMatch(projectName::contains)) {
             return false;
         }
 

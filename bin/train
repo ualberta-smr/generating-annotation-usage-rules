@@ -1,1 +1,0 @@
-java -jar rule-miner/miner/target/annotation-parser-1.0-SNAPSHOT.jar $CONFIG_PATH
