@@ -118,7 +118,6 @@ public class AnnotationUsageGraphBuilder {
 
         ProjectRoot projectRoot = s.collect(project.toPath());
 
-        System.out.println("Parsing " + projectName);
         for (SourceRoot sourceRoot : projectRoot.getSourceRoots()) {
             Path path = sourceRoot.getRoot();
 

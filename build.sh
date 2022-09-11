@@ -1,1 +1,2 @@
-docker build -f docker/Dockerfile -t demo1 .
+docker-compose down
+docker-compose build

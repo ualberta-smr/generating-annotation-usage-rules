@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 public class RulesDatabase {
 
     private static Map<String, List<LabeledRule>> rules;
-    private static List<LabeledRule> newRulesQueue;
 
     public static class LabeledRule {
         @SerializedName("id")
@@ -76,17 +75,13 @@ public class RulesDatabase {
         public static LabeledRule toLabeledRule(AssociationRule r) {
             return new LabeledRule(r.hashCode(), r.antecedent(), r.consequentAsSingletonSet(), r.status());
         }
-
-//        public static LabeledRule toLabeledRule(FrequentItemset fi) {
-//            return new LabeledRule(fi.hashCode(), fi.getItems(), new HashSet<>(), fi.status());
-//        }
     }
+
 
     // Static initialization for the rules
     static {
         Gson gson = new Gson();
 
-        newRulesQueue = new ArrayList<>();
         rules = new HashMap<>();
 
         File dir = new File(".");
@@ -120,11 +115,6 @@ public class RulesDatabase {
         }
     }
 
-    public static Map<String, List<LabeledRule>> getRulesFromAllVersions() {
-        return rules;
-    }
-
-
     public static String getLabel(AssociationRule rule) {
         LabeledRule r = getLabeledRule(rule.hashCode());
         if (r != null) {
@@ -144,14 +134,9 @@ public class RulesDatabase {
     }
 
     public static void writeToJSON(List<AssociationRule> rules) {
-        if (!Configuration.version.contains("v")) {
-            System.err.println("[writeToJSON] Configuration version is not set correctly!!!");
-            System.exit(1);
-        }
-
         // Gotta make sure this is called after we process all final rules, s.t. we put new rules into JSON.
-//        String fileName = "rules_" + Configuration.version + "_fi.json";
-        String fileName = "rules_" + System.currentTimeMillis() + ".json";
+        String filename = String.format("%s/candidate_rules_%d.json", System.getenv("EXPORT_DIR"), System.currentTimeMillis());
+        File outputFile = new File(filename);
 
         // Convert association rules to labeled rules (basically, label them)
         // In case of frequent itemsets, just put all in antecedent and make consequent empty.
@@ -160,13 +145,12 @@ public class RulesDatabase {
                 .collect(Collectors.toList());
 
         // Write current version rules to a new JSON file
-        try (Writer writer = new FileWriter(fileName)) {
-            Gson gson = new GsonBuilder()
+        try (Writer writer = new FileWriter(outputFile)) {
+            new GsonBuilder()
                     .disableHtmlEscaping()
                     .setPrettyPrinting()
-                    .create();
-
-            gson.toJson(labeledRules, writer);
+                    .create()
+                    .toJson(labeledRules, writer);
         } catch (IOException e) {
             System.err.println("Could not write rules to the JSON file");
         }

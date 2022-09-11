@@ -209,7 +209,7 @@ class RulePackageOperations:
             userId = UserOperationsHandler.createNewUser(username, db)
             # create a package with id X
             if packageName is None or packageName.strip() == "":
-                packageName = "MicroProfile Candidate Rules"
+                packageName = "A Set of Candidate Rules"
 
             db.add(CandidateRulesPackage(id = userId, name = packageName))
             # add all the rules for that user

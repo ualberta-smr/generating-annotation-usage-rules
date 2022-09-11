@@ -2,9 +2,15 @@ import glob
 import json
 import requests
 from randomname import get_name
+from common import getEnv, dumpJson
 
 if __name__ == '__main__':
-    files = glob.glob('rules_*.json')
+    frontendPort        = int(getEnv("FRONTEND_URL").split(":")[2])
+    backendUrl          = getEnv("BACKEND_URL")
+    mostRecentLoginFile = getEnv("MOST_RECENT_LOGIN_PATH")
+    exportDir           = getEnv("EXPORT_DIR")
+
+    files = glob.glob(f'{exportDir}/candidate_rules_*.json')
 
     if len(files) == 0:
         print("No rules file found. Try running: mine")
@@ -12,9 +18,12 @@ if __name__ == '__main__':
 
     file_time = dict()
 
+    # we will take the substring between prefix and suffix
+    prefixLen = len(f'{exportDir}/candidate_rules_')
+    suffixLen = len(".json")
     for file in files:
-        # remove 'rules_' and '.json' and only keep the timestamp
-        timestamp = file[6:-5]
+        # remove '{exportDir}/candidate_rules_' and '.json' and only keep the timestamp
+        timestamp = file[prefixLen:-suffixLen]
         if timestamp.isnumeric():
             file_time[file] = int(timestamp)
         else:
@@ -48,21 +57,21 @@ if __name__ == '__main__':
     username = get_name()
 
     resp = requests.post(
-        f'http://backend:5000/packages?username={username}&packageName=MicroProfileRules', files=files)
+        f'{backendUrl}/packages?username={username}&packageName=MicroProfileRules', files=files)
 
+    print("==========================================================")
     if resp.status_code == 200:
-        print("==========================================================")
+        # saving the most recent username
+        # because the 'export-rules' command might need it
+        with open(mostRecentLoginFile, "w") as f:
+            f.write(username)
         print("Successfully loaded the mined candidate rules!")
         print("To start validating candidate rules, please head over to:")
-        print("\thttp://localhost:8888")
+        print(f"\thttp://localhost:{frontendPort}")
         print(f"\tUsername: {username}")
-        print("==========================================================")
-        with open("/tmp/rvt_most_recent_login", "w") as f:
-            f.write(username)
     else:
-        print("==========================================================")
         print("Something went wrong!")
         print(f"Status code: {resp.status_code}")
         print("Error: ")
-        print(resp.json())
-        print("==========================================================")
+        print(dumpJson(resp))
+    print("==========================================================")

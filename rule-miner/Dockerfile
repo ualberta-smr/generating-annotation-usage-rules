@@ -1,3 +1,5 @@
+# ATTENTION!!!
+# This dockerfile is meant to be run from the root directory
 FROM docker
 
 RUN apk update \
@@ -35,17 +37,17 @@ ENV PATH=${PATH}:/usr/lib/maven/bin
 
 WORKDIR /pipeline
 
-VOLUME [ "/pipeline/mining-sources", "/pipeline/lib-sources" ]
-
-# add all the scripts to the path
-ADD bin/ /pipeline/bin
-RUN chmod -R +x /pipeline/bin
-ENV PATH=/pipeline/bin:${PATH}
+VOLUME [ "/pipeline/mining-sources", "/pipeline/lib-sources", "/pipeline/exports"]
 
 # copy the important directories and files
-ADD . /pipeline/rule-miner
-# ADD ui /pipeline/ui
-ADD configuration.json /pipeline/
+ADD rule-miner /pipeline/rule-miner
+ADD violation-detector /pipeline/detector
+
+RUN mv /pipeline/rule-miner/configuration.json /pipeline/configuration.json
+# add all the scripts to the path
+RUN mv /pipeline/rule-miner/bin /pipeline/bin
+RUN chmod -R +x /pipeline/bin
+ENV PATH=/pipeline/bin:${PATH}
 
 # build the miner
 RUN mvn clean package -f ./rule-miner/miner/pom.xml

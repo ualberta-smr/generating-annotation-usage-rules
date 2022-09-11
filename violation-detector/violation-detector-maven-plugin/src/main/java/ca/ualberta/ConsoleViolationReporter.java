@@ -1,6 +1,5 @@
-package ca.ualberta.report;
+package ca.ualberta;
 
-import ca.ualberta.FileStaticAnalysisRulePair;
 import ca.ualberta.smr.model.StaticAnalysisRule;
 import ca.ualberta.smr.model.violationreport.*;
 import com.github.javaparser.ast.Node;
@@ -9,10 +8,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import lombok.val;
-import org.codehaus.plexus.logging.AbstractLogEnabled;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
@@ -21,21 +17,24 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.joining;
 
-@Named
-@Singleton
-public class ConsoleViolationReporter extends AbstractLogEnabled implements ViolationReporter {
+public class ConsoleViolationReporter {
 
-    @Override
-    public void report(StaticAnalysisRule rule, Collection<FileStaticAnalysisRulePair> violations, Consumer<String> logger) {
+    private final Consumer<String> logger;
+
+    public ConsoleViolationReporter(Consumer<String> logger) {
+        this.logger = logger;
+    }
+
+    public void report(StaticAnalysisRule rule, Collection<FileStaticAnalysisRulePair> ruleMisusePairs) {
         logger.accept("------------------------------------------------------------------------");
         logger.accept("For rule: " + rule.name());
         logger.accept("\t" + rule.description());
         logger.accept("\t---");
         int i = 1;
-        for (val violation : violations) {
-            logger.accept("\tIn: " + violation.path);
-            for (ViolationCombination misuse : violation.misuses) {
-                logger.accept(getMessage(misuse, i++));
+        for (val pair : ruleMisusePairs) {
+            logger.accept("\tIn: " + pair.path);
+            for (val violation : pair.violations) {
+                logger.accept(getMessage(violation, i++));
             }
             logger.accept("");
         }

@@ -16,10 +16,14 @@ import util.AggregateData;
 import util.ResultPrinter;
 import util.labeler.RulesDatabase;
 
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
+
 public class Runner {
     private static AnnotationUsageGraphBuilder builder;
 
     public static void main(String[] args) throws IOException {
+        requireNonNull(System.getenv("EXPORT_DIR"), "The environment variable 'EXPORT_DIR' should be set to run the 'mine' command");
         // Get the path to all input user projects that use target library
         parseConfiguration(args);
 
@@ -53,20 +57,12 @@ public class Runner {
         }
         System.out.println("There are " + itemsets + " itemsets with at least 1 MP element");
 
-        /*
-         * Association rule mining using FP-Growth algorithm
-         */
-        if (Configuration.mineBySubApi) {
-            mineByAnnotations(usagesByAnnotations);
-        } else {
-            System.out.println("Mining all projects is deprecated.");
-        }
+        // Association rule mining using FP-Growth algorithm
+        mineByAnnotations(usagesByAnnotations);
         System.out.println("It took " + (endProcessingTime - startProcessingTime) + " to parse and mine stuff all projects.");
     }
 
     private static void getFrequencyDist(HashMap<String, List<Itemset>> usagesBySubApi) {
-
-
         PrintStream originalOut = System.out;
 
         try {
@@ -104,7 +100,6 @@ public class Runner {
     private static List<Itemset> takeOneItemsetFromEachProject(HashMap<String, List<Itemset>> rawProjectUsages) {
         List<Itemset> allUsages = new ArrayList<>();
 
-        Set<String> projectsUsed = new HashSet<>();
         Map<String, Integer> subApiProjectFreq = new HashMap<>();
         for (String subApi : Configuration.properties.api().subApi().prefixes()) {
             int freq = 0;
@@ -126,8 +121,6 @@ public class Runner {
                     }
                     if (found) break;
                 }
-
-                projectsUsed.add(usage.getKey());
 
                 // Calculates once per project
                 if (found) {
@@ -197,7 +190,7 @@ public class Runner {
             List<FrequentItemset> freqItemsetsSubApi = new ArrayList<>(resultForSubAPI.getValue().getFrequentItemsets());
             freqItemsetsSubApi = freqItemsetsSubApi.stream()
                     .filter(r -> Heuristics.containsTargetSubApiPrefix(r, subApi))
-                    .collect(Collectors.toList());
+                    .collect(toList());
 
             // Retain only relevant rules
             resultForSubAPI.getValue().getFrequentItemsets().retainAll(freqItemsetsSubApi);
@@ -208,7 +201,7 @@ public class Runner {
                 .stream()
                 .map(CombinedResult::getFrequentItemsets)
                 .flatMap(List::stream)
-                .collect(Collectors.toList());
+                .collect(toList());
         allFrequentItemsets = Miner.getMaximalFreqItemsetsLocal(allFrequentItemsets);
 
         int totalNumOfFreqItemsets = allFrequentItemsets.size();
@@ -216,13 +209,13 @@ public class Runner {
 
         // Keep only rules with at least 1 MP usage
         long startMpSortTime = System.currentTimeMillis();
-        List<FrequentItemset> mpFreqItemsets = allFrequentItemsets.stream().filter(Heuristics::containsTargetAPIPrefix).collect(Collectors.toList());
+        List<FrequentItemset> mpFreqItemsets = allFrequentItemsets.stream().filter(Heuristics::containsTargetAPIPrefix).collect(toList());
         long endMpSortTime = System.currentTimeMillis();
         System.out.println("... Filtered frequent itemsets without target APIs -> " + mpFreqItemsets.size());
 
         // Remove rules that are semantically incorrect
         long startSemanticSortTime = System.currentTimeMillis();
-        List<FrequentItemset> clearFreqItemsets = mpFreqItemsets.stream().filter(Heuristics::isSemanticallyOk).collect(Collectors.toList());
+        List<FrequentItemset> clearFreqItemsets = mpFreqItemsets.stream().filter(Heuristics::isSemanticallyOk).collect(toList());
         long endSemanticSortTime = System.currentTimeMillis();
         System.out.println("... Remove freq. itemsets that are semantically incorrect -> " + clearFreqItemsets.size());
 
@@ -235,7 +228,7 @@ public class Runner {
 
         // Remove frequent itemsets of size 2
         // TODO: comes in 0.0.9
-        finalFreqItemsets = finalFreqItemsets.stream().filter(fi -> fi.size() >= 2).collect(Collectors.toList());
+        finalFreqItemsets = finalFreqItemsets.stream().filter(fi -> fi.size() >= 2).collect(toList());
         System.out.println("... Removed freq. itemsets of size < 2 -> " + finalFreqItemsets.size());
 
         // Now take one rule per itemset
@@ -267,10 +260,7 @@ public class Runner {
         );
 
         // Let's print the stuff
-        // String subApiShortName = result.getKey().substring(result.getKey().lastIndexOf('.') + 1).trim();
         ResultPrinter printer = new ResultPrinter(data);
-
-        Date currDay = new java.sql.Date(System.currentTimeMillis());
 
         for (Map.Entry<String, CombinedResult> result : results.entrySet()) {
             String subApiShortName = result.getKey().substring(result.getKey().lastIndexOf('.') + 1).trim();
@@ -279,7 +269,7 @@ public class Runner {
                 List<Set<String>> inputItemsets = usagesBySubApi.get(result.getKey())
                         .stream()
                         .map(Itemset::getItems)
-                        .collect(Collectors.toList());
+                        .collect(toList());
 
                 // Dump all input itemsets for the sub-API
                 printer.printInputItemsets(
@@ -414,38 +404,44 @@ public class Runner {
         int totalProjects = 0;
 
         // Parse library sources so we get fully-qualified names
-        List<File> libs = new ArrayList<>();
-//        for (String lib : Configuration.librariesPaths) {
-        for (String lib : Configuration.properties.libSources()) {
-            libs.add(new File(lib));
-        }
+        List<File> libs = Configuration.properties.libSources()
+                .stream()
+                .map(File::new)
+                .collect(toList());
 
         // Read projects
         builder = new AnnotationUsageGraphBuilder();
-        for (File f : Objects.requireNonNull(project.listFiles())) {
+        File[] files = requireNonNull(project.listFiles());
+
+        List<File> projectDirectories = Arrays.stream(files).filter(File::isDirectory).collect(toList());
+        totalProjects = projectDirectories.size();
+
+        int progress = 1;
+
+        for (File f : projectDirectories) {
             List<File> sourceFiles = new ArrayList<>();
             List<File> configFiles = new ArrayList<>();
             List<File> beans = new ArrayList<>();
 
-            if (f.isDirectory()) {
-                ++totalProjects;
-                listFilesForFolder(f, sourceFiles, configFiles, beans);
-                boolean parsed = false;
-                try {
-                    parsed = builder.generateUsageGraphsPerProject(f, libs, sourceFiles, configFiles, beans);
-                } catch (RuntimeException e) {
-                    System.out.println("[runtime exception] Could not parse " + f.getPath());
-                }
-                // INFO: To get info on how many projs have beans.xml
-                if (!parsed) {
-                    ++projectsSkipped;
-                } else {
-                    if (beans.size() > 0) {
-                        ++projectsWithBeans;
-                        numOfBeansConsidered += beans.size();
-                    }
+            listFilesForFolder(f, sourceFiles, configFiles, beans);
+            boolean parsed = false;
+            try {
+                System.out.printf("[%d/%d] Parsing %s...", progress, totalProjects, f.getName().toLowerCase());
+                parsed = builder.generateUsageGraphsPerProject(f, libs, sourceFiles, configFiles, beans);
+                System.out.println("Done!");
+            } catch (RuntimeException e) {
+                System.out.println("\nFailed to parse: " + f.getPath());
+            }
+            // INFO: To get info on how many projs have beans.xml
+            if (!parsed) {
+                ++projectsSkipped;
+            } else {
+                if (beans.size() > 0) {
+                    ++projectsWithBeans;
+                    numOfBeansConsidered += beans.size();
                 }
             }
+            progress += 1;
 
             totalNumOfBeans += beans.size();
         }
@@ -466,7 +462,7 @@ public class Runner {
             return;
         }
 
-        for (final File file : Objects.requireNonNull(folder.listFiles())) {
+        for (final File file : requireNonNull(folder.listFiles())) {
             if (file.isDirectory()) {
                 listFilesForFolder(file, sourceFiles, configFiles, beans);
             } else {

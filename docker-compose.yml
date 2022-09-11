@@ -42,13 +42,22 @@ services:
       - 8000:8000
 
   miner:
-    build: rule-miner/
+    build:
+      context: .
+      dockerfile: rule-miner/Dockerfile
+    # these two are necessary for starting with a shell
     stdin_open: true
     tty: true
+    # environment variables that are used by some scripts
+    environment:
+      FRONTEND_URL: http://frontend:8888
+      BACKEND_URL: http://backend:5000
+      MOST_RECENT_LOGIN_PATH: /tmp/rvt_most_recent_login
+      EXPORT_DIR: /pipeline/exports
     volumes:
       - /home/owary/Programming/Research/Annotation-Violation-Detector/complete-detector-experiment/detector-evaluation/target_projects:/pipeline/mining-sources
       - /home/owary/Programming/Research/Annotation-Violation-Detector/project/generating-annotation-usage-rules/violation-detector/violation-detector-maven-plugin/src/main/resources/lib:/pipeline/lib-sources
-
+      - /home/owary/Programming/Research/Annotation-Violation-Detector/project/generating-annotation-usage-rules/exports:/pipeline/exports
 volumes:
   mysql-db:
   
