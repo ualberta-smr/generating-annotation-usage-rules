@@ -1,3 +1,4 @@
+import json
 import requests
 from common import getEnv, dumpJson, getMostRecentUsername
 
@@ -13,15 +14,16 @@ if __name__ == "__main__":
         print("Error: "+ str(e.args[0]))
         exit(1)
 
-
     resp = requests.get(f"{backendUrl}/packages/{username}/confirmed")
 
     if resp.status_code == 200:
-        # print(dumpJson(resp))
-        # will need to save to a file
+        rules = resp.json()
+        for i, rule in enumerate(rules["rules"]):
+            rule["id"] = f"Rule-{i + 1}"
+
         out = f"{exportedRulesDir}/confirmed-{username}.json"
         with open(out, "w") as f:
-            dumpJson(resp, f)
+            json.dump(rules, f)
             print("Exported the confirmed rules to: " + out)
     else:
         print("Error occurred")

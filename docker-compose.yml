@@ -54,9 +54,12 @@ services:
       BACKEND_URL: http://backend:5000
       MOST_RECENT_LOGIN_PATH: /tmp/rvt_most_recent_login
       EXPORT_DIR: /pipeline/exports
+      CONFIG_JSON_PATH: /pipeline/configuration.json
+      JARS_DIR: /pipeline/lib-sources
     volumes:
       - /home/owary/Programming/Research/Annotation-Violation-Detector/complete-detector-experiment/detector-evaluation/target_projects:/pipeline/mining-sources
-      - /home/owary/Programming/Research/Annotation-Violation-Detector/project/generating-annotation-usage-rules/violation-detector/violation-detector-maven-plugin/src/main/resources/lib:/pipeline/lib-sources
+      # - /home/owary/Programming/Research/Annotation-Violation-Detector/project/generating-annotation-usage-rules/violation-detector/violation-detector-maven-plugin/src/main/resources/lib:/pipeline/lib-sources
+      - /home/owary/Programming/Research/Annotation-Violation-Detector/project/generating-annotation-usage-rules/lib-sources:/pipeline/lib-sources
       - /home/owary/Programming/Research/Annotation-Violation-Detector/project/generating-annotation-usage-rules/exports:/pipeline/exports
 volumes:
   mysql-db:

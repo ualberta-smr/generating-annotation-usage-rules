@@ -13,7 +13,7 @@ if __name__ == "__main__":
     currentUsername     = getMostRecentUsername()
 
     # zip all the jars into one zip file, and call it lib.zip
-    jars = glob.glob(f"{libSourcesDir}/*.jar")
+    jars = glob.glob(f"{libSourcesDir}/**/*.jar", recursive=True)
     with zipfile.ZipFile("/tmp/lib.zip", "w") as zipFile:
         for jar in jars:
             zipFile.write(jar, compress_type=zipfile.ZIP_DEFLATED)
