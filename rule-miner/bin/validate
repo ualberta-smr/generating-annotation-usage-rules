@@ -1,1 +1,1 @@
-python /pipeline/bin/scripts/validate.py
+python /pipeline/bin/scripts/validate.py "$@"

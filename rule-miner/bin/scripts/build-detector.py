@@ -26,8 +26,8 @@ if __name__ == "__main__":
     move("/tmp/lib.zip", f"{detectorResourceDir}/lib.zip")
     move("/tmp/rules.json", f"{detectorResourceDir}/rules.json")
 
-    # mvn clean install /detector/violation-detection               
-    #                   /detector/violation-detector-maven-plugin
+    
+    # install the library so that we can use it while building the detector plugin
     installLibProcess   = subprocess.run(["mvn", "clean", "install", "-f", f"{detectorLibDir}/pom.xml"])
     if installLibProcess.returncode == 0:
         print("Successfully installed the violation-detection library")
@@ -35,6 +35,7 @@ if __name__ == "__main__":
         print("Installation of violation-detection library failed")
         exit(1)
 
+    # build the detector plugin
     installPluginProcess = subprocess.run(["mvn", "clean", "package", "-f", f"{detectorPluginDir}/pom.xml"])
     if installPluginProcess.returncode == 0:
         print("Successfully built the violation-detector-maven-plugin plugin")
@@ -42,7 +43,7 @@ if __name__ == "__main__":
         print("Building the violation-detector-maven-plugin failed")
         exit(1)
 
-    # copy the jar file to exports directory
+    # copy the jar file to '/pipeline/exports/detector' directory
     createDirIfDoesNotExist(f"{exportedRulesDir}/detector")
     move(f"{detectorPluginDir}/target/violation-detector-maven-plugin-jar-with-dependencies.jar", f"{exportedRulesDir}/detector/detector.jar")
     # create an install.sh script to install the jar file so that people can use it easily

@@ -24,7 +24,7 @@ RUN apk update \
  && ln -s /usr/bin/python3 /usr/bin/python \
 #  && ln -s /usr/bin/pip3 /usr/bin/pip \
  && pip install --upgrade pip \
- && pip install requests randomname \
+ && pip install requests randomname gitpython \
  \
  && apk add git bash
 
@@ -42,8 +42,8 @@ VOLUME [ "/pipeline/mining-sources", "/pipeline/lib-sources", "/pipeline/exports
 # copy the important directories and files
 ADD rule-miner /pipeline/rule-miner
 ADD violation-detector /pipeline/detector
+ADD config /pipeline/config
 
-RUN mv /pipeline/rule-miner/configuration.json /pipeline/configuration.json
 # add all the scripts to the path
 RUN mv /pipeline/rule-miner/bin /pipeline/bin
 RUN chmod -R +x /pipeline/bin

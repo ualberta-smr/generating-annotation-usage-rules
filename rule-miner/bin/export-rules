@@ -1,1 +1,1 @@
-python /pipeline/bin/scripts/export.py
+python /pipeline/bin/scripts/export.py "$@"

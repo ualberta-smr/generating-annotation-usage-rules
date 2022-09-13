@@ -2,7 +2,7 @@ import glob
 import json
 import requests
 from randomname import get_name
-from common import getEnv, dumpJson
+from common import extractUserNameFromCommandLineArgs, getEnv, dumpJson
 
 if __name__ == '__main__':
     frontendPort        = int(getEnv("FRONTEND_URL").split(":")[2])
@@ -54,7 +54,10 @@ if __name__ == '__main__':
         }
 
     # generate a random name
-    username = get_name()
+    username = extractUserNameFromCommandLineArgs()
+    if username is None:
+        print("No username has been provided, generating a random one...")
+        username = get_name()
 
     resp = requests.post(
         f'{backendUrl}/packages?username={username}&packageName=MicroProfileRules', files=files)

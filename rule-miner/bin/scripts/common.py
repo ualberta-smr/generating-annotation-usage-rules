@@ -2,6 +2,7 @@ import os
 import json
 import shutil
 from pathlib import Path
+import sys
 
 
 def getEnv(key):
@@ -20,12 +21,24 @@ def dumpJson(response, fileHandle=None):
         # returns string
         return json.dumps(response.json(), indent=4)
 
+def extractUserNameFromCommandLineArgs():
+    try:
+        ix = sys.argv.index("--user")
+        if ix + 1 < len(sys.argv):
+            return sys.argv[ix + 1]
+    except:
+        return None
+
 
 def getMostRecentUsername():
+    username = extractUserNameFromCommandLineArgs()
+    if username:
+        return username
+
     with open(getEnv("MOST_RECENT_LOGIN_PATH")) as f:
         username = f.read().strip()
         if not username or len(username) == 0:
-            raise Exception("Most recent username is empty")
+            raise Exception("No username has been provided and the most recent username is empty")
         return username
 
 

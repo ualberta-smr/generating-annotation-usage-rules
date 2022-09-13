@@ -26,3 +26,5 @@ hs_err_pid*
 # ignore client projects
 clientProjectsMP/
 clientProjectsSB/
+
+dump_input_itemsets.txt
