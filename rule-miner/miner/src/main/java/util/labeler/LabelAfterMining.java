@@ -4,12 +4,11 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 //import miner.AssociationRule;
-import miner.Configuration;
+import miner.config.Configuration;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class LabelAfterMining {
 

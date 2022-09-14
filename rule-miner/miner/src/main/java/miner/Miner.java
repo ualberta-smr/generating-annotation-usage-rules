@@ -1,5 +1,6 @@
 package miner;
 
+import miner.config.Configuration;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -191,72 +192,6 @@ public class Miner {
             if (!foundRule) itemsetsWithoutExistingRules.add(fi);
         }
 
-        // Put according to priority
-        // 1. hasParam, definedIn, declaredInBeans
-        // 2. hasType, hasReturnType, extends, implements
-        // 3. annotatedWith
-        String[] priorityStructuresForConsequent = {
-            "hasParam",
-            "definedIn",
-            "declaredInBeans"
-        };
-
-        //Removed the process of generating candidate rules without FP growth
-        /*
-        // Supply missing rules from some frequent itemsets
-        for (FrequentItemset fi : itemsetsWithoutExistingRules) {
-            // Make sure the frequent itemset is not there
-            assert !oneRulePerItemset.containsKey(fi);
-
-            Set<String> items = fi.getItems();
-            int initialSize = items.size();
-
-            // Set left-hand and right-hand (if-then) sides
-            List<String> antecedent = new ArrayList<>();
-            List<String> consequent = new ArrayList<>();
-
-            boolean foundConsequent = false;
-            for (String priorityStructure : priorityStructuresForConsequent) {
-                for (String item : items) {
-                    if (item.contains(priorityStructure)) {
-                        foundConsequent = true;
-                        consequent.add(item);
-                        break;
-                    }
-                }
-                if (foundConsequent) break;
-            }
-
-            // If there is no hasParam/definedIn/declaredInBeans, then just add class relationship, preferably
-            if (!foundConsequent) {
-                for (String item : items) {
-                    if (item.contains("Class")) {
-                        consequent.add(item);
-                        foundConsequent = true;
-                        break;
-                    }
-                }
-            }
-
-            // If class is not there, then just add any
-            if (!foundConsequent) {
-                for (String item : items) {
-                    // Just add 1 item
-                    consequent.add(item);
-                    break;
-                }
-            }
-
-            // Remove consequent from antecedent and put it in `consequent` array
-            items.remove(consequent.get(0));
-            antecedent = new ArrayList<>(items);
-
-            // To make sure we did not forget to remove or add things
-            assert antecedent.size() + consequent.size() == initialSize;
-            oneRulePerItemset.put(fi, AssociationRule.toAssociationRule(antecedent, consequent, -1.0));
-        }
-         */
-
         return new ArrayList<>(oneRulePerItemset.values());
     }
 
@@ -349,8 +284,6 @@ public class Miner {
 
         // Run FPGrowth model
 
-//        System.out.println("[fitItemsets()] Relative support is " + this.minSupp / this.datasetSize);
-//        FPGrowth fpg = new FPGrowth().setMinSupport(this.minSupp / this.datasetSize);
         System.out.println("[fitItemsets()] Relative support is " + this.minSupp);
         FPGrowth fpg = new FPGrowth().setMinSupport(this.minSupp);
 

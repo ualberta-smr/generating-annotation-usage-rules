@@ -60,11 +60,9 @@ services:
       JARS_DIR: /pipeline/lib-sources
       TARGET_PROJECTS_DIR: /pipeline/mining-sources
     volumes:
-      - /home/owary/Programming/Research/Annotation-Violation-Detector/project/generating-annotation-usage-rules/mining-sources:/pipeline/mining-sources
-      # - /home/owary/Programming/Research/Annotation-Violation-Detector/complete-detector-experiment/detector-evaluation/target_projects:/pipeline/mining-sources
-      # - /home/owary/Programming/Research/Annotation-Violation-Detector/project/generating-annotation-usage-rules/violation-detector/violation-detector-maven-plugin/src/main/resources/lib:/pipeline/lib-sources
-      - /home/owary/Programming/Research/Annotation-Violation-Detector/project/generating-annotation-usage-rules/lib-sources:/pipeline/lib-sources
-      - /home/owary/Programming/Research/Annotation-Violation-Detector/project/generating-annotation-usage-rules/exports:/pipeline/exports
+      - ./mining-sources:/pipeline/mining-sources
+      - ./lib-sources:/pipeline/lib-sources
+      - ./exports:/pipeline/exports
 volumes:
   mysql-db:
   

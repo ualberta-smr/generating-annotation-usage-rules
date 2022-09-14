@@ -33,6 +33,7 @@ def getListOfJarsToDownload(jarFilesArray) -> List[JarDependency]:
             exit(1)
         
         groupId, artifactId, version = pieces
+        groupId, artifactId, version = groupId.strip(), artifactId.strip(), version.strip()
         downloadUrl, fileName = createMvnRepositoryDownloadUrl(groupId, artifactId, version)
 
         fullPaths.append(JarDependency(groupId, artifactId, version, downloadUrl, fileName))

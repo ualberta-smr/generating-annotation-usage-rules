@@ -2,9 +2,7 @@ package util.stats;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 //import miner.AssociationRule;
-import miner.Configuration;
 import util.labeler.RulesDatabase;
 
 import java.io.*;

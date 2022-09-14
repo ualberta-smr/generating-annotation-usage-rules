@@ -1,13 +1,11 @@
 package util;
 
-//import miner.AssociationRule;
 import miner.AssociationRule;
-import miner.Configuration;
+import miner.config.Configuration;
 import miner.FrequentItemset;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;

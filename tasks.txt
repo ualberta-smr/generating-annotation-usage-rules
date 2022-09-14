@@ -1,4 +1,0 @@
-Create prepackaged jars for MicroProfile or Spring rules
-- Contribution of the validated rules
-    - plugin-jar
-    - json? 

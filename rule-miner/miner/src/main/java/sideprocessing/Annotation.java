@@ -25,7 +25,7 @@ public class Annotation {
         public String type() {
             return type;
         }
-    };
+    }
 
     public Annotation() {
         this.target = new ArrayList<>();

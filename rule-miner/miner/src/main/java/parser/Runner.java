@@ -1,21 +1,21 @@
 package parser;
 
-import config.ConfigurationProperties;
+import miner.config.Configuration;
+import miner.config.ConfigurationProperties;
+import miner.config.SubApiConfiguration;
 import miner.*;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import util.AggregateData;
 import util.ResultPrinter;
 import util.labeler.RulesDatabase;
 
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
@@ -23,7 +23,6 @@ public class Runner {
     private static AnnotationUsageGraphBuilder builder;
 
     public static void main(String[] args) throws IOException {
-        requireNonNull(System.getenv("EXPORT_DIR"), "The environment variable 'EXPORT_DIR' should be set to run the 'mine' command");
         // Get the path to all input user projects that use target library
         parseConfiguration(args);
 
@@ -297,7 +296,7 @@ public class Runner {
         RulesDatabase.writeToJSON(uniqueRules);
 
         System.out.println("In total, mined: ");
-        System.out.println("\tFrequent itemsets (raw) = " + +totalNumOfFreqItemsets);
+        System.out.println("\tFrequent itemsets (raw) = " + totalNumOfFreqItemsets);
         System.out.println("\tFrequent itemsets (final, post-processed) = " + finalFreqItemsets.size());
         System.out.println("\tAssociation rules = " + uniqueRules.size());
     }
@@ -314,16 +313,17 @@ public class Runner {
          *     D : [{ A, D }]
          */
         HashMap<String, List<Itemset>> usagesByAnnotation = new HashMap<>();
-        Pattern pattern = Pattern.compile(Configuration.properties.api().subApi().subApiRegex());
+        Collection<String> apiPrefixes = Configuration.properties.api().prefixes();
+        SubApiConfiguration subApiConfig = Configuration.properties.api().subApi();
+
         for (Itemset itemset : allUsages) {
             Set<String> items = itemset.getItems();
             Set<String> annotations = new HashSet<>();
             for (String item : items) {
-                if (Configuration.properties.api().prefixes().stream().anyMatch(item::contains)) {
-                    Matcher matcher = pattern.matcher(item);
-                    while (matcher.find()) {
-                        annotations.add(matcher.group(0));
-                    }
+                if (apiPrefixes.stream().anyMatch(item::contains)) {
+                    subApiConfig
+                            .extractMatchingAnnotation(item)
+                            .ifPresent(annotations::add);
                 }
             }
 
@@ -335,63 +335,47 @@ public class Runner {
         return usagesByAnnotation;
     }
 
-    private static double jaccardSimilarity(Set<String> r1, Set<String> r2) {
-        Set<String> s1 = new HashSet<String>(r1);
-        Set<String> s2 = new HashSet<String>(r2);
-
-        final int sa = s1.size();
-        final int sb = s2.size();
-        s1.retainAll(s2);
-        final int intersection = s1.size();
-
-        return 1d / (sa + sb - intersection) * intersection;
-    }
-
     private static void parseConfiguration(String[] args) throws IOException {
         // --config [configPath]
         // --targetProjectsDir [path]
         // --libSources [path]
+        // --exportDir [path]
 
-        if (args.length != 6) {
-            System.err.println("Expected three parameters: ");
-            System.err.println("PROGRAM --config [configPath] --targetProjectsDir [path] --libSources [path]");
+        final Map<String, String> parameters = new HashMap<>();
+        // initialize the slots for params
+        asList("--config", "--targetProjectsDir", "--libSources", "--exportDir")
+                .forEach(param -> parameters.put(param, null));
+
+        if (args.length != parameters.size() * 2) { // *2 because each parameter needs to have a value too
+            System.err.println("Expected four parameters: ");
+            System.err.println("PROGRAM --config [configPath] --targetProjectsDir [path] --libSources [path] --exportDir [path]");
             System.exit(1);
         }
 
-        String targetProjectsDir = null;
-        String libSources = null;
-        String configPath = null;
-        for (int i = 0; i < 6; i += 2) {
+        for (int i = 0; i < parameters.size() * 2; i += 2) {
             if (args[i].startsWith("--")) {
-                String option = args[i];
-                switch (option) {
-                    case "--config":
-                        configPath = args[i + 1];
-                        break;
-                    case "--targetProjectsDir":
-                        targetProjectsDir = args[i + 1];
-                        break;
-                    case "--libSources":
-                        libSources = args[i + 1];
-                        break;
-                    default:
-                        throw new RuntimeException("Unexpected option: " + option);
+                String option = args[i].trim();
+
+                if (parameters.containsKey(option)) {
+                    parameters.put(option, args[i + 1]);
+                } else {
+                    throw new RuntimeException("Unexpected option: " + option);
                 }
             }
         }
 
         // all three parameters are required, thus, they all must be non-null
-        if (Stream.of(targetProjectsDir, libSources, configPath).anyMatch(Objects::isNull)) {
-            System.err.println("Expected three parameters: ");
-            System.err.println("PROGRAM --config [configPath] --targetProjectsDir [path] --libSources [path]");
+        if (parameters.values().stream().anyMatch(Objects::isNull)) {
+            System.err.println("Expected four parameters: ");
+            System.err.println("PROGRAM --config [configPath] --targetProjectsDir [path] --libSources [path] --exportDir [path]");
             System.exit(1);
         }
 
-        //
-        String contents = Files.lines(Paths.get(configPath)).collect(Collectors.joining("\n"));
+        String contents = Files.lines(Paths.get(parameters.get("--config"))).collect(Collectors.joining("\n"));
         Configuration.properties = ConfigurationProperties.readConfigJson(contents);
-        Configuration.properties.targetProjectsDir(targetProjectsDir);
-        Configuration.properties.libSources(Collections.singletonList(libSources));
+        Configuration.properties.targetProjectsDir(parameters.get("--targetProjectsDir"));
+        Configuration.properties.libSources(Collections.singletonList(parameters.get("--libSources")));
+        Configuration.properties.exportDir(parameters.get("--exportDir"));
     }
 
     private static void readProjectsFiles() {

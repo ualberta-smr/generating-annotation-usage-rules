@@ -1,10 +1,10 @@
 package miner;
 
+import miner.config.Configuration;
 import sideprocessing.Annotation;
 import sideprocessing.AnnotationDeclarationReader;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Heuristics {
     public static boolean containsTargetAPIPrefix(FrequentItemset frequentItemset) {

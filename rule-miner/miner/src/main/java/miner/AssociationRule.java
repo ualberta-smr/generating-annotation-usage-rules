@@ -1,5 +1,7 @@
 package miner;
 
+import miner.config.Configuration;
+
 import java.util.*;
 
 public class AssociationRule {
@@ -79,19 +81,6 @@ public class AssociationRule {
         this.confidence = confidence;
     }
 
-//    @Deprecated
-//    public void addConsequent(String cons, Double conf) {
-//        if (this.consequent.containsKey(cons)) {
-//            System.err.println("[addConsequent] Cannot override existing key in consequent!!!");
-//            System.exit(1);
-//        }
-//        if (this.antecedent.contains(cons)) {
-//            System.err.println("[addConsequent] Consequent element is already inside antecedent!!!");
-//            System.exit(1);
-//        }
-//        this.consequent.put(cons, conf);
-//    }
-
     public boolean isInAntecedent(String item) {
         return antecedent.contains(item);
     }
@@ -113,8 +102,7 @@ public class AssociationRule {
     }
 
     public Set<String> getAllItems() {
-        Set<String> allItems = new HashSet<>();
-        allItems.addAll(antecedent);
+        Set<String> allItems = new HashSet<>(antecedent);
         allItems.add(consequent);
         return allItems;
     }
@@ -159,38 +147,6 @@ public class AssociationRule {
         rule.setConsequent(consequent.get(0));
         rule.setConfidence(conf);
 
-        // @Deprecated
-//        // Add packages from antecedent
-//        for (String s : antecedent) {
-//            if (s.contains("Annotation")) {
-//                if (!s.contains(".")) {
-//                    continue;
-//                }
-//                if (s.lastIndexOf(".") < s.indexOf("Annotation_") + 11) {
-//                    System.out.println(s);
-//                    continue;
-//                }
-//                String api = s.substring(s.indexOf("Annotation_") + 11, s.lastIndexOf("."));
-//                rule.addPackageUsed(api);
-//            }
-//        }
-//
-//        // Add packages from consequent
-//        for (String s : consequent) {
-//            if (s.contains("Annotation")) {
-//                if (!s.contains(".")) {
-//                    continue;
-//                }
-//                if (s.lastIndexOf(".") < s.indexOf("Annotation_") + 11) {
-//                    System.out.println(s);
-//                    continue;
-//                }
-//                String api = s.substring(s.indexOf("Annotation_") + 11, s.lastIndexOf("."));
-//                rule.addPackageUsed(api);
-//            }
-//        }
-
-        // Return
         return rule;
     }
 

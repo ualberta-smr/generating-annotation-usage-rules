@@ -12,7 +12,7 @@ import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParse
 import graph.Location;
 import graph.edges.*;
 import graph.nodes.*;
-import miner.Configuration;
+import miner.config.Configuration;
 import miner.Itemset;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
@@ -855,58 +855,6 @@ public class ConstructVisitor extends VoidVisitorAdapter<Object> {
             System.out.println("[allAncestors] Illegal argument exception for " + c.getName());
             return new ArrayList<>();
         }
-
-//            List<ResolvedReferenceType> resolvableAncestors = new ArrayList<>();
-//            Queue<ResolvedReferenceType> q;
-
-//            try {
-//                q = new ArrayDeque<>(c.getAncestors(true));
-//            } catch (IllegalArgumentException e) {
-//                // If there's a problem with type parameters, just ignore the extensions
-//                return new ArrayList<>();
-//            }
-//
-//            Set<ResolvedReferenceType> cacheForSeenTypes = new HashSet<>();
-//
-//            System.out.println("---- new call to allAncestors ----");
-//            while (!q.isEmpty()) {
-//                System.out.println("Queue size = " + q.size());
-//                ResolvedReferenceType head = q.poll();
-//
-//                // This will hopefully let us skip class A definition once it's processed
-//                if (cacheForSeenTypes.contains(head)) {
-//                    continue;
-//                } else {
-//                    cacheForSeenTypes.add(head);
-//                }
-//
-//                try {
-//                    // Get all parents in the current level of hierarchy
-//                    List<ResolvedReferenceType> parents = head.getDirectAncestors();
-//                    String packageName = c.getPackageName();
-//
-//                    for (ResolvedReferenceType parent : parents) {
-//                        // If contains any library target prefix, then put it in the bag (we will return that altogether)
-//                        boolean isAnyTargetLibType = Arrays.stream(Configuration.apiLibPrefixes)
-//                            .anyMatch(lib -> parent.getQualifiedName().contains(lib));
-//                        boolean isInternalType = parent.getQualifiedName().contains(packageName);
-//
-//                        if (isAnyTargetLibType) {
-//                            resolvableAncestors.add(parent);
-//                            // NOTE: this could be sped up if we are only interested in target lib extensions.
-//                            // In that case, just return `resolvableAncestors` here.
-//                        }
-//
-//                        if (isInternalType) {
-//                            q.add(parent);
-//                        }
-//                    }
-//                } catch (UnsolvedSymbolException e) {
-//                    System.out.println("[allAncestors] Could not get parents for class " + head.getQualifiedName());
-//                }
-//            }
-//
-//            return resolvableAncestors;
     }
 
     @Override

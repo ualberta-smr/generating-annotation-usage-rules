@@ -14,10 +14,6 @@ public class Itemset implements Serializable {
     boolean frozen = false;
 
     public Itemset(Location l) {
-//        if (l == null) {
-//            System.out.println("[Itemset()] Location object cannot be null");
-//            System.exit(1);
-//        }
         this.location = l;
         this.items = new HashSet<>();
     }
@@ -27,10 +23,6 @@ public class Itemset implements Serializable {
             System.out.println("[Itemset()] Items cannot be null or empty!");
             System.exit(1);
         }
-//        if (l == null) {
-//            System.out.println("[Itemset()] Location object cannot be null");
-//            System.exit(1);
-//        }
         this.location = l;
         this.items = items;
         this.frozen = true;

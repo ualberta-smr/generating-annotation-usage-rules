@@ -1,5 +1,5 @@
 echo "This tool allows you to mine candidate annotation usage rules "
-echo "from the target projects located in '/pipeline/mining-sources'."
+echo "from the target projects located in '$TARGET_PROJECTS_DIR'."
 echo "Once you mine candidate rules, you can review and validate them "
 echo "using the Rule Validation Tool (RVT). Confirmed rules can be exported "
 echo "to be used for misuse detection."
@@ -11,3 +11,4 @@ echo -e '\t' "export-rules          - Exports the validated correct rules from R
 echo -e '\t' "build-detector        - Builds the misuse detector Maven plugin jar file, and provides installation directions"
 echo -e '\t' "download-jars         - Downloads the required jar files mentioned in $CONFIG_JSON_PATH file"
 echo -e '\t' "clone-projects        - Clones the projects mentioned in the input file into $TARGET_PROJECTS_DIR directory"
+echo -e '\t' "info                  - Shows information about the available commands"

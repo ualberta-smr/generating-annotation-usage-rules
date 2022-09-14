@@ -6,8 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 //import miner.AssociationRule;
 import miner.AssociationRule;
-import miner.Configuration;
-import miner.FrequentItemset;
+import miner.config.Configuration;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -135,7 +134,7 @@ public class RulesDatabase {
 
     public static void writeToJSON(List<AssociationRule> rules) {
         // Gotta make sure this is called after we process all final rules, s.t. we put new rules into JSON.
-        String filename = String.format("%s/candidate_rules_%d.json", System.getenv("EXPORT_DIR"), System.currentTimeMillis());
+        String filename = String.format("%s/candidate_rules_%d.json", Configuration.properties.exportDir(), System.currentTimeMillis());
         File outputFile = new File(filename);
 
         // Convert association rules to labeled rules (basically, label them)
@@ -151,8 +150,10 @@ public class RulesDatabase {
                     .setPrettyPrinting()
                     .create()
                     .toJson(labeledRules, writer);
+            System.out.println("Saved the candidate rules to: " + filename);
         } catch (IOException e) {
             System.err.println("Could not write rules to the JSON file");
+            e.printStackTrace();
         }
 
     }

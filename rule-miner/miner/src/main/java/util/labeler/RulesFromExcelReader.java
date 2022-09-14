@@ -4,14 +4,11 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 //import miner.AssociationRule;
-import miner.Configuration;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RulesFromExcelReader {
     // Just to get hashcodes of labeled rules. Used to semi-automatically convert rules from Excel to JSON.
@@ -33,14 +30,6 @@ public class RulesFromExcelReader {
         }
 
         // Convert rules to JSON
-//        List<RulesDatabase.LabeledRule> rulesWithCorrectCodes = new ArrayList<>();
-//        for (RulesDatabase.LabeledRule lr : rules) {
-//            AssociationRule ar = AssociationRule.toAssociationRule(new ArrayList<>(lr.antecedent()), new ArrayList<>(lr.consequent()), 0.5);
-//            ar.setStatus(lr.label());
-//            System.out.println("Hashcode is " + ar.hashCode() + " for id " + lr.id());
-//            rulesWithCorrectCodes.add(RulesDatabase.LabeledRule.toLabeledRule(ar));
-//        }
-
         try (Writer writer = new FileWriter(jsonFileName)) {
             gson = new GsonBuilder()
                 .disableHtmlEscaping()

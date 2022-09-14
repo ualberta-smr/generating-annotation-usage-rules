@@ -1,8 +1,7 @@
-package config;
+package miner.config;
 
 import com.google.gson.Gson;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,6 +16,7 @@ public class ConfigurationProperties {
     private String targetProjectsDir;
     private ApiConfiguration api;
     private Collection<String> libSources;
+    private String exportDir;
 
     public static ConfigurationProperties readConfigJson(String contents) {
         return new Gson().fromJson(contents, ConfigurationProperties.class);
@@ -28,6 +28,14 @@ public class ConfigurationProperties {
 
     public void targetProjectsDir(String dir) {
         this.targetProjectsDir = dir;
+    }
+
+    public String exportDir() {
+        return exportDir;
+    }
+
+    public void exportDir(String dir) {
+        this.exportDir = dir;
     }
 
     public void libSources(Collection<String> dir) {

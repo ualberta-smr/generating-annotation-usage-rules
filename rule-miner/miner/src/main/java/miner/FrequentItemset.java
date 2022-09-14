@@ -1,9 +1,7 @@
 package miner;
 
+import miner.config.Configuration;
 import graph.Location;
-import org.apache.spark.sql.Row;
-import scala.collection.JavaConversions;
-import scala.collection.mutable.WrappedArray;
 
 import java.util.HashSet;
 import java.util.List;

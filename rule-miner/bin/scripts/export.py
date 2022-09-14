@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
         out = f"{exportedRulesDir}/confirmed-{username}.json"
         with open(out, "w") as f:
-            json.dump(rules, f)
+            json.dump(rules, f, indent=4)
             print("Exported the confirmed rules to: " + out)
     else:
         print("Error occurred")

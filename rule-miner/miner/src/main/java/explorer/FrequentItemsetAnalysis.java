@@ -1,8 +1,7 @@
 package explorer;
 
-import miner.Configuration;
+import miner.config.Configuration;
 import miner.FrequentItemset;
-import org.apache.spark.mllib.fpm.FPGrowth;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,15 +46,6 @@ public class FrequentItemsetAnalysis {
 
         List<FrequentItemset> freqItemsetsOriginal = new ArrayList<>(freqItemsets);
         Collections.shuffle(freqItemsetsOriginal);
-//        for (int i = 0; i < Math.min(30, freqItemsetsOriginal.size()); ++i) {
-//            if (freqItemsetsOriginal.get(i).getItems().size() >= 4) {
-//                System.out.println("{");
-//                for (String item : freqItemsetsOriginal.get(i).getItems()) {
-//                    System.out.println(item);
-//                }
-//                System.out.println("} with support = " + freqItemsetsOriginal.get(i).freq());
-//            }
-//        }
 
         for (int i = 0; i < Math.min(30, freqItemsetsOriginal.size()); ++i) {
             System.out.println("{");

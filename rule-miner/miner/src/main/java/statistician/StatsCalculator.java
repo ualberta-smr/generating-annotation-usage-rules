@@ -3,7 +3,7 @@ package statistician;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 //import miner.AssociationRule;
-import miner.Configuration;
+import miner.config.Configuration;
 import util.labeler.RulesDatabase;
 
 import java.io.File;
@@ -258,11 +258,6 @@ public class StatsCalculator {
         System.out.println("Recall    : ???/" + benchmark.size() + " = " + "???");
         System.out.println("Precision : " + numOfCorrectAndPartCorrect + "/"
             + postprocessedRules.size() + " = " + precision);
-//        System.out.println("Recall    : " + currVersionCorrectPartCorrect.size() + "/"
-//                + allUniqueRulesCorrectPartCorrect.size() + " = " + recall);
-//        System.out.println("Precision : " + numOfCorrectAndPartCorrect + "/"
-//                + postprocessedRules.size() + " = " + precision);
-
         System.out.println("------------------------------------------------------------------");
     }
 

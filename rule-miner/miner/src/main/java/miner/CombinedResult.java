@@ -15,10 +15,6 @@ public class CombinedResult {
         return frequentItemsets;
     }
 
-//    public List<AssociationRule> getAssociationRules() {
-//        return associationRules;
-//    }
-
     public long getInputSize() {
         return inputSize;
     }
