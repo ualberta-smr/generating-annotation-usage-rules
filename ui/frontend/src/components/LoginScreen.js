@@ -47,7 +47,7 @@ function LoginScreen() {
     return (
         <div className="app-login">
             <div className="heading">
-                <h1>Rule Authoring Tool</h1>
+                <h1>Rule Validation Tool</h1>
             </div>
             <div className="login-section">
                 <input className={`username ${error.errorMarker}`} type="text" placeholder='Username...' onKeyDown={handleEnterEvent} />

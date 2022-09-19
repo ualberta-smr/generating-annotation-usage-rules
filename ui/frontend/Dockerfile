@@ -21,7 +21,11 @@ COPY . ./
 RUN echo "REACT_APP_HOST=$RVT_BACKEND" > .env
 RUN echo "REACT_APP_TUTORIAL_URL=$RVT_TUTORIAL" >> .env
 
-RUN npm run build
-
 # start the application
-CMD ["serve", "-s", "build", "-l", "80"]
+
+# if we want to build an optimized production build
+# then we should be using two lines below
+#   RUN npm run build
+#   CMD ["serve", "-s", "build", "-l", "3000"]
+# else we can use the one below
+CMD ["npm", "run", "start"]

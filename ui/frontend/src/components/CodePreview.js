@@ -1,10 +1,10 @@
 import FieldsetWrapper from "./FieldsetWrapper";
-import "./CodeEditor.scss";
+import "./CodePreview.scss";
 
 const getOrDefault = (value, defaultValue = null) =>
     value ? value : defaultValue;
 
-function CodeEditor(props) {
+function CodePreview(props) {
     const code  = props.code;
     const fileName = getOrDefault(props.fileName, "Foo.java");
     const { height, width } = props.measurements;
@@ -31,4 +31,4 @@ function CodeEditor(props) {
     );
 }
 
-export default CodeEditor;
+export default CodePreview;

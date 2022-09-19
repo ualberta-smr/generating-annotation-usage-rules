@@ -21,7 +21,7 @@ services:
         - RVT_BACKEND=${RVT_BACKEND:-http://localhost:5000}
         - RVT_TUTORIAL=${RVT_TUTORIAL:-http://localhost:8000/README.md}
     ports:
-      - 8888:80
+      - 8888:3000
     depends_on:
       - backend
 
