@@ -9,7 +9,7 @@ if __name__ == "__main__":
     exportedRulesDir    = getEnv("EXPORT_DIR")
     detectorPluginDir   = "/pipeline/detector/violation-detector-maven-plugin"
     detectorLibDir      = "/pipeline/detector/violation-detection"
-    detectorResourceDir = f"{detectorPluginDir}/src/main/resources/"
+    detectorResourceDir = f"{detectorPluginDir}/src/main/resources"
     currentUsername     = getMostRecentUsername()
 
     # zip all the jars into one zip file, and call it lib.zip
