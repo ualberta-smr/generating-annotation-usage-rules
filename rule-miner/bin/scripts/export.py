@@ -1,4 +1,5 @@
 import json
+import sys
 import requests
 from common import getEnv, dumpJson, getMostRecentUsername
 
@@ -12,12 +13,16 @@ if __name__ == "__main__":
     except Exception as e:
         print("Error occurred while trying to access the most recent username")
         print("Error: "+ str(e.args[0]))
-        exit(1)
+        sys.exit(1)
 
     resp = requests.get(f"{backendUrl}/packages/{username}/confirmed")
 
     if resp.status_code == 200:
         rules = resp.json()
+        if len(rules["rules"]) == 0:
+            print(f"There are no confirmed rules for the user: {username}")
+            exit(1)
+        # add generic id for each rule: Rule-#    
         for i, rule in enumerate(rules["rules"]):
             rule["id"] = f"Rule-{i + 1}"
 

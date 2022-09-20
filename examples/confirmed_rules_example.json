@@ -1,0 +1,9 @@
+{
+    "rules": [
+        {
+            "id": "Rule-1",
+            "specification": "method with annotation \"org.eclipse.microprofile.graphql.Mutation\" must have enclosing class with annotation \"org.eclipse.microprofile.graphql.GraphQLApi\" ",
+            "is_best_practice": false
+        }
+    ]
+}

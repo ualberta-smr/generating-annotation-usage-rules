@@ -98,8 +98,11 @@ ADD rule-miner/bin /pipeline/bin
 RUN chmod -R +x /pipeline/bin
 ENV PATH=/pipeline/bin:${PATH}
 
+# copy the examples
+ADD examples /pipeline/examples
+
 # copy the configuration
 ADD config /pipeline/config
 
 # start from the bash
-CMD ["bash"]
+CMD /pipeline/bin/landing.sh

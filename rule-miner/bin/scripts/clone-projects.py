@@ -1,21 +1,7 @@
-"""
-Author: oneturkmen
-Description: Script for displaying JSON data. Used for manual copy-pasting into Excel document.
-Year: 2021
-
-
-!!!!!!!!!!!!!! NOTE !!!!!!!!!!!!!!
-Requires `gitpython` module.
-
-Install it as follows (unless you already have it):
-
-    pip3 install gitpython --user
-
-"""
-
+import os
 import sys
 import git
-from common import getEnv
+from common import extractParameterFromCommandLineArgs, getEnv
 
 def readProjectsList(filename):
     """
@@ -46,11 +32,21 @@ def readProjectsList(filename):
     return projs
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Incorrect number of args! Please provide <file_path>")
+    if extractParameterFromCommandLineArgs("--help", True):
+        print("clone-projects --file [file_path]")
+        print("     --file      - path to the file that contains GitHub links of the projects that need to be downloaded")
+        print()
+        sys.exit(0)
+
+    file_path = extractParameterFromCommandLineArgs("--file")
+    if file_path is None:
+        print("ERROR: expected --file parameter")
+        print("help:")
+        print("clone-projects --file [file_path]")
+        print("     --file      - path to the file that contains GitHub links of the projects that need to be downloaded")
+        print()
         sys.exit(1)
 
-    file_path = sys.argv[1]
     target_dir = getEnv("TARGET_PROJECTS_DIR")
 
     # Read rules from TXT
@@ -63,6 +59,12 @@ if __name__ == "__main__":
             # Reference: https://stackoverflow.com/a/44483212
             url = "https://:@github.com/{0}".format(proj)
             where = target_dir + "/{0}".format('#'.join(proj.split('/')))
+
+            if os.path.exists(where):
+                print("Already exists!", flush=True)
+                commit = None # to skip the commit checkout at the end of the loop
+                continue
+
             repo = git.Repo.clone_from(
                 url, 
                 where, 

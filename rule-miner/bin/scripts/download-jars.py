@@ -1,4 +1,5 @@
 from glob import glob
+import sys
 import traceback
 from typing import List
 from common import getEnv
@@ -30,7 +31,7 @@ def getListOfJarsToDownload(jarFilesArray) -> List[JarDependency]:
         pieces = jarDef.split(":")
         if len(pieces) != 3:
             print(f"ERR! Incorrect format in {jarDef}")
-            exit(1)
+            sys.exit(1)
         
         groupId, artifactId, version = pieces
         groupId, artifactId, version = groupId.strip(), artifactId.strip(), version.strip()
@@ -56,13 +57,13 @@ if __name__ == "__main__":
         config = json.load(confFile)
         if "jarFiles" not in config:
             print(f"{configPath} file is missing 'jarFiles' array that is used to specify the dependencies that need to be downloaded")
-            exit(1)
+            sys.exit(1)
         
         jarFiles = config["jarFiles"]
 
         if len(jarFiles) == 0:
             print(f"'jarFiles' array in {configPath} is empty. Nothing to download. Exiting...")
-            exit(0)
+            sys.exit(0)
     
     jarDependencies = getListOfJarsToDownload(jarFiles)
     existingJars = getExistingJars()
@@ -73,7 +74,7 @@ if __name__ == "__main__":
 
     if len(jarDependencies) == 0:
         print("Jar files have already downloaded. Nothing to download. Exiting...")
-        exit(0)
+        sys.exit(0)
     
     size = len(jarDependencies)
     for i, jd in enumerate(jarDependencies):

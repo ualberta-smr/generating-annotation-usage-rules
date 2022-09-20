@@ -7,19 +7,19 @@ services:
     depends_on:
       - db
     environment:
-      - PORT=5000
-      - DB_URL=mysql+pymysql://root:password@db:3306/database
-      - WAIT_HOSTS=db:3306
-      - WAIT_HOSTS_TIMEOUT=300
-      - WAIT_SLEEP_INTERVAL=30
-      - WAIT_HOST_CONNECT_TIMEOUT=30
+      PORT: 5000
+      DB_URL: mysql+pymysql://root:password@db:3306/database
+      WAIT_HOSTS: db:3306
+      WAIT_HOSTS_TIMEOUT: 300
+      WAIT_SLEEP_INTERVAL: 30
+      WAIT_HOST_CONNECT_TIMEOUT: 30
 
   frontend:
     build:
       context: ui/frontend/
       args:
-        - RVT_BACKEND=${RVT_BACKEND:-http://localhost:5000}
-        - RVT_TUTORIAL=${RVT_TUTORIAL:-http://localhost:8000/README.md}
+        RVT_BACKEND: ${RVT_BACKEND:-http://localhost:5000}
+        RVT_TUTORIAL: ${RVT_TUTORIAL:-http://localhost:8000/README.md}
     ports:
       - 8888:3000
     depends_on:
@@ -34,8 +34,8 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: database
     volumes:
-     - mysql-db:/var/lib/mysql
-    
+      - mysql-db:/var/lib/mysql
+
   tutorial:
     build: ui/tutorial/
     ports:
@@ -50,8 +50,7 @@ services:
     tty: true
     # environment variables that are used by some scripts
     environment:
-      # please do not add trailing forward slashes
-      # to any of those values
+      # application related environment variables
       FRONTEND_URL: http://frontend:8888
       BACKEND_URL: http://backend:5000
       MOST_RECENT_LOGIN_PATH: /tmp/rvt_most_recent_login
@@ -59,10 +58,14 @@ services:
       CONFIG_JSON_PATH: /pipeline/config/configuration.json
       JARS_DIR: /pipeline/lib-sources
       TARGET_PROJECTS_DIR: /pipeline/mining-sources
+      # java configuration
+      # setting max heap size
+      # Xmx: maximum memory allocation pool
+      # Xms: initial memory allocation pool
+      _JAVA_OPTIONS: -Xmx4g -Xms4g
     volumes:
       - ./mining-sources:/pipeline/mining-sources
       - ./lib-sources:/pipeline/lib-sources
       - ./exports:/pipeline/exports
 volumes:
   mysql-db:
-  

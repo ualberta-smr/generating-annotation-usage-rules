@@ -1,3 +1,4 @@
+echo "========================================================================"
 echo "This tool allows you to mine candidate annotation usage rules "
 echo "from the target projects located in '$TARGET_PROJECTS_DIR'."
 echo "Once you mine candidate rules, you can review and validate them "

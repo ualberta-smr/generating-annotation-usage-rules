@@ -21,26 +21,32 @@ def dumpJson(response, fileHandle=None):
         # returns string
         return json.dumps(response.json(), indent=4)
 
-def extractUserNameFromCommandLineArgs():
+def extractParameterFromCommandLineArgs(paramName, isFlag=False):
     try:
-        ix = sys.argv.index("--user")
-        if ix + 1 < len(sys.argv):
-            return sys.argv[ix + 1]
+        ix = sys.argv.index(paramName)
+        if isFlag:
+            return True
+        return sys.argv[ix + 1]
     except:
         return None
 
+def extractUserNameFromCommandLineArgs():
+    return extractParameterFromCommandLineArgs("--user")
 
 def getMostRecentUsername():
     username = extractUserNameFromCommandLineArgs()
     if username:
         return username
 
-    with open(getEnv("MOST_RECENT_LOGIN_PATH")) as f:
-        username = f.read().strip()
-        if not username or len(username) == 0:
-            raise Exception("No username has been provided and the most recent username is empty")
-        return username
+    mostRecentLoginFile = getEnv("MOST_RECENT_LOGIN_PATH")
 
+    if os.path.exists(mostRecentLoginFile):
+        with open(getEnv("MOST_RECENT_LOGIN_PATH")) as f:
+            username = f.read().strip()
+            if not username or len(username) == 0:
+                raise Exception("No username has been provided and the most recent username is empty")
+            return username
+    return None
 
 def move(src, dest):
     if os.path.isfile(dest):
