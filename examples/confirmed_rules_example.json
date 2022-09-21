@@ -4,6 +4,11 @@
             "id": "Rule-1",
             "specification": "method with annotation \"org.eclipse.microprofile.graphql.Mutation\" must have enclosing class with annotation \"org.eclipse.microprofile.graphql.GraphQLApi\" ",
             "is_best_practice": false
+        },
+        {
+            "id": "Rule-2",
+            "specification": "class with method with annotation \"org.eclipse.microprofile.reactive.messaging.Incoming\" must have annotation \"javax.enterprise.context.ApplicationScoped\" ",
+            "is_best_practice": false
         }
     ]
 }
