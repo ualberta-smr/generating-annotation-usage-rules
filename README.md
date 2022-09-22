@@ -1,15 +1,17 @@
 # Pipeline for producing annotation usage rules  
 
-For the version of the repository that we used for the CASCON 22 paper, please refer to the [following release](https://github.com/ualberta-smr/generating-annotation-usage-rules/releases/tag/v_cascon).
-
-The artifact repo for the paper:
-
-> A Human-in-the-loop Approach to Generate Annotation Usage Rules: A Case Study with MicroProfile. Mansur Gulami, Ajay Kumar Jha, Sarah Nadi, Karim Ali, Yee-Kang Chang, Emily Jiang. CASCONxEVOKE '22.
+Note: For the version of the repository that we used for the CASCON 22 paper, please refer to the [following release](https://github.com/ualberta-smr/generating-annotation-usage-rules/releases/tag/v_cascon).
 
 In this work, we create a human-in-the-loop pipeline to produce accurate annotation usage rules. The pipeline includes the following steps:
 1. Mining candidate annotation usage rules (see [this repo](https://github.com/ualberta-smr/MiningAnnotationUsageRules) for more details)
 2. Validating the candidate usage rules to produce confirmed usage rules (using the Rule Validation Tool)
 3. Using confirmed usage rules for misuse detection purposes (using the Violation Detector)Getting started
+
+Published papers:
+
+> [*Mining Annotation Usage Rules: A Case Study with MicroProfile*](https://hifromajay.github.io/papers/icsme22.pdf). Batyr Nuryyev, Ajay Kumar Jha, Sarah Nadi, Yee-Kang Chang, Emily Jiang, Vijay Sundaresan. ICSME'22: Industry Track.
+
+> [*A Human-in-the-loop Approach to Generate Annotation Usage Rules: A Case Study with MicroProfile*](https://karimali.ca/resources/papers/rvt.pdf). Mansur Gulami, Ajay Kumar Jha, Sarah Nadi, Karim Ali, Yee-Kang Chang, Emily Jiang. CASCONxEVOKE '22.
 
 ## Requirements
 
@@ -123,7 +125,7 @@ and once logged in, the rule validation page should look like this:
 
 To get familiar with the validation tool and the domain-specific language used for validating the rules, please head over to the [tutorial page](./ui/tutorial/README.md) (it is also accessible from the UI using the question mark (?) button at the top right corner).
 
-Once you're done with validation, you can simply close the browser tab.
+Once you're done with validation (which does not mean validating all the candidate rules necessarily), you can simply close the browser tab.
 
 ### Building the detector
 
