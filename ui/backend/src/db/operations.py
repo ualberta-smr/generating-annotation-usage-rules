@@ -151,6 +151,7 @@ class RulePackageNavigation:
 
 class RuleLabelingHandler:
 
+    @staticmethod
     def labelRule(db: Session, id: int, rulePadString: str, label: str, userId: int):
         """
             Labels the rule with the given id as 'correct', 'best_practice' or 'not_a_rule'. 
@@ -174,6 +175,7 @@ class RuleLabelingHandler:
             labelFromDatabase.rule_description = rulePadString
         db.commit()
 
+    @staticmethod
     def unlabelRule(db: Session, id: int, userId: int):
         """
             Removes the label from a rule with the given id
@@ -184,6 +186,7 @@ class RuleLabelingHandler:
             db.delete(labelFromDatabase)
             db.commit()
 
+    @staticmethod
     def getLabeledRuleCount(db: Session, userId: int) -> int:
         # TODO: this should be achieved by joining 2 tables and 
         # getting the results by using package_id, however, at the current setting
@@ -194,6 +197,7 @@ class RuleLabelingHandler:
 
 class RulePackageOperations:
 
+    @staticmethod
     def createNewPackage(username: str, packageName: str, rulesFile: UploadFile, resp: Response, db: Session):
         try:
             if rulesFile.content_type != "application/json":
@@ -205,7 +209,7 @@ class RulePackageOperations:
             userId = UserOperationsHandler.createNewUser(username, db)
             # create a package with id X
             if packageName is None or packageName.strip() == "":
-                packageName = "MicroProfile Candidate Rules"
+                packageName = "A Set of Candidate Rules"
 
             db.add(CandidateRulesPackage(id = userId, name = packageName))
             # add all the rules for that user
@@ -219,6 +223,7 @@ class RulePackageOperations:
                 ))
             db.commit()
         except Exception as e:
+            resp.body = e.args[0]
             if e.args[0] == "User already exists":
                 resp.status_code = 409 # Http Conflict
             else:
@@ -226,13 +231,14 @@ class RulePackageOperations:
                 traceback.print_exc()
                 print(e)
 
-
+    @staticmethod
     def getAllConfirmedRules(db: Session):
         return RulePackageOperations.__getConfirmedRulesByFilter(db,
             LabeledRule.label.in_([RuleLabels.CORRECT, RuleLabels.BEST_PRACTICE])
         )
 
-    def getConfirmedRulesByUsername(username: int, resp: Response,db: Session):
+    @staticmethod
+    def getConfirmedRulesByUsername(username: str, resp: Response, db: Session):
         userId = UserOperationsHandler.getUserId(username, db)
         if userId is None:
             resp.status_code = 404
@@ -243,6 +249,7 @@ class RulePackageOperations:
             LabeledRule.label.in_([RuleLabels.CORRECT, RuleLabels.BEST_PRACTICE])
         )
 
+    @staticmethod
     def __getConfirmedRulesByFilter(db: Session, *filters):
         # get confirmed rules
         confirmedLabeledRules: List[LabeledRule] = db.query(LabeledRule)\

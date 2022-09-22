@@ -1,6 +1,6 @@
 {
-  "short_name": "UI for API Misuse Check",
-  "name": "UI for API Misuse Check",
+  "short_name": "RVT",
+  "name": "Rule Validation Tool",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",

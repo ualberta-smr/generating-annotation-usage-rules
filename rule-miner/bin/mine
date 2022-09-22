@@ -1,0 +1,5 @@
+java -jar /pipeline/rule-miner.jar \
+    --config $CONFIG_JSON_PATH \
+    --libSources $JARS_DIR \
+    --targetProjectsDir $TARGET_PROJECTS_DIR \
+    --exportDir $EXPORT_DIR

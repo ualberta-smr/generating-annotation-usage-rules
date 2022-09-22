@@ -1,0 +1,1 @@
+python /pipeline/bin/scripts/build-detector.py "$@"

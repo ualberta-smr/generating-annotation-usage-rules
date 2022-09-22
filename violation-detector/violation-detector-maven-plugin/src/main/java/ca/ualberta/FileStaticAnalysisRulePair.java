@@ -10,5 +10,5 @@ import java.util.Collection;
 public class FileStaticAnalysisRulePair {
     public String path;
     public StaticAnalysisRule rule;
-    public Collection<ViolationCombination> misuses;
+    public Collection<ViolationCombination> violations;
 }

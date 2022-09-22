@@ -1,0 +1,35 @@
+{
+    "api": {
+        "prefixes": [
+            "org.eclipse.microprofile",
+            "javax",
+            "jakarta"
+        ],
+        "subApi": {
+            "prefixes": [
+                "org.eclipse.microprofile.config",
+                "org.eclipse.microprofile.faulttolerance",
+                "org.eclipse.microprofile.graphql",
+                "org.eclipse.microprofile.health",
+                "org.eclipse.microprofile.jwt",
+                "org.eclipse.microprofile.metrics",
+                "org.eclipse.microprofile.openapi",
+                "org.eclipse.microprofile.opentracing",
+                "org.eclipse.microprofile.reactive",
+                "org.eclipse.microprofile.rest",
+                "org.eclipse.microprofile.auth"
+            ]
+        }
+    },
+    "jarFiles": [
+        "org.eclipse.microprofile.config:               microprofile-config-api:             3.0.1",
+        "org.eclipse.microprofile.fault-tolerance:      microprofile-fault-tolerance-api:    3.0",
+        "org.eclipse.microprofile.graphql:              microprofile-graphql-api:            1.1.0",
+        "org.eclipse.microprofile.health:               microprofile-health-api:             3.0",
+        "org.eclipse.microprofile.jwt:                  microprofile-jwt-auth-api:           1.2",
+        "org.eclipse.microprofile.metrics:              microprofile-metrics-api:            4.0",
+        "org.eclipse.microprofile.openapi:              microprofile-openapi-api:            2.0",
+        "org.eclipse.microprofile.reactive.messaging:   microprofile-reactive-messaging-api: 2.0",
+        "org.eclipse.microprofile.rest.client:          microprofile-rest-client-api:        2.0"
+    ]
+}

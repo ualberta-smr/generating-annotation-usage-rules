@@ -5,13 +5,13 @@ import { FaArrowRight, FaArrowLeft, FaQuestionCircle } from "react-icons/fa";
 import FieldsetWrapper from "./FieldsetWrapper";
 import RuleAuthoringEditor from "./RuleAuthoringEditor";
 import makeCancellablePromise from "./superPromise";
-import CodeEditor from "./CodeEditor";
+import CodePreview from "./CodePreview";
 import prettify, { onelineify } from "../grammar/formatter";
 import { BACKEND_URL, LS_USERNAME, TUTORIAL_URL } from "./constants";
 import { visualize } from "../grammar/visualizer";
 
 function LabelingScreen() {
-    const [username, setUsername] = useState(window.localStorage.getItem(LS_USERNAME));
+    const [username] = useState(window.localStorage.getItem(LS_USERNAME));
     // this is a flag that represents if the current rule is a new rule or not
     // new rule here refers to the freshly retrieved rule from the server, without any edits
     // this is actually not a boolean flag but more like a representation of a change
@@ -225,7 +225,7 @@ function LabelingScreen() {
                             </div>
                         </div>
                         <div className="code-editors">
-                            <CodeEditor
+                            <CodePreview
                                 code={code}
                                 measurements={{
                                     width: 800,
@@ -240,7 +240,7 @@ function LabelingScreen() {
                             {propertiesFileData == null ? null : (
                                 <div className="config-file-editors">
                                     {propertiesFileData.map(conf => (
-                                        <CodeEditor
+                                        <CodePreview
                                             code={conf.text}
                                             fileName={conf.name}
                                             measurements={{
