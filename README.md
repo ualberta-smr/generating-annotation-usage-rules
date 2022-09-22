@@ -28,9 +28,9 @@ Published papers:
 
 The complete documentation is provided in [DOCS.md](./DOCS.md)
 
-## Quick start
+## Quick Start/Demo
 
-The pipeline has three major steps (i.e. mining, validating, creating the misuse detector) and there are commands available to perform each of these steps, and some other auxillary commands. In this section, we will quickly demonstrate each step so that the overall flow will be clearer. 
+The pipeline has three major steps (i.e. mining, validating, creating the misuse detector) and there are commands available to perform each of these steps, and some other auxillary commands. In this section, we will quickly demonstrate each step using sample data. To run the pipeline on your own data, please refer to the above complete documentation.
 
 ### Quick Start Table of Contents
 
@@ -183,7 +183,7 @@ After a successful execution, it should print out the misuses of "Rule-1".
 
 File an issue on this repo and we will get back to you asap.
 
-## Contributor
+## Main developer
 
 - [Mansur Gulami](https://www.github.com/mensurowary)
 
