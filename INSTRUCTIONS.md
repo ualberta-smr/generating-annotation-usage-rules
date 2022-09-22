@@ -27,18 +27,18 @@ your-host-machine> ./build.sh && ./run.sh
 # ...
 ========================================================================
 This tool allows you to mine candidate annotation usage rules 
-from the target projects located in ''.
+from the target projects located in /pipeline/mining-sources.
 Once you mine candidate rules, you can review and validate them 
 using the Rule Validation Tool (RVT). Confirmed rules can be exported 
 to be used for misuse detection.
 
 Available commands:
-	 mine                  - Mines candidate rules from target projects located in 
+	 mine                  - Mines candidate rules from target projects located in /pipeline/mining-sources
 	 validate              - Uploads the mined candidate rules into the RVT for validation
 	 export-rules          - Exports the validated correct rules from RVT
 	 build-detector        - Builds the misuse detector Maven plugin jar file, and provides installation directions
-	 download-jars         - Downloads the required jar files mentioned in  file
-	 clone-projects        - Clones the projects mentioned in the input file into  directory
+	 download-jars         - Downloads the required jar files mentioned in /pipeline/config/configuration.json file
+	 clone-projects        - Clones the projects mentioned in the input file into /pipeline/mining-sources directory
 	 info                  - Shows information about the available commands
 pipeline> 
 ```
@@ -47,7 +47,7 @@ A successful execution should land you in the bash shell, and information about 
 
 ## Mining
 
-We will explain the mining step in detail in the mining section, but now we will quickly demonstrate how it works. To be able to mine candidate annotation usage rules (a.k.a. _candidate rules_), we need two input: 
+We explain the mining step in detail in the mining section, but now we will quickly demonstrate how it works. To be able to mine candidate annotation usage rules (a.k.a. _candidate rules_), we need two inputs: 
     
 1. a set of Java projects that we will use for mining
 2. a set of JAR files for resolving the types that we are interested in
@@ -73,7 +73,7 @@ Now, we are ready to mine! To mine candidate rules, we can simply use the follow
 pipeline> mine
 ```
 
-The mining process might take a while, which is why we have provide [an example output file](./examples/candidate_rules_example.json) that can be used in the validation process next.
+The mining process might take a while, which is why we have provide [an example output file](./examples/candidate_rules_example.json) that can be used in the validation process which is described next.
 
 ## Validation
 
