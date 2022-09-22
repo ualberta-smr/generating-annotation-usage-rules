@@ -9,9 +9,7 @@ The artifact repo for the paper:
 In this work, we create a human-in-the-loop pipeline to produce accurate annotation usage rules. The pipeline includes the following steps:
 1. Mining candidate annotation usage rules (see [this repo](https://github.com/ualberta-smr/MiningAnnotationUsageRules) for more details)
 2. Validating the candidate usage rules to produce confirmed usage rules (using the Rule Validation Tool)
-3. Using confirmed usage rules for misuse detection purposes (using the Violation Detector)
-
-The last two tools are developed and maintained by [Mansur Gulami](https://github.com/MensurOwary).
+3. Using confirmed usage rules for misuse detection purposes (using the Violation Detector)Getting started
 
 ## Requirements
 
@@ -24,15 +22,20 @@ The last two tools are developed and maintained by [Mansur Gulami](https://githu
     - 8000 - ui tutorial
     - 8888 - ui
 
+## Documentation
+
+The complete documentation is provided in [DOCS.md](./DOCS.md)
+
 ## Quick start
 
-The pipeline has three major steps (i.e. mining, validating, creating the misuse detector) and there are commands available to perform each of these steps, and some other auxillary commands. In this section, we will quickly demonstrate each step so that the overall flow will be clearer. The complete documentation is shared in [DOCS.md](./DOCS.md)
+The pipeline has three major steps (i.e. mining, validating, creating the misuse detector) and there are commands available to perform each of these steps, and some other auxillary commands. In this section, we will quickly demonstrate each step so that the overall flow will be clearer. 
 
 ### Building and running
 
 To be able to use the pipeline, we need to build it first, and then run it. We can use [`build.sh`](./build.sh) and [`run.sh`](./run.sh) commands to achieve this as follows:
 
 ```shell
+
 your-host-machine> ./build.sh && ./run.sh
 # some build related output
 # ...
@@ -58,12 +61,13 @@ A successful execution should land you in the bash shell, and information about 
 
 ### Mining
 
-We explain the mining step in detail in the mining section, but now we will quickly demonstrate how it works. To be able to mine candidate annotation usage rules (a.k.a. _candidate rules_), we need two inputs: 
+To be able to mine candidate annotation usage rules (a.k.a. _candidate rules_), we need two inputs: 
     
 1. a set of Java projects that we will use for mining
 2. a set of JAR files for resolving the types that we are interested in
 
-You can provide your own set of projects as well, but for the purpose of this demo, we will clone some predefined MicroProfile projects. To do this, please issue the following command:
+You can provide your own set of Java projects for mining (input 1) as well, but for the purpose of this demo, we will clone some predefined MicroProfile projects. To do this, please issue the following command:
+
 ```shell
 pipeline> clone-projects --file /pipeline/examples/example_projects.txt
 ```
@@ -84,14 +88,17 @@ Now, we are ready to mine! To mine candidate rules, we can simply use the follow
 pipeline> mine
 ```
 
-The mining process might take a while, which is why we have provide [an example output file](./examples/candidate_rules_example.json) that can be used in the validation process which is described next.
+Mining candidate rules might take a while, which is why we provide [an example output file](./examples/candidate_rules_example.json) that can be used in the validation process which is described in the next section.
 
 ### Validation
 
-The next step after mining is to validate the candidate annotation usage rules. Usually, once the mining step is done, it is enough to issue the `validate` command to use the newly produced candidate rules for validation. However, in this section, we will use a predefined file to speedup the process. Issue the following command:
+The next step after mining is to validate the candidate annotation usage rules. Usually, once the mining step is done, it is enough to issue the `validate` command to use the newly produced candidate rules for validation. 
+
+However, if you have skipped the mining section and want to see how the validation works, we provide [an example file](./examples/candidate_rules_example.json) with 6 candidate rules. To validate these rules, issue the following command:
 
 ```shell
 pipeline> validate --file /pipeline/examples/candidate_rules_example.json
+
 Using the following rules file for the validation: /pipeline/examples/candidate_rules_example.json
 No username has been provided, generating a random one...
 ==========================================================
@@ -105,8 +112,16 @@ To start validating candidate rules, please head over to:
 Now, all you need to do is to go to `http://localhost:8888` and log in with the provided username, and start validating the candidate rules. The landing page will look something like this:
 
 <p align="center">
-  <img src="./assets/1_login_landing_page.png" width="90%" />
+  <img src="./assets/1_login_landing_page.png" width="80%" />
 </p>
+
+and once logged in, the rule validation page should look like this:
+
+<p align="center">
+  <img src="./ui/tutorial/assets/overall.png" width="80%" />
+</p>
+
+To get familiar with the validation tool and the domain-specific language used for validating the rules, please head over to the [tutorial page](./ui/tutorial/README.md) (it is also accessible from the UI using the question mark (?) button at the top right corner).
 
 Once you're done with validation, you can simply close the browser tab.
 
