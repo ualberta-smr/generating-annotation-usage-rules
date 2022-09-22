@@ -1,6 +1,6 @@
 # Pipeline for producing annotation usage rules  
 
-Note: For the version of the repository that we used for the CASCON 22 paper, please refer to the [following release](https://github.com/ualberta-smr/generating-annotation-usage-rules/releases/tag/v_cascon).
+Note: For the version of the repository that we used for the CASCON 22 paper, please refer to the [cascon-release branch](https://github.com/ualberta-smr/generating-annotation-usage-rules/tree/cascon-release).
 
 In this work, we create a human-in-the-loop pipeline to produce accurate annotation usage rules. The pipeline includes the following steps:
 1. Mining candidate annotation usage rules (see [this repo](https://github.com/ualberta-smr/MiningAnnotationUsageRules) for more details)
