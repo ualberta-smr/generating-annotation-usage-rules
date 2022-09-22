@@ -32,6 +32,13 @@ The complete documentation is provided in [DOCS.md](./DOCS.md)
 
 The pipeline has three major steps (i.e. mining, validating, creating the misuse detector) and there are commands available to perform each of these steps, and some other auxillary commands. In this section, we will quickly demonstrate each step so that the overall flow will be clearer. 
 
+### Quick Start Table of Contents
+
+- [Building and running](#building-and-running)
+- [Mining](#mining)
+- [Validation](#validation)
+- [Building the detector](#building-the-detector)
+
 ### Building and running
 
 To be able to use the pipeline, we need to build it first, and then run it. We can use [`build.sh`](./build.sh) and [`run.sh`](./run.sh) commands to achieve this as follows:
@@ -178,7 +185,7 @@ File an issue on this repo and we will get back to you asap.
 
 ## Contributor
 
-[Mansur Gulami](https://www.github.com/mensurowary)
+- [Mansur Gulami](https://www.github.com/mensurowary)
 
 ## Credit
 All credit related to RulePad goes to [Sahar Mehrpour](https://github.com/SaharMehrpour)

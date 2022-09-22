@@ -1,5 +1,20 @@
 # Documentation
 
+# Table of contents
+
+- [Overall workflow](#overall-workflow)
+- [Configuration](#configuration)
+- [Building and running](#building-and-running)
+- [Mining](#mining)
+- [Validation](#validation)
+- [Export](#export)
+- [Building the misuse detector](#building-the-misuse-detector)
+- [Installing and running the detector](#installing-and-running-the-detector)
+- [Downloading projects and jar files](#downloading-projects-and-jar-files)
+    - [Downloading JARS](#downloading-jars)
+    - [Cloning projects](#cloning-projects)
+
+
 ## Overall workflow
 
 To be able to use the tool, we first need to configure it and make sure we provide all the necessary input. Next, we can build, and then run the tool. Once inside of the container, we need to mine the rules and then validate them. Once the validation is complete, we need to export the confirmed rules, and finally build the detector that is equipped with the confirmed rules.
