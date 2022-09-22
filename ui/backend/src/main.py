@@ -57,8 +57,8 @@ def labelRule(ruleId: int, label: str, response: Response, ruleDto: Optional[Con
     return RuleOperationsHandler.labelRule(ruleId, label, response, ruleDto, db)
 
 @app.get('/packages/{username}/confirmed')
-def getRulesPackage(username: str, db: Session = Depends(getSession)):
-    return RulePackageOperations.getConfirmedRulesByUsername(username, db)
+def getRulesPackage(username: str, response: Response, db: Session = Depends(getSession)):
+    return RulePackageOperations.getConfirmedRulesByUsername(username, response, db)
 
 @app.post("/packages")
 def uploadNewRulePackage(username: str, rulesFile: UploadFile, response: Response, packageName: str = None, db: Session = Depends(getSession)):
