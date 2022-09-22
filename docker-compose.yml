@@ -67,5 +67,7 @@ services:
       - ./mining-sources:/pipeline/mining-sources
       - ./lib-sources:/pipeline/lib-sources
       - ./exports:/pipeline/exports
+      - m2:/root/.m2
 volumes:
   mysql-db:
+  m2:
