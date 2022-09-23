@@ -70,6 +70,8 @@ A successful execution should land you in the bash shell, and information about 
 
 ### Mining
 
+**Note: The mining phase (including downloading the input projects) takes a while. If you want to simply see what the output of the mining step is, please head over to the [Validation](#validation) section.**
+
 To be able to mine candidate annotation usage rules (a.k.a. _candidate rules_), we need two inputs: 
     
 1. a set of Java projects that we will use for mining
