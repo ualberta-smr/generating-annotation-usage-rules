@@ -45,7 +45,7 @@ def ensureBackendIsUp(backendUrl):
     try:
         requests.get(f'{backendUrl}')
     except requests.exceptions.ConnectionError:
-        print("The backend server is not up yet. Please try again")
+        print("The backend server is not up yet. It may take some time for the backend and database to be fully-functional. Please try again")
         exit(2)
 
 if __name__ == '__main__':
@@ -68,8 +68,11 @@ if __name__ == '__main__':
     filename = getCandidateRulesFile()
     print("Using the following rules file for the validation: " + filename)
 
-    with open(filename, 'r') as f:
+    with open(filename) as f:
         rules = json.load(f)
+        if len(rules) == 0:
+            print(f"Warning: Loaded candidate rules file is empty. Stopping the execution")
+            sys.exit(1)
         # order the ids
         # each rule will have an id, that starts from 1
         # and ends in N which is the number of all available rules

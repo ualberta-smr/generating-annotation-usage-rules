@@ -76,6 +76,9 @@ function LabelingScreen() {
                 if (json) {
                     const { totalLabeledRuleCount } = json
                     setRuleMetaData({ ...ruleMetaData, totalLabeledRuleCount })
+                    if (buttonAvailability.hasNext) {
+                        getNextRule()
+                    }
                 }
             })
             .catch((e) => {
@@ -95,9 +98,7 @@ function LabelingScreen() {
         });
         setRuleLabel(label);
 
-        const data = json.data;
-
-        const { id, ruleString, name, size, totalLabeledRuleCount } = data;
+        const { id, ruleString, name, size, totalLabeledRuleCount } = json.data;
 
         setRuleMetaData({ id, name, size, totalLabeledRuleCount });
         setGrammarText(prettify(ruleString));

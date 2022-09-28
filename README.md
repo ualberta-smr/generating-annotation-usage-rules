@@ -161,25 +161,21 @@ However, if we simply want to build the detector from some predefined confirmed 
 pipeline> build-detector --file /pipeline/examples/confirmed_rules_example.json
 ```
 
-After a successful execution, please head over to `/pipeline/exports/detector` directory where you'll find `install-plugin.sh` alongside a JAR file of the detector. The `/pipeline/exports` directory is a volume, and by default it is mounted to a directory called `exports` in the project root in the host machine. You can try installing the detector using the provided script in your host machine.
+The [predefined confirmed rules](./examples/confirmed_rules_example.json) contain 2 confirmed rules with the names `Rule-Foo` and `Rule-Bar`.
 
-You can also install the plugin within the pipeline and test it on a dummy project. To do it, you need to first install the plugin:
+Regardless of the rules file you have selected, after a successful `build-detector` execution, head over to `/pipeline/exports/detector` directory where you'll find `install-plugin.sh` alongside a JAR file of the detector. The `/pipeline/exports` directory is a volume, and by default it is mounted to a directory called `exports` in the project root in the host machine. You can try installing the detector using the provided script in your host machine. Simply running the `install-plugin.sh` should suffice.
+
+If you have built the detector using the predefined confirmed rules, you can install the plugin within the pipeline and test it on a dummy project. To do it, you need to first install the plugin (1), and then go to the dummy project directory (2), and issue the scanning task (3):
 
 ```shell
-pipeline> pwd
-/pipeline/exports/detector
-pipeline> ./install-plugin.sh
+pipeline> cd /pipeline/exports/detector		
+pipeline> ./install-plugin.sh	# (1)
 # it will install the plugin
+pipeline> cd /pipeline/examples/example_project # (2)
+pipeline> mvn ca.ualberta:violation-detector-maven-plugin:scan # (3)
 ```
 
-and then go to the dummy project directory, and issue the scanning task
-
-```shell
-pipeline> cd /pipeline/examples/example_project
-pipeline> mvn ca.ualberta:violation-detector-maven-plugin:scan
-```
-
-After a successful execution, it should print out the misuses of "Rule-1".
+After a successful execution, it should print out the misuses of `Rule-Foo`.
 
 ## Struggling with some steps?
 
